@@ -43,7 +43,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     publicEntrypoints: ['@vyrnforge/react/toggle-button'],
     frameworkSourcePath: 'product/components/interactive-controls/toggle-button/react/docs/index.md',
   });
-  expect(manifest.toggle.examples.map(example => example.id)).toEqual(['toggle-button/basic', 'toggle-button/icons']);
+  expect(manifest.toggle.examples.map(example => example.id)).toEqual(['toggle-button/basic', 'toggle-button/controlled', 'toggle-button/icon-text', 'toggle-button/icons', 'toggle-button/sizes', 'toggle-button/states']);
   expect(readFileSync('dist/docs/next/react/examples/toggle-button/basic/index.html', 'utf8'))
     .toContain('react-toggle-button-basic.js');
   expect(manifest.layout).toMatchObject({ guideOnly: false, api: true,
@@ -53,7 +53,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/theme-builder/', 'foundations/dark-mode/',
     'foundations/right-to-left/', 'utilities/overlay/', 'utilities/motion/', 'foundations/styling/',  'components/button/', 'api/components/button/',
-    'patterns/button-group/', 'components/toggle-button/', 'api/components/toggle-button/', 'components/layout/', 'api/components/layout/',
+    'patterns/button-group/', 'components/toggle-button/', 'api/components/toggle-button/', 'components/toggle-group/', 'api/components/toggle-group/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
@@ -487,6 +487,7 @@ test('Owner-authored React guide examples use public components for text, layout
     ...manifest.button.examples,
     ...manifest.buttonGroup.examples,
     ...manifest.toggle.examples,
+    ...manifest.toggleGroup.examples,
     ...manifest.layout.examples,
     ...manifest.divider.examples,
     ...manifest.icon.examples,
@@ -590,7 +591,7 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
 
   await group.getByRole('link', { name: 'ToggleButton', exact: true }).click();
   const toggleGuide = page.locator('[data-vf-docs-react-toggle]');
-  await expect(toggleGuide.locator('[data-vf-docs-react-toggle-example]')).toHaveCount(2);
+  await expect(toggleGuide.locator('[data-vf-docs-react-toggle-example]')).toHaveCount(6);
   const toggle = toggleGuide.frameLocator('iframe[title="React ToggleButton icon-only example"]');
   const iconToggle = toggle.getByRole('button', { name: 'Pin document' });
   await expect(iconToggle).toHaveAttribute('data-vf-icon-only', '');
@@ -721,19 +722,73 @@ test('React ToggleButton has an independent native pressed-state guide and sourc
   await expect(page.locator('[data-vf-docs-react-toggle]')).toBeVisible();
   const pressed = page.locator('[data-vf-docs-react-toggle-topic="pressed"]');
   await expect(pressed.getByRole('heading', { name: 'Pressed state', level: 2 })).toBeVisible();
-  await expect(pressed.getByRole('heading', { name: 'Controlled and uncontrolled state' })).toBeVisible();
   await expect(pressed.locator('[data-vf-docs-react-toggle-example]')).toHaveCount(1);
   const frame = page.frameLocator('iframe[title="React ToggleButton pressed-state example"]');
   const bold = frame.getByRole('button', { name: 'Bold', exact: true });
   await expect(bold).toHaveAttribute('aria-pressed', 'false');
   await bold.click();
   await expect(bold).toHaveAttribute('aria-pressed', 'true');
-  await expect(frame.getByRole('status')).toHaveText('Bold is on');
-  await frame.getByRole('button', { name: 'Reset Bold' }).click();
+  await bold.press('Space');
   await expect(bold).toHaveAttribute('aria-pressed', 'false');
+  const guide = page.locator('[data-vf-docs-react-toggle]');
+  const controlled = guide.locator('section[aria-labelledby="react-toggle-controlled-and-uncontrolled-state"]').frameLocator('iframe');
+  const controlledBold = controlled.getByRole('button', { name: 'Bold', exact: true });
+  await controlledBold.click();
+  await expect(controlled.getByRole('status')).toHaveText('Bold is on');
+  await controlled.getByRole('button', { name: 'Reset Bold' }).click();
+  await expect(controlledBold).toHaveAttribute('aria-pressed', 'false');
+  const states = guide.locator('section[aria-labelledby="react-toggle-pressed-and-disabled-states"]').frameLocator('iframe');
+  await expect(states.getByRole('button', { name: 'Strikethrough' })).toBeDisabled();
+  await expect(states.getByRole('button', { name: 'Strikethrough' })).toHaveAttribute('aria-pressed', 'true');
+  const sizes = guide.locator('section[aria-labelledby="react-toggle-sizing-and-styling"]').frameLocator('iframe');
+  for (const size of ['sm', 'md', 'lg']) {
+    await expect(sizes.getByRole('button', { name: 'Bookmark (' + size + ')' })).toHaveAttribute('data-vf-size', size);
+  }
+  await expect(guide.locator('section[aria-labelledby="react-toggle-icon-with-text"]').frameLocator('iframe')
+    .getByRole('button', { name: 'Pin document' })).not.toHaveAttribute('data-vf-icon-only', '');
   await page.goto('/next/react/api/components/toggle-button/');
   await expect(page.locator('[data-vf-docs-react-api="toggle-button"]')).toContainText('ToggleButtonProps');
   await expect(page.locator('[data-vf-docs-react-api="toggle-button"]')).toContainText("size?: 'sm' | 'md' | 'lg'");
+});
+
+test('React ToggleGroup guide teaches its actual independent-tab-stop selection contract', async ({ page }) => {
+  await page.goto('/next/react/components/toggle-button/');
+  await page.locator('[data-vf-docs-react-toggle]').getByRole('link', { name: 'ToggleGroup', exact: true }).click();
+  const guide = page.locator('[data-vf-docs-react-toggle-group]');
+  await expect(guide.getByRole('heading', { level: 1, name: 'ToggleGroup' })).toBeVisible();
+  await expect(guide.locator('[data-vf-docs-react-toggle-group-example]')).toHaveCount(4);
+  for (const [heading, id] of [['exclusive-selection', 'basic'], ['multiple-selection', 'multiple'], ['icon-only-choices', 'icons'], ['required-selection', 'required']]) {
+    await expect(guide.locator('section[aria-labelledby="react-toggle-group-' + heading + '"] [data-vf-docs-react-toggle-group-example="toggle-group/' + id + '"]')).toHaveCount(1);
+  }
+  const single = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/basic"]').frameLocator('iframe');
+  const day = single.getByRole('button', { name: 'Day', exact: true });
+  const week = single.getByRole('button', { name: 'Week', exact: true });
+  await expect(week).toHaveAttribute('aria-pressed', 'true');
+  await day.focus();
+  await day.press('Space');
+  await expect(day).toHaveAttribute('aria-pressed', 'true');
+  await expect(week).toHaveAttribute('aria-pressed', 'false');
+  await day.press('Tab');
+  await expect(week).toBeFocused();
+  await day.click();
+  await expect(day).toHaveAttribute('aria-pressed', 'false');
+  const multiple = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/multiple"]').frameLocator('iframe');
+  await multiple.getByRole('button', { name: 'Italic' }).click();
+  await expect(multiple.getByRole('button', { name: 'Bold' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(multiple.getByRole('button', { name: 'Italic' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(multiple.getByRole('button', { name: 'Underline' })).toBeDisabled();
+  const icons = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/icons"]').frameLocator('iframe');
+  await icons.getByRole('button', { name: 'Grid view' }).click();
+  await expect(icons.getByRole('button', { name: 'Grid view' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(icons.getByRole('button', { name: 'Grid view' })).toHaveAttribute('data-vf-icon-only', '');
+  const required = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/required"]').frameLocator('iframe');
+  await required.getByRole('button', { name: 'List', exact: true }).click();
+  await expect(required.getByRole('button', { name: 'List', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await required.getByRole('button', { name: 'Grid', exact: true }).click();
+  await expect(required.getByRole('status')).toHaveText('Current view: grid');
+  await guide.getByRole('link', { name: 'ToggleGroup public React API' }).click();
+  await expect(page.locator('[data-vf-docs-react-api="toggle-group"]')).toContainText('ToggleGroupRootProps');
+  await expect(page.locator('[data-vf-docs-react-api="toggle-group"]')).toContainText('ToggleGroupItemProps');
 });
 
 test('React API reference renders public source-derived types and inline semantic code', async ({ page }) => {

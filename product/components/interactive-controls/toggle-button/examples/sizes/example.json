@@ -1,0 +1,14 @@
+{
+  "id": "toggle-button/sizes",
+  "title": "Sizes",
+  "description": "The same bookmark command shown at each supported size.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Sizing and styling"
+}

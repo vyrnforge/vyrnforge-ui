@@ -157,6 +157,7 @@ function navigation(view, links, topic) {
     { label: 'Components', items: [
       { id: 'guide', title: 'Button', href: links.guide },
       { id: 'toggle', title: 'ToggleButton', href: links.toggle.guide },
+      { id: 'toggle-group', title: 'ToggleGroup', href: links.toggleGroup.guide },
     ] },
     { label: 'Patterns', items: [
       { id: 'button-group', title: 'Button Group', href: links.buttonGroup.guide },
@@ -187,6 +188,7 @@ function navigation(view, links, topic) {
     { label: 'API Reference', items: [
       { id: 'api', title: 'Button API', href: links.api },
       { id: 'toggle-api', title: 'ToggleButton API', href: links.toggle.api },
+      { id: 'toggle-group-api', title: 'ToggleGroup API', href: links.toggleGroup.api },
       { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
       { id: 'divider-api', title: 'Divider API', href: links.divider.api },
       { id: 'list-api', title: 'List API', href: links.list.api },
@@ -539,64 +541,75 @@ function buttonGroupUsage(group, links) {
       ])));
 }
 
-function toggleExample(example, links) {
-  const basic = example.id === 'toggle-button/basic';
-  return h('article', { key: example.id, className: 'vf-docs-example', id: basic ? 'react-toggle-example' : 'react-toggle-icon-example',
-    'data-vf-docs-react-toggle-example': example.id },
-    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
-      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
-      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title),
-        h(Text, { as: 'p' }, example.description))),
-    h('iframe', { className: 'vf-docs-react-example-frame', title: basic ? 'React ToggleButton pressed-state example' : 'React ToggleButton icon-only example',
-      src: links.toggle.examples[example.id], sandbox: 'allow-scripts', loading: basic ? 'eager' : 'lazy',
-      style: { minBlockSize: basic ? '17rem' : '10rem' } }),
+function toggleOwnedExample(example, links, group = false) {
+  const id = example.id.split('/')[1];
+  const basic = !group && id === 'basic';
+  const title = basic ? 'React ToggleButton pressed-state example' :
+    !group && id === 'icons' ? 'React ToggleButton icon-only example' : 'React ' + example.title + ' example';
+  return h('article', { key: example.id, className: 'vf-docs-example',
+    id: group ? 'react-toggle-group-example-' + id : basic ? 'react-toggle-example' :
+      id === 'icons' ? 'react-toggle-icon-example' : 'react-toggle-example-' + id,
+    [group ? 'data-vf-docs-react-toggle-group-example' : 'data-vf-docs-react-toggle-example']: example.id },
+    h('iframe', { className: 'vf-docs-react-example-frame', title,
+      src: links.examples[example.id], sandbox: 'allow-scripts', loading: basic ? 'eager' : 'lazy',
+      style: { minBlockSize: id === 'controlled' ? '12rem' : id === 'states' ? '10rem' : '8rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
 }
-function toggleUsage(toggle, links) {
+function toggleUsage(toggle, links, group = false) {
   if (!toggle?.sharedContent || !toggle?.frameworkContent || !toggle.examples?.length) return null;
-  const sections = [
-    { id: 'react-toggle-setup', heading: 'Get started' },
-    { id: 'react-toggle-examples', heading: 'Pressed state' },
-    { id: 'react-toggle-guidance', heading: 'Sizing' },
-    { id: 'react-toggle-icons', heading: 'Icon-only toggles' },
-    { id: 'react-toggle-a11y', heading: 'Accessibility' },
-    { id: 'react-toggle-reference', heading: 'Related components and API' },
-  ];
+  const prefix = group ? 'react-toggle-group-' : 'react-toggle-';
+  const routeLinks = group ? links.toggleGroup : links.toggle;
+  const topics = toggle.sharedContent.sections.map(({ heading }) => ({
+    id: prefix + slug(heading), heading: !group && heading === 'Native semantics and behavior' ? 'Pressed state' : heading,
+    sourceHeading: heading,
+  }));
+  const sections = [{ id: prefix + 'setup', heading: 'Get started' }, ...topics];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
-      'data-vf-docs-react-toggle': '' },
+      [group ? 'data-vf-docs-react-toggle-group' : 'data-vf-docs-react-toggle']: '' },
       guideHeader(toggle.sharedContent, 'React · Components · Actions'),
-      guidePart(sections[0], guideBlocks(toggle.frameworkContent, 'React setup')),
-      guidePart(sections[1], [
-        ...guideSubsections(toggle.sharedContent,
-          ['Native semantics and behavior'], 'react-toggle-behavior'),
-        ...guideSubsections(toggle.frameworkContent,
-          ['Controlled and uncontrolled state'], 'react-toggle-state'),
-        ...toggle.examples.filter((example) => !example.documentationSection).map((example) => toggleExample(example, links)),
-      ], { 'data-vf-docs-react-toggle-topic': 'pressed' }),
-      guidePart(sections[2], [
-        ...guideSubsections(toggle.sharedContent,
-          ['Sizing and styling'], 'react-toggle-guidance'),
-        ...guideSubsections(toggle.frameworkContent,
-          ['Sizing and composition'], 'react-toggle-authoring'),
+      guidePart(sections[0], [
+        ...guideBlocks(toggle.frameworkContent, 'React setup'),
+        ...(group ? guideBlocks(toggle.frameworkContent, 'Selection state') : []),
       ]),
-      guidePart(sections[3], [
-        ...guideBlocks(toggle.sharedContent, 'Icon-only toggles'),
-        ...toggle.examples.filter((example) => example.documentationSection === 'Icon-only toggles').map((example) => toggleExample(example, links)),
-      ]),
-      guidePart(sections[4], [
-        ...guideBlocks(toggle.sharedContent, 'Accessibility and evidence'),
-        evidenceDisclosure(toggle.standardReferences),
-      ]),
-      guidePart(sections[5], [
-        ...guideBlocks(toggle.sharedContent, 'Related controls and grouping'),
-        h('a', { href: links.toggle.api, 'data-vf-link': '' }, 'ToggleButton public React API'),
-        h('a', { href: links.guide, 'data-vf-link': '' }, 'Button'),
-        h('a', { href: links.buttonGroup.guide, 'data-vf-link': '' }, 'Button Group'),
-      ])));
+      ...topics.map((section) => {
+        const heading = section.sourceHeading;
+        const examples = toggle.examples.filter((example) => example.documentationSection === heading ||
+          (!group && heading === 'Native semantics and behavior' && !example.documentationSection));
+        const related = heading === 'Related controls and grouping';
+        const accessibility = heading === 'Accessibility' || heading === 'Accessibility and evidence';
+        return guidePart(section, [
+          ...guideBlocks(toggle.sharedContent, heading),
+          ...guideBlocks(toggle.frameworkContent, heading),
+          ...(!group && heading === 'Sizing and styling' ? guideBlocks(toggle.frameworkContent, 'Sizing and composition') : []),
+          ...(group && heading === 'Icon-only choices' ? guideBlocks(toggle.frameworkContent, 'Icon-only items') : []),
+          ...examples.map((example) => toggleOwnedExample(example, routeLinks, group)),
+          ...(accessibility ? [evidenceDisclosure(toggle.standardReferences)] : []),
+          ...(related || (group && accessibility) ? [
+            h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
+              h('li', null, h('a', { href: routeLinks.api, 'data-vf-link': '' }, group ? 'ToggleGroup public React API' : 'ToggleButton public React API')),
+              h('li', null, h('a', { href: group ? links.toggle.guide : links.toggleGroup.guide, 'data-vf-link': '' }, group ? 'ToggleButton' : 'ToggleGroup')),
+              h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button')),
+              h('li', null, h('a', { href: links.buttonGroup.guide, 'data-vf-link': '' }, 'Button Group'))),
+          ] : []),
+        ], !group && heading === 'Native semantics and behavior' ? { 'data-vf-docs-react-toggle-topic': 'pressed' } : {});
+      })));
+}
+function toggleGroupApi(group, links) {
+  return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'toggle-group' },
+    h('header', { className: 'vf-docs-component-header' },
+      h('h1', null, 'ToggleGroup API'),
+      h('p', { className: 'vf-docs-lede' }, 'Named groups of native pressed buttons with single or multiple selection.'),
+      accessibilityEvidence(group.standardReferences)),
+    h('section', null, h('h2', null, 'Public entrypoint'),
+      h('ul', null, ...group.publicEntrypoints.map((name) => h('li', { key: name }, h('code', null, name)))),
+      h('p', null, 'Canonical styling: ', h('code', null, '@vyrnforge/web/styles/toggle-group.css'))),
+    h('section', null, h('h2', null, 'Source-backed React props'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, group.publicTypes))),
+    h('a', { href: links.toggleGroup.guide, 'data-vf-link': '' }, 'View ToggleGroup guide'));
 }
 function toggleApi(toggle, links) {
   if (!toggle?.publicToggleTypes || !toggle.publicEntrypoints?.length) return null;
@@ -1291,7 +1304,7 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Use right-to-left content'))));
 }
 
-function body(view, links, button, toggle, buttonGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic) {
+function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
@@ -1378,6 +1391,8 @@ function body(view, links, button, toggle, buttonGroup, layout, typography, icon
   if (view === 'button-group') return buttonGroupUsage(buttonGroup, links);
   if (view === 'toggle') return toggleUsage(toggle, links);
   if (view === 'toggle-api') return toggleApi(toggle, links);
+  if (view === 'toggle-group') return toggleUsage(toggleGroup, links, true);
+  if (view === 'toggle-group-api') return toggleGroupApi(toggleGroup, links);
   if (view === 'icon-library') return iconLibrary(links);
   if (view === 'icon') return iconUsage(icon, links);
   if (view === 'icon-api') return iconApi(icon, links);
@@ -1436,7 +1451,7 @@ function body(view, links, button, toggle, buttonGroup, layout, typography, icon
   }
   return buttonUsageGuide(button, links);
 }
-export function ReactReferencePage({ view, links, button, toggle, buttonGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic }) {
+export function ReactReferencePage({ view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -1465,6 +1480,8 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, l
     { title: 'Button Group', href: links.buttonGroup.guide, keywords: 'joined horizontal vertical icon separate commands composition' },
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
     { title: 'ToggleButton', href: links.toggle.guide, keywords: 'toggle button pressed state independent' },
+    { title: 'ToggleGroup', href: links.toggleGroup.guide, keywords: 'exclusive multiple selected pressed choices' },
+    { title: 'ToggleGroup API', href: links.toggleGroup.api, keywords: 'root item type value onValueChange' },
     { title: 'ToggleButton API', href: links.toggle.api, keywords: 'togglebutton props aria-pressed controlled size' },
     { title: 'Layout', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX divider separator thematic hr css border' },
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
@@ -1559,7 +1576,7 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, l
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, toggle, buttonGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic))),
+        body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));

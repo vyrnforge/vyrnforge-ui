@@ -1,23 +1,35 @@
 # ToggleButton
 
-ToggleButton is a native `button` with a persistent `aria-pressed` state, for an independent toggleable command such as bold formatting. Keep its accessible name stable across on and off.
+Use ToggleButton for a command that stays on or off, such as bold formatting, pinning or bookmarking. Its stable accessible name identifies the action while `aria-pressed` communicates its current state.
 
 ## Native semantics and behavior
 
-Native Enter/Space activation, focus and disabled semantics remain browser-owned. React and Vue expose controlled/uncontrolled pressed state; Angular exposes a pressed model; Native Web uses `connectToggleButton`. The library derives `aria-pressed`, not custom checkbox or option roles.
-
-## Sizing and styling
-
-ToggleButton uses Button's `sm`, `md` and `lg` size axis via `data-vf-size`, defaulting to `md`, with inherited density. Load `@vyrnforge/web/styles/toggle-button.css`, which reuses canonical Button CSS and tokens.
+A ToggleButton is a native button. Enter, Space, pointer activation, focus and disabled behavior remain browser-owned. It does not represent a checkbox, a radio choice or a coordinated group.
 
 ## Icon-only toggles
 
-For icon-only pressed commands use `iconOnly` in React/Vue, `iconOnly` on Angular `button[vfToggleButton]`, or `data-vf-icon-only` on the Native Web Button host. The square target shares Button's nominal regular-density 32/40/48 CSS px geometry, with a 2rem compact minimum. Provide a localized `aria-label` or `aria-labelledby`, keep its name stable while `aria-pressed` changes, and leave artwork decorative. Pressed has explicit accent-subtle and forced-colors styling.
+Use square icon-only controls for familiar commands where space is limited. Keep the accessible name stable with `aria-label` or `aria-labelledby`; decorative artwork does not provide the name. The `iconOnly` prop in React and Vue, the corresponding Angular input and the Native Web `data-vf-icon-only` marker share Button geometry.
+
+## Icon with text
+
+When an icon needs explanation, combine it with visible text inside an ordinary ToggleButton. Do not enable icon-only geometry when a visible label is present.
+
+## Sizing and styling
+
+Choose `sm`, `md` or `lg` (default `md`) independently of inherited density. The nominal regular-density square targets are 32, 40 and 48 CSS px, with the compact minimum of 2rem. The public stylesheet is `@vyrnforge/web/styles/toggle-button.css`. It uses the shared Button design tokens.
+
+## Pressed and disabled states
+
+Pressed describes the committed on/off state; disabled describes whether the command can be activated. A disabled toggle can remain pressed. Keep the same accessible name in both states, preserve native disabled behavior, and make the pressed state visible in normal and forced-colors modes.
+
+## Controlled and uncontrolled state
+
+Use uncontrolled state when the toggle owns its initial and subsequent state. Use controlled state when the application owns the committed value or needs to coordinate it with other UI. Native Web uses `connectToggleButton`; framework ports supply their documented state interfaces.
 
 ## Related controls and grouping
 
-Use Button for a one-shot action, Button Group to arrange related independent commands, ToggleGroup for coordinated single or multiple pressed choices, SegmentedControl for an exclusive radio-like value, and Toolbar for composite command navigation. This guide covers only independent ToggleButton state.
+Use Button for one-shot actions, Button Group for arranging independent commands, ToggleGroup for coordinated pressed choices, SegmentedControl for an exclusive radio-like value, and Toolbar for composite command navigation.
 
 ## Accessibility and evidence
 
-Keep a stable authored accessible name; `aria-pressed` communicates state. Verify keyboard focus, disabled, forced colors, RTL and reduced motion. Automated checks do not establish human assistive-technology acceptance.
+Keep the accessible name stable as `aria-pressed` changes. Preserve native keyboard activation and focus, disabled behavior, RTL, forced colors and reduced motion. Automated checks do not establish human assistive-technology acceptance.

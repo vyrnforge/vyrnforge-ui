@@ -1,0 +1,14 @@
+{
+  "id": "toggle-group/icons",
+  "title": "Icon-only choices",
+  "description": "Switch between list and grid views with named icon items.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Icon-only choices"
+}

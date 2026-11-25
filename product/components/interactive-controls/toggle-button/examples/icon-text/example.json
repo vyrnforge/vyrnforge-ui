@@ -1,0 +1,14 @@
+{
+  "id": "toggle-button/icon-text",
+  "title": "Icon with text",
+  "description": "A visible label explains a familiar pin action.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Icon with text"
+}

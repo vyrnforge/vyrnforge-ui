@@ -59,13 +59,30 @@ if (!basicExample?.sourcePath.endsWith('/react.tsx')) {
 const toggle = reactModel.componentCatalog.find((entry) => entry.id === 'toggle-button');
 const toggleExamples = toggle?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
 if (!toggle?.showcaseAvailable || !toggle.apiAvailable || !toggle.sharedContent ||
-    !toggle.frameworkContent || toggleExamples.length !== 2 ||
+    !toggle.frameworkContent || toggleExamples.length !== 6 ||
     !toggle.publicEntrypoints.includes('@vyrnforge/react/toggle-button') ||
     !webModel.packageManifest.exports?.['./styles/toggle-button.css'] ||
     toggleExamples[0]?.id !== 'toggle-button/basic' ||
     !toggleExamples.every((entry) => entry.sourcePath.endsWith('/react.tsx') &&
       entry.source.includes("'@vyrnforge/react/toggle-button'")))
   throw new Error('React ToggleButton needs public API, canonical CSS and runnable source');
+
+const toggleGroup = reactModel.componentCatalog.find((entry) => entry.id === 'toggle-group');
+if (!toggleGroup?.showcaseAvailable || !toggleGroup.apiAvailable || !toggleGroup.frameworkContent ||
+    toggleGroup.examples.length !== 4 || !toggleGroup.publicEntrypoints.includes('@vyrnforge/react/toggle-group')) {
+  throw new Error('React ToggleGroup requires its real public API and four product-owned examples');
+}
+const toggleGroupSourcePath = path.join(root, path.dirname(path.dirname(toggleGroup.frameworkSourcePath)), 'index.ts');
+const toggleGroupSource = await readFile(toggleGroupSourcePath, 'utf8');
+const groupRootStart = toggleGroupSource.indexOf('export interface ToggleGroupRootProps');
+const groupRootEnd = toggleGroupSource.indexOf('function normalize(', groupRootStart);
+const groupItemStart = toggleGroupSource.indexOf('export interface ToggleGroupItemProps');
+const groupItemEnd = toggleGroupSource.indexOf('export const ToggleGroupItem', groupItemStart);
+if ([groupRootStart, groupRootEnd, groupItemStart, groupItemEnd].some((index) => index < 0)) {
+  throw new Error('React ToggleGroup public props are missing');
+}
+const toggleGroupTypes = toggleGroupSource.slice(groupRootStart, groupRootEnd).trim() + '\n\n' +
+  toggleGroupSource.slice(groupItemStart, groupItemEnd).trim();
 
 const buttonGroup = reactModel.patternCatalog.find((entry) => entry.id === 'button-group');
 if (!buttonGroup?.showcaseAvailable || !buttonGroup.guideOnly || buttonGroup.apiAvailable ||
@@ -385,6 +402,11 @@ function linksFor(route) {
       example: relative(dir, react + 'examples/toggle-button/basic/', true),
       examples: Object.fromEntries(toggleExamples.map((entry) => [entry.id, relative(dir, react + 'examples/' + entry.id + '/', true)])),
     },
+    toggleGroup: {
+      guide: relative(dir, react + toggleGroup.showcaseRoute, true),
+      api: relative(dir, react + toggleGroup.apiRoute, true),
+      examples: Object.fromEntries(toggleGroup.examples.map((entry) => [entry.id, relative(dir, react + 'examples/' + entry.id + '/', true)])),
+    },
     buttonGroup: {
       guide: relative(dir, react + buttonGroup.showcaseRoute, true),
       examples: Object.fromEntries(buttonGroup.examples.map((entry) => [entry.id, relative(dir, react + 'examples/' + entry.id + '/', true)])),
@@ -442,9 +464,9 @@ function linksFor(route) {
     }])),
     // The standalone React gallery has no Native Web gallery view. Route to
     // the Native Web gateway instead of constructing a nonexistent page.
-    native: relative(dir, native + ((route === 'icons/' ||
+    native: relative(dir, native + (route === toggleGroup.showcaseRoute && !nativeModel.showcasePages.some((page) => page.route === route) ? toggleGroup.apiRoute : ((route === 'icons/' ||
       (route.startsWith('foundations/') &&
-      !nativeModel.foundationPages.some((page) => page.route === route))) ? '' : route), true),
+      !nativeModel.foundationPages.some((page) => page.route === route))) ? '' : route)), true),
   };
 }
 async function verifyStyles(dir, extra = [], { docsChrome = true } = {}) {
@@ -736,7 +758,7 @@ for (const slug of layoutSlugs) {
 }
 
 // Render the checked-in ToggleButton React example with its canonical Web CSS.
-for (const entry of [...toggleExamples, ...buttonGroup.examples]) {
+for (const entry of [...toggleExamples, ...toggleGroup.examples, ...buttonGroup.examples]) {
   const asset = 'react-' + entry.id.replace('/', '-');
   await build({
     entryPoints: [path.join(root, entry.sourcePath)],
@@ -786,6 +808,8 @@ const pageViews = [
     description: 'Native pressed-state button and independently controlled state' },
   { route: toggle.apiRoute, view: 'toggle-api', title: 'React ToggleButton API',
     description: 'Source-backed ToggleButton types and pressed state' },
+  { route: toggleGroup.showcaseRoute, view: 'toggle-group', title: 'React ToggleGroup', description: 'Exclusive and multiple pressed choices' },
+  { route: toggleGroup.apiRoute, view: 'toggle-group-api', title: 'React ToggleGroup API', description: 'Source-backed ToggleGroup props' },
   { route: layout.showcaseRoute, view: 'layout', title: 'React Layout', description: 'Flow and AutoGrid usage in React with shared Web CSS' },
   { route: layout.apiRoute, view: 'layout-api', title: 'React Layout API', description: 'Public React Flow and AutoGrid props and stylesheet' },
   { route: divider.showcaseRoute, view: 'divider', title: 'React Divider', description: 'Horizontal and vertical visual-only lines in React' },
@@ -913,6 +937,7 @@ for (const page of pageViews) {
   const props = { view: page.view, links: linksFor(page.route), button: pageData,
     toggle: page.view === 'toggle' || page.view === 'toggle-api' ? toggleData : null,
     buttonGroup: page.view === 'button-group' ? buttonGroup : null,
+    toggleGroup: ['toggle-group', 'toggle-group-api'].includes(page.view) ? { ...toggleGroup, publicTypes: toggleGroupTypes } : null,
     layout: (page.view === 'layout' || page.view === 'layout-api') ? layoutData : null,
     typography: page.topic ? typography[page.topic] : null,
     icon: page.view === 'icon' || page.view === 'icon-api' ? iconData : null,
@@ -1041,6 +1066,11 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     guideRoute: buttonGroup.showcaseRoute, apiRoute: null, guideOnly: true,
     publicEntrypoints: buttonGroup.publicEntrypoints, sharedSourcePath: buttonGroup.sharedSourcePath,
     examples: buttonGroup.examples.map(({ id, sourcePath }) => ({ id, sourcePath })),
+  },
+  toggleGroup: {
+    guideRoute: toggleGroup.showcaseRoute, apiRoute: toggleGroup.apiRoute,
+    publicEntrypoints: toggleGroup.publicEntrypoints, sharedSourcePath: toggleGroup.sharedSourcePath,
+    examples: toggleGroup.examples.map(({ id, sourcePath }) => ({ id, sourcePath })),
   },
   toggle: {
     guideRoute: toggle.showcaseRoute, apiRoute: toggle.apiRoute,
