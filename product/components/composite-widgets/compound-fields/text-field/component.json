@@ -5,9 +5,6 @@
     "group": "form-controls"
   },
   "styling": {
-    "dependencies": [
-      "input",
-      "textarea"
-    ]
+    "dependencies": ["input", "textarea"]
   }
 }

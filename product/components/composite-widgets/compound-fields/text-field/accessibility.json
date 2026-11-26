@@ -57,7 +57,5 @@
   "profileVariability": [
     "single-line/multiline, native states, optional slots, density and explicit size, RTL and forced colors"
   ],
-  "notes": [
-    "No automatic live region or validation engine; human AT acceptance remains separate."
-  ]
+  "notes": ["No automatic live region or validation engine; human AT acceptance remains separate."]
 }

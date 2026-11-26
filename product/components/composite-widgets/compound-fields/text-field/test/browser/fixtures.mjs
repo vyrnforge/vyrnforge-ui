@@ -9,10 +9,21 @@ export const browserFixture = {
     const root = process.cwd();
     const outDir = path.join(root, 'dist/browser-fixtures/components/text-field');
     await mkdir(outDir, { recursive: true });
-    const header = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>TextField</title><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./' + port + '.css"><style>body{background:var(--vf-color-surface);color:var(--vf-color-text)} form{display:grid;gap:1rem;max-width:36rem}</style></head><body><main><h1>Fields</h1>';
+    const header =
+      '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>TextField</title><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./' +
+      port +
+      '.css"><style>body{background:var(--vf-color-surface);color:var(--vf-color-text)} form{display:grid;gap:1rem;max-width:36rem}</style></head><body><main><h1>Fields</h1>';
     if (port === 'web') {
-      await build({ stdin: { contents: '@import "@vyrnforge/web/styles/text-field.css";', loader: 'css', resolveDir: root }, bundle: true, outfile: path.join(outDir, 'web.css') });
-      await writeFile(path.join(outDir, 'web.html'), header + '<form><p id="external">External instruction.</p><div data-vf-text-field data-vf-text-field-full-width data-vf-text-field-variant="outlined"><label for="email" data-vf-text-field-label>Email</label><div data-vf-text-field-control><input id="email" data-vf-input data-vf-text-field-value name="email" value="original@example.com" type="email" required aria-describedby="external help error" aria-invalid="true"></div><div id="help" data-vf-text-field-description>Use your work address.</div><div id="error" data-vf-text-field-error>Choose another address.</div></div><div data-vf-text-field data-vf-text-field-full-width data-vf-text-field-variant="filled"><label for="notes" data-vf-text-field-label>Notes</label><div data-vf-text-field-control><textarea id="notes" name="notes" rows="3" data-vf-textarea data-vf-text-field-value>Original notes</textarea></div></div><button type="reset">Reset</button></form></main></body></html>');
+      await build({
+        stdin: { contents: '@import "@vyrnforge/web/styles/text-field.css";', loader: 'css', resolveDir: root },
+        bundle: true,
+        outfile: path.join(outDir, 'web.css'),
+      });
+      await writeFile(
+        path.join(outDir, 'web.html'),
+        header +
+          '<form><p id="external">External instruction.</p><div data-vf-text-field data-vf-text-field-full-width data-vf-text-field-variant="outlined"><label for="email" data-vf-text-field-label>Email</label><div data-vf-text-field-control><input id="email" data-vf-input data-vf-text-field-value name="email" value="original@example.com" type="email" required aria-describedby="external help error" aria-invalid="true"></div><div id="help" data-vf-text-field-description>Use your work address.</div><div id="error" data-vf-text-field-error>Choose another address.</div></div><div data-vf-text-field data-vf-text-field-full-width data-vf-text-field-variant="filled"><label for="notes" data-vf-text-field-label>Notes</label><div data-vf-text-field-control><textarea id="notes" name="notes" rows="3" data-vf-textarea data-vf-text-field-value>Original notes</textarea></div></div><button type="reset">Reset</button></form></main></body></html>',
+      );
     } else {
       const source = `
 import {createElement as h,useState,useRef} from 'react';
@@ -37,8 +48,17 @@ function App(){
 }
 createRoot(document.querySelector('#root')).render(h(App));
 `;
-      await build({ stdin: { contents: source, resolveDir: root, sourcefile: 'text-field-client.ts' }, bundle: true, platform: 'browser', format: 'iife', outfile: path.join(outDir, 'react.js') });
-      await writeFile(path.join(outDir, 'react.html'), header + '<div id="root"></div></main><script src="./react.js"></script></body></html>');
+      await build({
+        stdin: { contents: source, resolveDir: root, sourcefile: 'text-field-client.ts' },
+        bundle: true,
+        platform: 'browser',
+        format: 'iife',
+        outfile: path.join(outDir, 'react.js'),
+      });
+      await writeFile(
+        path.join(outDir, 'react.html'),
+        header + '<div id="root"></div></main><script src="./react.js"></script></body></html>',
+      );
     }
     return true;
   },

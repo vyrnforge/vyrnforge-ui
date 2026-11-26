@@ -9,8 +9,15 @@ Supported CSS-aware browser bundlers deliver canonical Web styles through the pu
 ```tsx
 import { TextField } from '@vyrnforge/react/text-field';
 
-<TextField label="Email address" name="email" type="email" autoComplete="email"
-  description="Use an address you can access." required fullWidth />;
+<TextField
+  label="Email address"
+  name="email"
+  type="email"
+  autoComplete="email"
+  description="Use an address you can access."
+  required
+  fullWidth
+/>;
 ```
 
 Supply multiline for textarea attributes, including rows, cols and optional autosize. The visual fieldSize is distinct from native numeric size. Native attributes, className and style target the editing element; use a surrounding theme scope to customize the entire field.
