@@ -50,5 +50,6 @@
   },
   "profileVariability": [
     "visible text, optional semantic severity, forced colors, RTL"
-  ]
+  ],
+  "notes": ["Automated checks do not establish human visual or assistive-technology acceptance."]
 }
