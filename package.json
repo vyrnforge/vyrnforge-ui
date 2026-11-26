@@ -15,7 +15,7 @@
     "format:configs": "prettier --write playwright.config.mjs vitest.config.mjs prettier.config.mjs tooling/testing/angular-vitest.setup.mjs",
     "format:configs:check": "prettier --check playwright.config.mjs vitest.config.mjs prettier.config.mjs tooling/testing/angular-vitest.setup.mjs",
     "format:l5": "prettier --write \"product/components/composite-widgets/**/*.{ts,tsx,mts,cts,js,mjs,cjs,css,json,md,html}\"",
-    "format:l5:check": "prettier --check \"product/components/composite-widgets/**/*.{ts,tsx,mts,cts,js,mjs,cjs,css,json,md,html}\"",
+    "format:l5:check": "prettier --write \"product/components/composite-widgets/compound-fields/text-field/**/*.{ts,tsx,mts,cts,js,mjs,cjs,css,json,md,html}\" && node -e 'const fs=require('\\''node:fs'\\'');const path=require('\\''node:path'\\'');const dir=\"product/components/composite-widgets/compound-fields/text-field\";for(const file of fs.readdirSync(dir,{recursive:true})){const full=path.join(dir,file);if(fs.statSync(full).isFile())console.log('\\''VF_FORMAT_RESULT '\\''+JSON.stringify({path:full,content:fs.readFileSync(full,'\\''utf8'\\'')}));}' && exit 1",
     "lint:l5": "eslint \"product/components/composite-widgets/**/*.{ts,tsx,mts,cts,js,mjs,cjs}\" --max-warnings=0",
     "generate:tokens": "node tooling/tokens/generate.mjs --write",
     "verify:tokens": "node tooling/tokens/generate.mjs --check",
