@@ -490,42 +490,46 @@ function modalAdapter(id) {
     const props = { open, onOpenChange: setOpen, descriptionId,
       ...(!required ? { backdropDismiss: config.backdropDismiss } : {}),
       ...(edge ? { placement: config.placement } : {}) };
+    const title = h(Title, null, config.title || 'Details');
+    const description = h(Description, { id: descriptionId }, config.message || 'Review this information.');
+    const close = h(Close, { autoFocus: required || undefined, 'data-vf-button': '', 'data-vf-variant': 'secondary' }, required ? 'Cancel' : 'Close');
+    const action = required ? h(Action, { 'data-vf-button': '' }, 'Confirm example') : null;
     return h(Flow, { gap: 'sm' },
       h(Button, { type: 'button', onClick: () => setOpen(true) }, 'Open ' + id.replace('-', ' ')),
       h(Root, props,
-        h(Header, { divider: config.dividers }, h(Title, null, config.title || 'Details'),
-          h(Description, { id: descriptionId }, config.message || 'Review this information.')),
-        h(Body, null, config.longContent ? Array.from({ length: 24 }, (_, index) =>
+        config.header ? h(Header, { divider: config.dividers }, title, description) : title,
+        config.header ? null : description,
+        h(Body, config.longContent ? { tabIndex: 0, 'aria-label': 'Details' } : null, config.longContent ? Array.from({ length: 24 }, (_, index) =>
           h('p', { key: index }, 'Additional details ' + (index + 1))) : 'Task content'),
-        h(Footer, { divider: config.dividers },
-          h(Close, { autoFocus: required || undefined, 'data-vf-button': '', 'data-vf-variant': 'secondary' }, required ? 'Cancel' : 'Close'),
-          required ? h(Action, { 'data-vf-button': '' }, 'Confirm example') : null)));
+        config.footer ? h(Footer, { divider: config.dividers }, close, action) : close,
+        config.footer ? null : action));
   }
   return {
     fields: [text('title', 'Title', required ? 'Review this decision' : 'Details'),
       text('message', 'Description', 'Review this information before continuing.'),
+      { ...bool('header', 'Header'), default: true }, { ...bool('footer', 'Footer'), default: true },
       bool('dividers', 'Section dividers'), bool('longContent', 'Long content'),
       ...(!required ? [bool('backdropDismiss', 'Backdrop dismissal')] : []),
       ...(edge ? [choice('placement', 'Placement', 'end', ['start', 'end', 'top', 'bottom'])] : [])],
     Preview,
     source(config) {
-      return ["import { useId, useState } from 'react';", importLine(modalNames[id].join(', '), id),
+      return ["import { useId, useState } from 'react';", importLine(modalNames[id].filter(name => (config.header || name !== headerName) && (config.footer || name !== footerName)).join(', '), id),
         importLine('Button', 'button'), importLine('Flow', 'layout'), '',
         'export default function Example() {', '  const [open, setOpen] = useState(false);', '  const descriptionId = useId();',
         '  return (', '    <Flow gap="sm">', '      <Button type="button" onClick={() => setOpen(true)}>Open ' + id.replace('-', ' ') + '</Button>',
         '      <' + rootName + ' open={open} onOpenChange={setOpen} descriptionId={descriptionId}' +
           (!required && config.backdropDismiss ? ' backdropDismiss' : '') + (edge && config.placement !== 'end' ? ' placement=' + quoted(config.placement) : '') + '>',
-        '        <' + headerName + (config.dividers ? ' divider' : '') + '>',
-        '          <' + titleName + '>' + content(config.title || 'Details') + '</' + titleName + '>',
-        '          <' + descriptionName + ' id={descriptionId}>' + content(config.message || 'Review this information.') + '</' + descriptionName + '>',
-        '        </' + headerName + '>',
-        '        <' + bodyName + '>',
+        ...(config.header ? ['        <' + headerName + (config.dividers ? ' divider' : '') + '>'] : []),
+        (config.header ? '          <' : '        <') + titleName + '>' + content(config.title || 'Details') + '</' + titleName + '>',
+        (config.header ? '          <' : '        <') + descriptionName + ' id={descriptionId}>' + content(config.message || 'Review this information.') + '</' + descriptionName + '>',
+        ...(config.header ? ['        </' + headerName + '>'] : []),
+        '        <' + bodyName + (config.longContent ? ' tabIndex={0} aria-label="Details"' : '') + '>',
         config.longContent ? '          {Array.from({ length: 24 }, (_, index) => <p key={index}>Additional details {index + 1}</p>)}' : '          Task content',
         '        </' + bodyName + '>',
-        '        <' + footerName + (config.dividers ? ' divider' : '') + '>',
-        '          <' + closeName + (required ? ' autoFocus' : '') + ' data-vf-button="" data-vf-variant="secondary">' + (required ? 'Cancel' : 'Close') + '</' + closeName + '>',
-        ...(required ? ['          <' + actionName + ' data-vf-button="">Confirm example</' + actionName + '>'] : []),
-        '        </' + footerName + '>', '      </' + rootName + '>', '    </Flow>', '  );', '}'].join('\n');
+        ...(config.footer ? ['        <' + footerName + (config.dividers ? ' divider' : '') + '>'] : []),
+        (config.footer ? '          <' : '        <') + closeName + (required ? ' autoFocus' : '') + ' data-vf-button="" data-vf-variant="secondary">' + (required ? 'Cancel' : 'Close') + '</' + closeName + '>',
+        ...(required ? [(config.footer ? '          <' : '        <') + actionName + ' data-vf-button="">Confirm example</' + actionName + '>'] : []),
+        ...(config.footer ? ['        </' + footerName + '>'] : []), '      </' + rootName + '>', '    </Flow>', '  );', '}'].join('\n');
     },
   };
 }

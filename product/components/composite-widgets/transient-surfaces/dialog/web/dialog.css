@@ -28,6 +28,7 @@
   :where(
     [data-vf-dialog-root][open]:has(> [data-vf-dialog-body]):has(> [data-vf-dialog-header], > [data-vf-dialog-footer])
   ) {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: var(--vf-space-md);
@@ -69,7 +70,7 @@
 
   :where([data-vf-dialog-root][open]:has(> [data-vf-dialog-header], > [data-vf-dialog-footer]) > [data-vf-dialog-body]) {
     flex: 1 1 auto;
-    min-block-size: var(--vf-space-3xl);
+    min-block-size: var(--vf-space-xl);
     overflow: auto;
     scroll-padding: var(--vf-space-xs);
     overflow-wrap: anywhere;

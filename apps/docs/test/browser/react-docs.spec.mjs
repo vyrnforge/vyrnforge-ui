@@ -3171,3 +3171,18 @@ test('structured Dialog playground keeps footer available with long content and 
   await expect(modal).toBeHidden();
   await expect(trigger).toBeFocused();
 });
+
+test('Dialog playground supports omitting both presentational regions without losing accessible name', async ({ page }) => {
+  await page.goto('/next/react/components/dialog/');
+  const playground = page.locator('[data-vf-docs-react-dialog] [data-vf-docs-component-playground]');
+  await playground.getByRole('checkbox', { name: 'Header', exact: true }).uncheck();
+  await playground.getByRole('checkbox', { name: 'Footer', exact: true }).uncheck();
+  const trigger = playground.getByRole('button', { name: 'Open dialog' });
+  await trigger.click();
+  const modal = playground.getByRole('dialog', { name: 'Details' });
+  await expect(modal).toBeVisible();
+  await expect(modal.locator('[data-vf-dialog-header], [data-vf-dialog-footer]')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await expect(modal).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
