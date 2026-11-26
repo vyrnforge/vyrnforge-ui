@@ -106,3 +106,43 @@ test('floating label follows native focus, value and reset without replacing the
   await page.emulateMedia({ forcedColors: 'active' });
   await page.screenshot({ path: testInfo.outputPath('floating-field-' + port + '-forced-colors.png'), fullPage: true });
 });
+
+test('filled and underlined variants have distinct surfaces and insets', async ({ page }, testInfo) => {
+  await page.goto('/components/text-field/' + port + '.html');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const filled = page.getByRole('textbox', { name: 'Compare filled' });
+  const underlined = page.getByRole('textbox', { name: 'Compare underlined' });
+  const shell = (editor) => page.locator('[data-vf-text-field-control]').filter({ has: editor });
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((el, theme) => {
+      el.dataset.vfTheme = theme;
+    }, theme);
+    await expect(shell(underlined)).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    const paint = await shell(filled).evaluate((node) => getComputedStyle(node).backgroundColor);
+    expect(paint).not.toBe('rgba(0, 0, 0, 0)');
+    const separation = await shell(filled).evaluate((node) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 1;
+      const ctx = canvas.getContext('2d');
+      const rgb = (color) => {
+        ctx.clearRect(0, 0, 1, 1);
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, 1, 1);
+        return [...ctx.getImageData(0, 0, 1, 1).data];
+      };
+      const field = rgb(getComputedStyle(node).backgroundColor);
+      const surface = rgb(getComputedStyle(document.body).backgroundColor);
+      return Math.max(...field.slice(0, 3).map((channel, i) => Math.abs(channel - surface[i])));
+    });
+    expect(separation).toBeGreaterThanOrEqual(24);
+    await expect(filled).toHaveCSS('padding-inline-start', '12px');
+    await expect(underlined).toHaveCSS('padding-inline-start', '4px');
+    await expect(shell(underlined)).toHaveCSS('border-top-left-radius', '0px');
+    await expect(shell(filled)).not.toHaveCSS('border-top-left-radius', '0px');
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    await page.screenshot({
+      path: testInfo.outputPath('text-field-variant-distinction-' + port + '-' + theme + '.png'),
+      fullPage: true,
+    });
+  }
+});

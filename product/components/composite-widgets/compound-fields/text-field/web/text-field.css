@@ -34,10 +34,11 @@
     --_vf-text-field-padding: var(--vf-space-sm);
   }
   :where([data-vf-text-field][data-vf-text-field-variant='filled']) {
-    --_vf-text-field-background: var(--vf-color-surface-subtle);
+    --_vf-text-field-background: color-mix(in srgb, var(--vf-color-surface) 88%, var(--vf-color-text));
   }
   :where([data-vf-text-field][data-vf-text-field-variant='underlined']) {
     --_vf-text-field-background: transparent;
+    --_vf-text-field-inline-padding: var(--vf-space-xs);
   }
   :where([data-vf-text-field-label]) {
     font: var(
