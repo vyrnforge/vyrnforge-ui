@@ -69,7 +69,7 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
     'data-vf-text-field-variant': variant,
     'data-vf-text-field-size': fieldSize,
     'data-vf-text-field-full-width': fullWidth ? '' : undefined,
-    'data-vf-text-field-status': status,
+    'data-vf-text-field-status': hasError ? undefined : status,
     'data-vf-text-field-align': textAlign,
     dir: props.dir,
     hidden: props.hidden,
