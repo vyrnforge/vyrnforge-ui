@@ -1,8 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { StatusIndicator } from '@vyrnforge/react/status-indicator';
 import { Flow } from '@vyrnforge/react/layout';
-import '@vyrnforge/web/styles/status-indicator.css';
-import '@vyrnforge/web/styles/layout.css';
 
 function Example() {
   return <Flow gap="sm">

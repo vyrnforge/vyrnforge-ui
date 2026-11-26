@@ -4,10 +4,11 @@ Compose persistent native-backed feedback with existing Button and Icon. The Rea
 
 ## React setup
 
+Supported CSS-aware browser bundlers load the component styles automatically.
+
 ```tsx
 import { Alert } from '@vyrnforge/react/alert';
 import { Button } from '@vyrnforge/react/button';
-import '@vyrnforge/web/styles/alert.css';
 
 <Alert
   severity="warning"

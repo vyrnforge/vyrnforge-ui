@@ -36,10 +36,21 @@
     border: 0;
     background: transparent;
     color: inherit;
+    min-inline-size: var(--vf-control-height-sm);
+    min-block-size: var(--vf-control-height-sm);
+    border-radius: var(--vf-radius-surface);
+    cursor: pointer;
+  }
+  [data-vf-toast-close]:focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
   }
   @media (forced-colors: active) {
     [data-vf-toast-root] {
       box-shadow: none;
+    }
+    [data-vf-toast-close]:focus-visible {
+      outline-color: Highlight;
     }
   }
 

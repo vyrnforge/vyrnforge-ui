@@ -28,7 +28,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-backdrop-status-alert-pilot');
+  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-backdrop-status-alert-feedback-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -61,8 +61,16 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     'icons/', 'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
     'components/list/', 'api/components/list/',
+    'patterns/banner/',
+    'patterns/empty-state/',
+    'patterns/inline-feedback/',
+    'patterns/feedback-composition/',
     'components/status-indicator/', 'api/components/status-indicator/',
     'components/alert/', 'api/components/alert/',
+    'components/dialog/', 'api/components/dialog/',
+    'components/alert-dialog/', 'api/components/alert-dialog/',
+    'components/drawer/', 'api/components/drawer/',
+    'components/toast/', 'api/components/toast/',
     'components/backdrop/', 'api/components/backdrop/',
     'patterns/loading/', 'api/patterns/loading/',
     'components/chip/', 'api/components/chip/',
@@ -3085,4 +3093,61 @@ test('Status Indicator and Alert use shared playground with explicit announcemen
   await alert.getByRole('button',{name:'Dismiss feedback'}).click();
   await expect(alert.locator('[data-vf-alert]')).toHaveCount(0);
   await expect(alert.getByRole('button',{name:'Restore message'})).toBeFocused();
+});
+
+test('React feedback modal and Toast guides use native interaction and shared playgrounds', async ({ page }) => {
+  test.setTimeout(90_000);
+  for (const [id, title, role, close] of [
+    ['dialog', 'Dialog', 'dialog', 'Close'],
+    ['alert-dialog', 'AlertDialog', 'alertdialog', 'Cancel'],
+    ['drawer', 'Drawer', 'dialog', 'Close'],
+  ]) {
+    await page.goto('/next/react/components/' + id + '/');
+    const playground = page.locator('[data-vf-docs-react-' + id + '] [data-vf-docs-component-playground]');
+    const trigger = playground.getByRole('button', { name: 'Open ' + id.replace('-', ' ') });
+    await trigger.click();
+    const modal = playground.getByRole(role);
+    await expect(modal).toBeVisible();
+    expect(await modal.evaluate(element => element.matches(':modal'))).toBe(true);
+    await modal.getByRole('button', { name: close, exact: true }).click();
+    await expect(modal).toBeHidden();
+    await expect(trigger).toBeFocused();
+  }
+  await page.goto('/next/react/components/toast/');
+  const toast = page.locator('[data-vf-docs-component-playground="Toast"]');
+  await toast.getByRole('checkbox', { name: 'Persistent' }).check();
+  await toast.getByRole('button', { name: 'Show notification' }).click();
+  const toastMessage = toast.locator('[data-vf-toast-root]');
+  await expect(toastMessage).toBeVisible();
+  await expect(toastMessage).toHaveAttribute('role', 'status');
+  await toast.getByRole('button', { name: 'Dismiss notification' }).click();
+  await expect(toastMessage).toHaveCount(0);
+});
+test('Feedback composition guides have executable examples and no fictional package API', async ({ page }) => {
+  for (const id of ['banner', 'empty-state', 'inline-feedback', 'feedback-composition']) {
+    await page.goto('/next/react/patterns/' + id + '/');
+    const guide = page.locator('[data-vf-docs-react-' + id + ']');
+    await expect(guide).toBeVisible();
+    await expect(guide.locator('iframe')).toHaveCount(id === 'feedback-composition' ? 4 : 1);
+    await expect(guide.locator('iframe').first().contentFrame().locator('#root')).not.toBeEmpty();
+    await expect(guide.getByRole('link', { name: /public React API/ })).toHaveCount(0);
+  }
+});
+
+test('Feedback recovery and notification examples retain application-owned state', async ({ page }) => {
+  await page.goto('/next/react/patterns/feedback-composition/');
+  const undoFrame = page.locator('[data-vf-docs-react-feedback-composition-example="feedback-composition/undo"] iframe');
+  await undoFrame.scrollIntoViewIfNeeded();
+  const undo = undoFrame.contentFrame();
+  await undo.getByRole('button', { name: 'Archive example report' }).click();
+  await expect(undo.getByRole('button', { name: 'Undo archive' })).toBeFocused();
+  await undo.getByRole('button', { name: 'Undo archive' }).click();
+  await expect(undo.getByRole('button', { name: 'Archive example report' })).toBeFocused();
+  const historyFrame = page.locator('[data-vf-docs-react-feedback-composition-example="feedback-composition/notification-history"] iframe');
+  await historyFrame.scrollIntoViewIfNeeded();
+  const history = historyFrame.contentFrame();
+  await history.getByRole('button', { name: 'Complete example export' }).click();
+  await expect(history.getByRole('list')).toContainText('Example export 1 is ready.');
+  await history.getByRole('button', { name: 'Dismiss notification' }).click();
+  await expect(history.getByRole('list')).toContainText('Example export 1 is ready.');
 });

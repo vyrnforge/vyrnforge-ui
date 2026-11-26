@@ -5,9 +5,6 @@ import { Button } from '@vyrnforge/react/button';
 import { Icon } from '@vyrnforge/react/icon';
 import { infoIcon } from '@vyrnforge/icons/info';
 import { Flow } from '@vyrnforge/react/layout';
-import '@vyrnforge/web/styles/alert.css';
-import '@vyrnforge/web/styles/icon.css';
-import '@vyrnforge/web/styles/layout.css';
 
 function Example() {
   const [visible, setVisible] = useState(true);

@@ -1,26 +1,22 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { DialogBody, DialogClose, DialogDescription, DialogRoot, DialogTitle } from '@vyrnforge/react/dialog';
-import '@vyrnforge/web/styles/dialog.css';
+import { Button } from '@vyrnforge/react/button';
 
-function App() {
-  const [open, setOpen] = React.useState(false);
+function Example() {
+  const [open, setOpen] = useState(false);
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)}>
+      <Button type="button" onClick={() => setOpen(true)}>
         Open dialog
-      </button>
-      <DialogRoot
-        id="example-dialog"
-        open={open}
-        onOpenChange={setOpen}
-        backdropDismiss
-        descriptionId="example-dialog-description"
-      >
+      </Button>
+      <DialogRoot open={open} onOpenChange={setOpen} backdropDismiss descriptionId="example-dialog-description">
         <DialogTitle>Edit profile</DialogTitle>
         <DialogDescription id="example-dialog-description">Update the fields you want to change.</DialogDescription>
         <DialogBody>Profile form content</DialogBody>
-        <DialogClose>Close</DialogClose>
+        <DialogClose data-vf-button="" data-vf-variant="secondary">
+          Close
+        </DialogClose>
       </DialogRoot>
     </>
   );
@@ -28,4 +24,4 @@ function App() {
 
 const mount = document.querySelector('#root');
 if (!mount) throw new Error('Example mount is missing.');
-createRoot(mount).render(<App />);
+createRoot(mount).render(<Example />);
