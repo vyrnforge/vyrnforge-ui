@@ -88,3 +88,5 @@ export * from './components/loading/index.js';
 export * from './components/backdrop/index.js';
 export * from './components/status-indicator/index.js';
 export * from './components/alert/index.js';
+
+export * from './components/text-field/index.js';

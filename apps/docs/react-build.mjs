@@ -274,6 +274,13 @@ if (badgeTypeStart < 0 || badgeTypeEnd < 0 ||
 const publicBadgeTypes = badgePublicSource.slice(badgeTypeStart, badgeTypeEnd).trim();
 
 const feedbackIds = ['status-indicator', 'alert', 'dialog', 'alert-dialog', 'drawer', 'toast'];
+const fieldIds = ['input', 'textarea', 'text-field'];
+const fieldUnits = await Promise.all(fieldIds.map(async id => {
+  const unit = reactModel.componentCatalog.find(entry => entry.id === id);
+  if (!unit?.apiAvailable || !unit.showcaseAvailable || !unit.frameworkContent || !unit.examples.length ||
+      !unit.publicEntrypoints.includes('@vyrnforge/react/' + id)) throw new Error('Missing React field owner: ' + id);
+  return { ...unit, publicTypes: await readFile(path.join(root, path.dirname(path.dirname(unit.frameworkSourcePath)), 'index.ts'), 'utf8') };
+}));
 const feedbackPatternIds = ['banner', 'empty-state', 'inline-feedback', 'feedback-composition'];
 const feedbackUnits = await Promise.all(feedbackIds.map(async id => {
   const unit = reactModel.componentCatalog.find(entry => entry.id === id);
@@ -405,8 +412,8 @@ const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 // Playground CSS belongs to React guide pages only. Bundle relative public CSS imports
 // so an iframe or Native Web inline theme clone never resolves them against a document URL.
-const playgroundViews = new Set(['guide', 'selection-checkbox', 'selection-radio', 'avatar', 'badge', 'chip', 'toggle', 'divider', 'list', 'loading', 'backdrop', ...feedbackIds]);
-const playgroundStyles = ['checkbox', 'radio', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list', 'loading', 'backdrop', 'segmented-control', ...feedbackIds];
+const playgroundViews = new Set(['guide', 'selection-checkbox', 'selection-radio', 'avatar', 'badge', 'chip', 'toggle', 'divider', 'list', 'loading', 'backdrop', ...fieldIds, ...feedbackIds]);
+const playgroundStyles = ['checkbox', 'radio', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list', 'loading', 'backdrop', 'segmented-control', ...fieldIds, ...feedbackIds];
 const playgroundStyleAsset = '/assets/react-playground.css';
 // The Color studio alone needs these public controls; other docs pages do not
 // pay for unrelated component styles or invent docs-specific component skins.
@@ -508,7 +515,7 @@ function linksFor(route) {
       api: relative(dir, react + list.apiRoute, true),
       exampleBase: relative(dir, react + 'examples/list/', true),
     },
-    ...Object.fromEntries([...feedbackUnits, ...feedbackPatterns].map(unit => [unit.id, {
+    ...Object.fromEntries([...fieldUnits, ...feedbackUnits, ...feedbackPatterns].map(unit => [unit.id, {
       guide: relative(dir, react + unit.showcaseRoute, true),
       api: unit.apiRoute ? relative(dir, react + unit.apiRoute, true) : null,
       exampleBase: relative(dir, react + 'examples/' + unit.id + '/', true),
@@ -720,11 +727,15 @@ for (const example of listExamples) {
 }
 
 
-for (const example of [...badgeExamples, ...chipExamples, ...loading.examples, ...backdrop.examples, ...feedbackUnits.flatMap(unit => unit.examples), ...feedbackPatterns.flatMap(unit => unit.examples)]) {
+for (const example of [...badgeExamples, ...chipExamples, ...loading.examples, ...backdrop.examples, ...fieldUnits.flatMap(unit => unit.examples), ...feedbackUnits.flatMap(unit => unit.examples), ...feedbackPatterns.flatMap(unit => unit.examples)]) {
   const [component, slug] = example.id.split('/');
   const asset = 'react-' + component + '-' + slug;
   await build({
-    entryPoints: [path.join(root, example.sourcePath)],
+    ...(['input', 'textarea'].includes(component) ? { stdin: {
+      contents: "import { createRoot } from 'react-dom/client'; import { createElement } from 'react'; import { Example } from " +
+        JSON.stringify('./' + path.relative(root, path.join(root, example.sourcePath))) + "; createRoot(document.querySelector('#root')).render(createElement(Example));",
+      resolveDir: root, sourcefile: 'field-example.tsx', loader: 'tsx',
+    } } : { entryPoints: [path.join(root, example.sourcePath)] }),
     bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
     jsx: 'automatic', logLevel: 'silent',
     outfile: path.join(outRoot, 'assets', asset + '.js'),
@@ -948,6 +959,10 @@ const pageViews = [
     description: 'Rich semantic lists, native markers and composed actions' },
   { route: list.apiRoute, view: 'list-api', title: 'React List API',
     description: 'Source-backed React List and ListItem public props' },
+  ...fieldUnits.flatMap(unit => [
+    { route: unit.showcaseRoute, view: unit.id, title: 'React ' + unit.title, description: 'Native-backed field usage and customization' },
+    { route: unit.apiRoute, view: unit.id + '-api', title: 'React ' + unit.title + ' API', description: 'Source-backed React public API' },
+  ]),
   ...feedbackPatterns.map(unit => ({ route: unit.showcaseRoute, view: unit.id, title: 'React ' + unit.title, description: 'Feedback composition using existing native-backed components' })),
   ...feedbackUnits.flatMap(unit => [
     { route: unit.showcaseRoute, view: unit.id, title: 'React ' + unit.title, description: 'Native-first feedback presentation' },
@@ -1074,7 +1089,7 @@ for (const page of pageViews) {
     image: page.view === 'image' || page.view === 'image-api' ? imageData : null,
     avatar: page.view === 'avatar' || page.view === 'avatar-api' ? avatarData : null,
     list: page.view === 'list' || page.view === 'list-api' ? listData : null,
-    feedback: [...feedbackUnits, ...feedbackPatterns].find(unit => [unit.id, unit.id + '-api'].includes(page.view)) ?? null,
+    feedback: [...fieldUnits, ...feedbackUnits, ...feedbackPatterns].find(unit => [unit.id, unit.id + '-api'].includes(page.view)) ?? null,
     backdrop: ['backdrop', 'backdrop-api'].includes(page.view) ? backdropData : null,
     loading: ['loading', 'loading-api'].includes(page.view) ? loadingData : null,
     chip: page.view === 'chip' || page.view === 'chip-api' ? chipData : null,
@@ -1157,6 +1172,11 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
       id: example.id, sourcePath: example.sourcePath, title: example.title,
     })),
   },
+  fields: fieldUnits.map(unit => ({
+    id: unit.id, guideRoute: unit.showcaseRoute, apiRoute: unit.apiRoute,
+    publicEntrypoints: unit.publicEntrypoints, frameworkSourcePath: unit.frameworkSourcePath,
+    examples: unit.examples.map(example => ({ id: example.id, sourcePath: example.sourcePath })),
+  })),
   feedback: [...feedbackUnits, ...feedbackPatterns].map(unit => ({
     id: unit.id, guideRoute: unit.showcaseRoute, apiRoute: unit.apiRoute,
     publicEntrypoints: unit.publicEntrypoints, sharedSourcePath: unit.sharedSourcePath,

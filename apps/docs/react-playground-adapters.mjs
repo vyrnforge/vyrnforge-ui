@@ -1,3 +1,6 @@
+import { Input } from '@vyrnforge/react/input';
+import { Textarea } from '@vyrnforge/react/textarea';
+import { TextField } from '@vyrnforge/react/text-field';
 import { createElement as h, useId, useState, useEffect, useRef } from 'react';
 import { Button } from '@vyrnforge/react/button';
 import { Checkbox } from '@vyrnforge/react/checkbox';
@@ -560,5 +563,83 @@ export const toastPlayground = {
       '        <ToastTitle>' + content(config.title || 'Saved') + '</ToastTitle>',
       '        <ToastDescription>' + content(config.message || 'Preferences are up to date.') + '</ToastDescription>',
       '        <ToastClose aria-label="Dismiss notification">×</ToastClose>','      </ToastRoot>','    </ToastViewport>','  </Flow>;','}'].join('\n');
+  },
+};
+
+const fieldModes = ['text', 'email', 'url', 'tel', 'search', 'password', 'number'];
+function nativeFieldAdapter(multiline) {
+  const name = multiline ? 'Textarea' : 'Input';
+  const Component = multiline ? Textarea : Input;
+  const fieldProps = config => ({
+    placeholder: config.placeholder, disabled: config.disabled, readOnly: config.readOnly, required: config.required,
+    defaultValue: config.initial, 'aria-invalid': config.invalid || undefined,
+    ...(multiline ? { rows: Number(config.rows) } : { type: config.type }),
+  });
+  return {
+    fields: [text('label', 'Label', multiline ? 'Notes' : 'Email address'),
+      text('placeholder', 'Placeholder', multiline ? 'Add a note' : 'name@example.com'),
+      text('initial', 'Initial value', ''), ...(multiline ? [choice('rows', 'Rows', '3', ['2','3','5'])] : [choice('type', 'Type', 'text', fieldModes)]),
+      bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'), bool('required', 'Required'), bool('invalid', 'Invalid')],
+    Preview({ config }) {
+      const id = useId();
+      return h(Flow, { gap: 'xs' },
+        h('label', { htmlFor: id }, label(config, name)),
+        h(Component, { ...fieldProps(config), id, key: JSON.stringify([config.type, config.initial]) }));
+    },
+    source(config) {
+      const control = markup(name, ['id="field"', attribute('placeholder', config.placeholder, ''), attribute('defaultValue', config.initial, ''),
+        multiline ? 'rows={' + Number(config.rows) + '}' : attribute('type', config.type, 'text'),
+        flag('disabled', config.disabled), flag('readOnly', config.readOnly), flag('required', config.required),
+        config.invalid ? 'aria-invalid="true"' : '']);
+      return snippet([importLine(name, name.toLowerCase())],
+        '<>\n  <label htmlFor="field">' + content(label(config, name)) + '</label>\n' + indent(control, 2) + '\n</>');
+    },
+  };
+}
+export const inputPlayground = nativeFieldAdapter(false);
+export const textareaPlayground = nativeFieldAdapter(true);
+function textFieldProps(config) {
+  return {
+    label: label(config, 'Text field'), placeholder: config.placeholder, description: config.description || undefined,
+    error: config.error || undefined, variant: config.variant,
+    fieldSize: config.fieldSize === 'inherit' ? undefined : config.fieldSize, fullWidth: config.fullWidth,
+    textAlign: config.textAlign, disabled: config.disabled, readOnly: config.readOnly, required: config.required,
+    prefix: config.prefix || undefined, suffix: config.suffix || undefined,
+    status: config.status === 'none' ? undefined : config.status,
+    ...(config.multiline ? { multiline: true, rows: 3, autosize: config.autosize } : { type: config.type }),
+    ...(config.leadingIcon ? { leading: h(Icon, { icon: userIcon }) } : {}),
+  };
+}
+export const textFieldPlayground = {
+  fields: [
+    text('label', 'Label', 'Display name'), text('placeholder', 'Placeholder', 'Your name'),
+    text('description', 'Helper text', 'Shown to your teammates.'), text('error', 'Error message', ''),
+    choice('variant', 'Variant', 'outlined', ['outlined', 'filled']),
+    choice('fieldSize', 'Field size', 'inherit', ['inherit', 'sm', 'md', 'lg']),
+    choice('type', 'Type', 'text', fieldModes), choice('textAlign', 'Text alignment', 'start', ['start', 'center', 'end']),
+    choice('status', 'Feedback', 'none', ['none', 'warning', 'success']),
+    text('prefix', 'Prefix', ''), text('suffix', 'Suffix', ''),
+    bool('leadingIcon', 'Leading icon'), bool('fullWidth', 'Full width'),
+    bool('multiline', 'Multiline'), bool('autosize', 'Autosize'), bool('required', 'Required'),
+    bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'),
+  ],
+  presets: [
+    { label: 'Amount', values: { label: 'Amount in USD', prefix: '$', textAlign: 'end', description: 'Enter a decimal amount.' } },
+    { label: 'Invalid', values: { error: 'Choose a different display name.', variant: 'filled' } },
+  ],
+  Preview({ config }) {
+    return h(TextField, { ...textFieldProps(config), key: config.multiline ? 'multi' : config.type });
+  },
+  source(config) {
+    const p = textFieldProps(config);
+    return snippet([importLine('TextField', 'text-field'), ...(config.leadingIcon ? iconImports('userIcon', 'user') : [])],
+      markup('TextField', [attribute('label', p.label, ''), attribute('placeholder', config.placeholder, ''),
+        attribute('description', config.description, ''), attribute('error', config.error, ''),
+        attribute('variant', config.variant, 'outlined'), attribute('fieldSize', config.fieldSize, 'inherit'),
+        config.multiline ? 'multiline' : attribute('type', config.type, 'text'), config.multiline ? 'rows={3}' : '',
+        flag('autosize', config.multiline && config.autosize), attribute('textAlign', config.textAlign, 'start'),
+        attribute('status', config.status, 'none'), attribute('prefix', config.prefix, ''), attribute('suffix', config.suffix, ''),
+        config.leadingIcon ? 'leading={<Icon icon={userIcon} />}' : '',
+        flag('fullWidth', config.fullWidth), flag('required', config.required), flag('disabled', config.disabled), flag('readOnly', config.readOnly)]));
   },
 };

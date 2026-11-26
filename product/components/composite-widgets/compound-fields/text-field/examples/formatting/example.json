@@ -1,0 +1,13 @@
+{
+  "id": "text-field/formatting",
+  "title": "Units and formatted display",
+  "description": "Keep raw editable text separate from locale-aware formatted output.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

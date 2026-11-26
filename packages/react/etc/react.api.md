@@ -4393,6 +4393,54 @@ export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 // @public (undocumented)
 export type TextElement = 'span' | 'p' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote' | 'q' | 'cite' | 'strong' | 'em' | 'small' | 'mark' | 'abbr' | 'sub' | 'sup' | 'del' | 'ins' | 'time' | 'figcaption';
 
+// @public
+export const TextField: ForwardRefExoticComponent<TextFieldProps & RefAttributes<HTMLTextAreaElement | HTMLInputElement>>;
+
+// @public (undocumented)
+export interface TextFieldAppearanceProps {
+    // (undocumented)
+    description?: ReactNode;
+    // (undocumented)
+    error?: string;
+    // (undocumented)
+    fieldSize?: 'sm' | 'md' | 'lg';
+    // (undocumented)
+    fullWidth?: boolean;
+    // (undocumented)
+    label: string;
+    // (undocumented)
+    leading?: ReactNode;
+    // (undocumented)
+    prefix?: string;
+    // (undocumented)
+    status?: 'warning' | 'success';
+    // (undocumented)
+    suffix?: string;
+    // (undocumented)
+    textAlign?: 'start' | 'center' | 'end';
+    // (undocumented)
+    trailing?: ReactNode;
+    // (undocumented)
+    variant?: 'outlined' | 'filled';
+}
+
+// @public (undocumented)
+export type TextFieldInputProps = TextFieldAppearanceProps & Omit<InputProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'type'> & {
+    multiline?: false;
+    type?: 'text' | 'email' | 'url' | 'tel' | 'search' | 'password' | 'number';
+    autosize?: never;
+};
+
+// @public (undocumented)
+export type TextFieldProps = TextFieldInputProps | TextFieldTextareaProps;
+
+// @public (undocumented)
+export type TextFieldTextareaProps = TextFieldAppearanceProps & Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix'> & {
+    multiline: true;
+    type?: never;
+    autosize?: boolean;
+};
+
 // @public (undocumented)
 export type TextProps<Element extends TextElement = TextElement> = Element extends TextElement ? {
     as?: Element;

@@ -1,0 +1,13 @@
+{
+  "id": "text-field/form",
+  "title": "Native form and validation",
+  "description": "Native requiredness and application validation with a controlled clear action.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
