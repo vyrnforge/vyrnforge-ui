@@ -601,7 +601,7 @@ export const textareaPlayground = nativeFieldAdapter(true);
 function textFieldProps(config) {
   return {
     label: label(config, 'Text field'), placeholder: config.placeholder, description: config.description || undefined,
-    error: config.error || undefined, variant: config.variant,
+    error: config.error || undefined, variant: config.variant, labelPlacement: config.labelPlacement,
     fieldSize: config.fieldSize === 'inherit' ? undefined : config.fieldSize, fullWidth: config.fullWidth,
     textAlign: config.textAlign, disabled: config.disabled, readOnly: config.readOnly, required: config.required,
     prefix: config.prefix || undefined, suffix: config.suffix || undefined,
@@ -612,9 +612,10 @@ function textFieldProps(config) {
 }
 export const textFieldPlayground = {
   fields: [
-    text('label', 'Label', 'Display name'), text('placeholder', 'Placeholder', 'Your name'),
+    text('label', 'Label', 'Display name'), text('placeholder', 'Placeholder', ''),
     text('description', 'Helper text', 'Shown to your teammates.'), text('error', 'Error message', ''),
-    choice('variant', 'Variant', 'outlined', ['outlined', 'filled']),
+    choice('variant', 'Variant', 'outlined', ['outlined', 'filled', 'underlined']),
+    choice('labelPlacement', 'Label placement', 'floating', ['outside', 'floating']),
     choice('fieldSize', 'Field size', 'inherit', ['inherit', 'sm', 'md', 'lg']),
     choice('type', 'Type', 'text', fieldModes), choice('textAlign', 'Text alignment', 'start', ['start', 'center', 'end']),
     choice('status', 'Feedback', 'none', ['none', 'warning', 'success']),
@@ -624,6 +625,7 @@ export const textFieldPlayground = {
     bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'),
   ],
   presets: [
+    { label: 'Underlined', values: { variant: 'underlined', labelPlacement: 'floating' } },
     { label: 'Amount', values: { label: 'Amount in USD', prefix: '$', textAlign: 'end', description: 'Enter a decimal amount.' } },
     { label: 'Invalid', values: { error: 'Choose a different display name.', variant: 'filled' } },
   ],
@@ -635,7 +637,7 @@ export const textFieldPlayground = {
     return snippet([importLine('TextField', 'text-field'), ...(config.leadingIcon ? iconImports('userIcon', 'user') : [])],
       markup('TextField', [attribute('label', p.label, ''), attribute('placeholder', config.placeholder, ''),
         attribute('description', config.description, ''), attribute('error', config.error, ''),
-        attribute('variant', config.variant, 'outlined'), attribute('fieldSize', config.fieldSize, 'inherit'),
+        attribute('variant', config.variant, 'outlined'), attribute('labelPlacement', config.labelPlacement, 'outside'), attribute('fieldSize', config.fieldSize, 'inherit'),
         config.multiline ? 'multiline' : attribute('type', config.type, 'text'), config.multiline ? 'rows={3}' : '',
         flag('autosize', config.multiline && config.autosize), attribute('textAlign', config.textAlign, 'start'),
         attribute('status', config.status, 'none'), attribute('prefix', config.prefix, ''), attribute('suffix', config.suffix, ''),

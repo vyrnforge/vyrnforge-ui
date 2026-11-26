@@ -22,7 +22,7 @@ export const browserFixture = {
       await writeFile(
         path.join(outDir, 'web.html'),
         header +
-          '<form><p id="external">External instruction.</p><div data-vf-text-field data-vf-text-field-full-width data-vf-text-field-variant="outlined"><label for="email" data-vf-text-field-label>Email</label><div data-vf-text-field-control><input id="email" data-vf-input data-vf-text-field-value name="email" value="original@example.com" type="email" required aria-describedby="external help error" aria-invalid="true"></div><div id="help" data-vf-text-field-description>Use your work address.</div><div id="error" data-vf-text-field-error>Choose another address.</div></div><div data-vf-text-field data-vf-text-field-full-width data-vf-text-field-variant="filled"><label for="notes" data-vf-text-field-label>Notes</label><div data-vf-text-field-control><textarea id="notes" name="notes" rows="3" data-vf-textarea data-vf-text-field-value>Original notes</textarea></div></div><button type="reset">Reset</button></form></main></body></html>',
+          '<form><p id="external">External instruction.</p><div data-vf-text-field data-vf-text-field-full-width data-vf-text-field-variant="outlined"><label for="email" data-vf-text-field-label>Email</label><div data-vf-text-field-control><input id="email" data-vf-input data-vf-text-field-value name="email" value="original@example.com" type="email" required aria-describedby="external help error" aria-invalid="true"></div><div id="help" data-vf-text-field-description>Use your work address.</div><div id="error" data-vf-text-field-error>Choose another address.</div></div><div data-vf-text-field data-vf-text-field-full-width data-vf-text-field-variant="filled"><label for="notes" data-vf-text-field-label>Notes</label><div data-vf-text-field-control><textarea id="notes" name="notes" rows="3" data-vf-textarea data-vf-text-field-value>Original notes</textarea></div></div><div data-vf-text-field data-vf-text-field-full-width data-vf-text-field-variant="outlined" data-vf-text-field-label-placement="floating"><div data-vf-text-field-control><label for="floating" data-vf-text-field-label>Floating email</label><fieldset data-vf-text-field-outline aria-hidden="true"><legend><span>Floating email</span></legend></fieldset><input id="floating" data-vf-input data-vf-text-field-value type="email" placeholder="name@example.com"></div></div><button type="reset">Reset</button></form></main></body></html>',
       );
     } else {
       const source = `
@@ -44,6 +44,9 @@ function App(){
     h(TextField,{label:'Controlled',name:'controlled',ref,value,onChange:e=>setValue(e.currentTarget.value),fullWidth:true,trailing:h(Button,{type:'button',size:'sm',variant:'ghost',onClick:()=>{setValue('');ref.current.focus();}},'Clear')}),
     h(TextField,{label:'Disabled',disabled:true,error:'Not available',defaultValue:'disabled',name:'disabled'}),
     h(TextField,{label:'Read only',readOnly:true,name:'readonly',defaultValue:'kept'}),
+    h(TextField,{id:'floating',label:'Floating email',labelPlacement:'floating',type:'email',placeholder:'name@example.com',fullWidth:true}),
+    h(TextField,{label:'Floating filled',labelPlacement:'floating',variant:'filled',defaultValue:'Ada',fullWidth:true}),
+    h(TextField,{label:'Floating underlined',labelPlacement:'floating',variant:'underlined',fullWidth:true}),
     h(Button,{type:'submit'},'Submit'),h(Button,{type:'reset'},'Reset'),h('output',null,submitted));
 }
 createRoot(document.querySelector('#root')).render(h(App));

@@ -4409,6 +4409,8 @@ export interface TextFieldAppearanceProps {
     // (undocumented)
     label: string;
     // (undocumented)
+    labelPlacement?: 'outside' | 'floating';
+    // (undocumented)
     leading?: ReactNode;
     // (undocumented)
     prefix?: string;
@@ -4421,7 +4423,7 @@ export interface TextFieldAppearanceProps {
     // (undocumented)
     trailing?: ReactNode;
     // (undocumented)
-    variant?: 'outlined' | 'filled';
+    variant?: 'outlined' | 'filled' | 'underlined';
 }
 
 // @public (undocumented)

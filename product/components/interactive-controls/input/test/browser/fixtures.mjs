@@ -10,10 +10,11 @@ export const browserFixture = {
     await mkdir(outDir, { recursive: true });
 
     const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
-    const inputCss = (await readFile(path.join(root, 'packages/web/dist/components/input/input.css'), 'utf8')).replace('@import "../../styles/tokens.css";\n', '');
+    const formControlsCss = await readFile(path.join(root, 'packages/web/dist/styles/form-controls.css'), 'utf8');
+    const inputCss = (await readFile(path.join(root, 'packages/web/dist/components/input/input.css'), 'utf8')).replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
     const foundationCss = (await readFile(path.join(root, 'packages/web/dist/styles/foundation.css'), 'utf8'))
       .replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
-    await writeFile(path.join(outDir, 'input.css'), `${tokensCss}\n${foundationCss}\n${inputCss}`);
+    await writeFile(path.join(outDir, 'input.css'), `${tokensCss}\n${formControlsCss}\n${foundationCss}\n${inputCss}`);
 
     const fields = `
   <form id="form">

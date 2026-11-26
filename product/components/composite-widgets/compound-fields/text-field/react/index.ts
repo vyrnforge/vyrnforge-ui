@@ -7,7 +7,8 @@ export interface TextFieldAppearanceProps {
   description?: ReactNode;
   error?: string;
   status?: 'warning' | 'success';
-  variant?: 'outlined' | 'filled';
+  variant?: 'outlined' | 'filled' | 'underlined';
+  labelPlacement?: 'outside' | 'floating';
   fieldSize?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
   textAlign?: 'start' | 'center' | 'end';
@@ -43,6 +44,7 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
       error,
       status,
       variant = 'outlined',
+      labelPlacement = 'outside',
       fieldSize,
       fullWidth,
       textAlign,
@@ -65,11 +67,14 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
           ...(hasError ? [errorId] : []),
         ]),
       ].join(' ') || undefined;
+    const floating = labelPlacement === 'floating';
+    const alwaysRaised = Boolean(rest.multiline || rest.type === 'number' || leading || trailing || prefix || suffix);
     const relationships = {
       id,
       'aria-describedby': describedBy,
       'aria-invalid': hasError ? true : rest['aria-invalid'],
       'data-vf-text-field-value': '',
+      placeholder: floating ? rest.placeholder || ' ' : rest.placeholder,
     };
     let control: ReactNode;
     if (rest.multiline) {
@@ -88,11 +93,14 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
       void autosize;
       control = createElement(Input, { ...native, ...relationships, ref: ref as Ref<HTMLInputElement> });
     }
+    const fieldLabel = createElement('label', { htmlFor: id, 'data-vf-text-field-label': '' }, label);
     return createElement(
       'div',
       {
         'data-vf-text-field': '',
         'data-vf-text-field-variant': variant,
+        'data-vf-text-field-label-placement': labelPlacement,
+        'data-vf-text-field-always-raised': floating && alwaysRaised ? '' : undefined,
         'data-vf-text-field-size': fieldSize,
         'data-vf-text-field-full-width': fullWidth ? '' : undefined,
         'data-vf-text-field-status': hasError ? undefined : status,
@@ -100,10 +108,18 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
         dir: props.dir,
         hidden: props.hidden,
       },
-      createElement('label', { htmlFor: id, 'data-vf-text-field-label': '' }, label),
+      floating ? null : fieldLabel,
       createElement(
         'div',
         { 'data-vf-text-field-control': '' },
+        floating ? fieldLabel : null,
+        floating && variant === 'outlined'
+          ? createElement(
+              'fieldset',
+              { 'data-vf-text-field-outline': '', 'aria-hidden': true },
+              createElement('legend', null, createElement('span', null, label)),
+            )
+          : null,
         leading == null ? null : createElement('span', { 'data-vf-text-field-leading': '' }, leading),
         prefix == null ? null : createElement('span', { 'data-vf-text-field-prefix': '' }, prefix),
         control,

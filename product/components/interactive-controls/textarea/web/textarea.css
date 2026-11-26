@@ -1,61 +1,10 @@
 @import "../../styles/tokens.css";
+@import "../../styles/form-controls.css";
 
 @layer vyrnforge.components {
   :where(textarea[data-vf-textarea]) {
-    background: var(--vf-color-surface);
-    border: 1px solid var(--vf-color-border-required);
-    border-radius: var(--vf-control-radius);
-    box-sizing: border-box;
-    color: var(--vf-color-text);
-    font-family: var(--vf-control-font-family);
-    font-size: var(--vf-control-font-size);
-    font-weight: var(--vf-font-weight-regular);
-    line-height: var(--vf-line-height-normal);
     min-block-size: var(--vf-control-height-md);
-    min-inline-size: 0;
-    max-inline-size: 100%;
     padding-block: var(--vf-space-sm);
     padding-inline: 0.75rem;
-    transition:
-      background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
-      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
-  }
-
-  :where(textarea[data-vf-textarea]::placeholder) {
-    color: var(--vf-color-text-subtle);
-    opacity: 1;
-  }
-
-  :where(textarea[data-vf-textarea]:hover:not(:disabled):not(:read-only)) { background: var(--vf-color-surface-hover); }
-
-  :where(textarea[data-vf-textarea]:focus-visible) {
-    border-color: var(--vf-color-accent-background);
-    outline: 2px solid var(--vf-color-focus-ring);
-    outline-offset: 2px;
-  }
-
-  :where(textarea[data-vf-textarea]:disabled) {
-    background: var(--vf-color-disabled-background);
-    border-color: var(--vf-color-disabled-border);
-    color: var(--vf-color-disabled-foreground);
-    cursor: not-allowed;
-  }
-
-  :where(textarea[data-vf-textarea]:read-only:not(:disabled)) { background: var(--vf-color-surface-subtle); }
-
-  :where(textarea[data-vf-textarea]:not(:disabled):user-invalid, textarea[data-vf-textarea]:not(:disabled)[aria-invalid="true"]) { border-color: var(--vf-color-danger-border); }
-
-  @media (prefers-reduced-motion: reduce) { :where(textarea[data-vf-textarea]) { transition: none; } }
-
-  @media (forced-colors: active) {
-    :where(textarea[data-vf-textarea]) {
-      background: Field;
-      border-color: FieldText;
-      color: FieldText;
-      forced-color-adjust: auto;
-    }
-    :where(textarea[data-vf-textarea]:focus-visible) { outline-color: Highlight; }
-    :where(textarea[data-vf-textarea]:disabled) { border-color: GrayText; color: GrayText; }
-    :where(textarea[data-vf-textarea]:not(:disabled):user-invalid, textarea[data-vf-textarea]:not(:disabled)[aria-invalid="true"]) { border-color: Highlight; }
   }
 }

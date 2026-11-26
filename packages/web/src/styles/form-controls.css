@@ -1,0 +1,84 @@
+/* Shared native text-entry paint. Component owners retain geometry and semantics. */
+@layer vyrnforge.components {
+  :where(input[data-vf-input], textarea[data-vf-textarea]) {
+    box-sizing: border-box;
+    color: var(--vf-color-text);
+    font-family: var(--vf-control-font-family);
+    font-size: var(--vf-control-font-size);
+    font-weight: var(--vf-font-weight-regular);
+    line-height: var(--vf-line-height-normal);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  :where(input[data-vf-input]::placeholder, textarea[data-vf-textarea]::placeholder) {
+    color: var(--vf-color-text-subtle);
+    opacity: 1;
+  }
+
+  :where(input[data-vf-input]:not([data-vf-text-field-value]), textarea[data-vf-textarea]:not([data-vf-text-field-value]), [data-vf-text-field-control]) {
+    --_vf-field-surface: var(--_vf-field-surface-default, var(--vf-color-surface));
+    --_vf-field-border: var(--_vf-field-border-default, var(--vf-color-border-required));
+    --_vf-field-foreground: var(--vf-color-text);
+    box-sizing: border-box;
+    background: var(--_vf-field-surface);
+    border: 1px solid var(--_vf-field-border);
+    border-radius: var(--_vf-field-radius, var(--vf-control-radius));
+    color: var(--_vf-field-foreground);
+    transition:
+      background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(input[data-vf-input]:not([data-vf-text-field-value]):hover:not(:disabled):not([readonly]), textarea[data-vf-textarea]:not([data-vf-text-field-value]):hover:not(:disabled):not([readonly]), [data-vf-text-field-control]:hover:not(:has(> [data-vf-text-field-value]:is(:disabled, [readonly])))) {
+    --_vf-field-surface: var(--_vf-field-hover-surface, var(--vf-color-surface-hover));
+  }
+
+  :where(input[data-vf-input]:not([data-vf-text-field-value])[readonly]:not(:disabled), textarea[data-vf-textarea]:not([data-vf-text-field-value])[readonly]:not(:disabled), [data-vf-text-field-control]:has(> [data-vf-text-field-value][readonly])) {
+    --_vf-field-surface: var(--vf-color-surface-subtle);
+  }
+
+  :where(input[data-vf-input]:not([data-vf-text-field-value]):focus-visible, textarea[data-vf-textarea]:not([data-vf-text-field-value]):focus-visible, [data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus)) {
+    --_vf-field-border: var(--vf-color-accent-background);
+  }
+
+  :where(input[data-vf-input]:not([data-vf-text-field-value]):focus-visible, textarea[data-vf-textarea]:not([data-vf-text-field-value]):focus-visible, [data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus-visible)) {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  :where(input[data-vf-input]:not([data-vf-text-field-value]):not(:disabled):is(:user-invalid, [aria-invalid="true"]), textarea[data-vf-textarea]:not([data-vf-text-field-value]):not(:disabled):is(:user-invalid, [aria-invalid="true"]), [data-vf-text-field-control]:has(> [data-vf-text-field-value]:not(:disabled):is(:user-invalid, [aria-invalid="true"]))) {
+    --_vf-field-border: var(--vf-color-danger-border);
+  }
+
+  :where(input[data-vf-input]:not([data-vf-text-field-value]):disabled, textarea[data-vf-textarea]:not([data-vf-text-field-value]):disabled, [data-vf-text-field-control]:has(> [data-vf-text-field-value]:disabled)) {
+    --_vf-field-surface: var(--vf-color-disabled-background);
+    --_vf-field-border: var(--vf-color-disabled-border);
+    --_vf-field-foreground: var(--vf-color-disabled-foreground);
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(input[data-vf-input], textarea[data-vf-textarea], [data-vf-text-field-control]) { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    :where(input[data-vf-input]:not([data-vf-text-field-value]), textarea[data-vf-textarea]:not([data-vf-text-field-value]), [data-vf-text-field-control]) {
+      --_vf-field-surface: Field;
+      --_vf-field-border: FieldText;
+      --_vf-field-foreground: FieldText;
+      forced-color-adjust: auto;
+    }
+    :where(input[data-vf-input]:not([data-vf-text-field-value]):focus-visible, textarea[data-vf-textarea]:not([data-vf-text-field-value]):focus-visible, [data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus-visible)) {
+      outline-color: Highlight;
+      --_vf-field-border: Highlight;
+    }
+    :where(input[data-vf-input]:not([data-vf-text-field-value]):not(:disabled):is(:user-invalid, [aria-invalid="true"]), textarea[data-vf-textarea]:not([data-vf-text-field-value]):not(:disabled):is(:user-invalid, [aria-invalid="true"]), [data-vf-text-field-control]:has(> [data-vf-text-field-value]:not(:disabled):is(:user-invalid, [aria-invalid="true"]))) {
+      --_vf-field-border: Highlight;
+    }
+    :where(input[data-vf-input]:not([data-vf-text-field-value]):disabled, textarea[data-vf-textarea]:not([data-vf-text-field-value]):disabled, [data-vf-text-field-control]:has(> [data-vf-text-field-value]:disabled)) {
+      --_vf-field-border: GrayText;
+      --_vf-field-foreground: GrayText;
+    }
+  }
+}
