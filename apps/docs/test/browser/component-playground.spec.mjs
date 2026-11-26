@@ -350,3 +350,37 @@ test('TextField playground uses native public components and focused import-only
   await playground.screenshot({ path: testInfo.outputPath('text-field-playground-rtl-forced.png') });
   expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
 });
+
+test('TextField playground switches the real public component between visibly distinct variants', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/next/react/components/text-field/');
+  const playground = page.locator('[data-vf-docs-component-playground="TextField"]');
+  const preview = playground.getByRole('region', { name: 'TextField preview' });
+  const source = playground.getByRole('region', { name: 'Generated React usage' });
+  const root = preview.locator('[data-vf-text-field]');
+  const shell = root.locator('[data-vf-text-field-control]');
+  const editor = preview.getByRole('textbox', { name: 'Display name' });
+  for (const theme of ['light', 'dark']) {
+    await page.locator('#vf-react-theme').selectOption(theme);
+    await expect(page.locator('html')).toHaveAttribute('data-vf-theme', theme);
+    await playground.getByRole('radio', { name: 'filled', exact: true }).check();
+    await expect(root).toHaveAttribute('data-vf-text-field-variant', 'filled');
+    await expect(source).toContainText('variant="filled"');
+    await expect(shell).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(shell).not.toHaveCSS('border-top-left-radius', '0px');
+    await expect(editor).toHaveCSS('padding-inline-start', '12px');
+    await editor.fill('Ada');
+    await editor.blur();
+    await preview.screenshot({ path: testInfo.outputPath('text-field-playground-filled-' + theme + '.png') });
+    await playground.getByRole('radio', { name: 'underlined', exact: true }).check();
+    await expect(root).toHaveAttribute('data-vf-text-field-variant', 'underlined');
+    await expect(source).toContainText('variant="underlined"');
+    await expect(shell).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(shell).toHaveCSS('border-top-left-radius', '0px');
+    await expect(editor).toHaveCSS('padding-inline-start', '4px');
+    await expect(editor).toHaveValue('Ada');
+    await preview.screenshot({ path: testInfo.outputPath('text-field-playground-underlined-' + theme + '.png') });
+    await expect(source).toContainText('@vyrnforge/react/text-field');
+    await expect(source).not.toContainText(/styles\//);
+  }
+});
