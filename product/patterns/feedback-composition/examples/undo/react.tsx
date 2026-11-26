@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Alert } from '@vyrnforge/react/alert';
@@ -36,7 +37,7 @@ function Example() {
           You can restore this report from here or from the archive.
         </Alert>
       )}
-      <p role="status">{archived ? 'Report moved to archive.' : 'Report is active.'}</p>
+      <Text as="p" role="status">{archived ? 'Report moved to archive.' : 'Report is active.'}</Text>
     </Flow>
   );
 }

@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Alert } from '@vyrnforge/react/alert';
@@ -16,12 +17,12 @@ function Example() {
         aria-busy={busy}
         style={{ position: 'relative', isolation: 'isolate', minBlockSize: '8rem', padding: 'var(--vf-space-md)' }}
       >
-        <div inert={busy}>
-          <p>Account summary</p>
+        <Flow inert={busy} gap="sm">
+          <Text as="p">Account summary</Text>
           <Button type="button" onClick={() => setPhase('loading')}>
             Refresh
           </Button>
-        </div>
+        </Flow>
         <Backdrop hidden={!busy} />
         {busy && (
           <Loading style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none' }}>
@@ -29,7 +30,7 @@ function Example() {
           </Loading>
         )}
       </section>
-      <p role="status">{busy ? 'Refreshing account' : phase === 'done' ? 'Account updated' : ''}</p>
+      <Text as="p" role="status">{busy ? 'Refreshing account' : phase === 'done' ? 'Account updated' : ''}</Text>
       {busy && (
         <Flow direction="inline" gap="sm" wrap="wrap">
           <Button type="button" onClick={() => setPhase('done')}>Complete example</Button>

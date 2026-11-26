@@ -17,7 +17,7 @@ function Example() {
           Create report
         </Button>
       )}
-      <p role="status">{created ? 'Example report created' : ''}</p>
+      <Text as="p" role="status">{created ? 'Example report created' : ''}</Text>
     </Flow>
   );
 }
