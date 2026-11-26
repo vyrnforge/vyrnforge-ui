@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import axeCore from 'axe-core';
 
 test('Button playground keeps configuration, interaction and generated usage synchronized', async ({ page }) => {
   await page.goto('/next/react/components/button/');
@@ -58,4 +59,27 @@ test('Playground preserves source and reflows at narrow widths with clipboard de
   await playground.screenshot({ path: testInfo.outputPath('playground-mobile-light.png') });
   await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
   await playground.screenshot({ path: testInfo.outputPath('playground-mobile-dark.png') });
+});
+
+test('Playground desktop and accessibility adaptations', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/next/react/components/button/');
+  const playground = page.locator('[data-vf-docs-component-playground="Button"]');
+  await expect(playground.getByRole('radio', { name: 'secondary' })).toBeEnabled();
+  await playground.screenshot({ path: testInfo.outputPath('playground-desktop-light.png') });
+  await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
+  await playground.screenshot({ path: testInfo.outputPath('playground-desktop-dark.png') });
+  await page.addScriptTag({ content: axeCore.source });
+  const results = await page.evaluate(async () => {
+    return await window.axe.run('[data-vf-docs-component-playground="Button"]', {
+      runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] },
+    });
+  });
+  expect(results.violations).toEqual([]);
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await page.evaluate(() => { document.documentElement.dir = 'rtl'; document.documentElement.dataset.vfDensity = 'compact'; });
+  await playground.getByRole('radio', { name: 'ghost' }).check();
+  await expect(playground.getByRole('region', { name: 'Button preview' }).getByRole('button'))
+    .toHaveAttribute('data-vf-variant', 'ghost');
+  await playground.screenshot({ path: testInfo.outputPath('playground-rtl-forced-colors.png') });
 });

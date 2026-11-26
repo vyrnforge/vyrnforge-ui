@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './test/browser',
-  testMatch: ['native-docs.spec.mjs', 'react-docs.spec.mjs', 'theme-toggle-artwork.spec.mjs'],
+  testMatch: ['native-docs.spec.mjs', 'react-docs.spec.mjs', 'theme-toggle-artwork.spec.mjs', 'component-playground.spec.mjs'],
   outputDir: '../../test-results/docs-playwright-results',
   timeout: 30_000,
   expect: { timeout: 5_000 },
