@@ -58,7 +58,7 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
   if (rest.multiline) {
     const { multiline: _multiline, autosize, type: _type, ...native } = rest;
     control = createElement(Textarea, { ...native, ...relationships,
-      'data-vf-text-field-autosize': autosize ? '' : undefined,
+      ...{ 'data-vf-text-field-autosize': autosize ? '' : undefined },
       ref: ref as Ref<HTMLTextAreaElement> });
   } else {
     const { multiline: _multiline, autosize: _autosize, ...native } = rest;
