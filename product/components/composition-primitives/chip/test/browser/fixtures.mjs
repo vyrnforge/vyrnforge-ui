@@ -12,8 +12,19 @@ export const browserFixture = {
     const css = await Promise.all(paths.map(async file => (await readFile(path.join(root, 'packages/web/dist', file), 'utf8')).replace(/^@import\s+["'][^"']+["'];\s*$/gm, '')));
     await writeFile(path.join(target, 'chip.css'), css.join('\n') + '\nbody{background:var(--vf-color-surface);color:var(--vf-color-text)}main{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;padding:1rem;min-inline-size:0;box-sizing:border-box}h1{flex-basis:100%}#long{max-inline-size:100%}');
     const label = value => '<span data-vf-chip-label>' + value + '</span>';
-    const close = '<button type="button" data-vf-button data-vf-chip-remove aria-label="Remove React"><span aria-hidden="true">×</span></button>';
+    const close = '<button type="button" data-vf-button data-vf-icon-only data-vf-chip-remove aria-label="Remove React"><span aria-hidden="true" data-vf-chip-default-remove>×</span></button>';
     const long = 'A long descriptive category that must remain available to assistive technology';
+    const removalCases = ['neutral', 'accent', 'danger'].flatMap(tone =>
+      ['filled', 'outlined'].map(variant => ({ tone, variant, size: 'md', id: 'remove-' + tone + '-' + variant })));
+    removalCases.push({ tone: 'neutral', variant: 'filled', size: 'sm', id: 'remove-small' },
+      { tone: 'neutral', variant: 'filled', size: 'lg', id: 'remove-large' },
+      { tone: 'neutral', variant: 'filled', size: 'md', id: 'remove-disabled', disabled: true },
+      { tone: 'neutral', variant: 'filled', size: 'md', id: 'remove-custom', custom: true });
+    const nativeRemovalCases = removalCases.map(({ tone, variant, size, id, disabled, custom }) =>
+      '<span id="' + id + '" data-vf-chip data-vf-chip-tone="' + tone + '" data-vf-chip-variant="' + variant + '" data-vf-chip-size="' + size + '"' +
+      (disabled ? ' data-vf-chip-disabled' : '') + '><span data-vf-chip-primary>' + label(tone) + '</span>' +
+      '<button type="button" data-vf-button data-vf-icon-only data-vf-chip-remove aria-label="Remove ' + id + '"' + (disabled ? ' disabled' : '') +
+      '><span aria-hidden="true"' + (custom ? '' : ' data-vf-chip-default-remove') + '>' + (custom ? '−' : '×') + '</span></button></span>').join('');
     let body = '<main><h1>Chip specimens</h1>' +
       '<span id="static" data-vf-chip data-vf-chip-size="sm"><span data-vf-chip-primary>' + label('Engineering') + '</span></span>' +
       '<span id="action" data-vf-chip><button type="button" data-vf-button data-vf-chip-primary>' + label('Open') + '</button></span>' +
@@ -21,7 +32,7 @@ export const browserFixture = {
       '<span id="disabled" data-vf-chip data-vf-chip-disabled><button type="button" data-vf-button data-vf-chip-primary disabled>' + label('Unavailable') + '</button></span>' +
       '<span id="long" data-vf-chip data-vf-chip-wrap data-vf-chip-size="lg"><span data-vf-chip-primary>' + label(long) + '</span></span>' +
       '<span id="link" data-vf-chip><a data-vf-chip-primary data-vf-link href="#long">' + label('Documentation') + '</a></span>' +
-      '<span id="disabled-link" data-vf-chip data-vf-chip-disabled><a data-vf-chip-primary data-vf-link role="link" aria-disabled="true">' + label('Disabled link') + '</a></span></main>';
+      '<span id="disabled-link" data-vf-chip data-vf-chip-disabled><a data-vf-chip-primary data-vf-link role="link" aria-disabled="true">' + label('Disabled link') + '</a></span>' + nativeRemovalCases + '</main>';
     if (port === 'react') {
       const { createElement: h } = await import('react');
       const { renderToString } = await import('react-dom/server');
@@ -33,7 +44,11 @@ export const browserFixture = {
         h(Chip, { id: 'disabled', disabled: true, onClick() {} }, 'Unavailable'),
         h(Chip, { id: 'long', size: 'lg', wrap: true }, long),
         h(Chip, { id: 'link', href: '#long' }, 'Documentation'),
-        h(Chip, { id: 'disabled-link', href: '#long', disabled: true }, 'Disabled link')));
+        h(Chip, { id: 'disabled-link', href: '#long', disabled: true }, 'Disabled link'),
+        ...removalCases.map(({ id, tone, variant, size, disabled, custom }) => h(Chip, {
+          key: id, id, tone, variant, size, disabled, onRemove() {}, removeLabel: 'Remove ' + id,
+          ...(custom ? { removeIcon: h('span', null, '−') } : {}),
+        }, tone))));
     }
     await writeFile(path.join(target, port + '.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Chip fixture</title><link rel="stylesheet" href="./chip.css"></head><body>' + body + '</body></html>');
   },
