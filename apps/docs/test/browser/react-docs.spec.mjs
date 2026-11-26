@@ -577,8 +577,6 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
 });
 
 test('React Button, Button Group and ToggleButton keep demonstrations on their respective guides', async ({ page }) => {
-  // This end-to-end scenario traverses three routes and many lazy-loaded iframe interactions.
-  test.setTimeout(60_000);
   await page.goto('/next/react/components/button/');
   const button = page.locator('[data-vf-docs-react-component="button"]');
   await expect(button.locator('[data-vf-docs-react-button-example]')).toHaveCount(7);
@@ -598,16 +596,20 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
     const demo = group.locator('section[aria-labelledby="react-button-group-' + topic + '"]');
     await expect(demo.locator('[data-vf-docs-react-button-group-example="button-group/' + id + '"]')).toHaveCount(1);
   }
+  await group.locator('iframe[title="React Horizontal joined actions example"]').scrollIntoViewIfNeeded();
   const joined = group.frameLocator('iframe[title="React Horizontal joined actions example"]');
   await expect(joined.getByRole('group', { name: 'Document actions', exact: true })).toBeVisible();
   await joined.getByRole('button', { name: 'Copy', exact: true }).click();
   await expect(joined.getByRole('status')).toHaveText('Copied');
   await expect(joined.getByRole('button', { name: 'Archive' })).toBeDisabled();
+  await group.locator('iframe[title="React Joined icon actions example"]').scrollIntoViewIfNeeded();
   const joinedIcons = group.frameLocator('iframe[title="React Joined icon actions example"]')
     .getByRole('group', { name: 'Quick document actions' });
   await expect(joinedIcons.getByRole('button', { name: 'Copy document' })).toHaveAttribute('data-vf-icon-only', '');
+  await group.locator('iframe[title="React Vertical joined actions example"]').scrollIntoViewIfNeeded();
   const vertical = group.frameLocator('iframe[title="React Vertical joined actions example"]');
   await expect(vertical.getByRole('group', { name: 'View actions' })).toHaveAttribute('data-vf-button-group-orientation', 'vertical');
+  await group.locator('iframe[title="React Joined toggle buttons example"]').scrollIntoViewIfNeeded();
   const formatting = group.frameLocator('iframe[title="React Joined toggle buttons example"]');
   const formatGroup = formatting.getByRole('group', { name: 'Text formatting' });
   await expect(formatGroup).toHaveAttribute('data-vf-button-group', '');
@@ -629,6 +631,7 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
   await expect(formatted).toHaveCSS('font-weight', '400');
   await expect(formatted).toHaveCSS('font-style', 'italic');
 
+  await group.locator('iframe[title="React Mixed button types example"]').scrollIntoViewIfNeeded();
   const mixed = group.frameLocator('iframe[title="React Mixed button types example"]');
   const mixedGroup = mixed.getByRole('group', { name: 'Article actions' });
   await expect(mixedGroup).toHaveAttribute('data-vf-button-group', '');
@@ -650,6 +653,7 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
   await group.getByRole('link', { name: 'ToggleButton', exact: true }).click();
   const toggleGuide = page.locator('[data-vf-docs-react-toggle]');
   await expect(toggleGuide.locator('[data-vf-docs-react-toggle-example]')).toHaveCount(7);
+  await toggleGuide.locator('iframe[title="React ToggleButton icon-only example"]').scrollIntoViewIfNeeded();
   const toggle = toggleGuide.frameLocator('iframe[title="React ToggleButton icon-only example"]');
   const iconToggle = toggle.getByRole('button', { name: 'Bookmark article', exact: true });
   await expect(iconToggle).toHaveAttribute('data-vf-icon-only', '');
@@ -669,6 +673,7 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
   await expect(iconToggle).toHaveAttribute('aria-pressed', 'true');
 
   await page.goto('/next/react/components/button/');
+  await page.locator('iframe[title="React Icon buttons example"]').scrollIntoViewIfNeeded();
   const icons = page.frameLocator('iframe[title="React Icon buttons example"]');
   await expect(icons.getByRole('button', { name: 'Save bookmark', exact: true })).toHaveCount(2);
   const iconOnly = icons.getByRole('button', { name: 'Save bookmark', exact: true }).first();
@@ -683,6 +688,7 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
   await expect(icons.getByRole('button', { name: 'Search' })).toHaveAttribute('data-vf-size', 'sm');
   await expect(icons.getByRole('button', { name: 'Saving bookmark' })).toHaveAttribute('aria-busy', 'true');
 
+  await page.locator('iframe[title="React Density example"]').scrollIntoViewIfNeeded();
   const density = page.frameLocator('iframe[title="React Density example"]');
   await density.getByRole('combobox', { name: 'Density' }).selectOption('compact');
   await expect(density.locator('[data-vf-density="compact"]')).toHaveCount(1);
@@ -2323,38 +2329,46 @@ test('React List guide exposes rich semantic examples and a separate source-back
   await expect(page.locator('[data-vf-docs-react-list]')).toBeVisible();
   await expect(page.locator('[data-vf-docs-react-list-example]')).toHaveCount(8);
 
+  await page.locator('iframe[title="React Rich team directory List example"]').scrollIntoViewIfNeeded();
   const rich = page.frameLocator('iframe[title="React Rich team directory List example"]');
   const people = rich.getByRole('list', { name: 'Project team' });
   await expect(people).toBeVisible();
   await expect(people.getByRole('listitem')).toHaveCount(3);
   await expect(rich.getByRole('button', { name: 'View Alex Chen' })).toBeVisible();
 
+  await page.locator('iframe[title="React Ordered and unordered List example"]').scrollIntoViewIfNeeded();
   const markers = page.frameLocator('iframe[title="React Ordered and unordered List example"]');
   await expect(markers.getByRole('list', { name: 'Release steps' })).toHaveCount(1);
   await expect(markers.getByRole('list', { name: 'Project notes' })).toHaveCount(1);
 
+  await page.locator('iframe[title="React Independent actions List example"]').scrollIntoViewIfNeeded();
   const actions = page.frameLocator('iframe[title="React Independent actions List example"]');
   await expect(actions.getByRole('list', { name: 'Saved reports' })).toBeVisible();
   await expect(actions.getByRole('button', { name: 'Unavailable' })).toBeDisabled();
 
+  await page.locator('iframe[title="React Gutters, dividers and inset rules List example"]').scrollIntoViewIfNeeded();
   const gutters = page.frameLocator('iframe[title="React Gutters, dividers and inset rules List example"]');
   await expect(gutters.getByRole('list', { name: 'Edge-to-edge reports' }))
     .toHaveAttribute('data-vf-list-gutter', 'none');
 
+  await page.locator('iframe[title="React Density and three row sizes List example"]').scrollIntoViewIfNeeded();
   const density = page.frameLocator('iframe[title="React Density and three row sizes List example"]');
   await expect(density.getByRole('list', { name: 'sm tasks' })).toBeVisible();
   await density.getByRole('combobox', { name: 'Density' }).selectOption('compact');
   await expect(density.locator('[data-vf-density="compact"]')).toHaveCount(1);
 
+  await page.locator('iframe[title="React Nested and collapsible lists List example"]').scrollIntoViewIfNeeded();
   const nested = page.frameLocator('iframe[title="React Nested and collapsible lists List example"]');
   await expect(nested.getByRole('list', { name: 'Frontend files' })).toBeVisible();
   await nested.getByRole('button', { name: 'Frontend areas' }).click();
   await expect(nested.getByRole('list', { name: 'Frontend files' })).toBeHidden();
 
+  await page.locator('iframe[title="React Grouped lists and sticky headings List example"]').scrollIntoViewIfNeeded();
   const grouped = page.frameLocator('iframe[title="React Grouped lists and sticky headings List example"]');
   await expect(grouped.getByRole('list', { name: 'Today' })).toBeVisible();
   await expect(grouped.getByRole('heading', { name: 'Today' })).toHaveCSS('position', 'sticky');
 
+  await page.locator('iframe[title="React Interactive checkbox and action rows List example"]').scrollIntoViewIfNeeded();
   const interactive = page.frameLocator('iframe[title="React Interactive checkbox and action rows List example"]');
   await interactive.getByRole('checkbox', { name: 'Select Monthly report' }).check();
   await expect(interactive.getByText('1 of 3 selected')).toBeVisible();
