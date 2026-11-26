@@ -73,7 +73,9 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
     };
     let control: ReactNode;
     if (rest.multiline) {
-      const { multiline: _multiline, autosize, type: _type, ...native } = rest;
+      const { multiline, autosize, type, ...native } = rest;
+      void multiline;
+      void type;
       control = createElement(Textarea, {
         ...native,
         ...relationships,
@@ -81,7 +83,9 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
         ref: ref as Ref<HTMLTextAreaElement>,
       });
     } else {
-      const { multiline: _multiline, autosize: _autosize, ...native } = rest;
+      const { multiline, autosize, ...native } = rest;
+      void multiline;
+      void autosize;
       control = createElement(Input, { ...native, ...relationships, ref: ref as Ref<HTMLInputElement> });
     }
     return createElement(
