@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 test('Loading supports built-ins, presentation customization, placeholders, native progress, and custom authored content', async ({ page }) => {
+  test.skip((process.env.VF_COMPONENT_PORT || 'web') !== 'web', 'Native Web CSS fixture');
   await page.goto('/components/loading/web.html');
 
   for (const [id, animationName] of [
@@ -124,6 +125,24 @@ test('Loading supports built-ins, presentation customization, placeholders, nati
   await expect(determinate).toBeVisible();
   await expect(page.locator('#spinner')).toBeVisible();
 
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
+});
+
+test('React Loading projects native progress, decorative hooks and shared motion', async ({ page }) => {
+  test.skip(process.env.VF_COMPONENT_PORT !== 'react', 'React SSR presentation fixture');
+  await page.goto('/components/loading/react.html');
+  await expect(page.locator('#react-spinner')).toHaveAttribute('aria-hidden', 'true');
+  await expect(page.locator('#react-spinner')).toHaveCSS('animation-name', 'vf-loading-spin');
+  await expect(page.locator('#react-placeholder')).toHaveAttribute('aria-hidden', 'true');
+  const progress = page.getByRole('progressbar', { name: 'Uploading file' });
+  await expect(progress).toHaveJSProperty('value', 48);
+  await expect(page.getByRole('progressbar', { name: 'Preparing import' })).not.toHaveAttribute('value');
+  await expect(page.locator('#react-custom svg')).toHaveCount(1);
+  await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
+  await expect(page.locator('#react-spinner')).toHaveCSS('animation-name', 'none');
+  await expect(page.locator('#react-dots')).toHaveCSS('forced-color-adjust', 'none');
+  await expect(progress).toBeVisible();
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });
