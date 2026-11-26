@@ -1,0 +1,7 @@
+{
+  "id": "status-indicator",
+  "name": "Status Indicator",
+  "documentation": {
+    "group": "overlays-feedback"
+  }
+}

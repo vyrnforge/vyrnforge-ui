@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -194,7 +194,7 @@ function navigation(view, links, topic) {
       { id: 'badge', title: 'Badge', href: links.badge.guide },
       { id: 'chip', title: 'Chip', href: links.chip.guide },
     ] },
-    { label: 'Feedback', items: [{ id: 'backdrop', title: 'Backdrop', href: links.backdrop.guide }, { id: 'loading', title: 'Loading', href: links.loading.guide }] },
+    { label: 'Feedback', items: [{ id: 'status-indicator', title: 'Status Indicator', href: links['status-indicator'].guide }, { id: 'alert', title: 'Alert', href: links.alert.guide }, { id: 'backdrop', title: 'Backdrop', href: links.backdrop.guide }, { id: 'loading', title: 'Loading', href: links.loading.guide }] },
     { label: 'Libraries', items: [
       { id: 'icon-library', title: 'VyrnForge Icons', href: links.icon.library },
     ] },
@@ -214,6 +214,8 @@ function navigation(view, links, topic) {
       { id: 'avatar-api', title: 'Avatar API', href: links.avatar.api },
       { id: 'badge-api', title: 'Badge API', href: links.badge.api },
       { id: 'chip-api', title: 'Chip API', href: links.chip.api },
+      { id: 'status-indicator-api', title: 'Status Indicator API', href: links['status-indicator'].api },
+      { id: 'alert-api', title: 'Alert API', href: links.alert.api },
       { id: 'backdrop-api', title: 'Backdrop API', href: links.backdrop.api },
       { id: 'loading-api', title: 'Loading API', href: links.loading.api },
       ...['text', 'code', 'kbd'].map((id) => ({
@@ -1420,7 +1422,7 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, h(Link, { href: links.rtl }, 'Use right-to-left content'))));
 }
 
-function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop) {
+function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop, feedback) {
   if (selection) return view.endsWith('-api') ? selectionApi(selection, links) : selectionGuide(selection, links);
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
@@ -1515,6 +1517,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   if (view === 'divider-api') return dividerApi(divider, links);
   if (view === 'list') return listUsage(list, links);
   if (view === 'list-api') return listApi(list, links);
+  if (feedback) return view.endsWith('-api') ? feedbackApi(feedback, links) : feedbackUsage(feedback, links, feedback.id === 'alert' ? alertPlayground : statusIndicatorPlayground);
   if (view === 'backdrop') return feedbackUsage(backdrop, links, backdropPlayground);
   if (view === 'backdrop-api') return feedbackApi(backdrop, links);
   if (view === 'loading') return feedbackUsage(loading, links, loadingPlayground);
@@ -1571,7 +1574,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   }
   return buttonUsageGuide(button, links);
 }
-export function ReactReferencePage({ view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop }) {
+export function ReactReferencePage({ view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop, feedback }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -1619,6 +1622,10 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
     { title: 'Image', href: links.image.guide, keywords: 'image img responsive alt decorative caption figure native JSX' },
     { title: 'Image API', href: links.image.api, keywords: 'imageprops img loading decoding srcset sizes ref types' },
+    { title: 'Status Indicator', href: links['status-indicator'].guide, keywords: 'status dot label semantic success warning error' },
+    { title: 'Status Indicator API', href: links['status-indicator'].api, keywords: 'StatusIndicatorProps' },
+    { title: 'Alert', href: links.alert.guide, keywords: 'persistent feedback message severity announcement action dismiss' },
+    { title: 'Alert API', href: links.alert.api, keywords: 'AlertProps FeedbackSeverity AlertAnnouncement' },
     { title: 'Backdrop', href: links.backdrop.guide, keywords: 'scrim loading overlay native dialog backdrop decorative region' },
     { title: 'Backdrop API', href: links.backdrop.api, keywords: 'BackdropProps hidden style ref' },
     { title: 'Loading', href: links.loading.guide, keywords: 'progress loading spinner dots bars pulse skeleton placeholder custom async' },
@@ -1707,7 +1714,7 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
           h(Link, { href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop))),
+        body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop, feedback))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));

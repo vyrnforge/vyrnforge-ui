@@ -6,6 +6,8 @@ import { Avatar } from '@vyrnforge/react/avatar';
 import { Badge } from '@vyrnforge/react/badge';
 import { Chip } from '@vyrnforge/react/chip';
 import { Backdrop } from '@vyrnforge/react/backdrop';
+import { StatusIndicator } from '@vyrnforge/react/status-indicator';
+import { Alert } from '@vyrnforge/react/alert';
 import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Divider } from '@vyrnforge/react/divider';
@@ -426,5 +428,40 @@ export const backdropPlayground = {
       markup('div', ['style={{ position: "relative", isolation: "isolate" }}'],
         '<Button type="button" variant="secondary">View statement</Button>\n' +
         markup('Backdrop', [flag('hidden', config.hidden), config.opacity !== 1 ? 'style={{ opacity: ' + config.opacity + ' }}' : ''])));
+  },
+};
+
+const severities = ['informational', 'success', 'warning', 'error', 'critical'];
+function StatusIndicatorPreview({ config }) {
+  return h(StatusIndicator, { severity: config.severity === 'neutral' ? undefined : config.severity }, label(config, 'Connected'));
+}
+export const statusIndicatorPlayground = {
+  fields: [text('label', 'Label', 'Connected'), choice('severity', 'Severity', 'success', ['neutral', ...severities])],
+  Preview: StatusIndicatorPreview,
+  source(config) {
+    return snippet([importLine('StatusIndicator', 'status-indicator')],
+      markup('StatusIndicator', [attribute('severity', config.severity, 'neutral')], content(label(config, 'Connected'))));
+  },
+};
+function AlertPreview({ config }) {
+  const [visible, setVisible] = useState(true);
+  const restore = useRef(null);
+  return h(Flow, { gap: 'sm', style: { inlineSize: '100%' } },
+    config.dismissible ? h(Button, { ref: restore, type: 'button', variant: 'secondary', onClick: () => setVisible(true) }, 'Restore message') : null,
+    visible || !config.dismissible ? h(Alert, { severity: config.severity, variant: config.variant, announcement: config.announcement,
+      heading: config.heading || undefined,
+      dismiss: config.dismissible ? { label: 'Dismiss feedback', onDismiss: () => { setVisible(false); restore.current?.focus(); } } : undefined },
+      config.message || 'Your changes remain available.') : null);
+}
+export const alertPlayground = {
+  fields: [text('heading', 'Heading', 'Connection interrupted'), text('message', 'Message', 'Your changes remain available.'),
+    choice('severity', 'Severity', 'warning', severities), choice('variant', 'Variant', 'subtle', ['subtle', 'outlined']),
+    choice('announcement', 'Announcement', 'none', ['none', 'polite', 'assertive']), bool('dismissible', 'Dismissible')],
+  Preview: AlertPreview,
+  source(config) {
+    const jsx = markup('Alert', [attribute('severity', config.severity, 'informational'), attribute('variant', config.variant, 'subtle'),
+      attribute('announcement', config.announcement, 'none'), config.heading ? attribute('heading', config.heading) : '',
+      config.dismissible ? 'dismiss={{ label: "Dismiss feedback", onDismiss }}' : ''], content(config.message || 'Your changes remain available.'));
+    return snippet([importLine('Alert', 'alert')], jsx, config.dismissible ? { signature: '{ onDismiss }: { onDismiss: () => void }' } : {});
   },
 };

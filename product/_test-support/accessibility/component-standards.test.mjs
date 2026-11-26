@@ -27,7 +27,7 @@ test('mapped records cannot hide unresolved accessibility fields', () => {
 test('every L5 widget owns its accessibility classification, including unresolved mappings', async () => {
   const { discovery, standards } = await loadComponentStandards();
   const l5 = discovery.components.filter((entry) => entry.facets?.root?.startsWith('product/components/composite-widgets/'));
-  assert.equal(l5.length, 33);
+  assert.equal(l5.length, 34);
   for (const entry of l5) {
     const standard = standards.find((item) => item.component === entry.unitId);
     assert.equal(standard?.classificationSource, 'component-owned', entry.unitId);
