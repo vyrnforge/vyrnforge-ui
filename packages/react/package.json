@@ -367,6 +367,12 @@
       "browser": "./dist/components/loading/browser.js",
       "import": "./dist/components/loading/index.js",
       "default": "./dist/components/loading/index.js"
+    },
+    "./backdrop": {
+      "types": "./dist/components/backdrop/index.d.ts",
+      "browser": "./dist/components/backdrop/browser.js",
+      "import": "./dist/components/backdrop/index.js",
+      "default": "./dist/components/backdrop/index.js"
     }
   },
   "dependencies": {

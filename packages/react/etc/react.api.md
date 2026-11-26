@@ -258,6 +258,21 @@ export type AvatarShape = 'rounded' | 'square';
 export type AvatarSize = 'sm' | 'md' | 'lg';
 
 // @public
+export const Backdrop: ForwardRefExoticComponent<BackdropProps & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export interface BackdropProps {
+    // (undocumented)
+    className?: string;
+    // (undocumented)
+    hidden?: boolean;
+    // (undocumented)
+    id?: string;
+    // (undocumented)
+    style?: CSSProperties;
+}
+
+// @public
 export const Badge: ForwardRefExoticComponent<BadgeProps & RefAttributes<HTMLSpanElement>>;
 
 // @public

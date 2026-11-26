@@ -28,7 +28,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-pilot');
+  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-backdrop-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -61,6 +61,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     'icons/', 'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
     'components/list/', 'api/components/list/',
+    'components/backdrop/', 'api/components/backdrop/',
     'patterns/loading/', 'api/patterns/loading/',
     'components/chip/', 'api/components/chip/',
     'components/badge/', 'api/components/badge/',
@@ -3045,4 +3046,18 @@ test('React Loading guide reuses the shared playground and native progress', asy
   await page.goto('/next/react/api/patterns/loading/');
   await expect(page.getByRole('heading', { name: 'Loading API', exact: true })).toBeVisible();
   await expect(page.locator('[data-vf-docs-react-api="loading"]')).toContainText('LoadingProgress');
+});
+
+test('React Backdrop guide reuses the shared playground and preserves an interactive underlying control', async ({ page }) => {
+  await page.goto('/next/react/components/backdrop/');
+  const playground = page.locator('[data-vf-docs-component-playground="Backdrop"]');
+  const scrim = playground.locator('[data-vf-backdrop]');
+  await expect(scrim).toBeVisible();
+  await expect(scrim).toHaveCSS('pointer-events', 'none');
+  await playground.getByRole('button', { name: 'View statement' }).click();
+  await expect(playground.getByRole('button', { name: 'View statement' })).toBeFocused();
+  await playground.getByRole('checkbox', { name: 'Hidden' }).check();
+  await expect(scrim).toBeHidden();
+  await page.goto('/next/react/api/components/backdrop/');
+  await expect(page.getByRole('heading', { name: 'Backdrop API', exact: true })).toBeVisible();
 });
