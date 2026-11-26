@@ -48,7 +48,7 @@ test('checkbox sizes preserve distinct indicators, native target, state and focu
       const indicator = getComputedStyle(input, '::before');
       const mark = getComputedStyle(input, '::after');
       return { size, target: rect.width, height: rect.height, indicator: parseFloat(indicator.width),
-        indicatorHeight: parseFloat(indicator.height), mark: parseFloat(mark.height), radius: parseFloat(indicator.borderRadius) };
+        indicatorHeight: parseFloat(indicator.height), mark: parseFloat(mark.height), markWidth: parseFloat(mark.width), mixedWidth: parseFloat(getComputedStyle(document.getElementById(size + '-mixed'), '::after').width), radius: parseFloat(indicator.borderRadius) };
     });
   });
   expect(values.map(value => value.indicator)).toEqual([20, 24, 28]);
@@ -56,7 +56,9 @@ test('checkbox sizes preserve distinct indicators, native target, state and focu
   for (const value of values) {
     expect(value.target).toBe(value.height);
     expect(value.indicator).toBe(value.indicatorHeight);
-    expect(value.mark).toBeCloseTo(value.indicator / 3, 1);
+    expect(value.mark).toBeCloseTo(value.indicator / 2, 1);
+    expect(value.markWidth).toBeCloseTo(value.indicator / 4, 1);
+    expect(value.mixedWidth).toBeCloseTo(value.indicator * 7 / 12, 1);
     expect(value.radius).toBeCloseTo(value.indicator / 6, 1);
   }
   const small = page.locator('#sm-unchecked');

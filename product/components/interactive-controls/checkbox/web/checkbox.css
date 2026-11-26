@@ -52,10 +52,10 @@
     content: "";
     grid-area: 1 / 1;
     box-sizing: content-box;
-    block-size: calc(var(--_vf-checkbox-indicator) / 3);
+    block-size: calc(var(--_vf-checkbox-indicator) / 2);
     border-block-end: calc(var(--_vf-checkbox-indicator) / 12) solid currentColor;
     border-right: calc(var(--_vf-checkbox-indicator) / 12) solid currentColor;
-    inline-size: calc(var(--_vf-checkbox-indicator) / 6);
+    inline-size: calc(var(--_vf-checkbox-indicator) / 4);
     transform: rotate(45deg) scale(0);
     transform-origin: center;
     pointer-events: none;
@@ -81,7 +81,7 @@
     background: currentColor;
     block-size: calc(var(--_vf-checkbox-indicator) / 12);
     border: 0;
-    inline-size: calc(var(--_vf-checkbox-indicator) * 5 / 12);
+    inline-size: calc(var(--_vf-checkbox-indicator) * 7 / 12);
     transform: none;
   }
   :where(input[data-vf-checkbox]:focus-visible) {

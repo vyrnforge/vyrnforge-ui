@@ -142,7 +142,7 @@ test('Generated playground examples typecheck and bundle against installed publi
   const root = fileURLToPath(new URL('../../../../', import.meta.url));
   const scenarios = [
     [buttonPlayground, {}], [buttonPlayground, { variant: 'secondary', size: 'lg', loading: true, disabled: true, label: '<Save>{x}' }],
-    [checkboxPlayground, { selection: 'mixed', required: true }], [radioPlayground, { selection: 'express' }],
+    [checkboxPlayground, { selection: 'mixed', required: true }], [checkboxPlayground, { presentation: 'standalone' }], [checkboxPlayground, { presentation: 'icon label' }], [checkboxPlayground, { presentation: 'label and description', selection: 'mixed' }], [radioPlayground, { selection: 'express' }],
     [avatarPlayground, { appearance: 'icon', decorative: true, size: 'lg', shape: 'square' }],
     [avatarPlayground, { initials: 'VF' }], [badgePlayground, { variant: 'dot', tone: 'danger' }],
     [badgePlayground, { count: 127, max: 50, horizontal: 'start', showZero: true }],
@@ -288,4 +288,34 @@ test('Playground source is component-first, without preview-only scaffolding', a
   await page.setViewportSize({ width: 320, height: 800 });
   await chip.screenshot({ path: testInfo.outputPath('chip-configured-mobile-dark.png') });
   expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+});
+
+test('Checkbox presentations preserve naming and label activation', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/checkbox/');
+  const playground = page.locator('[data-vf-docs-component-playground="Checkbox"]');
+  const preview = playground.getByRole('region', { name: 'Checkbox preview' });
+  const source = playground.getByRole('region', { name: 'Generated React usage' });
+  const control = preview.getByRole('checkbox', { name: 'Include a gift receipt', exact: true });
+  const presentation = async (value) => {
+    const select = playground.getByRole('combobox', { name: 'Presentation' });
+    if (await select.count()) await select.selectOption(value);
+    else await playground.getByRole('radio', { name: value, exact: true }).check();
+  };
+  await presentation('standalone');
+  await expect(control).toHaveAttribute('aria-label', 'Include a gift receipt');
+  await expect(source).toContainText('aria-label=');
+  await presentation('icon label');
+  await expect(preview.locator('[data-vf-icon]')).toBeVisible();
+  await preview.getByText('Include a gift receipt', { exact: true }).click();
+  await expect(control).toBeChecked();
+  await expect(source).toContainText('<Icon icon={tagIcon}');
+  await presentation('label and description');
+  await expect(control).toHaveAccessibleDescription('A separate receipt without prices.');
+  await preview.getByText('A separate receipt without prices.', { exact: true }).click();
+  await expect(control).not.toBeChecked();
+  await control.focus();
+  await control.press('Space');
+  await expect(control).toBeChecked();
+  await expect(source).toContainText('aria-describedby={descriptionId}');
+  await playground.screenshot({ path: testInfo.outputPath('checkbox-composed-label.png') });
 });

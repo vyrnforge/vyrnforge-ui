@@ -6,6 +6,10 @@ Checkbox represents one independent affirmative choice, such as accepting terms 
 
 A checkbox has checked and unchecked states. Associate a visible label with the input; clicking the label or pressing Space while focused toggles it. Checked inputs with a name contribute their value to native form submission; unchecked and disabled inputs do not.
 
+## Label composition
+
+A standalone checkbox requires an accessible name. A native label may contain text, decorative icons and noninteractive phrasing content. Keep interactive descendants out of the label. For a supporting description, identify the primary label with aria-labelledby when needed and associate the description with aria-describedby. Use existing typography and layout primitives; no separate LabelCheckbox or IconCheckbox is required. Use an icon-only ToggleButton for persistent pressed actions.
+
 ## Controlled and uncontrolled state
 
 Use an initial default when the browser owns the value. Use controlled state when an application coordinates a choice with other presentation or behavior. Update the committed checked value when accepting a change.
