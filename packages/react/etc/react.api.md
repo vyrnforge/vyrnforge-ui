@@ -3384,6 +3384,17 @@ export interface SplitPanelRootProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 // @public
+export const StatusIndicator: ForwardRefExoticComponent<StatusIndicatorProps & RefAttributes<HTMLSpanElement>>;
+
+// @public (undocumented)
+export interface StatusIndicatorProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-live' | 'tabIndex'> {
+    // (undocumented)
+    children: string;
+    // (undocumented)
+    severity?: FeedbackSeverity;
+}
+
+// @public
 export const SvgIcon: ForwardRefExoticComponent<SvgIconProps & RefAttributes<SVGSVGElement>>;
 
 // @public
@@ -3395,17 +3406,6 @@ export interface SvgIconProps extends Omit<SVGAttributes<SVGSVGElement>, 'role' 
     // (undocumented)
     size?: IconSize;
     tone?: TextTone;
-}
-
-// @public
-export const StatusIndicator: ForwardRefExoticComponent<StatusIndicatorProps & RefAttributes<HTMLSpanElement>>;
-
-// @public (undocumented)
-export interface StatusIndicatorProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-live' | 'tabIndex'> {
-    // (undocumented)
-    children: string;
-    // (undocumented)
-    severity?: FeedbackSeverity;
 }
 
 // @public (undocumented)

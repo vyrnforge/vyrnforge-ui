@@ -9,8 +9,15 @@ import { Alert } from '@vyrnforge/react/alert';
 import { Button } from '@vyrnforge/react/button';
 import '@vyrnforge/web/styles/alert.css';
 
-<Alert severity="warning" heading="Connection interrupted"
-  actions={<Button type="button" variant="secondary" onClick={retry}>Retry</Button>}>
+<Alert
+  severity="warning"
+  heading="Connection interrupted"
+  actions={
+    <Button type="button" variant="secondary" onClick={retry}>
+      Retry
+    </Button>
+  }
+>
   Your changes remain on this device.
 </Alert>
 ```

@@ -5,8 +5,6 @@
     "group": "overlays-feedback"
   },
   "styling": {
-    "dependencies": [
-      "button"
-    ]
+    "dependencies": ["button"]
   }
 }

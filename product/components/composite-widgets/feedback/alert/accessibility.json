@@ -9,19 +9,9 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": [
-      "1.3.1",
-      "1.4.1",
-      "1.4.3",
-      "1.4.11",
-      "2.1.1",
-      "4.1.3"
-    ]
+    "criteria": ["1.3.1", "1.4.1", "1.4.3", "1.4.11", "2.1.1", "4.1.3"]
   },
-  "aria": {
-    "status": "review-required",
-    "apgPattern": null
-  },
+  "aria": { "status": "review-required", "apgPattern": null },
   "interaction": {
     "keyboard": "native actions",
     "focus": "consumer-owned recovery after dismissal",
@@ -31,24 +21,11 @@
     "library": [
       "Keep visual severity independent of explicit announcement; preserve native dismiss and authored actions"
     ],
-    "consumer": [
-      "Own message lifetime, localized labels, action meaning, focus recovery and announcement timing"
-    ]
+    "consumer": ["Own message lifetime, localized labels, action meaning, focus recovery and announcement timing"]
   },
-  "forms": {
-    "status": "not-applicable"
-  },
-  "visualAccessibility": {
-    "status": "component-specific"
-  },
-  "ssrHydration": {
-    "status": "native"
-  },
-  "evidence": {
-    "browser": "required",
-    "assistiveTechnology": "review-required"
-  },
-  "profileVariability": [
-    "five severities, subtle/outlined, explicit status/alert, custom icon/action/dismiss, RTL and contrast"
-  ]
+  "forms": { "status": "not-applicable" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "native" },
+  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "profileVariability": ["five severities, subtle/outlined, explicit status/alert, custom icon/action/dismiss, RTL and contrast"]
 }

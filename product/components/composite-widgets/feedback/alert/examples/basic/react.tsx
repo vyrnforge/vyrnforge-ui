@@ -13,15 +13,46 @@ function Example() {
   const [visible, setVisible] = useState(true);
   const [retried, setRetried] = useState(false);
   const restore = useRef<HTMLButtonElement>(null);
-  return <Flow gap="sm">
-    <Button ref={restore} type="button" variant="secondary" onClick={() => { setVisible(true); setRetried(false); }}>Restore feedback</Button>
-    {visible && <Alert severity="warning" heading="Connection interrupted" icon={<Icon icon={infoIcon} />}
-      dismiss={{ label: 'Dismiss connection message', onDismiss: () => { setVisible(false); restore.current?.focus(); } }}
-      actions={<Button type="button" variant="secondary" onClick={() => setRetried(true)}>Retry</Button>}>
-      Your changes remain on this device.
-    </Alert>}
-    <p role="status">{retried ? 'Retry requested' : ''}</p>
-    <Alert severity="success" variant="outlined" heading="Saved">Your preferences are up to date.</Alert>
-  </Flow>;
+  return (
+    <Flow gap="sm">
+      <Button
+        ref={restore}
+        type="button"
+        variant="secondary"
+        onClick={() => {
+          setVisible(true);
+          setRetried(false);
+        }}
+      >
+        Restore feedback
+      </Button>
+      {visible && (
+        <Alert
+          severity="warning"
+          heading="Connection interrupted"
+          icon={<Icon icon={infoIcon} />}
+          dismiss={{
+            label: 'Dismiss connection message',
+            onDismiss: () => {
+              setVisible(false);
+              restore.current?.focus();
+            },
+          }}
+          actions={
+            <Button type="button" variant="secondary" onClick={() => setRetried(true)}>
+              Retry
+            </Button>
+          }
+        >
+          Your changes remain on this device.
+        </Alert>
+      )}
+      <p role="status">{retried ? 'Retry requested' : ''}</p>
+      <Alert severity="success" variant="outlined" heading="Saved">
+        Your preferences are up to date.
+      </Alert>
+    </Flow>
+  );
 }
-createRoot(document.querySelector('#root')!).render(<Example />);
+const host = document.querySelector('#root');
+if (host) createRoot(host).render(<Example />);
