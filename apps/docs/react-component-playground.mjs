@@ -135,7 +135,7 @@ export function ComponentPlayground({ adapter, title }) {
       h(Flow, { direction: 'inline', wrap: 'wrap', align: 'center', justify: 'space-between', gap: 'xs' },
         h(Text, { as: 'h3', id: id + '-source', variant: 'heading-sm' }, 'React usage'),
         h(Button, { type: 'button', size: 'sm', variant: 'secondary', disabled: !ready, onClick: copy,
-          'aria-label': 'Copy React usage' }, 'Copy code')),
+          'aria-label': 'Copy code' }, 'Copy code')),
       h('div', { role: 'region', 'aria-label': 'Generated React usage' },
         h(CodeBlock, { ref: sourceRegion, tabIndex: 0, dir: 'ltr', 'aria-label': 'React source code' }, source)),
       h(Text, { role: 'status', variant: 'body-sm', className: 'vf-docs-playground-feedback' }, feedback)));

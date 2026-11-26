@@ -23,7 +23,6 @@ const bool = (key, label) => ({ kind: 'boolean', key, label, default: false });
 const choice = (key, label, value, options) => ({ kind: 'choice', key, label, default: value,
   options: options.map(option => ({ value: option, label: option })) });
 const importLine = (component, path) => "import { " + component + " } from '@vyrnforge/react/" + path + "';";
-const styleLine = path => "import '@vyrnforge/web/styles/" + path + ".css';";
 const label = (config, fallback) => config.label.trim() || fallback;
 // Author concise JSX, with expression escaping only when needed for literal strings.
 const flag = (name, enabled) => enabled ? name : '';
@@ -54,7 +53,7 @@ function snippet(imports, jsx, { setup = [], signature } = {}) {
   return [...new Set(imports), '', body].join('\n');
 }
 const iconImports = (symbol, path) => [
-  importLine('Icon', 'icon'), "import { " + symbol + " } from '@vyrnforge/icons/" + path + "';", styleLine('icon'),
+  importLine('Icon', 'icon'), "import { " + symbol + " } from '@vyrnforge/icons/" + path + "';",
 ];
 
 function buttonProps(config) {
@@ -79,7 +78,7 @@ export const buttonPlayground = {
   Preview: ButtonPreview,
   source(config) {
     const props = buttonProps(config);
-    return snippet([importLine('Button', 'button'), styleLine('button'),
+    return snippet([importLine('Button', 'button'),
       ...(config.artwork !== 'none' ? iconImports('bookmarkIcon', 'bookmark') : [])],
     markup('Button', ['type="button"', attribute('variant', props.variant, 'primary'),
       attribute('size', props.size, 'md'), flag('disabled', props.disabled), flag('loading', props.loading),
@@ -109,7 +108,7 @@ export const checkboxPlayground = {
       flag('required', config.required),
       mixed ? 'onChange={event => setSelection(event.currentTarget.checked ? "checked" : "unchecked")}' : '',
     ]);
-    return snippet([...(mixed ? ["import { useState } from 'react';"] : []), importLine('Checkbox', 'checkbox'), styleLine('checkbox')],
+    return snippet([...(mixed ? ["import { useState } from 'react';"] : []), importLine('Checkbox', 'checkbox')],
       markup('label', [], checkbox + '\n' + content(label(config, 'Include a gift receipt'))),
       mixed ? { setup: ['const [selection, setSelection] = useState<"unchecked" | "checked" | "mixed">("mixed");'] } : {});
   },
@@ -130,7 +129,7 @@ export const radioPlayground = {
   Preview: RadioPreview,
   source(config) {
     // A same-name native group and its labels are semantic requirements, not demo chrome.
-    return snippet([importLine('Radio', 'radio'), styleLine('radio')],
+    return snippet([importLine('Radio', 'radio')],
       markup('fieldset', [], '<legend>Delivery</legend>\n' + ['standard', 'express'].map(value =>
         markup('label', [], markup('Radio', ['name="delivery"', attribute('value', value),
           flag('defaultChecked', config.selection === value), flag('disabled', config.disabled), flag('required', config.required)]) +
@@ -162,7 +161,7 @@ export const avatarPlayground = {
     const avatar = markup('Avatar', [attribute('name', props.name), attribute('size', props.size, 'md'),
       attribute('shape', props.shape, 'rounded'), flag('decorative', props.decorative),
       icon ? 'appearance="icon"' : '', icon ? 'icon={<Icon icon={userIcon} />}' : attribute('initials', props.initials, undefined)]);
-    return snippet([importLine('Avatar', 'avatar'), styleLine('avatar'), ...(icon ? iconImports('userIcon', 'user') : [])],
+    return snippet([importLine('Avatar', 'avatar'), ...(icon ? iconImports('userIcon', 'user') : [])],
       props.decorative ? '<>\n' + indent(avatar + '\n<span>' + content(props.name) + '</span>', 2) + '\n</>' : avatar);
   },
 };
@@ -195,7 +194,7 @@ export const badgePlayground = {
   Preview: BadgePreview,
   source(config) {
     const props = badgeProps(config);
-    return snippet([importLine('Badge', 'badge'), styleLine('badge'), importLine('Button', 'button'), styleLine('button')],
+    return snippet([importLine('Badge', 'badge'), importLine('Button', 'button')],
       markup('Badge', [attribute('variant', props.variant, 'standard'),
         props.variant === 'standard' ? attribute('badgeContent', props.badgeContent) : '',
         props.variant === 'standard' ? attribute('max', props.max, 99) : '',
@@ -262,11 +261,11 @@ export const chipPlayground = {
     const callbacks = [
       ...(config.mode === 'action' ? ['onClick'] : []), ...(config.removable ? ['onRemove'] : []),
     ];
-    return snippet([importLine('Chip', 'chip'), styleLine('chip'),
+    return snippet([importLine('Chip', 'chip'),
       ...(config.artwork === 'icon' ? iconImports('tagIcon', 'tag') : []),
       ...(config.artwork === 'trailing' ? iconImports('chevronRightIcon', 'chevron-right') : []),
       ...(config.removable && config.customRemove ? iconImports('trashIcon', 'trash') : []),
-      ...(config.artwork === 'avatar' ? [importLine('Avatar', 'avatar'), styleLine('avatar')] : [])],
+      ...(config.artwork === 'avatar' ? [importLine('Avatar', 'avatar')] : [])],
     markup('Chip', [attribute('variant', props.variant, 'filled'), attribute('size', props.size, 'md'),
       attribute('tone', props.tone, 'neutral'), flag('disabled', props.disabled), flag('wrap', props.wrap),
       config.mode === 'link' ? attribute('href', props.href) : '',
@@ -297,7 +296,7 @@ export const togglePlayground = {
   source(config) {
     const controlled = config.iconOnly;
     return snippet([...(controlled ? ["import { useState } from 'react';"] : []),
-      importLine('ToggleButton', 'toggle-button'), styleLine('toggle-button'),
+      importLine('ToggleButton', 'toggle-button'),
       ...(controlled ? iconImports('bookmarkIcon', 'bookmark') : [])],
     markup('ToggleButton', [controlled ? 'pressed={pressed}' : flag('defaultPressed', config.pressed),
       controlled ? 'onPressedChange={setPressed}' : '', attribute('size', config.size, 'md'),
@@ -325,7 +324,7 @@ export const dividerPlayground = {
   Preview: DividerPreview,
   source(config) {
     const props = dividerProps(config);
-    return snippet([importLine('Divider', 'divider'), styleLine('divider')],
+    return snippet([importLine('Divider', 'divider')],
       markup('Divider', [attribute('orientation', props.orientation, 'horizontal'),
         config.label.trim() ? attribute('textAlign', props.textAlign, 'center') : '',
         props.textDirection ? attribute('textDirection', props.textDirection, 'top-to-bottom') : ''],
@@ -352,7 +351,7 @@ export const listPlayground = {
   Preview: ListPreview,
   source(config) {
     const props = listProps(config);
-    return snippet(["import { List, ListItem } from '@vyrnforge/react/list';", styleLine('list')],
+    return snippet(["import { List, ListItem } from '@vyrnforge/react/list';"],
       markup('List', [attribute('as', props.as, 'ul'), attribute('variant', props.variant, 'plain'),
         attribute('size', props.size, 'md'), attribute('spacing', props.spacing, 'none'),
         attribute('marker', props.marker, 'none'), attribute('gutter', props.gutter, 'auto'),

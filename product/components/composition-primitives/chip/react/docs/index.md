@@ -2,11 +2,10 @@
 
 ## React setup
 
-Load the shared Chip stylesheet once.
+Import Chip. Supported CSS-aware browser bundlers load its component styles automatically.
 
 ```tsx
 import { Chip } from '@vyrnforge/react/chip';
-import '@vyrnforge/web/styles/chip.css';
 ```
 
 ## Composition with existing VyrnForge components

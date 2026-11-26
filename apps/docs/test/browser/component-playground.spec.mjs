@@ -58,11 +58,11 @@ test('Playground preserves source and reflows at narrow widths with clipboard de
   await page.setViewportSize({ width: 375, height: 900 });
   await page.goto('/next/react/components/button/');
   const playground = page.locator('[data-vf-docs-component-playground="Button"]');
-  await expect(playground.getByRole('button', { name: 'Copy React usage' })).toBeEnabled();
+  await expect(playground.getByRole('button', { name: 'Copy code' })).toBeEnabled();
   await playground.screenshot({ path: testInfo.outputPath('playground-mobile-light.png') });
   await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
   await playground.screenshot({ path: testInfo.outputPath('playground-mobile-dark.png') });
-  await playground.getByRole('button', { name: 'Copy React usage' }).click();
+  await playground.getByRole('button', { name: 'Copy code' }).click();
   await expect(playground.getByRole('region', { name: 'Generated React usage' }).locator('pre')).toBeFocused();
   await expect(playground.getByText('Source selected. Use your device copy command.')).toBeVisible();
   await expect(playground).toBeVisible();
@@ -152,9 +152,6 @@ test('Generated playground examples typecheck and bundle against installed publi
     path.join(root, 'apps/docs', 'generated-playground-' + index + '.tsx'),
     adapter.source(normalizeConfiguration(adapter.fields, { ...defaultsFor(adapter.fields), ...patch })),
   ]));
-  // CSS imports are legal bundler side effects rather than TypeScript modules.
-  // The separate esbuild checks below resolve every real public CSS path.
-  generated.set(path.join(root, 'apps/docs', 'generated-playground-css.d.ts'), "declare module '*.css';");
   const options = { noEmit: true, strict: true, skipLibCheck: true, jsx: ts.JsxEmit.ReactJSX,
     target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext,
     moduleResolution: ts.ModuleResolutionKind.Bundler, esModuleInterop: true };
@@ -165,19 +162,27 @@ test('Generated playground examples typecheck and bundle against installed publi
   host.fileExists = name => generated.has(name) || exists(name);
   host.readFile = name => generated.get(name) ?? read(name);
   host.getSourceFile = (name, version, ...args) => generated.has(name)
-    ? ts.createSourceFile(name, generated.get(name), version, true, name.endsWith('.d.ts') ? ts.ScriptKind.TS : ts.ScriptKind.TSX)
+    ? ts.createSourceFile(name, generated.get(name), version, true, ts.ScriptKind.TSX)
     : get(name, version, ...args);
   const program = ts.createProgram([...generated.keys()], options, host);
   const diagnostics = ts.getPreEmitDiagnostics(program);
   expect(diagnostics.map(d => ts.flattenDiagnosticMessageText(d.messageText, '\n'))).toEqual([]);
-  // Bundle every representative configuration, including actual CSS and icon imports.
+  // Prove the displayed imports alone resolve browser wrappers and extract canonical component CSS.
   for (const [name, source] of generated) {
-    if (name.endsWith('.d.ts')) continue;
+    expect(source).not.toContain('@vyrnforge/web/styles');
     const output = await build({ stdin: { contents: source, sourcefile: name, resolveDir: root, loader: 'tsx' },
-      bundle: true, write: false, platform: 'browser', format: 'esm', jsx: 'automatic',
+      bundle: true, write: false, metafile: true, platform: 'browser', format: 'esm', jsx: 'automatic',
       outdir: path.join(root, 'dist', 'playground-source-check'), logLevel: 'silent' });
     expect(output.outputFiles.some(file => file.path.endsWith('.js'))).toBe(true);
-    expect(output.outputFiles.some(file => file.path.endsWith('.css'))).toBe(true);
+    const css = output.outputFiles.find(file => file.path.endsWith('.css'));
+    expect(css?.text).toBeTruthy();
+    const componentImports = [...source.matchAll(/from '@vyrnforge\/react\/([a-z-]+)'/g)].map(match => match[1]);
+    expect(componentImports.length).toBeGreaterThan(0);
+    for (const component of componentImports) {
+      expect(Object.keys(output.metafile.inputs).some(input => input.endsWith('/components/' + component + '/browser.js'))).toBe(true);
+      expect(Object.keys(output.metafile.inputs).some(input => input.endsWith('/components/' + component + '/' + component + '.css'))).toBe(true);
+    }
+    expect(css.text).not.toMatch(/@layer\s+vyrnforge\.reset\s*\{/);
   }
 });
 
@@ -244,7 +249,7 @@ test('Playground source is component-first, without preview-only scaffolding', a
   await page.goto('/next/react/components/button/');
   const button = page.locator('[data-vf-docs-component-playground="Button"]');
   const code = button.getByRole('region', { name: 'Generated React usage' });
-  await expect(code).toHaveText("import { Button } from '@vyrnforge/react/button'; import '@vyrnforge/web/styles/button.css'; <Button type=\"button\">Save changes</Button>");
+  await expect(code).toHaveText("import { Button } from '@vyrnforge/react/button'; <Button type=\"button\">Save changes</Button>");
   await expect(code).not.toContainText(/Flow|Text|useState|Activations/);
   await button.getByRole('radio', { name: 'secondary' }).check();
   await button.getByRole('radio', { name: 'lg' }).check();
@@ -259,7 +264,7 @@ test('Playground source is component-first, without preview-only scaffolding', a
   await page.goto('/next/react/components/chip/');
   const chip = page.locator('[data-vf-docs-component-playground="Chip"]');
   const source = chip.getByRole('region', { name: 'Generated React usage' });
-  await expect(source).toHaveText("import { Chip } from '@vyrnforge/react/chip'; import '@vyrnforge/web/styles/chip.css'; <Chip>Engineering</Chip>");
+  await expect(source).toHaveText("import { Chip } from '@vyrnforge/react/chip'; <Chip>Engineering</Chip>");
   await chip.getByRole('radio', { name: 'selectable' }).check();
   await chip.getByRole('checkbox', { name: 'Selected' }).check();
   await chip.getByRole('checkbox', { name: 'Deletable' }).check();
