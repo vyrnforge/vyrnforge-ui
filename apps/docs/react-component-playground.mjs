@@ -31,7 +31,7 @@ function ConfigurationField({ field, config, update, disabled }) {
         onChange: () => update(field.key, option.value) }),
       h(Text, { as: 'span', variant: 'body-sm' }, option.label)))), description);
   return h(Flow, { gap: 'xs' },
-    h(Text, { as: 'label', htmlFor: id }, field.label),
+    h('label', { htmlFor: id }, h(Text, { as: 'span' }, field.label)),
     field.kind === 'choice'
       ? h(NativeSelect, { ...common, value, onChange: e => update(field.key, e.currentTarget.value) },
           ...field.options.map(option => h('option', { key: option.value, value: option.value }, option.label)))

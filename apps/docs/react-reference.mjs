@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -881,14 +881,16 @@ function badgeUsage(badge, links) {
     { id: 'react-badge-guidelines', heading: 'Behavior and usage' },
     { id: 'react-badge-related', heading: 'Related components and API' },
   ];
+  const playgroundSection = { id: 'react-badge-playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, {
+    guideToc([sections[0], playgroundSection, ...sections.slice(1)], {
       label: 'Badge', examples: badge.examples, getId: (example) => 'react-badge-example-' + example.id.slice('badge/'.length),
     }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-badge': '' },
       guideHeader(badge.sharedContent, 'React · Metadata', badge.standardReferences),
       guidePart(sections[0], [...guideBlocks(badge.frameworkContent, 'React setup')]),
+      guidePart(playgroundSection, [h(ComponentPlayground, { adapter: badgePlayground, title: 'Badge' })]),
       guidePart(sections[1], [
         ...badge.examples.map(example => badgeExample(example, links)),
       ]),
@@ -951,8 +953,9 @@ function avatarUsage(avatar, links) {
     { id: 'react-avatar-guidelines', heading: 'Behavior and usage' },
     { id: 'react-avatar-related', heading: 'Related components and API' },
   ];
+  const playgroundSection = { id: 'react-avatar-playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, {
+    guideToc([sections[0], playgroundSection, ...sections.slice(1)], {
       label: 'Avatar', examples: examples, getId: (example) => 'react-avatar-example-' + example.id.slice('avatar/'.length),
     }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
@@ -963,6 +966,7 @@ function avatarUsage(avatar, links) {
         h('p', { key: 'setup' }, 'See ', h(Link, { href: links.home },
           'React overview'), ' for shared setup and stylesheet delivery.'),
       ]),
+      guidePart(playgroundSection, [h(ComponentPlayground, { adapter: avatarPlayground, title: 'Avatar' })]),
       guidePart(sections[1], [
         ...examples.map((example) => avatarExample(example, links)),
       ]),

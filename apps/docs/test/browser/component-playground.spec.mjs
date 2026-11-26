@@ -83,3 +83,22 @@ test('Playground desktop and accessibility adaptations', async ({ page }, testIn
     .toHaveAttribute('data-vf-variant', 'ghost');
   await playground.screenshot({ path: testInfo.outputPath('playground-rtl-forced-colors.png') });
 });
+
+test('Avatar and Badge conditionally expose valid controls and generate actual public usage', async ({ page }) => {
+  await page.goto('/next/react/components/avatar/');
+  const avatar = page.locator('[data-vf-docs-component-playground="Avatar"]');
+  await avatar.getByRole('radio', { name: 'icon', exact: true }).check();
+  await expect(avatar.getByRole('textbox', { name: 'Custom initials' })).toBeDisabled();
+  await expect(avatar.getByRole('region', { name: 'Avatar preview' }).locator('[data-vf-avatar]'))
+    .toHaveAttribute('data-vf-avatar-appearance', 'icon');
+  await expect(avatar.getByRole('region', { name: 'Generated React usage' })).toContainText('icon={<Icon icon={userIcon} />}');
+  await page.goto('/next/react/components/badge/');
+  const badge = page.locator('[data-vf-docs-component-playground="Badge"]');
+  await badge.getByRole('spinbutton', { name: 'Count', exact: true }).fill('127');
+  const preview = badge.getByRole('region', { name: 'Badge preview' });
+  await expect(preview.locator('[data-vf-badge-indicator]')).toHaveText('99+');
+  await expect(preview.getByRole('button', { name: 'Inbox, 127 unread messages' })).toBeVisible();
+  await badge.getByRole('radio', { name: 'dot', exact: true }).check();
+  await expect(badge.getByRole('spinbutton', { name: 'Count', exact: true })).toBeDisabled();
+  await expect(badge.getByRole('region', { name: 'Generated React usage' })).not.toContainText('badgeContent');
+});
