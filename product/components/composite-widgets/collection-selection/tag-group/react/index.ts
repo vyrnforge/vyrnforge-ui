@@ -1,6 +1,6 @@
 import { createElement, forwardRef, useEffect, useRef, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 const groupSelector = '[data-vf-tag-group-root],vf-tag-group';
-const removeSelector = 'button[data-vf-tag-group-remove]';
+const removeSelector = 'button[data-vf-tag-group-remove],button[data-vf-chip-remove]';
 
 function attachRemovalFocus(root: HTMLElement): () => void {
   let focused: HTMLButtonElement | null = null;

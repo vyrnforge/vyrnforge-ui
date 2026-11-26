@@ -1,0 +1,14 @@
+{
+  "id": "chip/multiline",
+  "title": "Multiline",
+  "description": "Compare truncation with deliberate wrapping in a constrained container.",
+  "documentationSection": "Multiline",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

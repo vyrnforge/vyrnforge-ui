@@ -20,7 +20,7 @@ test('Button playground keeps configuration, interaction and generated usage syn
   await expect(button).toHaveAttribute('aria-busy', 'true');
   await playground.getByRole('button', { name: 'Reset playground' }).click();
   await expect(button).toBeEnabled();
-  await expect(code).not.toContainText('variant=');
+  await expect(code).not.toContainText(/<Button[^>]*\bvariant=/);
   await expect(preview.getByRole('status')).toHaveText('Activations: 0');
 });
 
@@ -53,7 +53,7 @@ test('Playground preserves source and reflows at narrow widths with clipboard de
   await page.goto('/next/react/components/button/');
   const playground = page.locator('[data-vf-docs-component-playground="Button"]');
   await playground.getByRole('button', { name: 'Copy React usage' }).click();
-  await expect(playground.getByRole('region', { name: 'Generated React usage' })).toBeFocused();
+  await expect(playground.getByRole('region', { name: 'Generated React usage' }).locator('pre')).toBeFocused();
   await expect(playground.getByText('Source selected. Use your device copy command.')).toBeVisible();
   await expect(playground).toBeVisible();
   await playground.screenshot({ path: testInfo.outputPath('playground-mobile-light.png') });
@@ -101,4 +101,24 @@ test('Avatar and Badge conditionally expose valid controls and generate actual p
   await badge.getByRole('radio', { name: 'dot', exact: true }).check();
   await expect(badge.getByRole('spinbutton', { name: 'Count', exact: true })).toBeDisabled();
   await expect(badge.getByRole('region', { name: 'Generated React usage' })).not.toContainText('badgeContent');
+});
+
+test('Chip guide uses the shared playground, with valid source and removal focus', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/chip/');
+  const playground = page.locator('[data-vf-docs-component-playground="Chip"]');
+  const preview = playground.getByRole('region', { name: 'Chip preview' });
+  await playground.getByRole('radio', { name: 'selectable' }).check();
+  await playground.getByRole('checkbox', { name: 'Deletable' }).check();
+  await playground.getByRole('checkbox', { name: 'Custom delete icon' }).check();
+  await preview.getByRole('button', { name: 'Engineering', exact: true }).click();
+  await expect(playground.getByRole('checkbox', { name: 'Selected' })).toBeChecked();
+  await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('useState(true)');
+  await preview.getByRole('button', { name: 'Remove Engineering' }).click();
+  await expect(preview.getByRole('button', { name: 'Restore' })).toBeFocused();
+  await playground.getByRole('button', { name: 'Reset playground' }).click();
+  await expect(preview.locator('[data-vf-chip]')).toBeVisible();
+  await expect(playground.getByRole('checkbox', { name: 'Custom delete icon' })).toBeDisabled();
+  await playground.screenshot({ path: testInfo.outputPath('chip-shared-playground-desktop.png') });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await playground.screenshot({ path: testInfo.outputPath('chip-shared-playground-mobile.png') });
 });

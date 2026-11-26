@@ -1,0 +1,14 @@
+{
+  "id": "chip/clickable",
+  "title": "Clickable",
+  "description": "Trigger a command; compare hover, focus and pressed feedback.",
+  "documentationSection": "Actions",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

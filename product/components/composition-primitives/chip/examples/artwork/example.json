@@ -1,0 +1,14 @@
+{
+  "id": "chip/artwork",
+  "title": "Avatar chips",
+  "description": "Compose identity with the public Avatar component.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Adornment"
+}

@@ -11,6 +11,8 @@ export const documentationShellStyleSpecifiers = Object.freeze([
   '@vyrnforge/web/styles/radio.css',
   '@vyrnforge/web/styles/avatar.css',
   '@vyrnforge/web/styles/badge.css',
+  '@vyrnforge/web/styles/chip.css',
+  '@vyrnforge/web/styles/toggle-button.css',
   '@vyrnforge/web/styles/icon.css',
   '@vyrnforge/web/styles/search-field.css',
   '@vyrnforge/web/styles/native-select.css',

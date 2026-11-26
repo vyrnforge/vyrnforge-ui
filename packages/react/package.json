@@ -355,6 +355,12 @@
       "browser": "./dist/components/side-nav/browser.js",
       "import": "./dist/components/side-nav/index.js",
       "default": "./dist/components/side-nav/index.js"
+    },
+    "./chip": {
+      "types": "./dist/components/chip/index.d.ts",
+      "browser": "./dist/components/chip/browser.js",
+      "import": "./dist/components/chip/index.js",
+      "default": "./dist/components/chip/index.js"
     }
   },
   "dependencies": {

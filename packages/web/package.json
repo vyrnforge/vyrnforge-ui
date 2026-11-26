@@ -105,7 +105,8 @@
     "./styles/split-panel.css": "./dist/components/split-panel/split-panel.css",
     "./styles/toast.css": "./dist/components/toast/toast.css",
     "./styles/app-shell.css": "./dist/components/app-shell/app-shell.css",
-    "./styles/side-nav.css": "./dist/components/side-nav/side-nav.css"
+    "./styles/side-nav.css": "./dist/components/side-nav/side-nav.css",
+    "./styles/chip.css": "./dist/components/chip/chip.css"
   },
   "dependencies": {
     "@vyrnforge/core": "workspace:*"

@@ -1,9 +1,13 @@
-import { createElement as h, useId, useState } from 'react';
+import { createElement as h, useId, useState, useEffect, useRef } from 'react';
 import { Button } from '@vyrnforge/react/button';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Radio } from '@vyrnforge/react/radio';
 import { Avatar } from '@vyrnforge/react/avatar';
 import { Badge } from '@vyrnforge/react/badge';
+import { Chip } from '@vyrnforge/react/chip';
+import { tagIcon } from '@vyrnforge/icons/tag';
+import { trashIcon } from '@vyrnforge/icons/trash';
+import { chevronRightIcon } from '@vyrnforge/icons/chevron-right';
 import { Icon } from '@vyrnforge/react/icon';
 import { userIcon } from '@vyrnforge/icons/user';
 import { Flow } from '@vyrnforge/react/layout';
@@ -186,6 +190,112 @@ export const badgePlayground = {
           ? ' anchorOrigin={{ vertical: ' + JSON.stringify(config.vertical) + ', horizontal: ' + JSON.stringify(config.horizontal) + ' }}' : '') + '>',
       '      <Button type="button" variant="secondary" aria-label=' + jsxText(badgeName(config)) + '>Inbox</Button>',
       '    </Badge>', '  );', '}',
+    ].join('\n');
+  },
+};
+
+function chipProps(config, destination) {
+  return { children: label(config, 'Engineering'), variant: config.variant, size: config.size,
+    tone: config.tone, disabled: config.disabled, wrap: config.wrap,
+    ...(config.mode === 'link' ? { href: destination } : {}),
+    ...(config.mode === 'selectable' ? { selectable: true, selected: config.selected } : {}),
+    ...(config.artwork === 'icon' ? { leading: h(Icon, { icon: tagIcon, size: 'sm' }) } : {}),
+    ...(config.artwork === 'avatar' ? { leading: h(Avatar, { name: 'Engineering', decorative: true, size: 'sm' }) } : {}),
+    ...(config.artwork === 'trailing' ? { trailing: h(Icon, { icon: chevronRightIcon, size: 'sm' }) } : {}),
+    ...(config.removable ? { removeLabel: 'Remove ' + label(config, 'Engineering'),
+      ...(config.customRemove ? { removeIcon: h(Icon, { icon: trashIcon, size: 'sm' }) } : {}) } : {}) };
+}
+function ChipPreview({ config, update }) {
+  const destination = useId();
+  const restore = useRef(null);
+  const root = useRef(null);
+  const shouldFocus = useRef(false);
+  const [visible, setVisible] = useState(true);
+  const [clicks, setClicks] = useState(0);
+  useEffect(() => {
+    if (!visible) restore.current?.focus();
+    else if (shouldFocus.current) {
+      shouldFocus.current = false;
+      root.current?.querySelector('button:not(:disabled), a[href]')?.focus();
+    }
+  }, [visible]);
+  return h(Flow, { align: 'center', gap: 'sm' },
+    visible ? h(Chip, { ...chipProps(config, '#' + destination), ref: root,
+      ...(config.mode === 'action' ? { onClick: () => setClicks(n => n + 1) } : {}),
+      ...(config.mode === 'selectable' ? { onSelectedChange: value => update('selected', value) } : {}),
+      ...(config.removable ? { onRemove: () => setVisible(false) } : {}) })
+      : h(Button, { ref: restore, type: 'button', variant: 'secondary', onClick: () => {
+        shouldFocus.current = true; setVisible(true);
+      } }, 'Restore'),
+    h(Text, { role: 'status', variant: 'body-sm' }, !visible ? 'Chip removed' :
+      config.mode === 'action' ? 'Activations: ' + clicks :
+      config.mode === 'selectable' ? (config.selected ? 'Selected' : 'Not selected') : 'Live preview'),
+    config.mode === 'link' ? h(Text, { as: 'p', id: destination, tabIndex: -1, variant: 'body-sm' }, 'Link example destination') : null);
+}
+export const chipPlayground = {
+  fields: [text('label', 'Label', 'Engineering'),
+    choice('variant', 'Variant', 'filled', ['filled', 'outlined']),
+    choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
+    choice('tone', 'Tone', 'neutral', ['neutral', 'accent', 'danger']),
+    choice('mode', 'Mode', 'static', ['static', 'action', 'selectable', 'link']),
+    choice('artwork', 'Artwork', 'none', ['none', 'icon', 'avatar', 'trailing']),
+    bool('removable', 'Deletable'),
+    { ...bool('customRemove', 'Custom delete icon'), available: config => config.removable },
+    { ...bool('selected', 'Selected'), available: config => config.mode === 'selectable' },
+    { ...bool('disabled', 'Disabled'), available: config => config.mode !== 'static' || config.removable },
+    bool('wrap', 'Multiline')],
+  Preview: ChipPreview,
+  source(config) {
+    const props = chipProps(config, '#chip-destination');
+    const hasIcon = ['icon', 'trailing'].includes(config.artwork) || (config.removable && config.customRemove);
+    const stateful = config.mode === 'action' || config.mode === 'selectable' || config.removable;
+    const tag = '<Chip' + attribute('variant', props.variant, 'filled') + attribute('size', props.size, 'md') +
+      attribute('tone', props.tone, 'neutral') + flag('disabled', props.disabled) + flag('wrap', props.wrap) +
+      (config.mode === 'link' ? ' href="#chip-destination"' : config.mode === 'action' ? ' onClick={() => setClicks(n => n + 1)}' :
+        config.mode === 'selectable' ? ' selectable selected={selected} onSelectedChange={setSelected}' : '') +
+      (config.artwork === 'icon' ? ' leading={<Icon icon={tagIcon} size="sm" />}' :
+        config.artwork === 'avatar' ? ' leading={<Avatar name="Engineering" decorative size="sm" />}' :
+        config.artwork === 'trailing' ? ' trailing={<Icon icon={chevronRightIcon} size="sm" />}' : '') +
+      (config.removable ? ' onRemove={() => setVisible(false)} removeLabel=' + jsxText(props.removeLabel) +
+        (config.customRemove ? ' removeIcon={<Icon icon={trashIcon} size="sm" />}' : '') : '') +
+      '>' + jsxText(props.children) + '</Chip>';
+    return [
+      ...(stateful ? ["import { useState" + (config.removable ? ', useEffect, useRef' : '') + " } from 'react';"] : []),
+      importLine('Chip', 'chip'), styleLine('chip'), ...compositionImports,
+      ...(config.mode === 'selectable' ? [styleLine('toggle-button')] : []),
+      ...(config.removable || config.mode === 'action' ? [styleLine('button')] : []),
+      ...(config.mode === 'link' ? [styleLine('link')] : []),
+      ...(hasIcon ? [importLine('Icon', 'icon'), styleLine('icon')] : []),
+      ...(config.artwork === 'icon' ? ["import { tagIcon } from '@vyrnforge/icons/tag';"] : []),
+      ...(config.artwork === 'trailing' ? ["import { chevronRightIcon } from '@vyrnforge/icons/chevron-right';"] : []),
+      ...(config.removable && config.customRemove ? ["import { trashIcon } from '@vyrnforge/icons/trash';"] : []),
+      ...(config.artwork === 'avatar' ? [importLine('Avatar', 'avatar'), styleLine('avatar')] : []),
+      ...(config.removable ? [importLine('Button', 'button')] : []),
+      '', 'export function Example() {',
+      ...(config.mode === 'action' ? ['  const [clicks, setClicks] = useState(0);'] : []),
+      ...(config.mode === 'selectable' ? ['  const [selected, setSelected] = useState(' + config.selected + ');'] : []),
+      ...(config.removable ? ['  const [visible, setVisible] = useState(true);',
+        '  const restore = useRef<HTMLButtonElement>(null);',
+        '  const root = useRef<HTMLSpanElement>(null);',
+        '  const shouldFocus = useRef(false);',
+        '  useEffect(() => {',
+        '    if (!visible) restore.current?.focus();',
+        '    else if (shouldFocus.current) {',
+        '      shouldFocus.current = false;',
+        '      root.current?.querySelector<HTMLElement>("button:not(:disabled), a[href]")?.focus();',
+        '    }',
+        '  }, [visible]);'] : []),
+      '  return (', '    <Flow align="center" gap="sm">',
+      ...(config.removable ? ['      {visible ? ' + tag.replace('<Chip', '<Chip ref={root}') + ' :',
+        '        <Button ref={restore} type="button" variant="secondary" onClick={() => {',
+        '          shouldFocus.current = true; setVisible(true);',
+        '        }}>Restore</Button>}'] : ['      ' + tag]),
+      '      <Text role="status" variant="body-sm">' +
+        (config.removable ? '{!visible ? "Chip removed" : ' : '{') +
+        (config.mode === 'action' ? '"Activations: " + clicks' : config.mode === 'selectable' ? 'selected ? "Selected" : "Not selected"' : '"Live preview"') +
+        '}</Text>',
+      ...(config.mode === 'link' ? ['      <Text as="p" id="chip-destination" tabIndex={-1} variant="body-sm">Link example destination</Text>'] : []),
+      '    </Flow>', '  );', '}',
     ].join('\n');
   },
 };

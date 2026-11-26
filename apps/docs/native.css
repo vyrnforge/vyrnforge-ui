@@ -855,6 +855,24 @@
     min-inline-size: 0;
   }
 
+  /* Compact specimens need less vertical chrome than the full configurator. */
+  [data-vf-docs-react-chip] .vf-docs-react-example-frame[data-vf-docs-example-id] {
+    min-block-size: 8rem;
+  }
+
+  [data-vf-docs-react-chip] .vf-docs-react-example-frame[data-vf-docs-example-id="chip/playground"] {
+    min-block-size: 52rem;
+  }
+
+  @media (max-width: 40rem) {
+    [data-vf-docs-react-chip] .vf-docs-react-example-frame[data-vf-docs-example-id] {
+      min-block-size: 15rem;
+    }
+    [data-vf-docs-react-chip] .vf-docs-react-example-frame[data-vf-docs-example-id="chip/playground"] {
+      min-block-size: 68rem;
+    }
+  }
+
   .vf-docs-usage-guide .vf-docs-source-disclosure {
     background: var(--vf-color-surface-subtle);
     border: 1px solid var(--vf-color-border);

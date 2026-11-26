@@ -1,0 +1,14 @@
+{
+  "id": "chip/action-removal",
+  "title": "Clickable and deletable",
+  "description": "The primary action and dismissal are independent native buttons.",
+  "documentationSection": "Actions",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

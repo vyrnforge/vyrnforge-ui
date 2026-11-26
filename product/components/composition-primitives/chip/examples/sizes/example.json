@@ -1,0 +1,14 @@
+{
+  "id": "chip/sizes",
+  "title": "Sizes",
+  "description": "Compare small, medium and large in both variants.",
+  "documentationSection": "Sizes",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

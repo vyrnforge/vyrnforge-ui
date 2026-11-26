@@ -1,0 +1,14 @@
+{
+  "id": "chip/selection",
+  "title": "Selectable chips",
+  "description": "Use native pressed state for filters. Controlled and uncontrolled modes are supported.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Actions"
+}

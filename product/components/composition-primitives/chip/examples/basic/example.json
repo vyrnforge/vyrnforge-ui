@@ -1,0 +1,19 @@
+{
+  "id": "chip/basic",
+  "title": "Basic chip",
+  "description": "Compare the default filled surface and the outlined variant.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Basic chip"
+}
