@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import {
@@ -74,8 +75,8 @@ function App() {
 
   return (
     <main>
-      <h2>Shared collection</h2>
-      <p data-collection-state>{deleted ? 'Quarterly planning deleted.' : 'Quarterly planning is available.'}</p>
+      <Text as="h2" variant="heading-md">Shared collection</Text>
+      <Text as="p" data-collection-state>{deleted ? 'Quarterly planning deleted.' : 'Quarterly planning is available.'}</Text>
       <button
         type="button"
         aria-disabled={deleted}
@@ -104,10 +105,10 @@ function App() {
           This permanently removes 14 shared items from the workspace. There is no self-service restore.
         </AlertDialogDescription>
         <AlertDialogBody>
-          <p>Only continue if you intend to remove this collection for everyone who has access.</p>
-          {phase === 'pending' ? <p role="status">Deleting collection…</p> : null}
+          <Text as="p">Only continue if you intend to remove this collection for everyone who has access.</Text>
+          {phase === 'pending' ? <Text as="p" role="status">Deleting collection…</Text> : null}
           {phase === 'error' ? (
-            <p role="alert">Deletion failed. Nothing was deleted. Review the consequence and retry.</p>
+            <Text as="p" role="alert">Deletion failed. Nothing was deleted. Review the consequence and retry.</Text>
           ) : null}
         </AlertDialogBody>
         <AlertDialogCancel autoFocus aria-disabled={pending}>

@@ -1,6 +1,6 @@
+import { Text } from '@vyrnforge/react/text';
 import { createRoot } from 'react-dom/client';
 import { List, ListItem } from '@vyrnforge/react/list';
-import '@vyrnforge/web/styles/list.css';
 
 const groups = [
   { id: 'list-today', title: 'Today', entries: ['Build passed', 'Code reviewed', 'Preview updated', 'Docs generated', 'Packages checked'] },
@@ -13,10 +13,10 @@ function App() {
       style={{ maxBlockSize: '16rem', overflowY: 'auto' }}>
       {groups.map(group => (
         <section key={group.id}>
-          <h3 id={group.id} data-vf-list-subheader=""
+          <Text as="h3" variant="heading-sm" id={group.id} data-vf-list-subheader=""
             data-vf-list-subheader-sticky="">
             {group.title}
-          </h3>
+          </Text>
           <List aria-labelledby={group.id} variant="divided" size="sm"
             dividerInset="gutter">
             {group.entries.map(item => <ListItem key={item}>{item}</ListItem>)}

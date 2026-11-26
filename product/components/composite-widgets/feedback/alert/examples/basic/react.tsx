@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Alert } from '@vyrnforge/react/alert';
@@ -44,7 +45,7 @@ function Example() {
           Your changes remain on this device.
         </Alert>
       )}
-      <p role="status">{retried ? 'Retry requested' : ''}</p>
+      <Text as="p" role="status">{retried ? 'Retry requested' : ''}</Text>
       <Alert severity="success" variant="outlined" heading="Saved">
         Your preferences are up to date.
       </Alert>

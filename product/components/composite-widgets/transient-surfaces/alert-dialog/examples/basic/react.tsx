@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
@@ -38,7 +39,7 @@ function Example() {
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogRoot>
-      <p role="status">{confirmed ? 'Example decision confirmed' : ''}</p>
+      <Text as="p" role="status">{confirmed ? 'Example decision confirmed' : ''}</Text>
     </Flow>
   );
 }
