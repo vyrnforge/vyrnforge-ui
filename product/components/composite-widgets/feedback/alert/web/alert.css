@@ -18,7 +18,7 @@
     min-inline-size: 0;
     overflow-wrap: anywhere;
   }
-  :where([data-vf-alert][data-vf-alert-variant="outlined"]) {
+  :where([data-vf-alert][data-vf-alert-variant='outlined']) {
     background: transparent;
   }
   :where([data-vf-alert-icon]) {

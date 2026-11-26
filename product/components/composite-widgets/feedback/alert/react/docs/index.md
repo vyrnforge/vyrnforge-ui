@@ -19,7 +19,7 @@ import '@vyrnforge/web/styles/alert.css';
   }
 >
   Your changes remain on this device.
-</Alert>
+</Alert>;
 ```
 
 Use announcement="polite" or announcement="assertive" only when justified. Supply dismiss={{ label: 'Dismiss message', onDismiss: close }} for an authored dismissal request. The application controls removal and focus restoration. The forwarded ref points at the native root.

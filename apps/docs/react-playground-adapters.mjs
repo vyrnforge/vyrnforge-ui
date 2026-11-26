@@ -251,7 +251,7 @@ export const chipPlayground = {
   fields: [text('label', 'Label', 'Engineering'),
     choice('variant', 'Variant', 'filled', ['filled', 'outlined']),
     choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
-    choice('tone', 'Tone', 'neutral', ['neutral', 'accent', 'danger']),
+    choice('tone', 'Tone', 'neutral', ['neutral', 'accent', 'danger', 'success', 'warning', 'info']),
     choice('mode', 'Mode', 'static', ['static', 'action', 'selectable', 'link']),
     choice('artwork', 'Artwork', 'none', ['none', 'icon', 'avatar', 'trailing']),
     bool('removable', 'Deletable'),

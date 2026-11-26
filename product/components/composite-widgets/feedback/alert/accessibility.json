@@ -27,5 +27,7 @@
   "visualAccessibility": { "status": "component-specific" },
   "ssrHydration": { "status": "native" },
   "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
-  "profileVariability": ["five severities, subtle/outlined, explicit status/alert, custom icon/action/dismiss, RTL and contrast"]
+  "profileVariability": [
+    "five severities, subtle/outlined, explicit status/alert, custom icon/action/dismiss, RTL and contrast"
+  ]
 }
