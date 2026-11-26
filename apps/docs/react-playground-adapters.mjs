@@ -5,6 +5,10 @@ import { Radio } from '@vyrnforge/react/radio';
 import { Avatar } from '@vyrnforge/react/avatar';
 import { Badge } from '@vyrnforge/react/badge';
 import { Chip } from '@vyrnforge/react/chip';
+import { ToggleButton } from '@vyrnforge/react/toggle-button';
+import { Divider } from '@vyrnforge/react/divider';
+import { List, ListItem } from '@vyrnforge/react/list';
+import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 import { tagIcon } from '@vyrnforge/icons/tag';
 import { trashIcon } from '@vyrnforge/icons/trash';
 import { chevronRightIcon } from '@vyrnforge/icons/chevron-right';
@@ -26,30 +30,37 @@ const flag = (name, enabled) => enabled ? ' ' + name : '';
 const attribute = (name, value, defaultValue) => value === defaultValue ? '' : ' ' + name + '=' + jsxText(value);
 
 function buttonProps(config) {
-  return { type: 'button', variant: config.variant, size: config.size, disabled: config.disabled, loading: config.loading };
+  return { type: 'button', variant: config.variant, size: config.size, disabled: config.disabled, loading: config.loading,
+    ...(config.artwork === 'icon only' ? { iconOnly: true, 'aria-label': label(config, 'Save changes') } : {}) };
 }
 function ButtonPreview({ config }) {
   const [count, setCount] = useState(0);
   return h(Flow, { align: 'center', gap: 'sm' },
-    h(Button, { ...buttonProps(config), onClick: () => setCount(n => n + 1) }, label(config, 'Save changes')),
+    h(Button, { ...buttonProps(config), onClick: () => setCount(n => n + 1) },
+      config.artwork !== 'none' ? h(Icon, { icon: bookmarkIcon }) : null,
+      config.artwork !== 'icon only' ? label(config, 'Save changes') : null),
     h(Text, { role: 'status', variant: 'body-sm' }, 'Activations: ' + count));
 }
 export const buttonPlayground = {
   fields: [text('label', 'Label', 'Save changes'),
     choice('variant', 'Variant', 'primary', ['primary', 'secondary', 'ghost']),
     choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
-    bool('disabled', 'Disabled'), bool('loading', 'Loading')],
+    bool('disabled', 'Disabled'), bool('loading', 'Loading'),
+    choice('artwork', 'Artwork', 'none', ['none', 'icon', 'icon only'])],
   presets: [{ label: 'Busy and disabled', values: { loading: true, disabled: true } }],
   Preview: ButtonPreview,
   source(config) {
     const props = buttonProps(config);
     return [
       "import { useState } from 'react';", importLine('Button', 'button'), styleLine('button'), ...compositionImports,
+      ...(config.artwork !== 'none' ? [importLine('Icon', 'icon'), "import { bookmarkIcon } from '@vyrnforge/icons/bookmark';", styleLine('icon')] : []),
       '', 'export function Example() {', '  const [count, setCount] = useState(0);', '  return (',
       '    <Flow align="center" gap="sm">',
       '      <Button type="button"' + attribute('variant', props.variant, 'primary') + attribute('size', props.size, 'md') +
-        flag('disabled', props.disabled) + flag('loading', props.loading) + ' onClick={() => setCount(n => n + 1)}>' +
-        jsxText(label(config, 'Save changes')) + '</Button>',
+        flag('disabled', props.disabled) + flag('loading', props.loading) +
+        (props.iconOnly ? ' iconOnly aria-label=' + jsxText(props['aria-label']) : '') + ' onClick={() => setCount(n => n + 1)}>' +
+        (config.artwork !== 'none' ? '<Icon icon={bookmarkIcon} />' : '') +
+        (props.iconOnly ? '' : jsxText(label(config, 'Save changes'))) + '</Button>',
       '      <Text role="status" variant="body-sm">Activations: {count}</Text>',
       '    </Flow>', '  );', '}',
     ].join('\n');
@@ -297,5 +308,88 @@ export const chipPlayground = {
       ...(config.mode === 'link' ? ['      <Text as="p" id="chip-destination" tabIndex={-1} variant="body-sm">Link example destination</Text>'] : []),
       '    </Flow>', '  );', '}',
     ].join('\n');
+  },
+};
+
+const toggleLabel = config => label(config, 'Bookmark article');
+function TogglePreview({ config, update }) {
+  return h(ToggleButton, { pressed: config.pressed, size: config.size, disabled: config.disabled,
+    onPressedChange: pressed => update('pressed', pressed),
+    ...(config.iconOnly ? { iconOnly: true, 'aria-label': toggleLabel(config) } : {}) },
+    config.iconOnly ? h(Icon, { icon: bookmarkIcon, variant: config.pressed ? 'filled' : 'outlined' }) : toggleLabel(config));
+}
+export const togglePlayground = {
+  fields: [text('label', 'Label', 'Bookmark article'), choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
+    bool('pressed', 'Pressed'), bool('disabled', 'Disabled'), bool('iconOnly', 'Icon only')],
+  Preview: TogglePreview,
+  source(config) {
+    return ["import { useState } from 'react';", importLine('ToggleButton', 'toggle-button'), styleLine('toggle-button'),
+      ...(config.iconOnly ? [importLine('Icon', 'icon'), "import { bookmarkIcon } from '@vyrnforge/icons/bookmark';", styleLine('icon')] : []),
+      '', 'export function Example() {', '  const [pressed, setPressed] = useState(' + config.pressed + ');',
+      '  return (', '    <ToggleButton pressed={pressed} onPressedChange={setPressed}' +
+        attribute('size', config.size, 'md') + flag('disabled', config.disabled) +
+        (config.iconOnly ? ' iconOnly aria-label=' + jsxText(toggleLabel(config)) : '') + '>',
+      '      ' + (config.iconOnly ? '<Icon icon={bookmarkIcon} variant={pressed ? "filled" : "outlined"} />' : jsxText(toggleLabel(config))),
+      '    </ToggleButton>', '  );', '}'].join('\n');
+  },
+};
+function dividerProps(config) {
+  return { orientation: config.orientation, textAlign: config.textAlign,
+    ...(config.orientation === 'vertical' && config.label.trim() ? { textDirection: config.textDirection } : {}),
+    children: config.label };
+}
+function DividerPreview({ config }) {
+  return h(Flow, { direction: config.orientation === 'vertical' ? 'inline' : 'block',
+    gap: 'md', style: { inlineSize: '100%', maxInlineSize: '20rem' } },
+    h(Text, null, 'Draft'), h(Divider, dividerProps(config)), h(Text, null, 'Published'));
+}
+export const dividerPlayground = {
+  fields: [text('label', 'Label', 'OR'), choice('orientation', 'Orientation', 'horizontal', ['horizontal', 'vertical']),
+    { ...choice('textAlign', 'Label alignment', 'center', ['start', 'center', 'end']), available: config => Boolean(config.label.trim()) },
+    { ...choice('textDirection', 'Label direction', 'top-to-bottom', ['top-to-bottom', 'bottom-to-top', 'horizontal']),
+      available: config => config.orientation === 'vertical' && Boolean(config.label.trim()) }],
+  Preview: DividerPreview,
+  source(config) {
+    const props = dividerProps(config);
+    return [importLine('Divider', 'divider'), styleLine('divider'), ...compositionImports,
+      '', 'export function Example() {', '  return (',
+      '    <Flow gap="md"' + (config.orientation === 'vertical' ? ' direction="inline"' : '') +
+        ' style={{ inlineSize: "100%", maxInlineSize: "20rem" }}>', '      <Text>Draft</Text>',
+      '      <Divider' + attribute('orientation', props.orientation, 'horizontal') +
+        (config.label.trim() ? attribute('textAlign', props.textAlign, 'center') : '') +
+        (props.textDirection ? attribute('textDirection', props.textDirection, 'top-to-bottom') : '') +
+        (config.label.trim() ? '>' + jsxText(config.label) + '</Divider>' : ' />'),
+      '      <Text>Published</Text>', '    </Flow>', '  );', '}'].join('\n');
+  },
+};
+const listItems = ['Design tokens', 'Components', 'Documentation'];
+function listProps(config) {
+  return { as: config.as, variant: config.variant, size: config.size, spacing: config.spacing,
+    marker: config.marker, gutter: config.gutter, dividerInset: config.dividerInset };
+}
+function ListPreview({ config }) {
+  return h(List, { ...listProps(config), 'aria-label': 'Project areas', style: { inlineSize: '100%', maxInlineSize: '20rem' } },
+    ...listItems.map(item => h(ListItem, { key: item }, item)));
+}
+export const listPlayground = {
+  fields: [choice('as', 'List type', 'ul', ['ul', 'ol']),
+    choice('variant', 'Variant', 'plain', ['plain', 'divided', 'bordered']),
+    choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
+    choice('spacing', 'Spacing', 'none', ['none', 'sm', 'md', 'lg']),
+    choice('marker', 'Markers', 'none', ['none', 'auto']),
+    choice('gutter', 'Gutter', 'auto', ['auto', 'none', 'sm', 'md', 'lg']),
+    { ...choice('dividerInset', 'Divider inset', 'none', ['none', 'gutter']), available: config => config.variant !== 'plain' }],
+  Preview: ListPreview,
+  source(config) {
+    const props = listProps(config);
+    return ["import { List, ListItem } from '@vyrnforge/react/list';", styleLine('list'),
+      '', 'export function Example() {', '  return (',
+      '    <List' + attribute('as', props.as, 'ul') + attribute('variant', props.variant, 'plain') +
+        attribute('size', props.size, 'md') + attribute('spacing', props.spacing, 'none') +
+        attribute('marker', props.marker, 'none') + attribute('gutter', props.gutter, 'auto') +
+        attribute('dividerInset', props.dividerInset, 'none') +
+        ' aria-label="Project areas" style={{ inlineSize: "100%", maxInlineSize: "20rem" }}>',
+      ...listItems.map(item => '      <ListItem>' + jsxText(item) + '</ListItem>'),
+      '    </List>', '  );', '}'].join('\n');
   },
 };

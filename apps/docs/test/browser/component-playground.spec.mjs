@@ -5,7 +5,7 @@ import ts from 'typescript';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeConfiguration, defaultsFor } from '../../playground-config.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground } from '../../react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground } from '../../react-playground-adapters.mjs';
 
 test('Button playground keeps configuration, interaction and generated usage synchronized', async ({ page }) => {
   await page.goto('/next/react/components/button/');
@@ -144,11 +144,17 @@ test('Generated playground examples typecheck and bundle against installed publi
     [chipPlayground, {}], [chipPlayground, { mode: 'action', artwork: 'avatar', size: 'sm' }],
     [chipPlayground, { mode: 'selectable', selected: true, artwork: 'icon', removable: true, customRemove: true }],
     [chipPlayground, { mode: 'link', artwork: 'trailing', removable: true, wrap: true }],
+    [buttonPlayground, { artwork: 'icon only' }], [togglePlayground, { iconOnly: true, pressed: true }],
+    [dividerPlayground, { orientation: 'vertical', textDirection: 'bottom-to-top', textAlign: 'end' }],
+    [listPlayground, { as: 'ol', variant: 'divided', marker: 'auto', gutter: 'lg', dividerInset: 'gutter' }],
   ];
   const generated = new Map(scenarios.map(([adapter, patch], index) => [
     path.join(root, 'apps/docs', 'generated-playground-' + index + '.tsx'),
     adapter.source(normalizeConfiguration(adapter.fields, { ...defaultsFor(adapter.fields), ...patch })),
   ]));
+  // CSS imports are legal bundler side effects rather than TypeScript modules.
+  // The separate esbuild checks below resolve every real public CSS path.
+  generated.set(path.join(root, 'apps/docs', 'generated-playground-css.d.ts'), "declare module '*.css';");
   const options = { noEmit: true, strict: true, skipLibCheck: true, jsx: ts.JsxEmit.ReactJSX,
     target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext,
     moduleResolution: ts.ModuleResolutionKind.Bundler, esModuleInterop: true };
@@ -159,17 +165,77 @@ test('Generated playground examples typecheck and bundle against installed publi
   host.fileExists = name => generated.has(name) || exists(name);
   host.readFile = name => generated.get(name) ?? read(name);
   host.getSourceFile = (name, version, ...args) => generated.has(name)
-    ? ts.createSourceFile(name, generated.get(name), version, true, ts.ScriptKind.TSX)
+    ? ts.createSourceFile(name, generated.get(name), version, true, name.endsWith('.d.ts') ? ts.ScriptKind.TS : ts.ScriptKind.TSX)
     : get(name, version, ...args);
   const program = ts.createProgram([...generated.keys()], options, host);
   const diagnostics = ts.getPreEmitDiagnostics(program);
   expect(diagnostics.map(d => ts.flattenDiagnosticMessageText(d.messageText, '\n'))).toEqual([]);
   // Bundle every representative configuration, including actual CSS and icon imports.
   for (const [name, source] of generated) {
+    if (name.endsWith('.d.ts')) continue;
     const output = await build({ stdin: { contents: source, sourcefile: name, resolveDir: root, loader: 'tsx' },
       bundle: true, write: false, platform: 'browser', format: 'esm', jsx: 'automatic',
       outdir: path.join(root, 'dist', 'playground-source-check'), logLevel: 'silent' });
     expect(output.outputFiles.some(file => file.path.endsWith('.js'))).toBe(true);
     expect(output.outputFiles.some(file => file.path.endsWith('.css'))).toBe(true);
   }
+});
+
+test('Chip shared playground covers old link, artwork, custom removal, wrapping and reset scenarios', async ({ page }) => {
+  await page.goto('/next/react/components/chip/');
+  const playground = page.locator('[data-vf-docs-component-playground="Chip"]');
+  const preview = playground.getByRole('region', { name: 'Chip preview' });
+  const source = playground.getByRole('region', { name: 'Generated React usage' });
+  await playground.getByRole('textbox', { name: 'Label' }).fill('Frontend');
+  await playground.getByRole('radio', { name: 'link', exact: true }).check();
+  await playground.getByRole('radio', { name: 'outlined', exact: true }).check();
+  await playground.getByRole('radio', { name: 'danger', exact: true }).check();
+  await playground.getByRole('radio', { name: 'lg', exact: true }).check();
+  await playground.getByRole('radio', { name: 'avatar', exact: true }).check();
+  await playground.getByRole('checkbox', { name: 'Deletable' }).check();
+  await playground.getByRole('checkbox', { name: 'Custom delete icon' }).check();
+  await playground.getByRole('checkbox', { name: 'Multiline' }).check();
+  const chip = preview.locator('[data-vf-chip]');
+  await expect(chip).toHaveAttribute('data-vf-chip-tone', 'danger');
+  await expect(chip).toHaveAttribute('data-vf-chip-variant', 'outlined');
+  await expect(chip).toHaveAttribute('data-vf-chip-size', 'lg');
+  await expect(chip).toHaveAttribute('data-vf-chip-wrap', '');
+  await expect(chip.locator('[data-vf-avatar]')).toBeVisible();
+  await expect(chip.locator('[data-vf-chip-remove] [data-vf-icon]')).toBeVisible();
+  await expect(source).toContainText('href="#chip-destination"');
+  await expect(source).toContainText('removeIcon={<Icon icon={trashIcon}');
+  await playground.getByRole('checkbox', { name: 'Disabled' }).check();
+  await expect(preview.getByRole('link', { name: 'Frontend' })).toHaveAttribute('aria-disabled', 'true');
+  await playground.getByRole('button', { name: 'Reset playground' }).click();
+  await expect(playground.getByRole('textbox', { name: 'Label' })).toHaveValue('Engineering');
+  await expect(source).not.toContainText('onRemove=');
+});
+test('ToggleButton, Divider and List guides share the playground and public properties', async ({ page }) => {
+  await page.goto('/next/react/components/toggle-button/');
+  const toggle = page.locator('[data-vf-docs-component-playground="ToggleButton"]');
+  const togglePreview = toggle.getByRole('region', { name: 'ToggleButton preview' });
+  await toggle.getByRole('checkbox', { name: 'Icon only' }).check();
+  await togglePreview.getByRole('button', { name: 'Bookmark article' }).click();
+  await expect(toggle.getByRole('checkbox', { name: 'Pressed' })).toBeChecked();
+  await expect(togglePreview.getByRole('button', { name: 'Bookmark article' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(toggle.getByRole('region', { name: 'Generated React usage' })).toContainText('useState(true)');
+  await page.goto('/next/react/components/divider/');
+  const divider = page.locator('[data-vf-docs-component-playground="Divider"]');
+  await divider.getByRole('radio', { name: 'vertical', exact: true }).check();
+  await divider.getByRole('radio', { name: 'bottom-to-top', exact: true }).check();
+  const line = divider.getByRole('region', { name: 'Divider preview' }).locator('[data-vf-divider]');
+  await expect(line).toHaveAttribute('data-vf-divider-text-direction', 'bottom-to-top');
+  await divider.getByRole('textbox', { name: 'Label' }).fill('');
+  await expect(line).toHaveAttribute('aria-hidden', 'true');
+  await expect(divider.getByRole('radio', { name: 'bottom-to-top' })).toBeDisabled();
+  await page.goto('/next/react/components/list/');
+  const list = page.locator('[data-vf-docs-component-playground="List"]');
+  await list.getByRole('radio', { name: 'ol', exact: true }).check();
+  await list.getByRole('radio', { name: 'divided', exact: true }).check();
+  await list.getByRole('combobox', { name: 'Gutter' }).selectOption('lg');
+  const listPreview = list.getByRole('region', { name: 'List preview' }).getByRole('list');
+  await expect(listPreview).toHaveAttribute('data-vf-list-variant', 'divided');
+  await expect(listPreview).toHaveAttribute('data-vf-list-gutter', 'lg');
+  await expect(listPreview.locator('li')).toHaveCount(3);
+  await expect(list.getByRole('region', { name: 'Generated React usage' })).toContainText('as={"ol"}');
 });

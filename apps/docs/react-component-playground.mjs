@@ -109,7 +109,7 @@ export function ComponentPlayground({ adapter, title }) {
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': id + '-source' },
       h(Text, { as: 'h3', id: id + '-source', variant: 'heading-sm' }, 'React usage'),
       h('div', { role: 'region', 'aria-label': 'Generated React usage' },
-        h(CodeBlock, { ref: sourceRegion, tabIndex: 0, 'aria-label': 'React source code' }, source)),
+        h(CodeBlock, { ref: sourceRegion, tabIndex: 0, dir: 'ltr', 'aria-label': 'React source code' }, source)),
       h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'sm' },
         h(Button, { type: 'button', variant: 'secondary', disabled: !ready, onClick: copy }, 'Copy React usage'),
         h(Button, { type: 'button', variant: 'ghost', disabled: !ready, onClick: () => restore() }, 'Reset playground')),

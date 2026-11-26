@@ -860,16 +860,10 @@
     min-block-size: 8rem;
   }
 
-  [data-vf-docs-react-chip] .vf-docs-react-example-frame[data-vf-docs-example-id="chip/playground"] {
-    min-block-size: 52rem;
-  }
 
   @media (max-width: 40rem) {
     [data-vf-docs-react-chip] .vf-docs-react-example-frame[data-vf-docs-example-id] {
       min-block-size: 15rem;
-    }
-    [data-vf-docs-react-chip] .vf-docs-react-example-frame[data-vf-docs-example-id="chip/playground"] {
-      min-block-size: 68rem;
     }
   }
 
@@ -1821,6 +1815,10 @@
 
 /* Documentation-only preview geometry; product controls keep their own styles. */
 .vf-docs-component-playground-preview {
+  background: var(--vf-color-surface-subtle);
+  border: 1px solid var(--vf-color-border);
+  border-radius: var(--vf-control-radius);
+  box-sizing: border-box;
   min-block-size: 8rem;
   padding: var(--vf-space-md);
   overflow-wrap: anywhere;

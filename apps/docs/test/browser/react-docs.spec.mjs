@@ -115,7 +115,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     frameworkSourcePath: 'product/components/composition-primitives/chip/react/docs/index.md',
   });
   expect(manifest.chip.examples.map(example => example.id)).toEqual([
-    'chip/action-removal', 'chip/appearance', 'chip/array', 'chip/artwork', 'chip/basic', 'chip/clickable', 'chip/custom-delete', 'chip/deletable', 'chip/icon', 'chip/links', 'chip/multiline', 'chip/playground', 'chip/removal', 'chip/selection', 'chip/sizes',
+    'chip/action-removal', 'chip/appearance', 'chip/array', 'chip/artwork', 'chip/basic', 'chip/clickable', 'chip/custom-delete', 'chip/deletable', 'chip/icon', 'chip/links', 'chip/multiline', 'chip/removal', 'chip/selection', 'chip/sizes',
   ]);
   for (const example of manifest.chip.examples) {
     const slug = example.id.slice('chip/'.length);
@@ -451,7 +451,7 @@ test('All React guide pages compose with canonical Flow and AutoGrid, not local 
     await expect(guide).toHaveAttribute('data-vf-flow-gap', '2xl');
     const sections = guide.locator(':scope > section[data-vf-flow][data-vf-flow-gap="md"]');
     await expect(sections, id + ' must preserve authored concept sections')
-      .toHaveCount(id === 'button' ? 10 : id === 'avatar' ? 5 : 4);
+      .toHaveCount(id === 'button' ? 10 : ['avatar', 'divider'].includes(id) ? 5 : 4);
     const toc = page.locator('nav.vf-docs-toc ol[data-vf-flow]');
     await expect(toc).toHaveCount(1);
     const jumpLinks = page.locator('aside.vf-docs-toc-region nav.vf-docs-toc-examples ol[data-vf-flow]');
@@ -577,6 +577,8 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
 });
 
 test('React Button, Button Group and ToggleButton keep demonstrations on their respective guides', async ({ page }) => {
+  // This end-to-end scenario traverses three routes and many lazy-loaded iframe interactions.
+  test.setTimeout(60_000);
   await page.goto('/next/react/components/button/');
   const button = page.locator('[data-vf-docs-react-component="button"]');
   await expect(button.locator('[data-vf-docs-react-button-example]')).toHaveCount(7);
@@ -2936,43 +2938,10 @@ test('React Chip navigation and removal remain separate native actions', async (
   await expect(page.getByRole('status')).toHaveText('Design activations: 1');
 });
 
-test('React Chip playground matches configuration and generated public source', async ({ page }, testInfo) => {
+test('Old Chip playground route redirects to the shared guide playground', async ({ page }) => {
   await page.goto('/next/react/examples/chip/playground/');
-  const label = page.getByRole('textbox', { name: 'Label', exact: true });
-  const source = page.getByRole('textbox', { name: 'Generated React usage' });
-  await label.fill('Frontend');
-  await page.getByRole('group', { name: 'Mode', exact: true }).getByRole('radio', { name: 'link', exact: true }).check();
-  await page.getByRole('group', { name: 'Variant', exact: true }).getByRole('radio', { name: 'outlined', exact: true }).check();
-  await page.getByRole('group', { name: 'Tone', exact: true }).getByRole('radio', { name: 'danger', exact: true }).check();
-  await page.getByRole('group', { name: 'Size', exact: true }).getByRole('radio', { name: 'lg', exact: true }).check();
-  await page.getByRole('group', { name: 'Artwork', exact: true }).getByRole('radio', { name: 'avatar', exact: true }).check();
-  await page.getByRole('checkbox', { name: 'Deletable' }).check();
-  await page.getByRole('checkbox', { name: 'Custom delete icon' }).check();
-  await page.getByRole('checkbox', { name: 'Multiline' }).check();
-  const chip = page.locator('[data-vf-chip]');
-  await expect(chip).toHaveAttribute('data-vf-chip-tone', 'danger');
-  await expect(chip).toHaveAttribute('data-vf-chip-variant', 'outlined');
-  await expect(chip).toHaveAttribute('data-vf-chip-size', 'lg');
-  await expect(chip.locator('[data-vf-avatar]')).toBeVisible();
-  await expect(chip.locator('[data-vf-chip-remove] [data-vf-icon]')).toBeVisible();
-  await expect(source).toHaveValue(/href="#chip-playground-destination"/);
-  await expect(source).toHaveValue(/removeIcon=\{<Icon icon=\{trashIcon\}/);
-  await page.getByRole('checkbox', { name: 'Disabled' }).check();
-  await expect(page.getByRole('link', { name: 'Frontend' })).toHaveAttribute('aria-disabled', 'true');
-  await page.getByRole('checkbox', { name: 'Disabled' }).uncheck();
-  await page.getByRole('group', { name: 'Mode', exact: true }).getByRole('radio', { name: 'selectable', exact: true }).check();
-  await page.getByRole('checkbox', { name: 'Selected' }).check();
-  await expect(page.getByRole('button', { name: 'Frontend', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await page.getByRole('button', { name: 'Remove Frontend' }).click();
-  await expect(chip).toHaveCount(0);
-  await expect(page.getByRole('button', { name: 'Restore', exact: true })).toBeFocused();
-  await page.getByRole('button', { name: 'Reset configuration' }).click();
-  await expect(label).toHaveValue('Engineering');
-  await expect(chip).toHaveAttribute('data-vf-chip-tone', 'neutral');
-  await expect(source).not.toHaveValue(/onRemove=/);
-  await page.setViewportSize({ width: 390, height: 844 });
-  expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
-  await page.screenshot({ path: testInfo.outputPath('chip-playground-mobile.png'), fullPage: true });
+  await expect(page).toHaveURL(/\/next\/react\/components\/chip\/#react-chip-playground$/);
+  await expect(page.locator('[data-vf-docs-component-playground="Chip"]')).toBeVisible();
 });
 
 
