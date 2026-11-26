@@ -6,7 +6,9 @@ export function Example() {
   return (
     <Flow gap="sm">
       <label htmlFor="verification-code">Verification code</label>
-      <Text as="p" id="verification-code-hint">Enter the four-digit code. You can paste it.</Text>
+      <Text as="p" id="verification-code-hint">
+        Enter the four-digit code. You can paste it.
+      </Text>
       <OTPFieldRoot length={4}>
         <OTPFieldInput id="verification-code" name="code" aria-describedby="verification-code-hint" />
       </OTPFieldRoot>

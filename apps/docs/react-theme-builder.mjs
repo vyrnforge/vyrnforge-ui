@@ -1,6 +1,5 @@
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
-import { CodeBlock } from '@vyrnforge/react/code';
-import { Code } from '@vyrnforge/react/code';
+import { Code, CodeBlock } from '@vyrnforge/react/code';
 import { Link } from '@vyrnforge/react/link';
 import { createElement as h, useEffect, useState } from 'react';
 import { createTheme, renderThemeCss, themeableColorRoles } from '@vyrnforge/web/theme';

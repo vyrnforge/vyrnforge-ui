@@ -131,7 +131,9 @@ function App() {
 
   return (
     <main>
-      <Text as="h1" variant="heading-lg">Import records</Text>
+      <Text as="h1" variant="heading-lg">
+        Import records
+      </Text>
       <Text as="p">
         This example uses a deterministic application-owned import service. VyrnForge owns file acquisition and button
         semantics, not transport or job orchestration.
@@ -161,8 +163,12 @@ function App() {
       </div>
 
       <section aria-labelledby="import-status-heading">
-        <Text as="h2" variant="heading-md" id="import-status-heading">Import status</Text>
-        <Text as="p" role="status">{message}</Text>
+        <Text as="h2" variant="heading-md" id="import-status-heading">
+          Import status
+        </Text>
+        <Text as="p" role="status">
+          {message}
+        </Text>
         {phase === 'starting' || phase === 'processing' || phase === 'cancel-requested' ? (
           <progress aria-label="Import progress" />
         ) : null}

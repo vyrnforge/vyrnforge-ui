@@ -116,7 +116,9 @@ function App() {
 
   return (
     <main className="vf-data-explorer" lang={locale}>
-      <Text as="h1" variant="heading-lg">Project explorer</Text>
+      <Text as="h1" variant="heading-lg">
+        Project explorer
+      </Text>
       <form className="vf-data-explorer__search" onSubmit={submitQuery}>
         <SearchFieldRoot className="vf-data-explorer__search-field" value={draftQuery} onValueChange={setDraftQuery}>
           <label htmlFor="project-query">Search projects</label>
@@ -173,7 +175,9 @@ function App() {
 
       {!loading && results.length === 0 ? (
         <section className="vf-data-explorer__zero" aria-labelledby="zero-results-heading">
-          <Text as="h2" variant="heading-md" id="zero-results-heading">No matching projects</Text>
+          <Text as="h2" variant="heading-md" id="zero-results-heading">
+            No matching projects
+          </Text>
           <Text as="p">Try another search or reset the active filters.</Text>
           <Button type="button" onClick={reset}>
             Reset search and filters
@@ -183,7 +187,9 @@ function App() {
         <ul className="vf-data-explorer__results" aria-label="Project results">
           {results.map((project) => (
             <li className="vf-data-explorer__result" key={project.id}>
-              <Text as="strong" variant="label-md">{project.name}</Text>
+              <Text as="strong" variant="label-md">
+                {project.name}
+              </Text>
               <Text as="p" className="vf-data-explorer__meta">
                 {project.active ? 'Active' : 'Archived'} · {project.mine ? 'Owned by me' : 'Team-owned'}
               </Text>

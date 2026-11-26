@@ -46,7 +46,9 @@ export function Example() {
 
         return (
           <section key={region.locale} lang={region.lang} dir={region.dir}>
-            <Text as="h3" variant="heading-sm">{region.title}</Text>
+            <Text as="h3" variant="heading-sm">
+              {region.title}
+            </Text>
             <Text as="p">
               Account <bdi>ACME-42</bdi>
             </Text>

@@ -110,7 +110,11 @@ export function Example() {
               Sign out of this app
             </Button>
           </div>
-          {saved && <Text as="p" role="status">Profile note saved by the example service.</Text>}
+          {saved && (
+            <Text as="p" role="status">
+              Profile note saved by the example service.
+            </Text>
+          )}
           <div className="vf-identity-test-controls" aria-label="Example provider controls">
             <Button type="button" variant="ghost" onClick={expireSession}>
               Simulate session expiry
@@ -147,7 +151,10 @@ export function Example() {
             Use password instead
           </Button>
           <Text as="p" className="vf-identity-draft">
-            Unsaved note: <Text as="span" data-testid="draft-value">{note}</Text>
+            Unsaved note:{' '}
+            <Text as="span" data-testid="draft-value">
+              {note}
+            </Text>
           </Text>
         </>
       )}
@@ -214,7 +221,9 @@ export function Example() {
           <Text as="p">The example provider requires a second factor before returning to your edit.</Text>
           <form onSubmit={submitOtp} noValidate>
             <label htmlFor="identity-otp">Verification code</label>
-            <Text as="p" id="identity-otp-hint">Enter or paste the four-digit code.</Text>
+            <Text as="p" id="identity-otp-hint">
+              Enter or paste the four-digit code.
+            </Text>
             <OTPFieldRoot
               value={otp}
               onValueChange={(value) => {
@@ -226,12 +235,17 @@ export function Example() {
               <OTPFieldInput id="identity-otp" name="code" aria-describedby="identity-otp-hint" />
             </OTPFieldRoot>
             {providerResult === 'otp-failed' && (
-              <Text as="p" role="alert">That verification code is incorrect or expired. Enter the current code and try again.</Text>
+              <Text as="p" role="alert">
+                That verification code is incorrect or expired. Enter the current code and try again.
+              </Text>
             )}
             <Button type="submit">Verify and return to edit</Button>
           </form>
           <Text as="p" className="vf-identity-draft">
-            Unsaved note: <Text as="span" data-testid="draft-value">{note}</Text>
+            Unsaved note:{' '}
+            <Text as="span" data-testid="draft-value">
+              {note}
+            </Text>
           </Text>
         </>
       )}

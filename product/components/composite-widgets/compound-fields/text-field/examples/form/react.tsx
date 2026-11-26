@@ -64,7 +64,9 @@ function Example() {
           Reset
         </Button>
       </Flow>
-      <Text as="p" role="status">{message}</Text>
+      <Text as="p" role="status">
+        {message}
+      </Text>
     </Flow>
   );
 }

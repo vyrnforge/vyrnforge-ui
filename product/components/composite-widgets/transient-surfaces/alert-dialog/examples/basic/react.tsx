@@ -39,7 +39,9 @@ function Example() {
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogRoot>
-      <Text as="p" role="status">{confirmed ? 'Example decision confirmed' : ''}</Text>
+      <Text as="p" role="status">
+        {confirmed ? 'Example decision confirmed' : ''}
+      </Text>
     </Flow>
   );
 }

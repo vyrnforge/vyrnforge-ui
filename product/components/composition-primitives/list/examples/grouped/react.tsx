@@ -1,6 +1,7 @@
 import { Text } from '@vyrnforge/react/text';
 import { createRoot } from 'react-dom/client';
 import { List, ListItem } from '@vyrnforge/react/list';
+import '@vyrnforge/web/styles/list.css';
 
 const groups = [
   { id: 'list-today', title: 'Today', entries: ['Build passed', 'Code reviewed', 'Preview updated', 'Docs generated', 'Packages checked'] },

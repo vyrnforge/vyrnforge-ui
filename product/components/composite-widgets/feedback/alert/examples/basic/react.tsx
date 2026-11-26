@@ -45,7 +45,9 @@ function Example() {
           Your changes remain on this device.
         </Alert>
       )}
-      <Text as="p" role="status">{retried ? 'Retry requested' : ''}</Text>
+      <Text as="p" role="status">
+        {retried ? 'Retry requested' : ''}
+      </Text>
       <Alert severity="success" variant="outlined" heading="Saved">
         Your preferences are up to date.
       </Alert>
