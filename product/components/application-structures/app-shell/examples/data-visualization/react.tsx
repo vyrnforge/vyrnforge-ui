@@ -90,7 +90,7 @@ function App() {
                   <Text as="h2" variant="heading-md" id="trend-title">Weekly completion rate, 6 Jul–24 Aug 2026</Text>
                   <Text as="p" id="trend-summary">Completion increased from 71% to an estimated 85%; the 20 Jul observation is missing, and the 24 Aug estimate ranges from 82% to 88%.</Text>
                 </div>
-                <span className="viz-unit">Percent of orders</span>
+                <Text as="span" className="viz-unit">Percent of orders</Text>
               </div>
 
               <svg className="viz-chart viz-trend" viewBox={`0 0 ${chartWidth} ${chartHeight}`} role="img" aria-labelledby="trend-svg-title trend-svg-desc">
@@ -127,9 +127,9 @@ function App() {
               </svg>
 
               <div className="viz-key" aria-label="Trend key">
-                <span><span className="viz-key-sample viz-key-observed" aria-hidden="true" />Observed</span>
-                <span><span className="viz-key-sample viz-key-estimated" aria-hidden="true" />Estimated</span>
-                <span><span className="viz-key-sample viz-key-missing" aria-hidden="true">×</span>Missing observation</span>
+                <Text as="span"><span className="viz-key-sample viz-key-observed" aria-hidden="true" />Observed</Text>
+                <Text as="span"><span className="viz-key-sample viz-key-estimated" aria-hidden="true" />Estimated</Text>
+                <Text as="span"><span className="viz-key-sample viz-key-missing" aria-hidden="true">×</span>Missing observation</Text>
               </div>
 
               <div className="viz-table-wrap" tabIndex={0} aria-label="Scrollable weekly completion rate data">
@@ -156,13 +156,13 @@ function App() {
                   <Text as="h2" variant="heading-md" id="channel-title">Completed orders by channel</Text>
                   <Text as="p" id="channel-summary">Web leads with {number.format(channels[0].value)} completed orders, followed by Partner at {number.format(channels[1].value)}.</Text>
                 </div>
-                <span className="viz-unit">Orders</span>
+                <Text as="span" className="viz-unit">Orders</Text>
               </div>
 
               <div className="viz-bars" role="img" aria-labelledby="channel-title channel-summary" data-scale-min="0">
                 {channels.map((channel) => (
                   <div className="viz-bar-row" key={channel.label}>
-                    <span className="viz-bar-label">{channel.label}</span>
+                    <Text as="span" className="viz-bar-label">{channel.label}</Text>
                     <div className="viz-bar-track" aria-hidden="true"><span className="viz-bar" style={{ inlineSize: `${(channel.value / maxChannel) * 100}%` }} /></div>
                     <Text as="strong" variant="label-md" className="viz-bar-value">{number.format(channel.value)}</Text>
                   </div>

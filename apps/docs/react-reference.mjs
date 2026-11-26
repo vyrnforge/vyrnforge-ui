@@ -368,8 +368,7 @@ function guideHeader(content, eyebrow, references) {
     h(Text, { as: 'p', className: 'vf-docs-eyebrow', variant: 'overline' }, eyebrow),
     h(Text, { as: 'h1', variant: 'heading-lg' }, content.title),
     evidenceDisclosure(references),
-    h('div', { className: 'vf-docs-lede', 'data-vf-text': '',
-      'data-vf-text-variant': 'body-lg' }, ...renderBlocks(content.intro, 'body-lg')));
+    h(Text, { as: 'div', className: 'vf-docs-lede', variant: 'body-lg' }, ...renderBlocks(content.intro, 'body-lg')));
 }
 function guidePart(section, children, extra = {}) {
   return h(Flow, { as: 'section', gap: 'md', key: section.id, 'aria-labelledby': section.id, ...extra },
@@ -1461,7 +1460,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
     return h('article', { className: 'vf-docs-article' },
       h('header', { className: 'vf-docs-component-header' },
         h(Text, { as: 'h1', variant: 'heading-lg' }, 'VyrnForge React'),
-        h(Text, { as: 'p', className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
+        h(Text, { as: 'p', className: 'vf-docs-lede', variant: 'body-lg' },
           'Runnable React examples for Button, ToggleButton, Layout, List, Divider, Text, Code, Kbd, Icon, Image and Avatar. All use the shared VyrnForge Web design foundation.')),
       h('section', null, h(Text, { as: 'h2', variant: 'heading-md' }, 'Getting started'),
         h(Text, { as: 'p' }, 'Import React components from their public entrypoints. Supported CSS-aware browser builds automatically include canonical Web component styles; server-rendered apps must also deliver extracted client CSS.'),
@@ -1573,7 +1572,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
       h('header', { className: 'vf-docs-component-header' },
         h(Text, { as: 'h1', variant: 'heading-lg' }, 'Button API'),
         evidenceDisclosure(button.standardReferences),
-        h(Text, { as: 'p', className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
+        h(Text, { as: 'p', className: 'vf-docs-lede', variant: 'body-lg' },
           'Public React entrypoints are derived from the Product Graph; other APIs are not inferred.')),
       h('section', null, h(Text, { as: 'h2', variant: 'heading-md' }, 'Public entrypoints'),
         h('ul', null, ...button.publicEntrypoints.map((name) =>

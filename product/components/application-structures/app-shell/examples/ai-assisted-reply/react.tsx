@@ -1,4 +1,3 @@
-import { CodeBlock } from '@vyrnforge/react/code';
 import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -174,7 +173,7 @@ function App() {
             <section className="ai-review" aria-labelledby="send-review-heading">
               <Text as="h2" variant="heading-md" id="send-review-heading">Review consequential action</Text>
               <Text as="p">Proposed action: send the current draft to the customer. No refund, payment change, or account mutation is included.</Text>
-              <CodeBlock className="ai-review-draft">{draft}</CodeBlock>
+              <Text as="div" className="ai-review-draft">{draft}</Text>
               <div className="ai-actions">
                 <Button type="button" onClick={confirmSend}>Confirm send reply</Button>
                 <Button type="button" variant="secondary" onClick={() => setReviewingSend(false)}>Keep editing</Button>

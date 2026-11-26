@@ -1,4 +1,5 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import ts from 'typescript';
 import { test, expect } from '@playwright/test';
 import axeCore from 'axe-core';
 import { compileFrameworkDocumentation } from '../../../../tooling/docs/framework-documentation.mjs';
@@ -3228,4 +3229,35 @@ test('React documentation uses public text, link, code and pressed controls in a
   ]) {
     expect(readFileSync(file, 'utf8'), file).not.toMatch(/<(?:p|h[1-6]|a|button|input|textarea|select|div)\b/);
   }
+});
+
+
+test('Inventory native authoring hosts across every product-owned React example', async ({}, testInfo) => {
+  // Use the TSX syntax tree rather than text matching (which confuses Button and button).
+  // A native host is a review candidate, not automatically a defect: semantic
+  // labels, tables, custom visual artwork and application-specific layout are valid.
+  const candidates = new Set(['div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'strong', 'em', 'a', 'button', 'input', 'textarea', 'select', 'img', 'code', 'pre']);
+  const findings = [];
+  const files = readdirSync('product', { recursive: true }).map(String)
+    .filter(path => /(?:^|[/\\])examples[/\\].*[/\\]react\.tsx$/.test(path)).sort();
+  expect(files.length).toBeGreaterThan(100);
+  for (const path of files) {
+    const file = 'product/' + path;
+    const source = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    const visit = node => {
+      if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) &&
+          ts.isIdentifier(node.tagName) && candidates.has(node.tagName.text)) {
+        const line = source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
+        findings.push({ file, line, tag: node.tagName.text, source: source.text.split('\n')[line - 1].trim() });
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(source);
+  }
+  const report = { exampleFiles: files.length, candidates: findings };
+  await testInfo.attach('react-example-native-host-inventory.json', {
+    body: JSON.stringify(report, null, 2), contentType: 'application/json',
+  });
+  console.log('React example native host inventory:', JSON.stringify(report));
 });
