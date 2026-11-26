@@ -2,7 +2,7 @@ import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { DialogBody, DialogClose, DialogDescription, DialogRoot, DialogTitle } from '@vyrnforge/react/dialog';
+import { DialogBody, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogRoot, DialogTitle } from '@vyrnforge/react/dialog';
 
 test('React Dialog SSR exposes intent and relationships without claiming native modality', () => {
   const html = renderToStaticMarkup(createElement(
@@ -26,4 +26,20 @@ test('React Dialog SSR exposes intent and relationships without claiming native 
   assert.match(html, /data-vf-dialog-close=""/);
   assert.doesNotMatch(html, /<dialog[^>]*\sopen(?:=|\s|>)/);
   assert.doesNotMatch(html, /aria-modal=/);
+});
+
+test('structured Dialog regions preserve authored attributes and native SSR visibility', () => {
+  const html = renderToStaticMarkup(createElement(
+    DialogRoot,
+    { id: 'structured', descriptionId: 'details' },
+    createElement(DialogHeader, { divider: true, className: 'custom-header' },
+      createElement(DialogTitle, null, 'Details'),
+      createElement(DialogDescription, { id: 'details' }, 'Description')),
+    createElement(DialogBody, null, 'Content'),
+    createElement(DialogFooter, null, createElement(DialogClose, null, 'Close')),
+  ));
+  assert.match(html, /data-vf-dialog-header="" data-vf-divider=""/);
+  assert.match(html, /class="custom-header"/);
+  assert.match(html, /data-vf-dialog-footer=""/);
+  assert.doesNotMatch(html, /<dialog[^>]*\sopen(?:=|\s|>)/);
 });

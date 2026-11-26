@@ -3,6 +3,8 @@ import {
   DialogBody,
   DialogClose,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogRoot,
   DialogTitle,
   type DialogDismissRequest,
@@ -20,6 +22,10 @@ export function AlertDialogRoot(props: AlertDialogRootProps) {
 export const AlertDialogTitle = DialogTitle;
 export const AlertDialogDescription = DialogDescription;
 export const AlertDialogBody = DialogBody;
+export const AlertDialogHeader = DialogHeader;
+export const AlertDialogFooter = DialogFooter;
+export type AlertDialogHeaderProps = ComponentProps<typeof AlertDialogHeader>;
+export type AlertDialogFooterProps = ComponentProps<typeof AlertDialogFooter>;
 export const AlertDialogCancel = DialogClose;
 export const AlertDialogAction = DialogClose;
 export type AlertDialogTitleProps = ComponentProps<typeof AlertDialogTitle>;
