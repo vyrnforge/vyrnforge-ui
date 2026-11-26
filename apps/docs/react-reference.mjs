@@ -872,6 +872,8 @@ function compactExample(example, links, component = 'badge') {
 }
 function chipUsage(chip, links) {
   if (!chip?.sharedContent || !chip?.frameworkContent || !chip.examples?.length) return null;
+  const exampleOrder = ['basic', 'appearance', 'artwork', 'array', 'selection', 'action-removal', 'links', 'removal', 'playground'];
+  const examples = [...chip.examples].sort((a, b) => exampleOrder.indexOf(a.id.split('/')[1]) - exampleOrder.indexOf(b.id.split('/')[1]));
   const sections = [
     { id: 'react-chip-setup', heading: 'Get started' },
     { id: 'react-chip-examples', heading: 'Examples' },
@@ -880,13 +882,13 @@ function chipUsage(chip, links) {
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections, {
-      label: 'Chip', examples: chip.examples, getId: example => 'react-chip-example-' + example.id.slice('chip/'.length),
+      label: 'Chip', examples, getId: example => 'react-chip-example-' + example.id.slice('chip/'.length),
     }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-chip': '' },
       guideHeader(chip.sharedContent, 'React · Metadata and interaction', chip.standardReferences),
       guidePart(sections[0], [...guideBlocks(chip.frameworkContent, 'React setup')]),
-      guidePart(sections[1], chip.examples.map(example => compactExample(example, links, 'chip'))),
+      guidePart(sections[1], examples.map(example => compactExample(example, links, 'chip'))),
       guidePart(sections[2], [
         ...guideSubsections(chip.sharedContent, ['When to use', 'Appearance and content', 'Selection and dismissal', 'Boundaries'], 'react-chip-guidance'),
         ...guideSubsections(chip.frameworkContent, ['Composition with existing VyrnForge components', 'React state and server rendering'], 'react-chip-integration'),

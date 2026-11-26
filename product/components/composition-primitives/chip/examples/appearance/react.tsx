@@ -13,6 +13,7 @@ function App() {
       {(['neutral', 'accent', 'danger'] as const).map(tone => <Chip key={tone} tone={tone}>{tone}</Chip>)}
       {(['neutral', 'accent', 'danger'] as const).map(tone => <Chip key={tone} tone={tone} variant="outlined">{tone}</Chip>)}
     </Flow>
+    <Chip variant="outlined">Outlined label</Chip>
     <Chip wrap>Internationalized category with a very long descriptive name that may wrap on narrow screens</Chip>
   </Flow>;
 }

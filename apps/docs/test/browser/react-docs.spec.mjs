@@ -115,7 +115,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     frameworkSourcePath: 'product/components/composition-primitives/chip/react/docs/index.md',
   });
   expect(manifest.chip.examples.map(example => example.id)).toEqual([
-    'chip/appearance', 'chip/artwork', 'chip/basic', 'chip/playground', 'chip/removal', 'chip/selection',
+    'chip/action-removal', 'chip/appearance', 'chip/array', 'chip/artwork', 'chip/basic', 'chip/links', 'chip/playground', 'chip/removal', 'chip/selection',
   ]);
   for (const example of manifest.chip.examples) {
     const slug = example.id.slice('chip/'.length);
@@ -2904,4 +2904,70 @@ test('React Chip actual-size appearance, artwork and removal evidence in light a
       await page.screenshot({ path: testInfo.outputPath('chip-' + example + '-' + theme + '.png') });
     }
   }
+});
+
+
+test('React Chip navigation and removal remain separate native actions', async ({ page }) => {
+  await page.goto('/next/react/examples/chip/links/');
+  const link = page.getByRole('link', { name: 'Project link', exact: true });
+  const remove = page.getByRole('button', { name: 'Remove Project link' });
+  await expect(link).toHaveAttribute('href', '#chip-destination');
+  await expect(link.locator('button')).toHaveCount(0);
+  await link.focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#chip-destination$/);
+  await remove.focus();
+  await page.keyboard.press('Enter');
+  await expect(link).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Restore link' })).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Unavailable link' })).toHaveAttribute('aria-disabled', 'true');
+  await page.goto('/next/react/examples/chip/action-removal/');
+  await page.getByRole('button', { name: 'Design', exact: true }).click();
+  await expect(page.getByRole('status')).toHaveText('Design activations: 1');
+  await page.getByRole('button', { name: 'Remove Draft' }).click();
+  await expect(page.getByRole('status')).toHaveText('Design activations: 1');
+  await expect(page.getByRole('button', { name: 'Design', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Remove Draft' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Remove Design' }).click();
+  await expect(page.getByRole('button', { name: 'Design', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('status')).toHaveText('Design activations: 1');
+});
+
+test('React Chip playground matches configuration and generated public source', async ({ page }, testInfo) => {
+  await page.goto('/next/react/examples/chip/playground/');
+  const label = page.getByRole('textbox', { name: 'Label', exact: true });
+  const source = page.getByRole('textbox', { name: 'Generated React usage' });
+  await label.fill('Frontend');
+  await page.getByRole('combobox', { name: 'Mode' }).selectOption('link');
+  await page.getByRole('combobox', { name: 'Variant' }).selectOption('outlined');
+  await page.getByRole('combobox', { name: 'Tone' }).selectOption('danger');
+  await page.getByRole('combobox', { name: 'Size' }).selectOption('lg');
+  await page.getByRole('combobox', { name: 'Artwork' }).selectOption('avatar');
+  await page.getByRole('checkbox', { name: 'Deletable' }).check();
+  await page.getByRole('checkbox', { name: 'Custom delete icon' }).check();
+  await page.getByRole('checkbox', { name: 'Multiline' }).check();
+  const chip = page.locator('[data-vf-chip]');
+  await expect(chip).toHaveAttribute('data-vf-chip-tone', 'danger');
+  await expect(chip).toHaveAttribute('data-vf-chip-variant', 'outlined');
+  await expect(chip).toHaveAttribute('data-vf-chip-size', 'lg');
+  await expect(chip.locator('[data-vf-avatar]')).toBeVisible();
+  await expect(chip.locator('[data-vf-chip-remove] [data-vf-icon]')).toBeVisible();
+  await expect(source).toHaveValue(/href="#chip-playground-destination"/);
+  await expect(source).toHaveValue(/removeIcon=\{<Icon icon=\{trashIcon\}/);
+  await page.getByRole('checkbox', { name: 'Disabled' }).check();
+  await expect(page.getByRole('link', { name: 'Frontend' })).toHaveAttribute('aria-disabled', 'true');
+  await page.getByRole('checkbox', { name: 'Disabled' }).uncheck();
+  await page.getByRole('combobox', { name: 'Mode' }).selectOption('selectable');
+  await page.getByRole('checkbox', { name: 'Selected' }).check();
+  await expect(page.getByRole('button', { name: 'Frontend', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Remove Frontend' }).click();
+  await expect(chip).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Restore', exact: true })).toBeFocused();
+  await page.getByRole('button', { name: 'Reset configuration' }).click();
+  await expect(label).toHaveValue('Engineering');
+  await expect(chip).toHaveAttribute('data-vf-chip-tone', 'neutral');
+  await expect(source).not.toHaveValue(/onRemove=/);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  await page.screenshot({ path: testInfo.outputPath('chip-playground-mobile.png'), fullPage: true });
 });

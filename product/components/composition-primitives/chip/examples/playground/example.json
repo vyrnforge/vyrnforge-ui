@@ -1,7 +1,7 @@
 {
   "id": "chip/playground",
   "title": "Interactive playground",
-  "description": "Change the public Chip options using existing React controls.",
+  "description": "Configure every supported Chip option, try live interaction and copy matching React usage. Reset restores the defaults.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

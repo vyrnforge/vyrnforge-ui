@@ -276,10 +276,10 @@ const publicBadgeTypes = badgePublicSource.slice(badgeTypeStart, badgeTypeEnd).t
 const chip = reactModel.componentCatalog.find((entry) => entry.id === 'chip');
 const chipExamples = chip?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
 if (!chip?.showcaseAvailable || !chip.apiAvailable || !chip.sharedContent ||
-    !chip.frameworkContent || chipExamples.length !== 6 ||
+    !chip.frameworkContent || chipExamples.length !== 9 ||
     !chip.publicEntrypoints.includes('@vyrnforge/react/chip') ||
     !webModel.packageManifest.exports?.['./styles/chip.css']) {
-  throw new Error('React Chip requires its public product graph, canonical styling and six examples');
+  throw new Error('React Chip requires its public product graph, canonical styling and nine examples');
 }
 const chipPublicSourcePath = path.join(root,
   path.dirname(path.dirname(chip.frameworkSourcePath)), 'index.ts');
