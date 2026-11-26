@@ -113,7 +113,7 @@ function CheckboxPreview({ config, update }) {
   if (config.presentation === 'standalone') return control;
   return h(Flow, { as: 'label', direction: 'inline', align: 'center', gap: 'sm' }, control,
     config.presentation === 'icon label' ? h(Icon, { icon: tagIcon }) : null,
-    rich ? h('span', { style: { display: 'grid', gap: 'var(--vf-space-xs)' } },
+    rich ? h('span', { 'data-vf-flow': '', 'data-vf-flow-direction': 'block', 'data-vf-flow-gap': 'xs' },
       h(Text, { as: 'span', id: labelId }, name),
       h(Text, { as: 'span', variant: 'body-sm', id: descriptionId }, 'A separate receipt without prices.'))
       : h(Text, { as: 'span' }, name));
@@ -151,11 +151,11 @@ export const checkboxPlayground = {
     if (icon || rich) {
       imports.push(importLine('Flow', 'layout'));
       if (icon) imports.push(...iconImports('tagIcon', 'tag'));
-      if (rich) imports.push(importLine('Text', 'text'));
+      imports.push(importLine('Text', 'text'));
       const labelContent = rich
-        ? markup('span', ['style={{ display: "grid", gap: "var(--vf-space-xs)" }}'], markup('Text', ['as="span"', 'id={labelId}'], content(name)) + '\n' +
+        ? markup('span', ['data-vf-flow=""', 'data-vf-flow-direction="block"', 'data-vf-flow-gap="xs"'], markup('Text', ['as="span"', 'id={labelId}'], content(name)) + '\n' +
           markup('Text', ['as="span"', 'variant="body-sm"', 'id={descriptionId}'], 'A separate receipt without prices.'))
-        : '<Icon icon={tagIcon} />\n' + markup('span', [], content(name));
+        : '<Icon icon={tagIcon} />\n' + markup('Text', [], content(name));
       return snippet(imports, markup('Flow', ['as="label"', 'direction="inline"', 'align="center"', 'gap="sm"'], checkbox + '\n' + labelContent), { setup });
     }
     return snippet(imports, markup('label', [], checkbox + '\n' + content(name)), { setup });
@@ -539,7 +539,7 @@ function modalAdapter(id) {
         config.header ? h(Header, { divider: config.dividers }, title, description) : title,
         config.header ? null : description,
         h(Body, config.longContent ? { tabIndex: 0, role: 'region', 'aria-label': 'Details' } : null, config.longContent ? Array.from({ length: 24 }, (_, index) =>
-          h('p', { key: index }, 'Additional details ' + (index + 1))) : 'Task content'),
+          h(Text, { as: 'p', key: index }, 'Additional details ' + (index + 1))) : 'Task content'),
         config.footer ? h(Footer, { divider: config.dividers }, close, action) : close,
         config.footer ? null : action));
   }

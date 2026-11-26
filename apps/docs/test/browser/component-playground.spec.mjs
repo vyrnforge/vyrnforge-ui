@@ -314,6 +314,8 @@ test('Checkbox presentations preserve naming and label activation', async ({ pag
   await preview.getByText('Include a gift receipt', { exact: true }).click();
   await expect(control).toBeChecked();
   await expect(source).toContainText('<Icon icon={tagIcon}');
+  await expect(source).toContainText('<Text>Include a gift receipt</Text>');
+  await expect(preview.locator('[data-vf-text]').filter({ hasText: 'Include a gift receipt' })).toBeVisible();
   await presentation('label and description');
   await expect(control).toHaveAccessibleDescription('A separate receipt without prices.');
   await preview.getByText('A separate receipt without prices.', { exact: true }).click();
@@ -322,6 +324,8 @@ test('Checkbox presentations preserve naming and label activation', async ({ pag
   await control.press('Space');
   await expect(control).toBeChecked();
   await expect(source).toContainText('aria-describedby={descriptionId}');
+  await expect(preview.locator('span[data-vf-flow][data-vf-flow-gap="xs"]')).toHaveCSS('display', 'flex');
+  await expect(source).not.toContainText('display: "grid"');
   await playground.screenshot({ path: testInfo.outputPath('checkbox-composed-label.png') });
 });
 

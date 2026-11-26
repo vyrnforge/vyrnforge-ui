@@ -4,10 +4,6 @@ import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 import { Button } from '@vyrnforge/react/button';
-import '@vyrnforge/web/styles/checkbox.css';
-import '@vyrnforge/web/styles/layout.css';
-import '@vyrnforge/web/styles/text.css';
-import '@vyrnforge/web/styles/button.css';
 
 function App() {
   const [result, setResult] = useState('Not submitted.');

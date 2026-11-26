@@ -4,10 +4,6 @@ import { Radio } from '@vyrnforge/react/radio';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 import { Button } from '@vyrnforge/react/button';
-import '@vyrnforge/web/styles/radio.css';
-import '@vyrnforge/web/styles/layout.css';
-import '@vyrnforge/web/styles/text.css';
-import '@vyrnforge/web/styles/button.css';
 
 function App() {
   const [selected, setSelected] = useState('standard');

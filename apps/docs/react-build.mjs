@@ -422,6 +422,7 @@ const themeStudioStyles = [
   '@vyrnforge/web/styles/segmented-control.css',
   '@vyrnforge/web/styles/checkbox.css',
   '@vyrnforge/web/styles/slider.css',
+  '@vyrnforge/web/styles/toggle-button.css',
 ].map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 

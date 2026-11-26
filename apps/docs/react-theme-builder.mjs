@@ -1,3 +1,7 @@
+import { ToggleButton } from '@vyrnforge/react/toggle-button';
+import { CodeBlock } from '@vyrnforge/react/code';
+import { Code } from '@vyrnforge/react/code';
+import { Link } from '@vyrnforge/react/link';
 import { createElement as h, useEffect, useState } from 'react';
 import { createTheme, renderThemeCss, themeableColorRoles } from '@vyrnforge/web/theme';
 import { Button } from '@vyrnforge/react/button';
@@ -38,16 +42,16 @@ const friendly = (role) => role.replaceAll('-', ' ');
 function TokenList({ roles, selected, onSelect, theme }) {
   return h('div', { className: 'vf-docs-builder-role-list', 'data-vf-docs-builder-roles': '',
     'aria-label': 'Semantic color roles' },
-    roles.length ? roles.map((role) => h('button', {
+    roles.length ? roles.map((role) => h(ToggleButton, {
       type: 'button', key: role, className: 'vf-docs-studio-token',
-      'aria-pressed': selected === role, onClick: () => onSelect(role),
+      pressed: selected === role, onClick: () => onSelect(role),
     },
     h('span', { className: 'vf-docs-studio-token-swatch',
       style: { backgroundColor: theme.variables['--vf-color-' + role] },
       'aria-hidden': 'true' }),
-    h('span', null, h('strong', null, friendly(role)),
-      h('code', null, theme.variables['--vf-color-' + role])))) :
-      h('p', { className: 'vf-docs-builder-empty' }, 'No matching tokens. Clear a filter to see more.'));
+    h(Text, { as: 'span' }, h(Text, { as: 'strong', variant: 'label-md' }, friendly(role)),
+      h(Code, null, theme.variables['--vf-color-' + role])))) :
+      h(Text, { as: 'p', className: 'vf-docs-builder-empty' }, 'No matching tokens. Clear a filter to see more.'));
 }
 function AccentContrast({ theme }) {
   const foreground = theme.variables['--vf-color-accent-foreground'];
@@ -57,10 +61,10 @@ function AccentContrast({ theme }) {
     'data-vf-docs-builder-contrast': theme.appearance },
     h('span', { className: 'vf-docs-studio-contrast-dot',
       style: { backgroundColor: background }, 'aria-hidden': 'true' }),
-    h('div', null, h('strong', null, theme.appearance + ' accent · ' + ratio.toFixed(2) + ':1'),
-      h('p', null, ratio >= 4.5 ? 'Contrast ratio meets 4.5:1 for this pair' :
+    h('div', null, h(Text, { as: 'strong', variant: 'label-md' }, theme.appearance + ' accent · ' + ratio.toFixed(2) + ':1'),
+      h(Text, { as: 'p' }, ratio >= 4.5 ? 'Contrast ratio meets 4.5:1 for this pair' :
         'Below 4.5:1 for normal text; review the foreground and background')),
-    h('span', { className: 'vf-docs-studio-contrast-state' }, ratio >= 4.5 ? 'Pass' : 'Review'));
+    h(Text, { as: 'span', className: 'vf-docs-studio-contrast-state' }, ratio >= 4.5 ? 'Pass' : 'Review'));
 }
 export function ThemeBuilder({ links }) {
   const [name, setName] = useState('my-brand');
@@ -155,30 +159,30 @@ export function ThemeBuilder({ links }) {
       h('nav', { 'aria-label': 'Theme Builder sections', className: 'vf-docs-studio-jump' },
         ...[['vf-builder-design', 'Design'], ['vf-builder-roles', 'Tokens'],
           ['vf-builder-preview', 'Preview'], ['vf-builder-export', 'Export']].map(([id, label]) =>
-          h('a', { key: id, href: '#' + id }, label)))),
+          h(Link, { key: id, href: '#' + id }, label)))),
     h('div', { className: 'vf-docs-studio-bar' },
       h('div', { className: 'vf-docs-studio-bar-group' },
-        h('strong', null, 'Build your theme'),
-        h('span', { className: 'vf-docs-studio-bar-description' },
+        h(Text, { as: 'strong', variant: 'label-md' }, 'Build your theme'),
+        h(Text, { as: 'span', className: 'vf-docs-studio-bar-description' },
           overrideCount + ' semantic override' + (overrideCount === 1 ? '' : 's') +
           ' · light and dark stylesheets')),
       h('div', { className: 'vf-docs-studio-inline-actions' },
-        h('a', { className: 'vf-docs-studio-next-link', href: links.color }, 'Back to Theme Studio'),
+        h(Link, { className: 'vf-docs-studio-next-link', href: links.color }, 'Back to Theme Studio'),
         h(Button, { type: 'button', size: 'sm', variant: 'secondary',
           onClick: reset, 'data-vf-docs-builder-reset': '' }, 'Reset builder'))),
     h('div', { className: 'vf-docs-builder-workspace' },
       h('section', { className: 'vf-docs-studio-section', id: 'vf-builder-design',
         'aria-labelledby': 'vf-builder-design-title' },
-        h('h2', { id: 'vf-builder-design-title' }, '1 · Theme identity'),
+        h(Text, { as: 'h2', variant: 'heading-md', id: 'vf-builder-design-title' }, '1 · Theme identity'),
         h('label', { className: 'vf-docs-studio-field', htmlFor: 'vf-builder-name' },
-          h('span', null, 'Theme name'),
+          h(Text, { as: 'span' }, 'Theme name'),
           h(Input, { id: 'vf-builder-name', value: name, onChange: (e) => setName(e.target.value),
             'aria-invalid': !valid, 'aria-describedby': valid ? undefined : 'vf-builder-name-error',
             'data-vf-docs-builder-name': '' })),
-        !valid ? h('p', { id: 'vf-builder-name-error', role: 'alert' },
+        !valid ? h(Text, { as: 'p', id: 'vf-builder-name-error', role: 'alert' },
           'Use a lowercase slug starting with a letter; light, dark and system are reserved.') : null,
         h('label', { className: 'vf-docs-studio-field', htmlFor: 'vf-builder-palette' },
-          h('span', null, 'Palette family'),
+          h(Text, { as: 'span' }, 'Palette family'),
           h(NativeSelect, { id: 'vf-builder-palette', value: palette,
             'data-vf-docs-builder-palette': '', onChange: (e) => {
               setPalette(e.target.value); setCustom({}); setStatus('Palette family updated');
@@ -190,7 +194,7 @@ export function ThemeBuilder({ links }) {
             h('span', { key: level, title: level + ' · ' + color,
               'aria-hidden': 'true', style: { backgroundColor: color } }))),
         h('label', { className: 'vf-docs-studio-field', htmlFor: 'vf-builder-shade' },
-          h('span', null, 'Primary shade'),
+          h(Text, { as: 'span' }, 'Primary shade'),
           h(NativeSelect, { id: 'vf-builder-shade', value: shade,
             onChange: (e) => setShade(e.target.value) },
             ...Object.keys(shades).map((v) => h('option', { key: v, value: v }, v)))),
@@ -203,46 +207,46 @@ export function ThemeBuilder({ links }) {
           onChange: (e) => setRadius(Number(e.target.value)) })),
       h('section', { className: 'vf-docs-studio-section', id: 'vf-builder-roles',
         'aria-labelledby': 'vf-builder-roles-title' },
-        h('h2', { id: 'vf-builder-roles-title' }, '2 · Semantic token editor'),
-        h('p', null, 'Switch appearances and change only the roles your brand needs.'),
+        h(Text, { as: 'h2', variant: 'heading-md', id: 'vf-builder-roles-title' }, '2 · Semantic token editor'),
+        h(Text, { as: 'p' }, 'Switch appearances and change only the roles your brand needs.'),
         h(Segment, { label: 'Builder editing appearance', value: appearance,
           testId: 'builder-appearance', onChange: (next) => {
             setAppearance(next); setShade(next === 'dark' ? '300' : '600');
           }, items: [['light', 'Light'], ['dark', 'Dark']] }),
         h('div', { className: 'vf-docs-builder-filter-row' },
           h('label', { className: 'vf-docs-studio-field', htmlFor: 'vf-builder-filter' },
-            h('span', null, 'Search tokens'),
+            h(Text, { as: 'span' }, 'Search tokens'),
             h(Input, { type: 'search', id: 'vf-builder-filter', value: query,
               onChange: (e) => setQuery(e.target.value), 'data-vf-docs-builder-filter': '' })),
           h('label', { className: 'vf-docs-studio-field', htmlFor: 'vf-builder-group' },
-            h('span', null, 'Category'),
+            h(Text, { as: 'span' }, 'Category'),
             h(NativeSelect, { id: 'vf-builder-group', value: group,
               onChange: (e) => setGroup(e.target.value) },
               ...groups.map((g) => h('option', { key: g, value: g }, g))))),
         h('label', { className: 'vf-docs-studio-check' },
           h(Checkbox, { checked: changedOnly, onChange: (e) => setChangedOnly(e.target.checked),
             'data-vf-docs-builder-changed-only': '' }),
-          h('span', null, 'Only changed roles')),
+          h(Text, { as: 'span' }, 'Only changed roles')),
         h('div', { className: 'vf-docs-builder-role-workspace' },
           h(TokenList, { roles: visible, selected: role, onSelect: setRole, theme: current }),
           h('div', { className: 'vf-docs-builder-role-detail',
             'data-vf-docs-builder-role-detail': '' },
             h(Text, { as: 'h3', variant: 'heading-sm' }, friendly(role)),
-            h('code', null, '--vf-color-' + role),
+            h(Code, null, '--vf-color-' + role),
             h(Picker, { value, onValueChange: editRole,
               label: 'Builder role hex', testId: 'builder-role' }),
-            h('p', null, overridden ? 'Custom override for ' + appearance :
+            h(Text, { as: 'p' }, overridden ? 'Custom override for ' + appearance :
               'Using generated ' + appearance + ' color'),
             h(Button, { type: 'button', size: 'sm', variant: 'secondary',
               onClick: restoreRole, disabled: !overridden,
               'data-vf-docs-builder-restore-role': '' }, 'Restore role'))),
-        h('p', { role: 'status', 'aria-live': 'polite',
+        h(Text, { as: 'p', role: 'status', 'aria-live': 'polite',
           'data-vf-docs-builder-notice': '' }, status))),
     h('section', { className: 'vf-docs-studio-section', id: 'vf-builder-preview',
       'aria-labelledby': 'vf-builder-preview-title' },
       h('div', { className: 'vf-docs-studio-panel-head' },
-        h('div', null, h('h2', { id: 'vf-builder-preview-title' }, '3 · Live preview'),
-          h('p', null, 'Both appearances are rendered with real VyrnForge controls.')),
+        h('div', null, h(Text, { as: 'h2', variant: 'heading-md', id: 'vf-builder-preview-title' }, '3 · Live preview'),
+          h(Text, { as: 'p' }, 'Both appearances are rendered with real VyrnForge controls.')),
         h(Segment, { label: 'Builder preview scene', value: scene, onChange: setScene,
           testId: 'builder-preview', items: [['dashboard', 'Dashboard'], ['form', 'Form']] })),
       h('div', { className: 'vf-docs-studio-scene-grid vf-docs-builder-preview-grid' },
@@ -254,25 +258,24 @@ export function ThemeBuilder({ links }) {
     h('section', { className: 'vf-docs-studio-section', id: 'vf-builder-export',
       'aria-labelledby': 'vf-builder-export-title' },
       h('div', { className: 'vf-docs-studio-panel-head' },
-        h('div', null, h('h2', { id: 'vf-builder-export-title' }, '4 · Export your theme'),
-          h('p', null, 'Copy the authoring functions or the complete generated CSS.')),
+        h('div', null, h(Text, { as: 'h2', variant: 'heading-md', id: 'vf-builder-export-title' }, '4 · Export your theme'),
+          h(Text, { as: 'p' }, 'Copy the authoring functions or the complete generated CSS.')),
         h(Segment, { label: 'Builder export format', value: format, onChange: (next) => {
           setFormat(next); setExportStatus('');
         }, testId: 'builder-export', items: [['function', 'TypeScript'], ['css', 'CSS']] })),
       h('div', { className: 'vf-docs-customization-code' },
-        h('pre', { tabIndex: 0, 'data-vf-code-block': '',
-          'data-vf-docs-builder-code': format }, h('code', null, source))),
+        h(CodeBlock, { tabIndex: 0, 'data-vf-docs-builder-code': format }, source)),
       h('div', { className: 'vf-docs-studio-inline-actions' },
         h(Button, { type: 'button', variant: 'primary', onClick: copy, disabled: !valid,
           'data-vf-docs-builder-copy': '' }, 'Copy ' + (format === 'css' ? 'CSS' : 'TypeScript')),
         h(Button, { type: 'button', variant: 'secondary', onClick: download,
           disabled: !valid, 'data-vf-docs-builder-download': '' }, 'Download CSS')),
-      h('p', { role: 'status', 'aria-live': 'polite',
+      h(Text, { as: 'p', role: 'status', 'aria-live': 'polite',
         'data-vf-docs-builder-export-status': '' }, exportStatus),
-      h('p', null, 'Load generated CSS after canonical Web styles and apply data-vf-theme to a scope. ' +
+      h(Text, { as: 'p' }, 'Load generated CSS after canonical Web styles and apply data-vf-theme to a scope. ' +
         'Theme authoring does not guarantee accessibility; review interaction states and contrast.')),
     h('footer', { className: 'vf-docs-studio-footer' },
-      h('a', { href: links.color, 'data-vf-link': '' }, 'Theme Studio'),
-      h('a', { href: links.themes, 'data-vf-link': '' }, 'Theming'),
-      h('a', { href: links.tokens, 'data-vf-link': '' }, 'Design tokens')));
+      h(Link, { href: links.color }, 'Theme Studio'),
+      h(Link, { href: links.themes }, 'Theming'),
+      h(Link, { href: links.tokens }, 'Design tokens')));
 }

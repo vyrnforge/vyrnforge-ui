@@ -271,6 +271,8 @@ test('Theme Studio focuses on palettes and hands a customized draft into Theme B
   const studio = page.locator('[data-vf-docs-react-color]');
   await expect(studio.getByRole('heading', { name: 'Color', level: 1 })).toBeVisible();
   await expect(studio.getByRole('navigation', { name: 'Theme Studio sections' }).getByRole('link')).toHaveCount(2);
+  await expect(studio.getByRole('navigation', { name: 'Theme Studio sections' }).locator('a[data-vf-link]')).toHaveCount(2);
+  await expect(studio.locator('[data-vf-docs-color-shades] button[data-vf-toggle-button]').first()).toBeVisible();
   await expect(studio.getByRole('heading', { name: 'Semantic token inspector' })).toHaveCount(0);
   await expect(studio.getByRole('heading', { name: 'Export your theme' })).toHaveCount(0);
   const families = studio.locator('[data-vf-docs-color-picker]');
@@ -305,6 +307,7 @@ test('Theme Builder edits independent light/dark tokens, filters roles and expor
     .getByRole('link')).toHaveCount(4);
   const roles = builder.locator('[data-vf-docs-builder-roles]');
   await expect(roles.getByRole('button')).toHaveCount(32);
+  await expect(roles.locator('button[data-vf-toggle-button]')).toHaveCount(32);
   await builder.locator('#vf-builder-group').selectOption('Feedback');
   await expect(roles.getByRole('button')).toHaveCount(9);
   await expect(roles.getByRole('button', { name: /success foreground/ })).toBeVisible();
@@ -3205,4 +3208,24 @@ test('Dialog playground supports omitting both presentational regions without lo
   await page.keyboard.press('Escape');
   await expect(modal).toBeHidden();
   await expect(trigger).toBeFocused();
+});
+
+
+test('React documentation uses public text, link, code and pressed controls in audited renderers', () => {
+  const files = ['react-reference.mjs', 'react-customization.mjs', 'react-theme-builder.mjs',
+    'react-theme-studio.mjs', 'react-overlay-utility.mjs', 'react-motion-utility.mjs',
+    'react-utility-content.mjs', 'react-playground-adapters.mjs', 'react-component-playground.mjs',
+    'react-icon-explorer.mjs'];
+  for (const file of files) {
+    const source = readFileSync('apps/docs/' + file, 'utf8');
+    // Native structure and raw SVG/decorative swatches remain intentional.
+    // Verify authored React calls, not the resulting native HTML.
+    expect(source, file).not.toMatch(/\bh\(\s*['"](?:p|h[1-6]|a|button|code|pre|input|textarea|select|img)['"]\s*,/);
+  }
+  for (const file of [
+    'product/components/interactive-controls/input/examples/profile-edit/react.tsx',
+    'product/components/composite-widgets/compound-fields/text-field/examples/form/react.tsx',
+  ]) {
+    expect(readFileSync(file, 'utf8'), file).not.toMatch(/<(?:p|h[1-6]|a|button|input|textarea|select|div)\b/);
+  }
 });

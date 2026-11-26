@@ -3,9 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
-import '@vyrnforge/web/styles/checkbox.css';
-import '@vyrnforge/web/styles/layout.css';
-import '@vyrnforge/web/styles/text.css';
 
 function App() {
   const eligible = ['Invoice.pdf', 'Summary.csv', 'Receipt.pdf'];

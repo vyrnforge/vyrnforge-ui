@@ -266,12 +266,12 @@ export function MotionUtility({ guide: sharedGuide, links }) {
           h('li', null, h(Link, { href: links.motionButton }, 'Button component'))))),
     h('aside', { className: 'vf-docs-toc-region' },
       h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
-        h('p', null, 'On this page'),
+        h(Text, { as: 'p' }, 'On this page'),
         h('ol', null,
-          h('li', null, h('a', { href: '#motion-playground-title' }, 'Live playground')),
-          h('li', null, h('a', { href: '#motion-component-examples-title' }, 'Built-in component motion')),
+          h('li', null, h(Link, { href: '#motion-playground-title' }, 'Live playground')),
+          h('li', null, h(Link, { href: '#motion-component-examples-title' }, 'Built-in component motion')),
           ...reactConsumerSections(guide).map((section) => h('li', { key: section.heading },
-            h('a', { href: '#motion-' + section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
+            h(Link, { href: '#motion-' + section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
               section.heading))),
-          h('li', null, h('a', { href: '#motion-related-links' }, 'Related guidance'))))));
+          h('li', null, h(Link, { href: '#motion-related-links' }, 'Related guidance'))))));
 }
