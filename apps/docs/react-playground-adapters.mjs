@@ -101,28 +101,64 @@ export const buttonPlayground = {
 };
 
 function CheckboxPreview({ config, update }) {
-  return h(Flow, { as: 'label', direction: 'inline', align: 'center', gap: 'sm' },
-    h(Checkbox, { checked: config.selection === 'checked', indeterminate: config.selection === 'mixed',
-      disabled: config.disabled, required: config.required,
-      onChange: e => update('selection', e.currentTarget.checked ? 'checked' : 'unchecked') }),
-    h(Text, { as: 'span' }, label(config, 'Include a gift receipt')));
+  const labelId = useId();
+  const descriptionId = labelId + '-description';
+  const name = label(config, 'Include a gift receipt');
+  const rich = config.presentation === 'label and description';
+  const control = h(Checkbox, { checked: config.selection === 'checked', indeterminate: config.selection === 'mixed',
+    size: config.size, disabled: config.disabled, required: config.required,
+    ...(config.presentation === 'standalone' ? { 'aria-label': name } : {}),
+    ...(rich ? { 'aria-labelledby': labelId, 'aria-describedby': descriptionId } : {}),
+    onChange: e => update('selection', e.currentTarget.checked ? 'checked' : 'unchecked') });
+  if (config.presentation === 'standalone') return control;
+  return h(Flow, { as: 'label', direction: 'inline', align: 'center', gap: 'sm' }, control,
+    config.presentation === 'icon label' ? h(Icon, { icon: tagIcon }) : null,
+    rich ? h('span', { style: { display: 'grid', gap: 'var(--vf-space-xs)' } },
+      h(Text, { as: 'span', id: labelId }, name),
+      h(Text, { as: 'span', variant: 'body-sm', id: descriptionId }, 'A separate receipt without prices.'))
+      : h(Text, { as: 'span' }, name));
 }
 export const checkboxPlayground = {
   fields: [text('label', 'Label', 'Include a gift receipt'),
+    choice('presentation', 'Presentation', 'label', ['standalone', 'label', 'icon label', 'label and description']),
+    choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
     choice('selection', 'State', 'unchecked', ['unchecked', 'checked', 'mixed']),
     bool('disabled', 'Disabled'), bool('required', 'Required')],
   Preview: CheckboxPreview,
   source(config) {
     const mixed = config.selection === 'mixed';
+    const rich = config.presentation === 'label and description';
+    const icon = config.presentation === 'icon label';
+    const standalone = config.presentation === 'standalone';
+    const name = label(config, 'Include a gift receipt');
     const checkbox = markup('Checkbox', [
+      attribute('size', config.size, 'md'),
       mixed ? 'checked={selection === "checked"}' : flag('defaultChecked', config.selection === 'checked'),
       mixed ? 'indeterminate={selection === "mixed"}' : '', flag('disabled', config.disabled),
       flag('required', config.required),
+      standalone ? attribute('aria-label', name) : '',
+      rich ? 'aria-labelledby={labelId}' : '', rich ? 'aria-describedby={descriptionId}' : '',
       mixed ? 'onChange={event => setSelection(event.currentTarget.checked ? "checked" : "unchecked")}' : '',
     ]);
-    return snippet([...(mixed ? ["import { useState } from 'react';"] : []), importLine('Checkbox', 'checkbox')],
-      markup('label', [], checkbox + '\n' + content(label(config, 'Include a gift receipt'))),
-      mixed ? { setup: ['const [selection, setSelection] = useState<"unchecked" | "checked" | "mixed">("mixed");'] } : {});
+    const imports = [importLine('Checkbox', 'checkbox')];
+    const hooks = [mixed ? 'useState' : '', rich ? 'useId' : ''].filter(Boolean);
+    if (hooks.length) imports.unshift("import { " + hooks.join(', ') + " } from 'react';");
+    const setup = [
+      ...(mixed ? ['const [selection, setSelection] = useState<"unchecked" | "checked" | "mixed">("mixed");'] : []),
+      ...(rich ? ['const labelId = useId();', 'const descriptionId = labelId + "-description";'] : []),
+    ];
+    if (standalone) return snippet(imports, checkbox, { setup });
+    if (icon || rich) {
+      imports.push(importLine('Flow', 'layout'));
+      if (icon) imports.push(...iconImports('tagIcon', 'tag'));
+      if (rich) imports.push(importLine('Text', 'text'));
+      const labelContent = rich
+        ? markup('span', ['style={{ display: "grid", gap: "var(--vf-space-xs)" }}'], markup('Text', ['as="span"', 'id={labelId}'], content(name)) + '\n' +
+          markup('Text', ['as="span"', 'variant="body-sm"', 'id={descriptionId}'], 'A separate receipt without prices.'))
+        : '<Icon icon={tagIcon} />\n' + markup('span', [], content(name));
+      return snippet(imports, markup('Flow', ['as="label"', 'direction="inline"', 'align="center"', 'gap="sm"'], checkbox + '\n' + labelContent), { setup });
+    }
+    return snippet(imports, markup('label', [], checkbox + '\n' + content(name)), { setup });
   },
 };
 

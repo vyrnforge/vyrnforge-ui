@@ -4,6 +4,10 @@
 
 Import Checkbox from `@vyrnforge/react/checkbox`. Supported CSS-aware browser bundlers load its component styles automatically. The forwarded ref points to the actual HTMLInputElement. Use native `name`, `value`, `id`, `required`, `disabled`, and accessible labeling attributes.
 
+## Label composition
+
+Compose Checkbox with a native label or Flow as a label. Text and decorative Icon content remain independent of the input. An icon beside the label does not replace checkbox artwork. The playground demonstrates standalone, text, icon and descriptive label compositions with accessible names and descriptions; no extra Checkbox props are required.
+
 ## Controlled and uncontrolled state
 
 Use `defaultChecked` for uncontrolled state or `checked` with `onChange` for controlled state. Read `event.currentTarget.checked`. Do not switch between controlled and uncontrolled ownership.
@@ -11,6 +15,10 @@ Use `defaultChecked` for uncontrolled state or `checked` with `onChange` for con
 ## Indeterminate state
 
 Pass the independent boolean `indeterminate` prop. React synchronizes the real DOM property after mount and activation. It is not an HTML attribute and cannot be serialized as a native mixed state before hydration. Keep the owner value synchronized with the selected items.
+
+## Sizes
+
+Pass `size="sm"`, `size="md"` (default), or `size="lg"`. This is a visual size, not the native numeric HTML input size attribute (which does not apply to checkboxes). The control remains the original input and the label remains independent.
 
 ## Required and disabled states
 

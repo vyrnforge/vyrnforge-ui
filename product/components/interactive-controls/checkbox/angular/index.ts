@@ -5,11 +5,13 @@ import { Directive, ElementRef, HostListener, Renderer2, afterRenderEffect, bool
   standalone: true,
   host: {
     'data-vf-checkbox': '',
+    '[attr.data-vf-size]': 'size()',
     type: 'checkbox',
   },
 })
 export class VfCheckboxDirective {
   readonly indeterminate = input(false, { transform: booleanAttribute });
+  readonly size = input<'sm' | 'md' | 'lg'>('md');
   private readonly element = inject<ElementRef<HTMLInputElement>>(ElementRef);
   private readonly renderer = inject(Renderer2);
 

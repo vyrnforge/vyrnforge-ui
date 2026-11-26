@@ -647,7 +647,7 @@ function selectionGuide(unit, links) {
               'data-vf-docs-example-id': example.id, title: 'React ' + example.title + ' example',
               src: routeLinks.examples[example.id], sandbox: 'allow-scripts allow-forms', loading: 'lazy',
               onLoad: (event) => syncSelectionPreviewTheme(event.currentTarget),
-              style: { minBlockSize: example.id === 'checkbox/basic' ? '10rem' : example.id.endsWith('/basic') ? '12rem' : '19rem' } }),
+              style: { minBlockSize: ['checkbox/basic', 'checkbox/sizes'].includes(example.id) ? '10rem' : example.id.endsWith('/basic') ? '12rem' : '19rem' } }),
             h('details', { className: 'vf-docs-source-disclosure' },
               h('summary', null, 'View React TSX source'),
               h(CodeBlock, { tabIndex: 0 }, example.source)))),
