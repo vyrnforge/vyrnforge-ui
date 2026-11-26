@@ -157,7 +157,9 @@ test('Generated playground examples typecheck and bundle against installed publi
     [backdropPlayground, {}], [backdropPlayground, { hidden: true, opacity: 0.5 }],
     [inputPlayground, { type: 'email', required: true }], [textareaPlayground, { rows: '5', invalid: true }],
     [textFieldPlayground, {}], [textFieldPlayground, { multiline: true, autosize: true, fieldSize: 'lg', error: 'Try again' }],
-    [textFieldPlayground, { leadingIcon: true, prefix: '
+    [textFieldPlayground, { leadingIcon: true, prefix: '$', variant: 'filled', fullWidth: true }],
+    [textFieldPlayground, { variant: 'underlined', labelPlacement: 'floating' }],
+    [textFieldPlayground, { variant: 'outlined', labelPlacement: 'outside' }],
   ];
   const generated = new Map(scenarios.map(([adapter, patch], index) => [
     path.join(root, 'apps/docs', 'generated-playground-' + index + '.tsx'),
