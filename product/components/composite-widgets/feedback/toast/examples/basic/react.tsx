@@ -1,13 +1,27 @@
+import { useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { ToastClose, ToastDescription, ToastRoot, ToastTitle, ToastViewport } from '@vyrnforge/react/toast';
+import { Button } from '@vyrnforge/react/button';
 
-export function Example() {
+function Example() {
+  const [open, setOpen] = useState(false);
   return (
-    <ToastViewport>
-      <ToastRoot duration={0}>
-        <ToastTitle>Saved</ToastTitle>
-        <ToastDescription>Your changes are available.</ToastDescription>
-        <ToastClose aria-label="Tutup notifikasi">×</ToastClose>
-      </ToastRoot>
-    </ToastViewport>
+    <>
+      <p>Saved preferences are available in your account.</p>
+      <Button type="button" onClick={() => setOpen(true)}>
+        Show notification
+      </Button>
+      <ToastViewport>
+        <ToastRoot open={open} onOpenChange={setOpen} duration={0}>
+          <ToastTitle>Saved</ToastTitle>
+          <ToastDescription>Your preferences are up to date.</ToastDescription>
+          <ToastClose aria-label="Dismiss notification">×</ToastClose>
+        </ToastRoot>
+      </ToastViewport>
+    </>
   );
 }
+
+const mount = document.querySelector('#root');
+if (!mount) throw new Error('Example mount is missing.');
+createRoot(mount).render(<Example />);

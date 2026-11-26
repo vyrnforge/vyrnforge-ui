@@ -1,0 +1,7 @@
+{
+  "id": "inline-feedback",
+  "name": "Inline Feedback",
+  "documentation": {
+    "group": "feedback-status"
+  }
+}

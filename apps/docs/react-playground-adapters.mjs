@@ -8,6 +8,10 @@ import { Chip } from '@vyrnforge/react/chip';
 import { Backdrop } from '@vyrnforge/react/backdrop';
 import { StatusIndicator } from '@vyrnforge/react/status-indicator';
 import { Alert } from '@vyrnforge/react/alert';
+import { DialogRoot, DialogTitle, DialogDescription, DialogClose } from '@vyrnforge/react/dialog';
+import { AlertDialogRoot, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from '@vyrnforge/react/alert-dialog';
+import { DrawerRoot, DrawerTitle, DrawerDescription, DrawerClose } from '@vyrnforge/react/drawer';
+import { ToastViewport, ToastRoot, ToastTitle, ToastDescription, ToastClose } from '@vyrnforge/react/toast';
 import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Divider } from '@vyrnforge/react/divider';
@@ -501,5 +505,86 @@ export const alertPlayground = {
       attribute('announcement',config.announcement,'none')+(config.heading?' heading='+jsxText(config.heading):'')+
       (config.dismissible?' dismiss={{ label: "Dismiss feedback", onDismiss: () => { setVisible(false); restore.current?.focus(); } }}':'')+
       '>'+jsxText(config.message || 'Your changes remain available.')+'</Alert>}','  </Flow>;','}'].join('\n');
+  },
+};
+
+const modalParts = {
+  dialog: [DialogRoot, DialogTitle, DialogDescription, DialogClose],
+  'alert-dialog': [AlertDialogRoot, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction],
+  drawer: [DrawerRoot, DrawerTitle, DrawerDescription, DrawerClose],
+};
+const modalNames = {
+  dialog: ['DialogRoot', 'DialogTitle', 'DialogDescription', 'DialogClose'],
+  'alert-dialog': ['AlertDialogRoot', 'AlertDialogTitle', 'AlertDialogDescription', 'AlertDialogCancel', 'AlertDialogAction'],
+  drawer: ['DrawerRoot', 'DrawerTitle', 'DrawerDescription', 'DrawerClose'],
+};
+function modalAdapter(id) {
+  const required = id === 'alert-dialog';
+  const edge = id === 'drawer';
+  const [Root, Title, Description, Close, Action] = modalParts[id];
+  const [rootName, titleName, descriptionName, closeName, actionName] = modalNames[id];
+  function Preview({ config }) {
+    const [open, setOpen] = useState(false);
+    const descriptionId = useId();
+    const props = { open, onOpenChange: setOpen, descriptionId,
+      ...(!required ? { backdropDismiss: config.backdropDismiss } : {}),
+      ...(edge ? { placement: config.placement } : {}) };
+    return h(Flow, { gap: 'sm' },
+      h(Button, { type: 'button', onClick: () => setOpen(true) }, 'Open ' + id.replace('-', ' ')),
+      h(Root, props, h(Title, null, config.title || 'Details'),
+        h(Description, { id: descriptionId }, config.message || 'Review this information.'),
+        h(Flow, { direction: 'inline', gap: 'sm', wrap: 'wrap' },
+          h(Close, { autoFocus: required || undefined, 'data-vf-button': '', 'data-vf-variant': 'secondary' }, required ? 'Cancel' : 'Close'),
+          required ? h(Action, { 'data-vf-button': '' }, 'Confirm example') : null)));
+  }
+  return {
+    fields: [text('title', 'Title', required ? 'Review this decision' : 'Details'),
+      text('message', 'Description', 'Review this information before continuing.'),
+      ...(!required ? [bool('backdropDismiss', 'Backdrop dismissal')] : []),
+      ...(edge ? [choice('placement', 'Placement', 'end', ['start', 'end', 'top', 'bottom'])] : [])],
+    Preview,
+    source(config) {
+      return ["import { useId, useState } from 'react';", importLine(modalNames[id].join(', '), id),
+        importLine('Button', 'button'), importLine('Flow', 'layout'), '',
+        'export default function Example() {', '  const [open, setOpen] = useState(false);', '  const descriptionId = useId();',
+        '  return (', '    <Flow gap="sm">', '      <Button type="button" onClick={() => setOpen(true)}>Open ' + id.replace('-', ' ') + '</Button>',
+        '      <' + rootName + ' open={open} onOpenChange={setOpen} descriptionId={descriptionId}' +
+          (!required ? flag('backdropDismiss', config.backdropDismiss) : '') + (edge ? attribute('placement', config.placement, 'end') : '') + '>',
+        '        <' + titleName + '>' + jsxText(config.title || 'Details') + '</' + titleName + '>',
+        '        <' + descriptionName + ' id={descriptionId}>' + jsxText(config.message || 'Review this information.') + '</' + descriptionName + '>',
+        '        <Flow direction="inline" gap="sm" wrap="wrap">',
+        '          <' + closeName + (required ? ' autoFocus' : '') + ' data-vf-button="" data-vf-variant="secondary">' + (required ? 'Cancel' : 'Close') + '</' + closeName + '>',
+        ...(required ? ['          <' + actionName + ' data-vf-button="">Confirm example</' + actionName + '>'] : []),
+        '        </Flow>', '      </' + rootName + '>', '    </Flow>', '  );', '}'].join('\n');
+    },
+  };
+}
+export const dialogPlayground = modalAdapter('dialog');
+export const alertDialogPlayground = modalAdapter('alert-dialog');
+export const drawerPlayground = modalAdapter('drawer');
+function ToastPreview({config}) {
+  const [open,setOpen] = useState(false);
+  return h(Flow,{gap:'sm'},
+    h(Button,{type:'button',onClick:()=>setOpen(true)},'Show notification'),
+    h(ToastViewport,{style:{position:'static',inlineSize:'100%'}},
+      h(ToastRoot,{open,onOpenChange:setOpen,duration:config.persistent ? 0 : config.duration},
+        h(ToastTitle,null,config.title || 'Saved'),
+        h(ToastDescription,null,config.message || 'Preferences are up to date.'),
+        h(ToastClose,{'aria-label':'Dismiss notification'},'×'))));
+}
+export const toastPlayground = {
+  fields:[text('title','Title','Saved'),text('message','Message','Preferences are up to date.'),bool('persistent','Persistent'),
+    {kind:'number',key:'duration',label:'Duration (ms)',default:5000,min:1000,max:15000,step:500,available:c=>!c.persistent}],
+  Preview:ToastPreview,
+  source(config) {
+    return ["import { useState } from 'react';",importLine('ToastViewport, ToastRoot, ToastTitle, ToastDescription, ToastClose','toast'),
+      importLine('Button','button'),importLine('Flow','layout'),'','export default function Example() {',
+      '  const [open,setOpen] = useState(false);','  return <Flow gap="sm">',
+      '    <Button type="button" onClick={() => setOpen(true)}>Show notification</Button>',
+      '    <ToastViewport style={{ position: "static", inlineSize: "100%" }}>',
+      '      <ToastRoot open={open} onOpenChange={setOpen} duration={' + (config.persistent ? 0 : config.duration) + '}>',
+      '        <ToastTitle>' + jsxText(config.title || 'Saved') + '</ToastTitle>',
+      '        <ToastDescription>' + jsxText(config.message || 'Preferences are up to date.') + '</ToastDescription>',
+      '        <ToastClose aria-label="Dismiss notification">×</ToastClose>','      </ToastRoot>','    </ToastViewport>','  </Flow>;','}'].join('\n');
   },
 };

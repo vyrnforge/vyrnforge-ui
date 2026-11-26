@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -194,7 +194,7 @@ function navigation(view, links, topic) {
       { id: 'badge', title: 'Badge', href: links.badge.guide },
       { id: 'chip', title: 'Chip', href: links.chip.guide },
     ] },
-    { label: 'Feedback', items: [{ id: 'status-indicator', title: 'Status Indicator', href: links['status-indicator'].guide }, { id: 'alert', title: 'Alert', href: links.alert.guide }, { id: 'backdrop', title: 'Backdrop', href: links.backdrop.guide }, { id: 'loading', title: 'Loading', href: links.loading.guide }] },
+    { label: 'Feedback', items: [{ id: 'status-indicator', title: 'Status Indicator', href: links['status-indicator'].guide }, { id: 'alert', title: 'Alert', href: links.alert.guide }, { id: 'backdrop', title: 'Backdrop', href: links.backdrop.guide }, { id: 'loading', title: 'Loading', href: links.loading.guide }, { id: 'dialog', title: 'Dialog', href: links['dialog'].guide }, { id: 'alert-dialog', title: 'AlertDialog', href: links['alert-dialog'].guide }, { id: 'drawer', title: 'Drawer', href: links['drawer'].guide }, { id: 'toast', title: 'Toast', href: links['toast'].guide }, { id: 'banner', title: 'Banner', href: links['banner'].guide }, { id: 'empty-state', title: 'Empty State', href: links['empty-state'].guide }, { id: 'inline-feedback', title: 'Inline Feedback', href: links['inline-feedback'].guide }, { id: 'feedback-composition', title: 'Feedback Composition', href: links['feedback-composition'].guide }] },
     { label: 'Libraries', items: [
       { id: 'icon-library', title: 'VyrnForge Icons', href: links.icon.library },
     ] },
@@ -216,6 +216,10 @@ function navigation(view, links, topic) {
       { id: 'chip-api', title: 'Chip API', href: links.chip.api },
       { id: 'status-indicator-api', title: 'Status Indicator API', href: links['status-indicator'].api },
       { id: 'alert-api', title: 'Alert API', href: links.alert.api },
+      { id: 'dialog-api', title: 'Dialog API', href: links['dialog'].api },
+      { id: 'alert-dialog-api', title: 'AlertDialog API', href: links['alert-dialog'].api },
+      { id: 'drawer-api', title: 'Drawer API', href: links['drawer'].api },
+      { id: 'toast-api', title: 'Toast API', href: links['toast'].api },
       { id: 'backdrop-api', title: 'Backdrop API', href: links.backdrop.api },
       { id: 'loading-api', title: 'Loading API', href: links.loading.api },
       ...['text', 'code', 'kbd'].map((id) => ({
@@ -891,23 +895,25 @@ function feedbackUsage(unit, links, adapter) {
   const prefix = 'react-' + unit.id;
   const sections = [
     { id: prefix + '-setup', heading: 'Get started' },
-    { id: prefix + '-playground', heading: 'Playground' },
+    ...(adapter ? [{ id: prefix + '-playground', heading: 'Playground' }] : []),
     { id: prefix + '-examples', heading: 'Examples' },
     { id: prefix + '-guidelines', heading: 'Usage and accessibility' },
-    { id: prefix + '-reference', heading: 'Related API' },
+    ...(unit.apiAvailable ? [{ id: prefix + '-reference', heading: 'Related API' }] : []),
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections),
     h('article', { className: 'vf-docs-article', ['data-vf-docs-react-' + unit.id]: '' },
       guideHeader(unit.sharedContent, 'React · Feedback', unit.standardReferences),
-      guidePart(sections[0], [...renderBlocks(unit.frameworkContent.intro),
-        ...guideBlocks(unit.frameworkContent, 'React setup')]),
-      guidePart(sections[1], [h(ComponentPlayground, { adapter, title: unit.title })]),
-      guidePart(sections[2], unit.examples.map(example => compactExample(example, links, unit.id))),
-      guidePart(sections[3], guideSubsections(unit.sharedContent, unit.sharedContent.sections
-        .filter(section => section.heading !== 'Native Web' && section.heading !== 'Framework boundary')
+      guidePart(sections.find(section => section.id === prefix + '-setup'),
+        unit.frameworkContent ? [...renderBlocks(unit.frameworkContent.intro), ...guideBlocks(unit.frameworkContent, 'React setup')] :
+          guideBlocks(unit.sharedContent, 'React composition')),
+      adapter ? guidePart(sections.find(section => section.id === prefix + '-playground'), [h(ComponentPlayground, { adapter, title: unit.title })]) : null,
+      guidePart(sections.find(section => section.id === prefix + '-examples'), unit.examples.map(example => compactExample(example, links, unit.id))),
+      guidePart(sections.find(section => section.id === prefix + '-guidelines'), guideSubsections(unit.sharedContent, unit.sharedContent.sections
+        .filter(section => !['Native Web', 'Framework boundary', 'React composition'].includes(section.heading))
         .map(section => section.heading), prefix + '-guidance')),
-      guidePart(sections[4], [h(Link, { href: links[unit.id].api }, 'View ' + unit.title + ' public React API')])));
+      unit.apiAvailable ? guidePart(sections.find(section => section.id === prefix + '-reference'),
+        [h(Link, { href: links[unit.id].api }, 'View ' + unit.title + ' public React API')]) : null));
 }
 function feedbackApi(unit, links) {
   return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': unit.id },
@@ -1517,7 +1523,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   if (view === 'divider-api') return dividerApi(divider, links);
   if (view === 'list') return listUsage(list, links);
   if (view === 'list-api') return listApi(list, links);
-  if (feedback) return view.endsWith('-api') ? feedbackApi(feedback, links) : feedbackUsage(feedback, links, feedback.id === 'alert' ? alertPlayground : statusIndicatorPlayground);
+  if (feedback) return view.endsWith('-api') ? feedbackApi(feedback, links) : feedbackUsage(feedback, links, ({ alert: alertPlayground, 'status-indicator': statusIndicatorPlayground, dialog: dialogPlayground, 'alert-dialog': alertDialogPlayground, drawer: drawerPlayground, toast: toastPlayground })[feedback.id]);
   if (view === 'backdrop') return feedbackUsage(backdrop, links, backdropPlayground);
   if (view === 'backdrop-api') return feedbackApi(backdrop, links);
   if (view === 'loading') return feedbackUsage(loading, links, loadingPlayground);
@@ -1626,6 +1632,14 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
     { title: 'Status Indicator API', href: links['status-indicator'].api, keywords: 'StatusIndicatorProps' },
     { title: 'Alert', href: links.alert.guide, keywords: 'persistent feedback message severity announcement action dismiss' },
     { title: 'Alert API', href: links.alert.api, keywords: 'AlertProps FeedbackSeverity AlertAnnouncement' },
+    { title: 'Dialog', href: links['dialog'].guide, keywords: 'feedback dialog native composition' },
+    { title: 'AlertDialog', href: links['alert-dialog'].guide, keywords: 'feedback alert-dialog native composition' },
+    { title: 'Drawer', href: links['drawer'].guide, keywords: 'feedback drawer native composition' },
+    { title: 'Toast', href: links['toast'].guide, keywords: 'feedback toast native composition' },
+    { title: 'Banner', href: links['banner'].guide, keywords: 'feedback banner native composition' },
+    { title: 'Empty State', href: links['empty-state'].guide, keywords: 'feedback empty-state native composition' },
+    { title: 'Inline Feedback', href: links['inline-feedback'].guide, keywords: 'feedback inline-feedback native composition' },
+    { title: 'Feedback Composition', href: links['feedback-composition'].guide, keywords: 'feedback feedback-composition native composition' },
     { title: 'Backdrop', href: links.backdrop.guide, keywords: 'scrim loading overlay native dialog backdrop decorative region' },
     { title: 'Backdrop API', href: links.backdrop.api, keywords: 'BackdropProps hidden style ref' },
     { title: 'Loading', href: links.loading.guide, keywords: 'progress loading spinner dots bars pulse skeleton placeholder custom async' },

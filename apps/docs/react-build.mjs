@@ -273,13 +273,21 @@ if (badgeTypeStart < 0 || badgeTypeEnd < 0 ||
 }
 const publicBadgeTypes = badgePublicSource.slice(badgeTypeStart, badgeTypeEnd).trim();
 
-const feedbackIds = ['status-indicator', 'alert'];
+const feedbackIds = ['status-indicator', 'alert', 'dialog', 'alert-dialog', 'drawer', 'toast'];
+const feedbackPatternIds = ['banner', 'empty-state', 'inline-feedback', 'feedback-composition'];
 const feedbackUnits = await Promise.all(feedbackIds.map(async id => {
   const unit = reactModel.componentCatalog.find(entry => entry.id === id);
   if (!unit?.apiAvailable || !unit.showcaseAvailable || !unit.frameworkContent || !unit.examples.length ||
       !unit.publicEntrypoints.includes('@vyrnforge/react/' + id)) throw new Error('Missing React feedback owner: ' + id);
   return { ...unit, publicTypes: await readFile(path.join(root, path.dirname(path.dirname(unit.frameworkSourcePath)), 'index.ts'), 'utf8') };
 }));
+const feedbackPatterns = feedbackPatternIds.map(id => {
+  const unit = reactModel.patternCatalog.find(entry => entry.id === id);
+  if (!unit?.guideOnly || !unit.showcaseAvailable || unit.apiAvailable || !unit.examples.length) {
+    throw new Error('Missing React feedback composition guide: ' + id);
+  }
+  return unit;
+});
 const backdrop = reactModel.componentCatalog.find(entry => entry.id === 'backdrop');
 if (!backdrop?.apiAvailable || !backdrop.showcaseAvailable || !backdrop.frameworkContent || backdrop.examples.length !== 1) {
   throw new Error('React Backdrop requires a public native CSS adapter and executable example');
@@ -500,9 +508,9 @@ function linksFor(route) {
       api: relative(dir, react + list.apiRoute, true),
       exampleBase: relative(dir, react + 'examples/list/', true),
     },
-    ...Object.fromEntries(feedbackUnits.map(unit => [unit.id, {
+    ...Object.fromEntries([...feedbackUnits, ...feedbackPatterns].map(unit => [unit.id, {
       guide: relative(dir, react + unit.showcaseRoute, true),
-      api: relative(dir, react + unit.apiRoute, true),
+      api: unit.apiRoute ? relative(dir, react + unit.apiRoute, true) : null,
       exampleBase: relative(dir, react + 'examples/' + unit.id + '/', true),
     }])),
     backdrop: {
@@ -712,7 +720,7 @@ for (const example of listExamples) {
 }
 
 
-for (const example of [...badgeExamples, ...chipExamples, ...loading.examples, ...backdrop.examples, ...feedbackUnits.flatMap(unit => unit.examples)]) {
+for (const example of [...badgeExamples, ...chipExamples, ...loading.examples, ...backdrop.examples, ...feedbackUnits.flatMap(unit => unit.examples), ...feedbackPatterns.flatMap(unit => unit.examples)]) {
   const [component, slug] = example.id.split('/');
   const asset = 'react-' + component + '-' + slug;
   await build({
@@ -940,6 +948,7 @@ const pageViews = [
     description: 'Rich semantic lists, native markers and composed actions' },
   { route: list.apiRoute, view: 'list-api', title: 'React List API',
     description: 'Source-backed React List and ListItem public props' },
+  ...feedbackPatterns.map(unit => ({ route: unit.showcaseRoute, view: unit.id, title: 'React ' + unit.title, description: 'Feedback composition using existing native-backed components' })),
   ...feedbackUnits.flatMap(unit => [
     { route: unit.showcaseRoute, view: unit.id, title: 'React ' + unit.title, description: 'Native-first feedback presentation' },
     { route: unit.apiRoute, view: unit.id + '-api', title: 'React ' + unit.title + ' API', description: 'Source-backed React public API' },
@@ -1065,7 +1074,7 @@ for (const page of pageViews) {
     image: page.view === 'image' || page.view === 'image-api' ? imageData : null,
     avatar: page.view === 'avatar' || page.view === 'avatar-api' ? avatarData : null,
     list: page.view === 'list' || page.view === 'list-api' ? listData : null,
-    feedback: feedbackUnits.find(unit => [unit.id, unit.id + '-api'].includes(page.view)) ?? null,
+    feedback: [...feedbackUnits, ...feedbackPatterns].find(unit => [unit.id, unit.id + '-api'].includes(page.view)) ?? null,
     backdrop: ['backdrop', 'backdrop-api'].includes(page.view) ? backdropData : null,
     loading: ['loading', 'loading-api'].includes(page.view) ? loadingData : null,
     chip: page.view === 'chip' || page.view === 'chip-api' ? chipData : null,
@@ -1101,7 +1110,7 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-backdrop-status-alert-pilot',
+  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-backdrop-status-alert-feedback-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
   utilities: [
@@ -1148,7 +1157,7 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
       id: example.id, sourcePath: example.sourcePath, title: example.title,
     })),
   },
-  feedback: feedbackUnits.map(unit => ({
+  feedback: [...feedbackUnits, ...feedbackPatterns].map(unit => ({
     id: unit.id, guideRoute: unit.showcaseRoute, apiRoute: unit.apiRoute,
     publicEntrypoints: unit.publicEntrypoints, sharedSourcePath: unit.sharedSourcePath,
     frameworkSourcePath: unit.frameworkSourcePath,
