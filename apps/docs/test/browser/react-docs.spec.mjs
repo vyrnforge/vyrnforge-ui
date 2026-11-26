@@ -3066,3 +3066,17 @@ test('React Backdrop guide reuses the shared playground and preserves an interac
   await page.goto('/next/react/api/components/backdrop/');
   await expect(page.getByRole('heading', { name: 'Backdrop API', exact: true })).toBeVisible();
 });
+
+
+test('React Checkbox guide shows all sizes at actual scale', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/checkbox/');
+  const frame = page.locator('[data-vf-docs-react-selection-example="checkbox/sizes"] iframe');
+  await frame.scrollIntoViewIfNeeded();
+  const demo = frame.contentFrame();
+  for (const [size, pixels] of [['sm', 20], ['md', 24], ['lg', 28]]) {
+    const control = demo.getByRole('checkbox', { name: size + ' checked', exact: true });
+    await expect(control).toHaveAttribute('data-vf-size', size);
+    await expect.poll(() => control.evaluate(el => parseFloat(getComputedStyle(el, '::before').width))).toBe(pixels);
+  }
+  await frame.screenshot({ path: testInfo.outputPath('checkbox-guide-sizes.png') });
+});

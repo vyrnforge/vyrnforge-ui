@@ -93,18 +93,20 @@ export const buttonPlayground = {
 function CheckboxPreview({ config, update }) {
   return h(Flow, { as: 'label', direction: 'inline', align: 'center', gap: 'sm' },
     h(Checkbox, { checked: config.selection === 'checked', indeterminate: config.selection === 'mixed',
-      disabled: config.disabled, required: config.required,
+      size: config.size, disabled: config.disabled, required: config.required,
       onChange: e => update('selection', e.currentTarget.checked ? 'checked' : 'unchecked') }),
     h(Text, { as: 'span' }, label(config, 'Include a gift receipt')));
 }
 export const checkboxPlayground = {
   fields: [text('label', 'Label', 'Include a gift receipt'),
+    choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
     choice('selection', 'State', 'unchecked', ['unchecked', 'checked', 'mixed']),
     bool('disabled', 'Disabled'), bool('required', 'Required')],
   Preview: CheckboxPreview,
   source(config) {
     const mixed = config.selection === 'mixed';
     const checkbox = markup('Checkbox', [
+      attribute('size', config.size, 'md'),
       mixed ? 'checked={selection === "checked"}' : flag('defaultChecked', config.selection === 'checked'),
       mixed ? 'indeterminate={selection === "mixed"}' : '', flag('disabled', config.disabled),
       flag('required', config.required),

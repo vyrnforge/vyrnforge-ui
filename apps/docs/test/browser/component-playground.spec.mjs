@@ -34,6 +34,11 @@ test('Checkbox and Radio playground previews update configuration and source', a
   await page.goto('/next/react/components/checkbox/');
   const checkbox = page.locator('[data-vf-docs-component-playground="Checkbox"]');
   const preview = checkbox.getByRole('region', { name: 'Checkbox preview' });
+  await checkbox.getByRole('radio', { name: 'sm', exact: true }).check();
+  await expect(preview.getByRole('checkbox')).toHaveAttribute('data-vf-size', 'sm');
+  await expect(checkbox.getByRole('region', { name: 'Generated React usage' })).toContainText('size="sm"');
+  await checkbox.getByRole('radio', { name: 'lg', exact: true }).check();
+  await expect(preview.getByRole('checkbox')).toHaveCSS('width', '28px');
   await checkbox.getByRole('radio', { name: 'mixed', exact: true }).check();
   await expect(preview.getByRole('checkbox')).toHaveJSProperty('indeterminate', true);
   await preview.getByRole('checkbox').click();
