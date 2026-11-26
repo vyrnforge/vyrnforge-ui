@@ -1,5 +1,4 @@
 import { Input } from '@vyrnforge/react/input';
-import '@vyrnforge/web/styles/input.css';
 
 export function Example() {
   return (
