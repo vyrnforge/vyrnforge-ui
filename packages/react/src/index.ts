@@ -86,3 +86,5 @@ export * from './components/app-shell/index.js';
 export * from './components/side-nav/index.js';
 export * from './components/loading/index.js';
 export * from './components/backdrop/index.js';
+export * from './components/status-indicator/index.js';
+export * from './components/alert/index.js';

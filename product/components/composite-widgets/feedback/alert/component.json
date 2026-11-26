@@ -1,0 +1,12 @@
+{
+  "id": "alert",
+  "name": "Alert",
+  "documentation": {
+    "group": "overlays-feedback"
+  },
+  "styling": {
+    "dependencies": [
+      "button"
+    ]
+  }
+}

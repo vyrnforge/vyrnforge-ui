@@ -273,6 +273,13 @@ if (badgeTypeStart < 0 || badgeTypeEnd < 0 ||
 }
 const publicBadgeTypes = badgePublicSource.slice(badgeTypeStart, badgeTypeEnd).trim();
 
+const feedbackIds = ['status-indicator', 'alert'];
+const feedbackUnits = await Promise.all(feedbackIds.map(async id => {
+  const unit = reactModel.componentCatalog.find(entry => entry.id === id);
+  if (!unit?.apiAvailable || !unit.showcaseAvailable || !unit.frameworkContent || !unit.examples.length ||
+      !unit.publicEntrypoints.includes('@vyrnforge/react/' + id)) throw new Error('Missing React feedback owner: ' + id);
+  return { ...unit, publicTypes: await readFile(path.join(root, path.dirname(path.dirname(unit.frameworkSourcePath)), 'index.ts'), 'utf8') };
+}));
 const backdrop = reactModel.componentCatalog.find(entry => entry.id === 'backdrop');
 if (!backdrop?.apiAvailable || !backdrop.showcaseAvailable || !backdrop.frameworkContent || backdrop.examples.length !== 1) {
   throw new Error('React Backdrop requires a public native CSS adapter and executable example');
@@ -390,8 +397,8 @@ const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 // Playground CSS belongs to React guide pages only. Bundle relative public CSS imports
 // so an iframe or Native Web inline theme clone never resolves them against a document URL.
-const playgroundViews = new Set(['guide', 'selection-checkbox', 'selection-radio', 'avatar', 'badge', 'chip', 'toggle', 'divider', 'list', 'loading', 'backdrop']);
-const playgroundStyles = ['checkbox', 'radio', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list', 'loading', 'backdrop'];
+const playgroundViews = new Set(['guide', 'selection-checkbox', 'selection-radio', 'avatar', 'badge', 'chip', 'toggle', 'divider', 'list', 'loading', 'backdrop', ...feedbackIds]);
+const playgroundStyles = ['checkbox', 'radio', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list', 'loading', 'backdrop', ...feedbackIds];
 const playgroundStyleAsset = '/assets/react-playground.css';
 // The Color studio alone needs these public controls; other docs pages do not
 // pay for unrelated component styles or invent docs-specific component skins.
@@ -493,6 +500,11 @@ function linksFor(route) {
       api: relative(dir, react + list.apiRoute, true),
       exampleBase: relative(dir, react + 'examples/list/', true),
     },
+    ...Object.fromEntries(feedbackUnits.map(unit => [unit.id, {
+      guide: relative(dir, react + unit.showcaseRoute, true),
+      api: relative(dir, react + unit.apiRoute, true),
+      exampleBase: relative(dir, react + 'examples/' + unit.id + '/', true),
+    }])),
     backdrop: {
       guide: relative(dir, react + backdrop.showcaseRoute, true),
       api: relative(dir, react + backdrop.apiRoute, true),
@@ -700,7 +712,7 @@ for (const example of listExamples) {
 }
 
 
-for (const example of [...badgeExamples, ...chipExamples, ...loading.examples, ...backdrop.examples]) {
+for (const example of [...badgeExamples, ...chipExamples, ...loading.examples, ...backdrop.examples, ...feedbackUnits.flatMap(unit => unit.examples)]) {
   const [component, slug] = example.id.split('/');
   const asset = 'react-' + component + '-' + slug;
   await build({
@@ -928,6 +940,10 @@ const pageViews = [
     description: 'Rich semantic lists, native markers and composed actions' },
   { route: list.apiRoute, view: 'list-api', title: 'React List API',
     description: 'Source-backed React List and ListItem public props' },
+  ...feedbackUnits.flatMap(unit => [
+    { route: unit.showcaseRoute, view: unit.id, title: 'React ' + unit.title, description: 'Native-first feedback presentation' },
+    { route: unit.apiRoute, view: unit.id + '-api', title: 'React ' + unit.title + ' API', description: 'Source-backed React public API' },
+  ]),
   { route: backdrop.showcaseRoute, view: 'backdrop', title: 'React Backdrop', description: 'Decorative local scrim and native modal paint' },
   { route: backdrop.apiRoute, view: 'backdrop-api', title: 'React Backdrop API', description: 'Source-backed native Backdrop presentation props' },
   { route: loading.showcaseRoute, view: 'loading', title: 'React Loading', description: 'Native progress, indicators, structured placeholders and custom loading feedback' },
@@ -1049,6 +1065,7 @@ for (const page of pageViews) {
     image: page.view === 'image' || page.view === 'image-api' ? imageData : null,
     avatar: page.view === 'avatar' || page.view === 'avatar-api' ? avatarData : null,
     list: page.view === 'list' || page.view === 'list-api' ? listData : null,
+    feedback: feedbackUnits.find(unit => [unit.id, unit.id + '-api'].includes(page.view)) ?? null,
     backdrop: ['backdrop', 'backdrop-api'].includes(page.view) ? backdropData : null,
     loading: ['loading', 'loading-api'].includes(page.view) ? loadingData : null,
     chip: page.view === 'chip' || page.view === 'chip-api' ? chipData : null,
@@ -1084,7 +1101,7 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-backdrop-pilot',
+  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-backdrop-status-alert-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
   utilities: [
@@ -1131,6 +1148,12 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
       id: example.id, sourcePath: example.sourcePath, title: example.title,
     })),
   },
+  feedback: feedbackUnits.map(unit => ({
+    id: unit.id, guideRoute: unit.showcaseRoute, apiRoute: unit.apiRoute,
+    publicEntrypoints: unit.publicEntrypoints, sharedSourcePath: unit.sharedSourcePath,
+    frameworkSourcePath: unit.frameworkSourcePath,
+    examples: unit.examples.map(({id, sourcePath}) => ({id, sourcePath})),
+  })),
   backdrop: {
     guideRoute: backdrop.showcaseRoute, apiRoute: backdrop.apiRoute,
     publicEntrypoints: backdrop.publicEntrypoints, sharedSourcePath: backdrop.sharedSourcePath,

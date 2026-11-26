@@ -28,7 +28,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-backdrop-pilot');
+  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-backdrop-status-alert-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -61,6 +61,8 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     'icons/', 'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
     'components/list/', 'api/components/list/',
+    'components/status-indicator/', 'api/components/status-indicator/',
+    'components/alert/', 'api/components/alert/',
     'components/backdrop/', 'api/components/backdrop/',
     'patterns/loading/', 'api/patterns/loading/',
     'components/chip/', 'api/components/chip/',
@@ -3060,4 +3062,22 @@ test('React Backdrop guide reuses the shared playground and preserves an interac
   await expect(scrim).toBeHidden();
   await page.goto('/next/react/api/components/backdrop/');
   await expect(page.getByRole('heading', { name: 'Backdrop API', exact: true })).toBeVisible();
+});
+
+test('Status Indicator and Alert use shared playground with explicit announcement and independent dismissal', async ({page}) => {
+  await page.goto('/next/react/components/status-indicator/');
+  const status = page.locator('[data-vf-docs-component-playground="Status Indicator"]');
+  await expect(status.locator('[data-vf-status-indicator]')).toHaveText('Connected');
+  await status.getByRole('combobox',{name:'Severity'}).selectOption('critical');
+  await expect(status.locator('[data-vf-status-indicator]')).toHaveAttribute('data-vf-feedback-severity','critical');
+  await page.goto('/next/react/components/alert/');
+  const alert = page.locator('[data-vf-docs-component-playground="Alert"]');
+  await alert.getByRole('combobox',{name:'Severity'}).selectOption('critical');
+  await expect(alert.locator('[data-vf-alert-message]')).not.toHaveAttribute('role');
+  await alert.getByRole('radio',{name:'assertive',exact:true}).check();
+  await expect(alert.locator('[data-vf-alert-message]')).toHaveAttribute('role','alert');
+  await alert.getByRole('checkbox',{name:'Dismissible'}).check();
+  await alert.getByRole('button',{name:'Dismiss feedback'}).click();
+  await expect(alert.locator('[data-vf-alert]')).toHaveCount(0);
+  await expect(alert.getByRole('button',{name:'Restore message'})).toBeFocused();
 });

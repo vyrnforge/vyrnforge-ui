@@ -373,6 +373,18 @@
       "browser": "./dist/components/backdrop/browser.js",
       "import": "./dist/components/backdrop/index.js",
       "default": "./dist/components/backdrop/index.js"
+    },
+    "./status-indicator": {
+      "types": "./dist/components/status-indicator/index.d.ts",
+      "browser": "./dist/components/status-indicator/browser.js",
+      "import": "./dist/components/status-indicator/index.js",
+      "default": "./dist/components/status-indicator/index.js"
+    },
+    "./alert": {
+      "types": "./dist/components/alert/index.d.ts",
+      "browser": "./dist/components/alert/browser.js",
+      "import": "./dist/components/alert/index.js",
+      "default": "./dist/components/alert/index.js"
     }
   },
   "dependencies": {
