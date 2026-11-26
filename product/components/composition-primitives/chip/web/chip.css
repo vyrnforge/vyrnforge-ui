@@ -64,6 +64,24 @@
     --_vf-chip-selected-bg: var(--vf-color-danger-background);
     --_vf-chip-selected-border: var(--vf-color-danger-border);
   }
+  :where([data-vf-chip][data-vf-chip-tone="success"]) {
+    --_vf-chip-bg: var(--vf-color-success-background);
+    --_vf-chip-fg: var(--vf-color-success-foreground);
+    --_vf-chip-selected-bg: var(--vf-color-success-background);
+    --_vf-chip-selected-border: var(--vf-color-success-border);
+  }
+  :where([data-vf-chip][data-vf-chip-tone="warning"]) {
+    --_vf-chip-bg: var(--vf-color-warning-background);
+    --_vf-chip-fg: var(--vf-color-warning-foreground);
+    --_vf-chip-selected-bg: var(--vf-color-warning-background);
+    --_vf-chip-selected-border: var(--vf-color-warning-border);
+  }
+  :where([data-vf-chip][data-vf-chip-tone="info"]) {
+    --_vf-chip-bg: var(--vf-color-info-background);
+    --_vf-chip-fg: var(--vf-color-info-foreground);
+    --_vf-chip-selected-bg: var(--vf-color-info-background);
+    --_vf-chip-selected-border: var(--vf-color-info-border);
+  }
   :where([data-vf-chip][data-vf-chip-variant="outlined"]) {
     --_vf-chip-bg: transparent;
     --_vf-chip-fg: var(--vf-color-text);
@@ -74,6 +92,18 @@
   }
   :where([data-vf-chip][data-vf-chip-variant="outlined"][data-vf-chip-tone="danger"]) {
     --_vf-chip-border: var(--vf-color-danger-border);
+  }
+  :where([data-vf-chip][data-vf-chip-variant="outlined"][data-vf-chip-tone="success"]) {
+    --_vf-chip-border: var(--vf-color-success-border);
+    --_vf-chip-fg: var(--vf-color-success-foreground);
+  }
+  :where([data-vf-chip][data-vf-chip-variant="outlined"][data-vf-chip-tone="warning"]) {
+    --_vf-chip-border: var(--vf-color-warning-border);
+    --_vf-chip-fg: var(--vf-color-warning-foreground);
+  }
+  :where([data-vf-chip][data-vf-chip-variant="outlined"][data-vf-chip-tone="info"]) {
+    --_vf-chip-border: var(--vf-color-info-border);
+    --_vf-chip-fg: var(--vf-color-info-foreground);
   }
   :where([data-vf-chip]:has(> [aria-pressed="true"])) {
     --_vf-chip-bg: var(--_vf-chip-selected-bg);

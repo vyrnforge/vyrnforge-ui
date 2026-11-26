@@ -189,7 +189,9 @@ test('Chip shared playground covers old link, artwork, custom removal, wrapping 
   await playground.getByRole('textbox', { name: 'Label' }).fill('Frontend');
   await playground.getByRole('radio', { name: 'link', exact: true }).check();
   await playground.getByRole('radio', { name: 'outlined', exact: true }).check();
-  await playground.getByRole('radio', { name: 'danger', exact: true }).check();
+  await playground.getByRole('combobox', { name: 'Tone' }).selectOption('success');
+  await expect(preview.locator('[data-vf-chip]')).toHaveAttribute('data-vf-chip-tone', 'success');
+  await playground.getByRole('combobox', { name: 'Tone' }).selectOption('danger');
   await playground.getByRole('radio', { name: 'lg', exact: true }).check();
   await playground.getByRole('radio', { name: 'avatar', exact: true }).check();
   await playground.getByRole('checkbox', { name: 'Deletable' }).check();

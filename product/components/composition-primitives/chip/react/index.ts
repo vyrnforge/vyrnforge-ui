@@ -4,7 +4,7 @@ import { Button } from '../button/index.js';
 import { Link } from '../link/index.js';
 import { ToggleButton } from '../toggle-button/index.js';
 
-export type ChipTone = 'neutral' | 'accent' | 'danger';
+export type ChipTone = 'neutral' | 'accent' | 'danger' | 'success' | 'warning' | 'info';
 export type ChipSize = 'sm' | 'md' | 'lg';
 export type ChipVariant = 'filled' | 'outlined';
 
