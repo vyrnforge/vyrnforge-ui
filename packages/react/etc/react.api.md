@@ -157,6 +157,18 @@ export type AlertDialogDismissReason = DialogDismissReason;
 export type AlertDialogDismissRequest = DialogDismissRequest;
 
 // @public (undocumented)
+export const AlertDialogFooter: typeof DialogFooter;
+
+// @public (undocumented)
+export type AlertDialogFooterProps = ComponentProps<typeof AlertDialogFooter>;
+
+// @public (undocumented)
+export const AlertDialogHeader: typeof DialogHeader;
+
+// @public (undocumented)
+export type AlertDialogHeaderProps = ComponentProps<typeof AlertDialogHeader>;
+
+// @public (undocumented)
 export function AlertDialogRoot(props: AlertDialogRootProps): FunctionComponentElement<DialogRootProps & RefAttributes<HTMLDialogElement>>;
 
 // @public (undocumented)
@@ -1484,6 +1496,22 @@ export interface DialogDismissRequest {
 }
 
 // @public (undocumented)
+export function DialogFooter(input: DialogFooterProps): ReactElement;
+
+// @public (undocumented)
+export type DialogFooterProps = HTMLAttributes<HTMLDivElement> & {
+    divider?: boolean;
+};
+
+// @public (undocumented)
+export function DialogHeader(input: DialogHeaderProps): ReactElement;
+
+// @public (undocumented)
+export type DialogHeaderProps = HTMLAttributes<HTMLDivElement> & {
+    divider?: boolean;
+};
+
+// @public (undocumented)
 export const DialogRoot: ForwardRefExoticComponent<DialogRootProps & RefAttributes<HTMLDialogElement>>;
 
 // @public (undocumented)
@@ -1864,6 +1892,18 @@ export const DrawerDescription: typeof DialogDescription;
 
 // @public (undocumented)
 export type DrawerDescriptionProps = ComponentProps<typeof DrawerDescription>;
+
+// @public (undocumented)
+export const DrawerFooter: typeof DialogFooter;
+
+// @public (undocumented)
+export type DrawerFooterProps = ComponentProps<typeof DrawerFooter>;
+
+// @public (undocumented)
+export const DrawerHeader: typeof DialogHeader;
+
+// @public (undocumented)
+export type DrawerHeaderProps = ComponentProps<typeof DrawerHeader>;
 
 // @public (undocumented)
 export type DrawerPlacement = 'start' | 'end' | 'top' | 'bottom';
@@ -4354,6 +4394,54 @@ export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 // @public (undocumented)
 export type TextElement = 'span' | 'p' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote' | 'q' | 'cite' | 'strong' | 'em' | 'small' | 'mark' | 'abbr' | 'sub' | 'sup' | 'del' | 'ins' | 'time' | 'figcaption';
+
+// @public
+export const TextField: ForwardRefExoticComponent<TextFieldProps & RefAttributes<HTMLTextAreaElement | HTMLInputElement>>;
+
+// @public (undocumented)
+export interface TextFieldAppearanceProps {
+    // (undocumented)
+    description?: ReactNode;
+    // (undocumented)
+    error?: string;
+    // (undocumented)
+    fieldSize?: 'sm' | 'md' | 'lg';
+    // (undocumented)
+    fullWidth?: boolean;
+    // (undocumented)
+    label: string;
+    // (undocumented)
+    leading?: ReactNode;
+    // (undocumented)
+    prefix?: string;
+    // (undocumented)
+    status?: 'warning' | 'success';
+    // (undocumented)
+    suffix?: string;
+    // (undocumented)
+    textAlign?: 'start' | 'center' | 'end';
+    // (undocumented)
+    trailing?: ReactNode;
+    // (undocumented)
+    variant?: 'outlined' | 'filled';
+}
+
+// @public (undocumented)
+export type TextFieldInputProps = TextFieldAppearanceProps & Omit<InputProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'type'> & {
+    multiline?: false;
+    type?: 'text' | 'email' | 'url' | 'tel' | 'search' | 'password' | 'number';
+    autosize?: never;
+};
+
+// @public (undocumented)
+export type TextFieldProps = TextFieldInputProps | TextFieldTextareaProps;
+
+// @public (undocumented)
+export type TextFieldTextareaProps = TextFieldAppearanceProps & Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix'> & {
+    multiline: true;
+    type?: never;
+    autosize?: boolean;
+};
 
 // @public (undocumented)
 export type TextProps<Element extends TextElement = TextElement> = Element extends TextElement ? {

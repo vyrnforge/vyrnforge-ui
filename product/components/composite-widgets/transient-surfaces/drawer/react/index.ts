@@ -3,6 +3,8 @@ import {
   DialogBody,
   DialogClose,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogRoot,
   DialogTitle,
   type DialogRootProps,
@@ -18,6 +20,10 @@ export function DrawerRoot({ placement = 'end', ...props }: DrawerRootProps) {
 export const DrawerTitle = DialogTitle;
 export const DrawerDescription = DialogDescription;
 export const DrawerBody = DialogBody;
+export const DrawerHeader = DialogHeader;
+export const DrawerFooter = DialogFooter;
+export type DrawerHeaderProps = ComponentProps<typeof DrawerHeader>;
+export type DrawerFooterProps = ComponentProps<typeof DrawerFooter>;
 export const DrawerClose = DialogClose;
 export type DrawerTitleProps = ComponentProps<typeof DrawerTitle>;
 export type DrawerDescriptionProps = ComponentProps<typeof DrawerDescription>;

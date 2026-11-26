@@ -96,3 +96,15 @@ test('feedback colors are themeable without changing action accent', () => {
   assert.equal(theme.variables['--vf-color-accent-background'], '#8db4ff');
   assert.match(renderThemeCss(theme), /--vf-color-success-foreground: #ffffff;/);
 });
+
+test('TextField component tokens use the existing pure theme authoring path', () => {
+  const theme = createTheme({ name: 'field-brand', tokens: {
+    '--vf-text-field-label-font': '600 1rem/1.5 sans-serif',
+    '--vf-text-field-value-letter-spacing': '0.03em',
+    '--vf-text-field-radius': '0.75rem',
+  } });
+  assert.match(renderThemeCss(theme), /--vf-text-field-label-font: 600 1rem\/1.5 sans-serif;/);
+  assert.match(renderThemeCss(theme), /--vf-text-field-radius: 0.75rem;/);
+  assert.equal(createTheme({ name: 'field-derived', base: theme }).variables['--vf-text-field-radius'], '0.75rem');
+  assert.throws(() => createTheme({ name: 'field-invalid', tokens: { '--vf-text-field-not-public': 'red' } }), /Not a public CSS token/);
+});

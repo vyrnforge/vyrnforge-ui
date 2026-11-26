@@ -5,7 +5,7 @@ import ts from 'typescript';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeConfiguration, defaultsFor } from '../../playground-config.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground } from '../../react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from '../../react-playground-adapters.mjs';
 
 test('Button playground keeps configuration, interaction and generated usage synchronized', async ({ page }) => {
   await page.goto('/next/react/components/button/');
@@ -155,6 +155,9 @@ test('Generated playground examples typecheck and bundle against installed publi
     [loadingPlayground, {}], [loadingPlayground, { presentation: 'progress', value: 72 }],
     [loadingPlayground, { presentation: 'placeholder', shape: 'circle' }], [loadingPlayground, { presentation: 'custom' }],
     [backdropPlayground, {}], [backdropPlayground, { hidden: true, opacity: 0.5 }],
+    [inputPlayground, { type: 'email', required: true }], [textareaPlayground, { rows: '5', invalid: true }],
+    [textFieldPlayground, {}], [textFieldPlayground, { multiline: true, autosize: true, fieldSize: 'lg', error: 'Try again' }],
+    [textFieldPlayground, { leadingIcon: true, prefix: '$', variant: 'filled', fullWidth: true }],
   ];
   const generated = new Map(scenarios.map(([adapter, patch], index) => [
     path.join(root, 'apps/docs', 'generated-playground-' + index + '.tsx'),
@@ -318,4 +321,30 @@ test('Checkbox presentations preserve naming and label activation', async ({ pag
   await expect(control).toBeChecked();
   await expect(source).toContainText('aria-describedby={descriptionId}');
   await playground.screenshot({ path: testInfo.outputPath('checkbox-composed-label.png') });
+});
+
+test('TextField playground uses native public components and focused import-only source', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/text-field/');
+  const playground = page.locator('[data-vf-docs-component-playground="TextField"]');
+  const preview = playground.getByRole('region', { name: 'TextField preview' });
+  const source = playground.getByRole('region', { name: 'Generated React usage' });
+  await expect(preview.getByRole('textbox', { name: 'Display name' })).toBeVisible();
+  await playground.getByRole('button', { name: 'Invalid', exact: true }).click();
+  await expect(preview.getByRole('textbox')).toHaveAttribute('aria-invalid', 'true');
+  await expect(source).toContainText('error="Choose a different display name."');
+  await playground.getByRole('checkbox', { name: 'Multiline', exact: true }).check();
+  await expect(preview.locator('textarea[data-vf-textarea]')).toBeVisible();
+  await expect(source).toContainText('multiline');
+  await expect(source).not.toContainText(/styles\/|useState|<Flow/);
+  for (const width of [1440, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const theme of ['light', 'dark']) {
+      await page.evaluate(theme => { document.documentElement.dataset.vfTheme = theme; }, theme);
+      await playground.screenshot({ path: testInfo.outputPath('text-field-playground-' + width + '-' + theme + '.png') });
+    }
+  }
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+  await playground.screenshot({ path: testInfo.outputPath('text-field-playground-rtl-forced.png') });
+  expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
 });

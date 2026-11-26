@@ -1,5 +1,4 @@
 import { Textarea } from '@vyrnforge/react/textarea';
-import '@vyrnforge/web/styles/textarea.css';
 
 export function Example() {
   return (

@@ -5,6 +5,8 @@ import type {
   DialogDismissReason,
   DialogDismissRequest,
   DialogRootProps,
+  DialogFooterProps,
+  DialogHeaderProps,
   DialogTitleProps,
 } from '@vyrnforge/react/dialog';
 
@@ -23,4 +25,6 @@ const reasons: DialogDismissReason[] = ['escape', 'backdrop', 'close-control'];
 const accept = (request: DialogDismissRequest) => request.defaultPrevented;
 // @ts-expect-error Unsupported dismissal reasons are not public API.
 const invalidReason: DialogDismissReason = 'outside-click';
-void [root, title, description, body, close, reasons, accept, invalidReason];
+const header: DialogHeaderProps = { divider: true, children: 'Header' };
+const footer: DialogFooterProps = { children: 'Footer' };
+void [header, footer, root, title, description, body, close, reasons, accept, invalidReason];

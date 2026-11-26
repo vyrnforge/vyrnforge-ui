@@ -1,4 +1,4 @@
-import { darkThemeOverrides, runtimeTokenDefaults } from './source.mjs';
+import { componentThemeTokens, darkThemeOverrides, runtimeTokenDefaults } from './source.mjs';
 
 function declarations(tokens, indent = '    ') {
   return Object.entries(tokens).map(([name, value]) => `${indent}${name}: ${value};`).join('\n');
@@ -26,6 +26,6 @@ export const themeDefaults = ${JSON.stringify({ light, dark: darkThemeOverrides 
 
 export const themeableColorRoles = ${JSON.stringify(names, null, 2)} as const;
 
-export const publicRuntimeTokens = ${JSON.stringify(Object.keys(runtimeTokenDefaults), null, 2)} as const;
+export const publicRuntimeTokens = ${JSON.stringify([...Object.keys(runtimeTokenDefaults), ...componentThemeTokens], null, 2)} as const;
 `;
 }

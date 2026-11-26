@@ -1,0 +1,13 @@
+{
+  "id": "feedback-composition/confirmation-result",
+  "title": "Confirmation and durable result",
+  "description": "Native AlertDialog for a decision and persistent feedback after the demonstration commits.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

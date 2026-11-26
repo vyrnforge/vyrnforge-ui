@@ -65,6 +65,9 @@ export const browserFixture = {
       const profileJs = profileBuild.outputFiles.find((file) => file.path.endsWith('.js'))?.text;
       const profileCss = profileBuild.outputFiles.find((file) => file.path.endsWith('.css'))?.text ?? '';
       if (!profileJs) throw new Error('Profile fixture client bundle was not generated');
+      for (const hook of ['data-vf-input', 'data-vf-textarea', 'data-vf-button']) {
+        if (!profileCss.includes(hook)) throw new Error('Missing automatic React browser CSS for ' + hook);
+      }
       const safeProfileJs = profileJs.replaceAll('</script', '<\\/script');
       await writeFile(path.join(outDir, 'react-profile.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Profile form fixture</title><style>${profileCss}</style></head><body><main><h1>STD-06 profile form fixture</h1><div id="profile-app"></div></main><script>${safeProfileJs}</script></body></html>`);
     }

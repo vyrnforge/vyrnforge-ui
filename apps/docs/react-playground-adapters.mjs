@@ -1,3 +1,6 @@
+import { Input } from '@vyrnforge/react/input';
+import { Textarea } from '@vyrnforge/react/textarea';
+import { TextField } from '@vyrnforge/react/text-field';
 import { createElement as h, useId, useState, useEffect, useRef } from 'react';
 import { Button } from '@vyrnforge/react/button';
 import { Checkbox } from '@vyrnforge/react/checkbox';
@@ -8,6 +11,11 @@ import { Chip } from '@vyrnforge/react/chip';
 import { Backdrop } from '@vyrnforge/react/backdrop';
 import { StatusIndicator } from '@vyrnforge/react/status-indicator';
 import { Alert } from '@vyrnforge/react/alert';
+import { DialogHeader, DialogBody, DialogFooter, DialogRoot, DialogTitle, DialogDescription, DialogClose } from '@vyrnforge/react/dialog';
+import { AlertDialogHeader, AlertDialogBody, AlertDialogFooter, AlertDialogRoot, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from '@vyrnforge/react/alert-dialog';
+import { DrawerHeader, DrawerBody, DrawerFooter, DrawerRoot, DrawerTitle, DrawerDescription, DrawerClose } from '@vyrnforge/react/drawer';
+import { ToastViewport, ToastRoot, ToastTitle, ToastDescription, ToastClose } from '@vyrnforge/react/toast';
+
 import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Divider } from '@vyrnforge/react/divider';
@@ -497,5 +505,177 @@ export const alertPlayground = {
       attribute('announcement', config.announcement, 'none'), config.heading ? attribute('heading', config.heading) : '',
       config.dismissible ? 'dismiss={{ label: "Dismiss feedback", onDismiss }}' : ''], content(config.message || 'Your changes remain available.'));
     return snippet([importLine('Alert', 'alert')], jsx, config.dismissible ? { signature: '{ onDismiss }: { onDismiss: () => void }' } : {});
+  },
+};
+
+const modalParts = {
+  dialog: [DialogRoot, DialogHeader, DialogBody, DialogFooter, DialogTitle, DialogDescription, DialogClose],
+  'alert-dialog': [AlertDialogRoot, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction],
+  drawer: [DrawerRoot, DrawerHeader, DrawerBody, DrawerFooter, DrawerTitle, DrawerDescription, DrawerClose],
+};
+const modalNames = {
+  dialog: ['DialogRoot', 'DialogHeader', 'DialogBody', 'DialogFooter', 'DialogTitle', 'DialogDescription', 'DialogClose'],
+  'alert-dialog': ['AlertDialogRoot', 'AlertDialogHeader', 'AlertDialogBody', 'AlertDialogFooter', 'AlertDialogTitle', 'AlertDialogDescription', 'AlertDialogCancel', 'AlertDialogAction'],
+  drawer: ['DrawerRoot', 'DrawerHeader', 'DrawerBody', 'DrawerFooter', 'DrawerTitle', 'DrawerDescription', 'DrawerClose'],
+};
+function modalAdapter(id) {
+  const required = id === 'alert-dialog';
+  const edge = id === 'drawer';
+  const [Root, Header, Body, Footer, Title, Description, Close, Action] = modalParts[id];
+  const [rootName, headerName, bodyName, footerName, titleName, descriptionName, closeName, actionName] = modalNames[id];
+  function Preview({ config }) {
+    const [open, setOpen] = useState(false);
+    const descriptionId = useId();
+    const props = { open, onOpenChange: setOpen, descriptionId,
+      ...(!required ? { backdropDismiss: config.backdropDismiss } : {}),
+      ...(edge ? { placement: config.placement } : {}) };
+    const title = h(Title, null, config.title || 'Details');
+    const description = h(Description, { id: descriptionId }, config.message || 'Review this information.');
+    const close = h(Close, { autoFocus: required || undefined, 'data-vf-button': '', 'data-vf-variant': 'secondary' }, required ? 'Cancel' : 'Close');
+    const action = required ? h(Action, { 'data-vf-button': '' }, 'Confirm example') : null;
+    return h(Flow, { gap: 'sm' },
+      h(Button, { type: 'button', onClick: () => setOpen(true) }, 'Open ' + id.replace('-', ' ')),
+      h(Root, props,
+        config.header ? h(Header, { divider: config.dividers }, title, description) : title,
+        config.header ? null : description,
+        h(Body, config.longContent ? { tabIndex: 0, role: 'region', 'aria-label': 'Details' } : null, config.longContent ? Array.from({ length: 24 }, (_, index) =>
+          h('p', { key: index }, 'Additional details ' + (index + 1))) : 'Task content'),
+        config.footer ? h(Footer, { divider: config.dividers }, close, action) : close,
+        config.footer ? null : action));
+  }
+  return {
+    fields: [text('title', 'Title', required ? 'Review this decision' : 'Details'),
+      text('message', 'Description', 'Review this information before continuing.'),
+      { ...bool('header', 'Header'), default: true }, { ...bool('footer', 'Footer'), default: true },
+      bool('dividers', 'Section dividers'), bool('longContent', 'Long content'),
+      ...(!required ? [bool('backdropDismiss', 'Backdrop dismissal')] : []),
+      ...(edge ? [choice('placement', 'Placement', 'end', ['start', 'end', 'top', 'bottom'])] : [])],
+    Preview,
+    source(config) {
+      return ["import { useId, useState } from 'react';", importLine(modalNames[id].filter(name => (config.header || name !== headerName) && (config.footer || name !== footerName)).join(', '), id),
+        importLine('Button', 'button'), importLine('Flow', 'layout'), '',
+        'export default function Example() {', '  const [open, setOpen] = useState(false);', '  const descriptionId = useId();',
+        '  return (', '    <Flow gap="sm">', '      <Button type="button" onClick={() => setOpen(true)}>Open ' + id.replace('-', ' ') + '</Button>',
+        '      <' + rootName + ' open={open} onOpenChange={setOpen} descriptionId={descriptionId}' +
+          (!required && config.backdropDismiss ? ' backdropDismiss' : '') + (edge && config.placement !== 'end' ? ' placement=' + quoted(config.placement) : '') + '>',
+        ...(config.header ? ['        <' + headerName + (config.dividers ? ' divider' : '') + '>'] : []),
+        (config.header ? '          <' : '        <') + titleName + '>' + content(config.title || 'Details') + '</' + titleName + '>',
+        (config.header ? '          <' : '        <') + descriptionName + ' id={descriptionId}>' + content(config.message || 'Review this information.') + '</' + descriptionName + '>',
+        ...(config.header ? ['        </' + headerName + '>'] : []),
+        '        <' + bodyName + (config.longContent ? ' tabIndex={0} role="region" aria-label="Details"' : '') + '>',
+        config.longContent ? '          {Array.from({ length: 24 }, (_, index) => <p key={index}>Additional details {index + 1}</p>)}' : '          Task content',
+        '        </' + bodyName + '>',
+        ...(config.footer ? ['        <' + footerName + (config.dividers ? ' divider' : '') + '>'] : []),
+        (config.footer ? '          <' : '        <') + closeName + (required ? ' autoFocus' : '') + ' data-vf-button="" data-vf-variant="secondary">' + (required ? 'Cancel' : 'Close') + '</' + closeName + '>',
+        ...(required ? [(config.footer ? '          <' : '        <') + actionName + ' data-vf-button="">Confirm example</' + actionName + '>'] : []),
+        ...(config.footer ? ['        </' + footerName + '>'] : []), '      </' + rootName + '>', '    </Flow>', '  );', '}'].join('\n');
+    },
+  };
+}
+export const dialogPlayground = modalAdapter('dialog');
+export const alertDialogPlayground = modalAdapter('alert-dialog');
+export const drawerPlayground = modalAdapter('drawer');
+function ToastPreview({config}) {
+  const [open,setOpen] = useState(false);
+  return h(Flow,{gap:'sm'},
+    h(Button,{type:'button',onClick:()=>setOpen(true)},'Show notification'),
+    h(ToastViewport,{style:{position:'static',inlineSize:'100%'}},
+      h(ToastRoot,{open,onOpenChange:setOpen,duration:config.persistent ? 0 : config.duration},
+        h(ToastTitle,null,config.title || 'Saved'),
+        h(ToastDescription,null,config.message || 'Preferences are up to date.'),
+        h(ToastClose,{'aria-label':'Dismiss notification'},'×'))));
+}
+export const toastPlayground = {
+  fields:[text('title','Title','Saved'),text('message','Message','Preferences are up to date.'),bool('persistent','Persistent'),
+    {kind:'number',key:'duration',label:'Duration (ms)',default:5000,min:1000,max:15000,step:500,available:c=>!c.persistent}],
+  Preview:ToastPreview,
+  source(config) {
+    return ["import { useState } from 'react';",importLine('ToastViewport, ToastRoot, ToastTitle, ToastDescription, ToastClose','toast'),
+      importLine('Button','button'),importLine('Flow','layout'),'','export default function Example() {',
+      '  const [open,setOpen] = useState(false);','  return <Flow gap="sm">',
+      '    <Button type="button" onClick={() => setOpen(true)}>Show notification</Button>',
+      '    <ToastViewport style={{ position: "static", inlineSize: "100%" }}>',
+      '      <ToastRoot open={open} onOpenChange={setOpen} duration={' + (config.persistent ? 0 : config.duration) + '}>',
+      '        <ToastTitle>' + content(config.title || 'Saved') + '</ToastTitle>',
+      '        <ToastDescription>' + content(config.message || 'Preferences are up to date.') + '</ToastDescription>',
+      '        <ToastClose aria-label="Dismiss notification">×</ToastClose>','      </ToastRoot>','    </ToastViewport>','  </Flow>;','}'].join('\n');
+  },
+};
+
+const fieldModes = ['text', 'email', 'url', 'tel', 'search', 'password', 'number'];
+function nativeFieldAdapter(multiline) {
+  const name = multiline ? 'Textarea' : 'Input';
+  const Component = multiline ? Textarea : Input;
+  const fieldProps = config => ({
+    placeholder: config.placeholder, disabled: config.disabled, readOnly: config.readOnly, required: config.required,
+    defaultValue: config.initial, 'aria-invalid': config.invalid || undefined,
+    ...(multiline ? { rows: Number(config.rows) } : { type: config.type }),
+  });
+  return {
+    fields: [text('label', 'Label', multiline ? 'Notes' : 'Email address'),
+      text('placeholder', 'Placeholder', multiline ? 'Add a note' : 'name@example.com'),
+      text('initial', 'Initial value', ''), ...(multiline ? [choice('rows', 'Rows', '3', ['2','3','5'])] : [choice('type', 'Type', 'text', fieldModes)]),
+      bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'), bool('required', 'Required'), bool('invalid', 'Invalid')],
+    Preview({ config }) {
+      const id = useId();
+      return h(Flow, { gap: 'xs' },
+        h('label', { htmlFor: id }, label(config, name)),
+        h(Component, { ...fieldProps(config), id, key: JSON.stringify([config.type, config.initial]) }));
+    },
+    source(config) {
+      const control = markup(name, ['id="field"', attribute('placeholder', config.placeholder, ''), attribute('defaultValue', config.initial, ''),
+        multiline ? 'rows={' + Number(config.rows) + '}' : attribute('type', config.type, 'text'),
+        flag('disabled', config.disabled), flag('readOnly', config.readOnly), flag('required', config.required),
+        config.invalid ? 'aria-invalid="true"' : '']);
+      return snippet([importLine(name, name.toLowerCase())],
+        '<>\n  <label htmlFor="field">' + content(label(config, name)) + '</label>\n' + indent(control, 2) + '\n</>');
+    },
+  };
+}
+export const inputPlayground = nativeFieldAdapter(false);
+export const textareaPlayground = nativeFieldAdapter(true);
+function textFieldProps(config) {
+  return {
+    label: label(config, 'Text field'), placeholder: config.placeholder, description: config.description || undefined,
+    error: config.error || undefined, variant: config.variant,
+    fieldSize: config.fieldSize === 'inherit' ? undefined : config.fieldSize, fullWidth: config.fullWidth,
+    textAlign: config.textAlign, disabled: config.disabled, readOnly: config.readOnly, required: config.required,
+    prefix: config.prefix || undefined, suffix: config.suffix || undefined,
+    status: config.status === 'none' ? undefined : config.status,
+    ...(config.multiline ? { multiline: true, rows: 3, autosize: config.autosize } : { type: config.type }),
+    ...(config.leadingIcon ? { leading: h(Icon, { icon: userIcon }) } : {}),
+  };
+}
+export const textFieldPlayground = {
+  fields: [
+    text('label', 'Label', 'Display name'), text('placeholder', 'Placeholder', 'Your name'),
+    text('description', 'Helper text', 'Shown to your teammates.'), text('error', 'Error message', ''),
+    choice('variant', 'Variant', 'outlined', ['outlined', 'filled']),
+    choice('fieldSize', 'Field size', 'inherit', ['inherit', 'sm', 'md', 'lg']),
+    choice('type', 'Type', 'text', fieldModes), choice('textAlign', 'Text alignment', 'start', ['start', 'center', 'end']),
+    choice('status', 'Feedback', 'none', ['none', 'warning', 'success']),
+    text('prefix', 'Prefix', ''), text('suffix', 'Suffix', ''),
+    bool('leadingIcon', 'Leading icon'), bool('fullWidth', 'Full width'),
+    bool('multiline', 'Multiline'), bool('autosize', 'Autosize'), bool('required', 'Required'),
+    bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'),
+  ],
+  presets: [
+    { label: 'Amount', values: { label: 'Amount in USD', prefix: '$', textAlign: 'end', description: 'Enter a decimal amount.' } },
+    { label: 'Invalid', values: { error: 'Choose a different display name.', variant: 'filled' } },
+  ],
+  Preview({ config }) {
+    return h(TextField, { ...textFieldProps(config), key: config.multiline ? 'multi' : config.type });
+  },
+  source(config) {
+    const p = textFieldProps(config);
+    return snippet([importLine('TextField', 'text-field'), ...(config.leadingIcon ? iconImports('userIcon', 'user') : [])],
+      markup('TextField', [attribute('label', p.label, ''), attribute('placeholder', config.placeholder, ''),
+        attribute('description', config.description, ''), attribute('error', config.error, ''),
+        attribute('variant', config.variant, 'outlined'), attribute('fieldSize', config.fieldSize, 'inherit'),
+        config.multiline ? 'multiline' : attribute('type', config.type, 'text'), config.multiline ? 'rows={3}' : '',
+        flag('autosize', config.multiline && config.autosize), attribute('textAlign', config.textAlign, 'start'),
+        attribute('status', config.status, 'none'), attribute('prefix', config.prefix, ''), attribute('suffix', config.suffix, ''),
+        config.leadingIcon ? 'leading={<Icon icon={userIcon} />}' : '',
+        flag('fullWidth', config.fullWidth), flag('required', config.required), flag('disabled', config.disabled), flag('readOnly', config.readOnly)]));
   },
 };

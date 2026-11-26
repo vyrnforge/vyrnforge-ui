@@ -1,0 +1,7 @@
+{
+  "id": "empty-state",
+  "name": "Empty State",
+  "documentation": {
+    "group": "feedback-status"
+  }
+}

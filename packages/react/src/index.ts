@@ -19,8 +19,8 @@ export { Button } from './components/button/index.js';
 export type { ButtonProps, ButtonSize, ButtonVariant } from './components/button/index.js';
 export { Checkbox } from './components/checkbox/index.js';
 export type { CheckboxProps } from './components/checkbox/index.js';
-export { DialogBody, DialogClose, DialogDescription, DialogRoot, DialogTitle } from './components/dialog/index.js';
-export type { DialogBodyProps, DialogCloseProps, DialogDescriptionProps, DialogDismissReason, DialogDismissRequest, DialogRootProps, DialogTitleProps } from './components/dialog/index.js';
+export { DialogBody, DialogHeader, DialogFooter, DialogClose, DialogDescription, DialogRoot, DialogTitle } from './components/dialog/index.js';
+export type { DialogBodyProps, DialogHeaderProps, DialogFooterProps, DialogCloseProps, DialogDescriptionProps, DialogDismissReason, DialogDismissRequest, DialogRootProps, DialogTitleProps } from './components/dialog/index.js';
 export { FileInput } from './components/file-input/index.js';
 export type { FileInputProps } from './components/file-input/index.js';
 export { Icon, SvgIcon, createSvgIcon } from './components/icon/index.js';
@@ -88,3 +88,5 @@ export * from './components/loading/index.js';
 export * from './components/backdrop/index.js';
 export * from './components/status-indicator/index.js';
 export * from './components/alert/index.js';
+
+export * from './components/text-field/index.js';

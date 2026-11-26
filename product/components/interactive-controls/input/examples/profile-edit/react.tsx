@@ -3,9 +3,6 @@ import type { FormEvent } from 'react';
 import { Button } from '@vyrnforge/react/button';
 import { Input } from '@vyrnforge/react/input';
 import { Textarea } from '@vyrnforge/react/textarea';
-import '@vyrnforge/web/styles/button.css';
-import '@vyrnforge/web/styles/input.css';
-import '@vyrnforge/web/styles/textarea.css';
 
 type Locale = 'en' | 'id';
 type Profile = {

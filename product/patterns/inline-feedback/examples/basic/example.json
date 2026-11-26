@@ -1,0 +1,18 @@
+{
+  "id": "inline-feedback/basic",
+  "title": "Inline Feedback example",
+  "description": "Inline feedback belongs beside the affected field or task. Use native associations and existing controls; do not promote local validation into a toast, banner or modal.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

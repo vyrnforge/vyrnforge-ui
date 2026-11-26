@@ -129,3 +129,26 @@ test('compact Input preserves width and access at 320px with 200% text', async (
   await page.keyboard.press('Tab');
   await expect(page.locator('#readonly')).toBeFocused();
 });
+
+
+test('Input keeps disabled presentation authoritative when application invalid state remains', async ({ page }) => {
+  await page.goto(`/components/input/${port}.html`);
+  const disabled = page.locator('#disabled');
+  for (const forcedColors of ['none', 'active']) {
+    await page.emulateMedia({ forcedColors });
+    const before = await disabled.evaluate((node) => getComputedStyle(node).borderColor);
+    await disabled.evaluate((node) => node.setAttribute('aria-invalid', 'true'));
+    await expect(disabled).toBeDisabled();
+    await expect(disabled).toHaveAttribute('aria-invalid', 'true');
+    await expect.poll(() => disabled.evaluate((node) => getComputedStyle(node).borderColor)).toBe(before);
+    await disabled.evaluate((node) => node.removeAttribute('aria-invalid'));
+  }
+});
+
+test('Input native reset restores the authored default value', async ({ page }) => {
+  await page.goto(`/components/input/${port}.html`);
+  const editable = page.locator('#editable');
+  await editable.fill('changed');
+  await page.locator('#form').evaluate((form) => form.reset());
+  await expect(editable).toHaveValue('alpha');
+});
