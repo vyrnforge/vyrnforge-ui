@@ -36,7 +36,8 @@ test('Chip preserves logical order, wrapping, themes and motion preference', asy
     }, theme);
     const action = await page.getByRole('button', { name: 'React', exact: true }).boundingBox();
     const remove = await page.getByRole('button', { name: 'Remove React' }).boundingBox();
-    expect(remove.x).toBeLessThan(action.x);
+    // The primary now covers the whole Chip; removal overlays its logical end.
+    expect(remove.x + remove.width / 2).toBeLessThan(action.x + action.width / 2);
     await expect(page.locator('#long')).toContainText('available to assistive technology');
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(321);
   }
@@ -111,6 +112,7 @@ test('default removal mark has independent geometry and contrast across tones an
       expect(item.width).toBeLessThan(item.targetWidth);
       expect(item.targetWidth).toBeGreaterThanOrEqual(24);
       expect(item.targetHeight).toBeGreaterThanOrEqual(24);
+      expect(item.targetWidth).toBe(item.targetHeight);
       expect(item.circleContrast, item.id + ' circle contrast: ' + item.colors.join(' / ')).toBeGreaterThanOrEqual(3);
       expect(item.inkContrast, item.id + ' mark contrast: ' + item.colors.join(' / ')).toBeGreaterThanOrEqual(3);
     }
@@ -136,4 +138,44 @@ test('default removal mark has independent geometry and contrast across tones an
   await expect(page.locator('#filter [data-vf-chip-default-remove]')).toHaveCSS('forced-color-adjust', 'none');
   await expect(page.locator('#filter [data-vf-chip-default-remove]')).toHaveCSS('transition-duration', '0s');
   await page.screenshot({ path: testInfo.outputPath('chip-removal-circle-forced-colors.png'), fullPage: true });
+});
+
+
+test('Chip removal is a localized target; all remaining primary surface is actionable in LTR and RTL', async ({ page }) => {
+  await page.setViewportSize({ width: 640, height: 720 });
+  await page.goto(url);
+  const chip = page.locator('#filter');
+  await chip.evaluate(el => {
+    el.setAttribute('data-vf-chip-size', 'lg');
+    el.setAttribute('data-vf-chip-wrap', '');
+    el.style.inlineSize = '12rem';
+    el.querySelector('[data-vf-chip-label]').textContent = 'Long selected category with enough text to wrap across several lines';
+    el.dataset.primaryClicks = '0';
+    el.dataset.removeClicks = '0';
+    el.querySelector('[data-vf-chip-primary]').addEventListener('click', () => { el.dataset.primaryClicks = String(Number(el.dataset.primaryClicks) + 1); });
+    el.querySelector('[data-vf-chip-remove]').addEventListener('click', () => { el.dataset.removeClicks = String(Number(el.dataset.removeClicks) + 1); });
+  });
+  for (const direction of ['ltr', 'rtl']) {
+    await page.locator('html').evaluate((el, value) => { el.dir = value; }, direction);
+    const primary = await chip.locator('[data-vf-chip-primary]').boundingBox();
+    const remove = await chip.locator('[data-vf-chip-remove]').boundingBox();
+    const mark = await chip.locator('[data-vf-chip-default-remove]').boundingBox();
+    expect(primary.height).toBeGreaterThan(remove.height + 4);
+    expect(primary.x).toBeLessThanOrEqual(remove.x);
+    expect(primary.x + primary.width).toBeGreaterThanOrEqual(remove.x + remove.width);
+    expect(remove.width).toBe(remove.height);
+    expect(remove.width).toBeGreaterThanOrEqual(24);
+    expect(remove.width).toBeLessThan(primary.width);
+    await chip.evaluate(el => { el.dataset.primaryClicks = '0'; el.dataset.removeClicks = '0'; });
+    const x = remove.x + remove.width / 2;
+    // Trailing space above and below the close target belongs to the primary.
+    await page.mouse.click(x, primary.y + 2);
+    await page.mouse.click(x, primary.y + primary.height - 2);
+    await page.mouse.click(primary.x + primary.width / 2, primary.y + primary.height / 2);
+    await expect(chip).toHaveAttribute('data-primary-clicks', '3');
+    await expect(chip).toHaveAttribute('data-remove-clicks', '0');
+    await page.mouse.click(mark.x + mark.width / 2, mark.y + mark.height / 2);
+    await expect(chip).toHaveAttribute('data-remove-clicks', '1');
+    await expect(chip).toHaveAttribute('data-primary-clicks', '3');
+  }
 });

@@ -17,6 +17,8 @@ import { ThemeBuilder } from './react-theme-builder.mjs';
 import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
+import { ComponentPlayground } from './react-component-playground.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -476,8 +478,9 @@ function buttonUsageGuide(button, links) {
     })),
     { id: 'react-reference', heading: 'Related components and API' },
   ];
+  const playgroundSection = { id: 'react-button-playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc([sections[0], playgroundSection, ...sections.slice(1)]),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-component': 'button' },
       guideHeader(button.sharedContent, 'React · Components · Actions', button.standardReferences),
@@ -486,6 +489,7 @@ function buttonUsageGuide(button, links) {
         h('p', { key: 'shared-setup' }, 'For shared styling and server-rendering setup, see ',
           h(Link, { href: links.home }, 'React overview'), '.'),
       ]),
+      guidePart(playgroundSection, [h(ComponentPlayground, { adapter: buttonPlayground, title: 'Button' })]),
       ...sections.slice(1, -1).map((section) => {
         const heading = section.sourceHeading;
         const demonstrations = heading === 'When to use' ? mainExample :
@@ -570,8 +574,9 @@ function toggleUsage(toggle, links, group = false) {
     topics.push({ id: prefix + 'related', heading: 'Related controls and grouping', sourceHeading: 'Related controls and grouping', blocks: [] });
   }
   const sections = [{ id: prefix + 'setup', heading: 'Get started' }, ...topics];
+  const playgroundSection = { id: prefix + 'playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(group ? sections : [sections[0], playgroundSection, ...sections.slice(1)]),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       [group ? 'data-vf-docs-react-toggle-group' : 'data-vf-docs-react-toggle']: '' },
       guideHeader(toggle.sharedContent, 'React · Components · Actions', toggle.standardReferences),
@@ -579,6 +584,7 @@ function toggleUsage(toggle, links, group = false) {
         ...guideBlocks(toggle.frameworkContent, 'React setup'),
         ...(group ? guideBlocks(toggle.frameworkContent, 'Selection state') : []),
       ]),
+      ...(!group ? [guidePart(playgroundSection, [h(ComponentPlayground, { adapter: togglePlayground, title: 'ToggleButton' })])] : []),
       ...topics.map((section) => {
         const heading = section.sourceHeading;
         const examples = toggle.examples.filter((example) => example.documentationSection === heading ||
@@ -605,12 +611,15 @@ function selectionGuide(unit, links) {
   const routeLinks = links.selection[unit.id];
   const topics = visibleGuideSections(unit.sharedContent.sections, unit.examples).map(section => ({ ...section, id: prefix + slug(section.heading) }));
   const sections = [...(unit.frameworkContent ? [{ id: prefix + 'setup', heading: 'Get started' }] : []), ...topics];
+  const adapter = unit.id === 'checkbox' ? checkboxPlayground : unit.id === 'radio' ? radioPlayground : null;
+  const playgroundSection = { id: prefix + 'playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(adapter ? [sections[0], playgroundSection, ...sections.slice(1)] : sections),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-selection': unit.id },
       guideHeader(unit.sharedContent, unit.guideOnly ? 'React · Patterns · Forms' : 'React · Components · Forms', unit.standardReferences),
       ...(unit.frameworkContent ? [guidePart(sections[0], guideBlocks(unit.frameworkContent, 'React setup'))] : []),
+      ...(adapter ? [guidePart(playgroundSection, [h(ComponentPlayground, { adapter, title: unit.title })])] : []),
       ...topics.map(section => guidePart(section, [
         ...renderBlocks(section.blocks),
         ...guideBlocks(unit.frameworkContent, section.heading),
@@ -804,14 +813,16 @@ function listUsage(list, links) {
     { id: 'react-list-design', heading: 'Composition and variants' },
     { id: 'react-list-related', heading: 'API and related components' },
   ];
+  const playgroundSection = { id: 'react-list-playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, {
+    guideToc([sections[0], playgroundSection, ...sections.slice(1)], {
       label: 'List', examples: list.examples, getId: (example) => 'react-list-example-' + example.id.slice('list/'.length),
     }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-list': '' },
       guideHeader(list.sharedContent, 'React · Collections', list.standardReferences),
       guidePart(sections[0], [...guideBlocks(list.frameworkContent, 'React setup')]),
+      guidePart(playgroundSection, [h(ComponentPlayground, { adapter: listPlayground, title: 'List' })]),
       guidePart(sections[1], [
         ...list.examples.map(example => listExample(example, links)),
       ]),
@@ -873,12 +884,13 @@ function compactExample(example, links, component = 'badge', topicHeading = '') 
 function chipUsage(chip, links) {
   if (!chip?.sharedContent || !chip?.frameworkContent || !chip.examples?.length) return null;
   const exampleOrder = ['basic', 'clickable', 'deletable', 'action-removal', 'links', 'custom-delete',
-    'selection', 'artwork', 'icon', 'appearance', 'sizes', 'multiline', 'array', 'removal', 'playground'];
+    'selection', 'artwork', 'icon', 'appearance', 'sizes', 'multiline', 'array', 'removal'];
   const examples = [...chip.examples].sort((a, b) => exampleOrder.indexOf(a.id.split('/')[1]) - exampleOrder.indexOf(b.id.split('/')[1]));
   const topics = chip.sharedContent.sections.filter(section =>
-    examples.some(example => example.documentationSection === section.heading));
+    section.heading !== 'Playground' && examples.some(example => example.documentationSection === section.heading));
   const sections = [
     { id: 'react-chip-setup', heading: 'Get started' },
+    { id: 'react-chip-playground', heading: 'Playground' },
     ...topics.map(section => ({ id: 'react-chip-' + slug(section.heading), heading: section.heading })),
     { id: 'react-chip-related', heading: 'Related components and API' },
   ];
@@ -888,7 +900,9 @@ function chipUsage(chip, links) {
       'data-vf-docs-react-chip': '' },
       guideHeader(chip.sharedContent, 'React · Metadata and interaction', chip.standardReferences),
       guidePart(sections[0], [...guideBlocks(chip.frameworkContent, 'React setup')]),
-      ...sections.slice(1, -1).map(section => guidePart(section, [
+      guidePart(sections[1], [...guideBlocks(chip.sharedContent, 'Playground'),
+        h(ComponentPlayground, { adapter: chipPlayground, title: 'Chip' })]),
+      ...sections.slice(2, -1).map(section => guidePart(section, [
         ...guideBlocks(chip.sharedContent, section.heading),
         ...examples.filter(example => example.documentationSection === section.heading)
           .map(example => compactExample(example, links, 'chip', section.heading)),
@@ -923,14 +937,16 @@ function badgeUsage(badge, links) {
     { id: 'react-badge-guidelines', heading: 'Behavior and usage' },
     { id: 'react-badge-related', heading: 'Related components and API' },
   ];
+  const playgroundSection = { id: 'react-badge-playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, {
+    guideToc([sections[0], playgroundSection, ...sections.slice(1)], {
       label: 'Badge', examples: badge.examples, getId: (example) => 'react-badge-example-' + example.id.slice('badge/'.length),
     }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-badge': '' },
       guideHeader(badge.sharedContent, 'React · Metadata', badge.standardReferences),
       guidePart(sections[0], [...guideBlocks(badge.frameworkContent, 'React setup')]),
+      guidePart(playgroundSection, [h(ComponentPlayground, { adapter: badgePlayground, title: 'Badge' })]),
       guidePart(sections[1], [
         ...badge.examples.map(example => compactExample(example, links)),
       ]),
@@ -993,8 +1009,9 @@ function avatarUsage(avatar, links) {
     { id: 'react-avatar-guidelines', heading: 'Behavior and usage' },
     { id: 'react-avatar-related', heading: 'Related components and API' },
   ];
+  const playgroundSection = { id: 'react-avatar-playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, {
+    guideToc([sections[0], playgroundSection, ...sections.slice(1)], {
       label: 'Avatar', examples: examples, getId: (example) => 'react-avatar-example-' + example.id.slice('avatar/'.length),
     }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
@@ -1005,6 +1022,7 @@ function avatarUsage(avatar, links) {
         h('p', { key: 'setup' }, 'See ', h(Link, { href: links.home },
           'React overview'), ' for shared setup and stylesheet delivery.'),
       ]),
+      guidePart(playgroundSection, [h(ComponentPlayground, { adapter: avatarPlayground, title: 'Avatar' })]),
       guidePart(sections[1], [
         ...examples.map((example) => avatarExample(example, links)),
       ]),
@@ -1153,8 +1171,9 @@ function dividerUsage(divider, links) {
     { id: 'react-divider-guidelines', heading: 'Usage guidelines' },
     { id: 'react-divider-related', heading: 'Related components and API' },
   ];
+  const playgroundSection = { id: 'react-divider-playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, {
+    guideToc([sections[0], playgroundSection, ...sections.slice(1)], {
       label: 'Divider', examples: examples, getId: (example) => 'react-divider-example-' + example.id.slice('divider/'.length),
     }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
@@ -1165,6 +1184,7 @@ function dividerUsage(divider, links) {
         h('p', { key: 'setup' }, 'For shared styles and server rendering, see ',
           h(Link, { href: links.home }, 'React overview'), '.'),
       ]),
+      guidePart(playgroundSection, [h(ComponentPlayground, { adapter: dividerPlayground, title: 'Divider' })]),
       guidePart(sections[1], [
         ...examples.map((example) => dividerExample(example, links)),
       ]),
