@@ -77,6 +77,9 @@
     );
     letter-spacing: var(--vf-text-field-value-letter-spacing, normal);
   }
+  :where([data-vf-text-field-variant='filled'] [data-vf-text-field-value])::placeholder {
+    color: var(--vf-color-text-muted);
+  }
   :where([data-vf-text-field-value])::placeholder {
     font: var(--vf-text-field-placeholder-font, inherit);
     letter-spacing: var(--vf-text-field-placeholder-letter-spacing, inherit);
