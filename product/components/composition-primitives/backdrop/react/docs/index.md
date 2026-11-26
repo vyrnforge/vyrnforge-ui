@@ -4,9 +4,10 @@ React renders one native decorative div using the shared Web CSS. It is not a su
 
 ## React setup
 
+Supported CSS-aware browser bundlers load the component styles automatically.
+
 ```tsx
 import { Backdrop } from '@vyrnforge/react/backdrop';
-import '@vyrnforge/web/styles/backdrop.css';
 
 <div style={{ position: 'relative' }}>
   <div>Region content</div>

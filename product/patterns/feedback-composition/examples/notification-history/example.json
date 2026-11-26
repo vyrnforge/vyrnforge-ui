@@ -1,0 +1,13 @@
+{
+  "id": "feedback-composition/notification-history",
+  "title": "Durable notification history",
+  "description": "A supplemental Toast can disappear without removing its underlying notification record.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

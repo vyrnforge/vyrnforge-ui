@@ -2,7 +2,7 @@
 
 ## React setup
 
-Use the native-first adapter with `@vyrnforge/react/loading`. All parts forward refs and native attributes appropriate to their host element. The CSS and motion are shared with Native Web.
+Use the native-first adapter with `@vyrnforge/react/loading`. All parts forward refs and native attributes appropriate to their host element. The CSS and motion are shared with Native Web. CSS-aware browser bundlers load the component styles automatically.
 
 | Export | Host | Props |
 | --- | --- | --- |

@@ -1,8 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
 import { Flow } from '@vyrnforge/react/layout';
-import '@vyrnforge/web/styles/loading.css';
-import '@vyrnforge/web/styles/layout.css';
 
 function Example() {
   return (

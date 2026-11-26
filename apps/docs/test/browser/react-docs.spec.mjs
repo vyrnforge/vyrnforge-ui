@@ -3126,8 +3126,22 @@ test('Feedback composition guides have executable examples and no fictional pack
     await page.goto('/next/react/patterns/' + id + '/');
     const guide = page.locator('[data-vf-docs-react-' + id + ']');
     await expect(guide).toBeVisible();
-    await expect(guide.locator('iframe')).toHaveCount(1);
-    await expect(guide.locator('iframe').contentFrame().locator('#root')).not.toBeEmpty();
+    await expect(guide.locator('iframe')).toHaveCount(id === 'feedback-composition' ? 4 : 1);
+    await expect(guide.locator('iframe').first().contentFrame().locator('#root')).not.toBeEmpty();
     await expect(guide.getByRole('link', { name: /public React API/ })).toHaveCount(0);
   }
+});
+
+test('Feedback recovery and notification examples retain application-owned state', async ({ page }) => {
+  await page.goto('/next/react/patterns/feedback-composition/');
+  const undo = page.locator('[data-vf-docs-react-feedback-composition-example="feedback-composition/undo"] iframe').contentFrame();
+  await undo.getByRole('button', { name: 'Archive example report' }).click();
+  await expect(undo.getByRole('button', { name: 'Undo archive' })).toBeFocused();
+  await undo.getByRole('button', { name: 'Undo archive' }).click();
+  await expect(undo.getByRole('button', { name: 'Archive example report' })).toBeFocused();
+  const history = page.locator('[data-vf-docs-react-feedback-composition-example="feedback-composition/notification-history"] iframe').contentFrame();
+  await history.getByRole('button', { name: 'Complete example export' }).click();
+  await expect(history.getByRole('list')).toContainText('Example export 1 is ready.');
+  await history.getByRole('button', { name: 'Dismiss notification' }).click();
+  await expect(history.getByRole('list')).toContainText('Example export 1 is ready.');
 });
