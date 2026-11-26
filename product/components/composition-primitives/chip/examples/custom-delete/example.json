@@ -1,0 +1,14 @@
+{
+  "id": "chip/custom-delete",
+  "title": "Custom delete icon",
+  "description": "Change artwork without changing the removal semantics or accessible name.",
+  "documentationSection": "Actions",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

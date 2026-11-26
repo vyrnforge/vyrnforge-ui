@@ -5,16 +5,13 @@ import '@vyrnforge/web/styles/chip.css';
 import '@vyrnforge/web/styles/layout.css';
 
 function App() {
-  return <Flow gap="md">
-    <Flow direction="inline" wrap="wrap" gap="sm" align="center">
-      <Chip size="sm">Small</Chip><Chip>Medium</Chip><Chip size="lg">Large</Chip>
+  return <Flow gap="sm" align="center">
+    <Flow direction="inline" wrap="wrap" align="center" justify="center" gap="sm">
+      <Chip>Neutral</Chip><Chip tone="accent">Accent</Chip><Chip tone="danger">Danger</Chip>
     </Flow>
-    <Flow direction="inline" wrap="wrap" gap="sm">
-      {(['neutral', 'accent', 'danger'] as const).map(tone => <Chip key={tone} tone={tone}>{tone}</Chip>)}
-      {(['neutral', 'accent', 'danger'] as const).map(tone => <Chip key={tone} tone={tone} variant="outlined">{tone}</Chip>)}
+    <Flow direction="inline" wrap="wrap" align="center" justify="center" gap="sm">
+      <Chip variant="outlined">Neutral</Chip><Chip variant="outlined" tone="accent">Accent</Chip><Chip variant="outlined" tone="danger">Danger</Chip>
     </Flow>
-    <Chip variant="outlined">Outlined label</Chip>
-    <Chip wrap>Internationalized category with a very long descriptive name that may wrap on narrow screens</Chip>
   </Flow>;
 }
 

@@ -1,0 +1,14 @@
+{
+  "id": "chip/icon",
+  "title": "Icon chips",
+  "description": "Decorative leading or trailing icons accompany a meaningful text label.",
+  "documentationSection": "Adornment",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

@@ -5,10 +5,10 @@
 
 @layer vyrnforge.components {
   :where([data-vf-chip]) {
-    --_vf-chip-height: calc(var(--vf-control-height-sm) + var(--vf-space-xs));
+    --_vf-chip-height: var(--vf-control-height-sm);
     --_vf-chip-font: var(--vf-font-size-sm);
     --_vf-chip-bg: var(--vf-color-surface-pressed);
-    --_vf-chip-border: var(--vf-color-border);
+    --_vf-chip-border: transparent;
     --_vf-chip-fg: var(--vf-color-text);
     --_vf-chip-selected-bg: var(--vf-color-accent-subtle);
     --_vf-chip-selected-border: var(--vf-color-accent-background);
@@ -16,6 +16,7 @@
     align-items: stretch;
     vertical-align: middle;
     min-inline-size: 0;
+    inline-size: fit-content;
     max-inline-size: 100%;
     min-block-size: var(--_vf-chip-height);
     box-sizing: border-box;
@@ -25,13 +26,13 @@
     color: var(--_vf-chip-fg);
     font-family: var(--vf-control-font-family);
     font-size: var(--_vf-chip-font);
-    font-weight: var(--vf-control-font-weight);
+    font-weight: var(--vf-font-weight-medium);
     line-height: var(--vf-line-height-tight);
     transition: background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
   :where([data-vf-chip][data-vf-chip-size="sm"]) {
-    --_vf-chip-height: var(--vf-control-height-sm);
+    --_vf-chip-height: calc(var(--vf-control-height-sm) - var(--vf-space-xs));
     --_vf-chip-font: var(--vf-font-size-xs);
   }
   :where([data-vf-chip][data-vf-chip-size="lg"]) {
@@ -39,17 +40,19 @@
     --_vf-chip-font: var(--vf-font-size-md);
   }
   :where([data-vf-chip][data-vf-chip-tone="accent"]) {
-    --_vf-chip-bg: var(--vf-color-accent-subtle);
-    --_vf-chip-border: var(--vf-color-accent-background);
+    --_vf-chip-bg: var(--vf-color-accent-background);
+    --_vf-chip-border: transparent;
+    --_vf-chip-fg: var(--vf-color-accent-foreground);
   }
   :where([data-vf-chip][data-vf-chip-tone="danger"]) {
     --_vf-chip-bg: var(--vf-color-danger-background);
-    --_vf-chip-border: var(--vf-color-danger-border);
+    --_vf-chip-border: transparent;
     --_vf-chip-selected-bg: var(--vf-color-danger-background);
     --_vf-chip-selected-border: var(--vf-color-danger-border);
   }
   :where([data-vf-chip][data-vf-chip-variant="outlined"]) {
     --_vf-chip-bg: transparent;
+    --_vf-chip-fg: var(--vf-color-text);
     --_vf-chip-border: var(--vf-color-border-required);
   }
   :where([data-vf-chip][data-vf-chip-variant="outlined"][data-vf-chip-tone="accent"]) {
@@ -60,6 +63,7 @@
   }
   :where([data-vf-chip]:has(> [aria-pressed="true"])) {
     --_vf-chip-bg: var(--_vf-chip-selected-bg);
+    --_vf-chip-fg: var(--vf-color-text);
     --_vf-chip-border: var(--_vf-chip-selected-border);
   }
   :where([data-vf-chip][data-vf-chip-disabled]) {
@@ -83,7 +87,7 @@
     min-block-size: calc(var(--_vf-chip-height) - 2px);
     min-inline-size: 0;
     padding-block: var(--vf-space-2xs);
-    padding-inline: var(--vf-space-sm);
+    padding-inline: calc(var(--vf-space-sm) + var(--vf-space-2xs));
     border-radius: inherit;
     gap: var(--vf-space-xs);
   }
@@ -99,18 +103,28 @@
   }
   :where([data-vf-chip]) > [data-vf-chip-remove] {
     flex: none;
-    inline-size: var(--vf-control-height-sm);
-    min-inline-size: var(--vf-control-height-sm);
+    inline-size: calc(var(--vf-control-height-sm) - var(--vf-space-xs));
+    min-inline-size: calc(var(--vf-control-height-sm) - var(--vf-space-sm));
+    padding-inline: var(--vf-space-2xs);
     border-start-start-radius: 0;
     border-end-start-radius: 0;
     font-size: var(--vf-font-size-lg);
     line-height: var(--vf-line-height-none);
+  }
+  :where([data-vf-chip]) > [data-vf-chip-primary]:has(> [data-vf-chip-leading]) {
+    padding-inline-start: var(--vf-space-xs);
   }
   :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):hover:not(:disabled,[aria-disabled="true"]) {
     background: var(--vf-color-surface-hover);
   }
   :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):active:not(:disabled,[aria-disabled="true"]) {
     background: var(--vf-color-surface-pressed);
+  }
+  :where([data-vf-chip][data-vf-chip-tone="accent"][data-vf-chip-variant="filled"]:not(:has(> [aria-pressed="true"]))) > :is(button,a):is([data-vf-chip-primary],[data-vf-chip-remove]):hover:not(:disabled,[aria-disabled="true"]) {
+    background: var(--vf-color-accent-background-hover);
+  }
+  :where([data-vf-chip][data-vf-chip-tone="accent"][data-vf-chip-variant="filled"]:not(:has(> [aria-pressed="true"]))) > :is(button,a):is([data-vf-chip-primary],[data-vf-chip-remove]):active:not(:disabled,[aria-disabled="true"]) {
+    background: var(--vf-color-accent-background-pressed);
   }
   :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):focus-visible {
     outline: 2px solid var(--vf-color-focus-ring);

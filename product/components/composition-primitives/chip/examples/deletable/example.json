@@ -1,0 +1,14 @@
+{
+  "id": "chip/deletable",
+  "title": "Deletable",
+  "description": "An independent, named removal button removes each chip from the preview.",
+  "documentationSection": "Actions",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
