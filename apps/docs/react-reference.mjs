@@ -1,4 +1,4 @@
-import { standardsCopy, criteriaHeading, mappingLabel, criterionLearningNote } from './standards-presentation.mjs';
+import { standardsCopy, criteriaHeading, criterionLearningNote } from './standards-presentation.mjs';
 import { visibleGuideSections } from './guide-presentation.mjs';
 import { createElement as h, Fragment, useEffect, useRef, useState } from 'react';
 import { AppShell, AppShellHeader, AppShellBody, AppShellNavigation, AppShellMain, AppShellFooter } from '@vyrnforge/react/app-shell';
@@ -46,7 +46,6 @@ function accessibilityEvidence(references, headingTag = 'h2') {
   return h(Flow, { as: 'section', gap: 'sm', className: 'vf-docs-standards',
     'data-vf-docs-accessibility': '', 'aria-labelledby': 'react-accessibility-heading' },
     h(headingTag, { id: 'react-accessibility-heading' }, standardsCopy.heading),
-    h(Text, { as: 'p', className: 'vf-docs-standards-intro' }, standardsCopy.introduction),
     h(Flow, { as: 'ul', direction: 'inline', wrap: 'wrap', gap: 'xs',
       className: 'vf-docs-standards-primary', 'aria-label': 'Standards' },
       ...references.standards.map((standard, i) => h('li', { key: i },
@@ -56,9 +55,8 @@ function accessibilityEvidence(references, headingTag = 'h2') {
     (criteria.length || hasBaselineNote)
       ? h('details', { className: 'vf-docs-standards-details' },
           h('summary', null, criteriaHeading(criteria.length)),
-          criteria.length ? h(Text, { as: 'p', className: 'vf-docs-standards-intro' }, standardsCopy.criteriaIntroduction) : null,
           criteria.length ? h(AutoGrid, { as: 'ul', minItemSize: '20rem', gap: 'sm',
-             'aria-label': 'Mapped WCAG criteria' },
+             'aria-label': 'WCAG requirements' },
             ...criteria.map((criterion, i) =>
               h('li', { key: i }, criterion.url
                 ? h(Link, { href: criterion.url },
@@ -66,12 +64,11 @@ function accessibilityEvidence(references, headingTag = 'h2') {
                 : h('span', null, criterion.id),
                 criterionLearningNote(criterion) ? h(Text, { as: 'p', className: 'vf-docs-criterion-note' }, criterionLearningNote(criterion)) : null))) : null,
           hasBaselineNote ? h('p', { className: 'vf-docs-standards-baseline' },
-            'Semantic baseline: ' + references.nativeBaseline) : null)
+            standardsCopy.baselineLabel + ': ' + references.nativeBaseline) : null)
       : null,
     h('p', { className: 'vf-docs-standards-note' },
-      standardsCopy.mappingLabel + ': ', h('strong', null, mappingLabel(references.mappingStatus)), '.',
-      references.reviewStatus === 'review-required' ? ' ' + standardsCopy.reviewRequired : '',
-      ' ' + standardsCopy.scope));
+      references.reviewStatus === 'review-required' ? standardsCopy.reviewRequired + ' ' : '',
+      standardsCopy.scope));
 }
 // Selection previews are sandboxed (opaque origin); only send a non-sensitive theme enum.
 function syncSelectionPreviewTheme(frame) {

@@ -470,7 +470,7 @@ test('All React guide pages compose with canonical Flow and AutoGrid, not local 
     }
     const standards = guide.locator('.vf-docs-standards[data-vf-flow]');
     await expect(standards).toHaveCount(1);
-    const mapped = standards.locator('ul[aria-label="Mapped WCAG criteria"]');
+    const mapped = standards.locator('ul[aria-label="WCAG requirements"]');
     if (await mapped.count()) {
       await expect(mapped).toHaveAttribute('data-vf-auto-grid', '');
       await expect(mapped).toHaveAttribute('data-vf-auto-grid-gap', 'sm');
@@ -551,12 +551,14 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
   const disclosure = page.locator('[data-vf-docs-react-component="button"]')
     .getByText('Accessibility standards', { exact: true });
   await disclosure.click();
-  await expect(standards.getByRole('heading', { name: 'Reference standards' })).toBeVisible();
+  await expect(standards.getByRole('heading', { name: 'References' })).toBeVisible();
+  await expect(standards).not.toContainText('Mapping status');
+  await expect(standards).toContainText('Always test accessibility in your own application.');
   await expect(standards.getByRole('link', { name: /WCAG 2\.2/ })).toHaveAttribute('href', 'https://www.w3.org/TR/WCAG22/');
   await expect(standards.locator('details')).not.toHaveAttribute('open', '');
   await standards.locator('summary').click();
   await expect(standards.locator('details')).toHaveAttribute('open', '');
-  await expect(standards.getByText('Support keyboard operation of functionality.', { exact: true })).toBeVisible();
+  await expect(standards.getByText('Let users perform actions with a keyboard.', { exact: true })).toBeVisible();
   await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
   await expect(page.locator('[data-vf-side-nav]')).toHaveCount(1);
   await expect(page.getByRole('navigation', { name: 'Documentation' })
@@ -1267,9 +1269,9 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   const layoutGuide = page.locator('[data-vf-docs-react-layout]');
   await layoutGuide.getByText('Accessibility standards', { exact: true }).click();
   const accessibility = layoutGuide.locator('[data-vf-docs-accessibility]');
-  await expect(accessibility).toContainText('Accessibility review required');
+  await expect(accessibility).toContainText('Accessibility still needs review.');
   await accessibility.locator('summary').click();
-  const mappedCriteria = accessibility.getByRole('list', { name: 'Mapped WCAG criteria' });
+  const mappedCriteria = accessibility.getByRole('list', { name: 'WCAG requirements' });
   await expect(mappedCriteria.getByRole('link')).toHaveCount(6);
   for (const [id, label, slug] of [
     ['1.3.2', 'Meaningful Sequence', 'meaningful-sequence'],
@@ -1946,7 +1948,7 @@ test('React Text guide teaches every public type role with real TSX previews and
   await expect(guide.getByRole('heading', { name: 'Choosing a semantic host' })).toBeVisible();
   const standardDisclosure = guide.getByText('Accessibility standards', { exact: true });
   await standardDisclosure.click();
-  await expect(guide.getByRole('heading', { name: 'Reference standards' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'References' })).toBeVisible();
   await expect(guide.getByRole('link', { name: /WCAG 2\.2/ })).toHaveAttribute('href', 'https://www.w3.org/TR/WCAG22/');
   await standardDisclosure.click();
   const gallery = guide.locator('[data-vf-docs-react-usage-gallery="text"]');
