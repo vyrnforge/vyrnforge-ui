@@ -105,7 +105,7 @@ function CheckboxPreview({ config, update }) {
   if (config.presentation === 'standalone') return control;
   return h(Flow, { as: 'label', direction: 'inline', align: 'center', gap: 'sm' }, control,
     config.presentation === 'icon label' ? h(Icon, { icon: tagIcon }) : null,
-    rich ? h(Flow, { as: 'span', gap: 'xs' },
+    rich ? h('span', { style: { display: 'grid', gap: 'var(--vf-space-xs)' } },
       h(Text, { as: 'span', id: labelId }, name),
       h(Text, { as: 'span', variant: 'body-sm', id: descriptionId }, 'A separate receipt without prices.'))
       : h(Text, { as: 'span' }, name));
@@ -145,7 +145,7 @@ export const checkboxPlayground = {
       if (icon) imports.push(...iconImports('tagIcon', 'tag'));
       if (rich) imports.push(importLine('Text', 'text'));
       const labelContent = rich
-        ? markup('Flow', ['as="span"', 'gap="xs"'], markup('Text', ['as="span"', 'id={labelId}'], content(name)) + '\n' +
+        ? markup('span', ['style={{ display: "grid", gap: "var(--vf-space-xs)" }}'], markup('Text', ['as="span"', 'id={labelId}'], content(name)) + '\n' +
           markup('Text', ['as="span"', 'variant="body-sm"', 'id={descriptionId}'], 'A separate receipt without prices.'))
         : '<Icon icon={tagIcon} />\n' + markup('span', [], content(name));
       return snippet(imports, markup('Flow', ['as="label"', 'direction="inline"', 'align="center"', 'gap="sm"'], checkbox + '\n' + labelContent), { setup });
