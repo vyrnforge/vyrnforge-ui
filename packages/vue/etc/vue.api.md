@@ -311,7 +311,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 size: {
-type: PropType<'sm' | 'md' | 'lg'>;
+type: PropType<"sm" | "md" | "lg">;
 default: string;
 };
 }>, () => VNode<RendererNode, RendererElement, {
@@ -322,12 +322,12 @@ type: BooleanConstructor;
 default: boolean;
 };
 size: {
-type: PropType<'sm' | 'md' | 'lg'>;
+type: PropType<"sm" | "md" | "lg">;
 default: string;
 };
 }>> & Readonly<{}>, {
+size: "sm" | "md" | "lg";
 indeterminate: boolean;
-size: 'sm' | 'md' | 'lg';
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
