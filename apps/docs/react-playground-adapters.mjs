@@ -5,6 +5,7 @@ import { Radio } from '@vyrnforge/react/radio';
 import { Avatar } from '@vyrnforge/react/avatar';
 import { Badge } from '@vyrnforge/react/badge';
 import { Chip } from '@vyrnforge/react/chip';
+import { Backdrop } from '@vyrnforge/react/backdrop';
 import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Divider } from '@vyrnforge/react/divider';
@@ -436,5 +437,27 @@ export const loadingPlayground = {
       '      <Loading' + attribute('size', config.size, 'md') + '>' + body + '</Loading>',
       '      <Text as="p" variant="body-sm">' + jsxText(config.label || 'Loading') + '</Text>',
       '    </Flow>', '  );', '}'].join('\n');
+  },
+};
+
+function BackdropPreview({ config }) {
+  return h(Flow, { gap: 'sm', style: { inlineSize: 'min(100%, 24rem)' } },
+    h('div', { style: { position: 'relative', isolation: 'isolate', padding: 'var(--vf-space-md)',
+      border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)' } },
+      h(Text, { as: 'p' }, 'Account summary'),
+      h(Button, { type: 'button', variant: 'secondary' }, 'View statement'),
+      h(Backdrop, { hidden: config.hidden, style: { opacity: config.opacity } })),
+    h(Text, { as: 'p', variant: 'body-sm' }, 'The scrim is visual-only; the underlying action is not disabled.'));
+}
+export const backdropPlayground = {
+  fields: [bool('hidden', 'Hidden'), {kind: 'number', key: 'opacity', label: 'Opacity', min: 0, max: 1, step: 0.1, default: 1}],
+  Preview: BackdropPreview,
+  source(config) {
+    return [importLine('Backdrop', 'backdrop'), styleLine('backdrop'), importLine('Button', 'button'), styleLine('button'),
+      '', 'export default function Example() {', '  return (',
+      '    <div style={{ position: "relative", isolation: "isolate", padding: "var(--vf-space-md)" }}>',
+      '      <p>Account summary</p>', '      <Button type="button" variant="secondary">View statement</Button>',
+      '      <Backdrop' + flag('hidden', config.hidden) + ' style={{ opacity: ' + config.opacity + ' }} />',
+      '    </div>', '  );', '}'].join('\n');
   },
 };

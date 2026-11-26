@@ -1,5 +1,6 @@
 @import '../../styles/tokens.css';
 @import '../../styles/motion.css';
+@import '../../styles/internal/backdrop.css';
 
 @layer vyrnforge.components {
   :where([data-vf-dialog-root]) {
@@ -12,10 +13,6 @@
     margin: auto;
     overflow: auto;
     padding: 1.25rem;
-  }
-
-  :where([data-vf-dialog-root])::backdrop {
-    background: color-mix(in srgb, var(--vf-color-text) 45%, transparent);
   }
 
   :where([data-vf-dialog-title]) {
@@ -48,11 +45,6 @@
     :where([data-vf-dialog-root]) {
       border-color: CanvasText;
       forced-color-adjust: auto;
-    }
-
-    :where([data-vf-dialog-root])::backdrop {
-      background: Canvas;
-      opacity: 0.5;
     }
 
     :where([data-vf-dialog-close]:focus-visible),

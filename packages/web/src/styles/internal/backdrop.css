@@ -1,0 +1,14 @@
+/* Shared paint only. The native dialog keeps its top-layer and dismissal semantics. */
+@layer vyrnforge.components {
+  :where([data-vf-dialog-root])::backdrop,
+  :where([data-vf-backdrop]) {
+    background: var(--vf-backdrop-color, color-mix(in srgb, var(--vf-color-text) 45%, transparent));
+  }
+  @media (forced-colors: active) {
+    :where([data-vf-dialog-root])::backdrop,
+    :where([data-vf-backdrop]) {
+      background: Canvas;
+      opacity: 0.5;
+    }
+  }
+}

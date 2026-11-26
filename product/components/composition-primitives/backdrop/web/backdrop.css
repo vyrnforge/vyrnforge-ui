@@ -1,0 +1,14 @@
+@import '../../styles/tokens.css';
+@import '../../styles/internal/backdrop.css';
+
+@layer vyrnforge.components {
+  :where([data-vf-backdrop]) {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  :where([data-vf-backdrop][hidden]) {
+    display: none;
+  }
+}
