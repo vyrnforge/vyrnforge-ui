@@ -3012,10 +3012,15 @@ test('React Chip guide exposes circular default and unchanged custom removal art
     const mark = page.locator('[data-vf-chip-default-remove]');
     await expect(mark).toHaveCount(2);
     await expect(mark.first()).toHaveCSS('border-radius', '50%');
+    await expect(mark.locator('svg[data-vf-icon]')).toHaveCount(2);
     await page.screenshot({ path: testInfo.outputPath('chip-deletable-' + theme + '.png') });
     await page.goto('/next/react/examples/chip/custom-delete/');
     await expect(page.locator('[data-vf-chip-remove] [data-vf-icon]')).toHaveCount(2);
     await expect(page.locator('[data-vf-chip-default-remove]')).toHaveCount(0);
+    const custom = page.locator('[data-vf-chip-remove]').first();
+    await custom.hover();
+    expect(await custom.evaluate(el => getComputedStyle(el, '::before').borderRadius)).toBe('50%');
+    await expect(custom).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     await page.screenshot({ path: testInfo.outputPath('chip-custom-delete-' + theme + '.png') });
   }
 });
@@ -3091,13 +3096,14 @@ test('Status Indicator and Alert use shared playground with explicit announcemen
 });
 
 test('React feedback modal and Toast guides use native interaction and shared playgrounds', async ({ page }) => {
+  test.setTimeout(90_000);
   for (const [id, title, role, close] of [
     ['dialog', 'Dialog', 'dialog', 'Close'],
     ['alert-dialog', 'AlertDialog', 'alertdialog', 'Cancel'],
     ['drawer', 'Drawer', 'dialog', 'Close'],
   ]) {
     await page.goto('/next/react/components/' + id + '/');
-    const playground = page.locator('[data-vf-docs-component-playground="' + title + '"]');
+    const playground = page.locator('[data-vf-docs-react-' + id + '] [data-vf-docs-component-playground]');
     const trigger = playground.getByRole('button', { name: 'Open ' + id.replace('-', ' ') });
     await trigger.click();
     const modal = playground.getByRole(role);

@@ -101,12 +101,17 @@ test('default removal mark has independent geometry and contrast across tones an
         const rootColor = getComputedStyle(root).backgroundColor;
         const surface = rootColor === 'rgba(0, 0, 0, 0)' ? getComputedStyle(document.body).backgroundColor : rootColor;
         const rect = node.getBoundingClientRect();
-        return { id: root.id, width: rect.width, height: rect.height, targetWidth: target.width, targetHeight: target.height,
+        const svg = node.querySelector('svg');
+        const svgRect = svg.getBoundingClientRect();
+        const glyph = svg.querySelector('path').getBBox();
+        return { centerError: Math.max(Math.abs(rect.x + rect.width / 2 - svgRect.x - svgRect.width / 2), Math.abs(rect.y + rect.height / 2 - svgRect.y - svgRect.height / 2)), glyphCenter: [glyph.x + glyph.width / 2, glyph.y + glyph.height / 2], id: root.id, width: rect.width, height: rect.height, targetWidth: target.width, targetHeight: target.height,
           radius: style.borderRadius, colors: [style.backgroundColor, surface, style.color], circleContrast: ratio(style.backgroundColor, surface),
           inkContrast: ratio(style.color, style.backgroundColor) };
       });
     });
     for (const item of specimens) {
+      expect(item.centerError).toBeLessThan(0.51);
+      expect(item.glyphCenter).toEqual([12, 12]);
       expect(item.width).toBe(item.height);
       expect(item.radius).toBe('50%');
       expect(item.width).toBeLessThan(item.targetWidth);
@@ -131,7 +136,8 @@ test('default removal mark has independent geometry and contrast across tones an
     await page.keyboard.press('Tab');
     await page.keyboard.press('Shift+Tab');
     await expect(button).toBeFocused();
-    await expect(button).toHaveCSS('outline-style', 'solid');
+    expect(await button.evaluate(el => getComputedStyle(el, '::before').outlineStyle)).toBe('solid');
+    expect(await button.evaluate(el => getComputedStyle(el, '::before').borderRadius)).toBe('50%');
     await page.screenshot({ path: testInfo.outputPath('chip-removal-circle-' + theme + '.png'), fullPage: true });
   }
   await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
@@ -214,4 +220,45 @@ test('semantic feedback Chip tones use canonical foreground, fill and outline in
   await expect(page.locator('#remove-success-filled')).toBeVisible();
   await expect(page.locator('#remove-warning-outlined')).toContainText('warning');
   await expect(page.locator('#remove-success-filled')).toHaveCSS('border-top-style', 'solid');
+});
+
+
+test('custom removal uses centered artwork and round feedback without changing its square hit target', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(url);
+  const button = page.locator('#remove-custom [data-vf-chip-remove]');
+  const read = () => button.evaluate(el => {
+    const b = el.getBoundingClientRect(), i = el.querySelector('svg').getBoundingClientRect();
+    const paint = getComputedStyle(el, '::before');
+    return { width: b.width, height: b.height, centerError: Math.max(Math.abs(b.x+b.width/2-i.x-i.width/2), Math.abs(b.y+b.height/2-i.y-i.height/2)), radius: paint.borderRadius, bg: paint.backgroundColor, outline: paint.outlineStyle, hostBg: getComputedStyle(el).backgroundColor, hostRadius: getComputedStyle(el).borderRadius };
+  });
+  for (const theme of ['light', 'dark']) {
+    await page.mouse.move(0,0);
+    await page.emulateMedia({ colorScheme: theme });
+    await page.locator('html').evaluate((el, value) => { el.dataset.vfTheme = value; }, theme);
+    const idle = await read();
+    expect(idle.width).toBe(idle.height);
+    expect(idle.width).toBeGreaterThanOrEqual(24);
+    expect(idle.centerError).toBeLessThan(0.51);
+    expect(idle.radius).toBe('50%');
+    expect(idle.hostRadius).toBe('0px');
+    await button.hover();
+    const hover = await read();
+    expect(hover.hostBg).toBe('rgba(0, 0, 0, 0)');
+    expect(hover.bg).not.toBe(idle.bg);
+    await page.screenshot({ path: testInfo.outputPath('chip-custom-hover-' + theme + '.png'), fullPage: true });
+    await page.mouse.down();
+    expect((await read()).bg).not.toBe(hover.bg);
+    await page.mouse.up();
+    await button.focus();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Tab');
+    await expect(button).toBeFocused();
+    expect((await read()).outline).toBe('solid');
+  }
+  await page.emulateMedia({ forcedColors: 'active' });
+  await button.hover();
+  expect((await read()).radius).toBe('50%');
+  expect((await read()).hostBg).toBe('rgba(0, 0, 0, 0)');
+  await page.screenshot({ path: testInfo.outputPath('chip-custom-hover-forced-colors.png'), fullPage: true });
 });

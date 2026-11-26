@@ -29,5 +29,6 @@
   "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
   "profileVariability": [
     "five severities, subtle/outlined, explicit status/alert, custom icon/action/dismiss, RTL and contrast"
-  ]
+  ],
+  "notes": ["Automated checks do not establish human visual or assistive-technology acceptance."]
 }

@@ -2,11 +2,10 @@
 
 ## React setup
 
-Import Badge and load its shared styling once.
+Import Badge. Supported CSS-aware browser bundlers load its component styles automatically.
 
 ```tsx
 import { Badge } from '@vyrnforge/react/badge';
-import '@vyrnforge/web/styles/badge.css';
 ```
 
 The live examples compare compact `sm`/`md`/`lg` count sizing and independently scaled dots, existing neutral/accent/danger tones, positioning/overlap, maximum values, hidden zero and explicit visibility. The existing `standard` and `dot` variants remain the only indicator variants; no Chip-style visual variants are added. See the separate API page for the source-backed types.

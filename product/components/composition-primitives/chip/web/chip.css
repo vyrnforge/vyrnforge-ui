@@ -2,6 +2,7 @@
 @import "../../styles/tokens.css";
 @import "../toggle-button/toggle-button.css";
 @import "../link/link.css";
+@import "../icon/icon.css";
 
 @layer vyrnforge.components {
   :where([data-vf-chip]) {
@@ -177,9 +178,33 @@
     min-block-size: var(--_vf-chip-remove-target);
     padding: 0;
     gap: 0;
+    /* Keep the square pointer target; paint circular feedback separately. */
     border-radius: 0;
+    isolation: isolate;
     font-size: var(--vf-font-size-lg);
     line-height: var(--vf-line-height-none);
+  }
+  :where([data-vf-chip]) > [data-vf-chip-remove]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: transparent;
+    pointer-events: none;
+    z-index: -1;
+    transition: background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
+  :where([data-vf-chip-remove]) > span {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    line-height: 0;
+  }
+  :where([data-vf-chip-remove]) > span > svg {
+    display: block;
+    max-inline-size: var(--_vf-chip-remove-target);
+    max-block-size: var(--_vf-chip-remove-target);
+    vertical-align: initial;
   }
   /* The visual mark is smaller than the native hit target. Keep custom
      removal artwork untouched and keep focus on the actual sibling button. */
@@ -192,11 +217,13 @@
     border-radius: 50%;
     background-color: var(--_vf-chip-remove-disc);
     color: var(--_vf-chip-remove-ink);
-    font-size: var(--_vf-chip-remove-mark-size);
-    font-weight: var(--vf-font-weight-semibold);
-    line-height: 1;
+    line-height: 0;
     transition: background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
+  :where([data-vf-chip-default-remove]) > svg {
+    inline-size: 100%;
+    block-size: 100%;
   }
   :where([data-vf-chip]) > [data-vf-chip-primary]:has(> [data-vf-chip-leading]) {
     padding-inline-start: var(--vf-space-xs);
@@ -213,8 +240,14 @@
   :where([data-vf-chip][data-vf-chip-tone="accent"][data-vf-chip-variant="filled"]:not(:has(> [aria-pressed="true"]))) > :is(button,a):is([data-vf-chip-primary],[data-vf-chip-remove]):active:not(:disabled,[aria-disabled="true"]) {
     background: var(--vf-color-accent-background-pressed);
   }
-  :where([data-vf-chip]) > button[data-vf-chip-remove]:has(> [data-vf-chip-default-remove]):is(:hover, :active):not(:disabled) {
+  :where([data-vf-chip]) > button[data-vf-chip-remove]:is(:hover, :active):not(:disabled) {
     background: transparent;
+  }
+  :where([data-vf-chip]) > button[data-vf-chip-remove]:not(:has(> [data-vf-chip-default-remove])):hover:not(:disabled)::before {
+    background: color-mix(in srgb, currentColor 12%, transparent);
+  }
+  :where([data-vf-chip]) > button[data-vf-chip-remove]:not(:has(> [data-vf-chip-default-remove])):active:not(:disabled)::before {
+    background: color-mix(in srgb, currentColor 22%, transparent);
   }
   :where([data-vf-chip]) > button[data-vf-chip-remove]:is(:hover, :active):not(:disabled) > [data-vf-chip-default-remove] {
     background-color: var(--_vf-chip-remove-disc-hover);
@@ -233,6 +266,11 @@
   }
   :where([data-vf-chip]) > button[data-vf-chip-remove]:focus-visible {
     z-index: 2;
+    outline: none;
+  }
+  :where([data-vf-chip]) > button[data-vf-chip-remove]:focus-visible::before {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 1px;
   }
   :where([data-vf-chip]) > :is(button:disabled, a[aria-disabled="true"]) { cursor: not-allowed; }
   :where([data-vf-chip]) > a[data-vf-chip-primary] { text-decoration-line: underline; }
@@ -270,7 +308,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :where([data-vf-chip], [data-vf-chip-default-remove]) { transition: none; }
+    :where([data-vf-chip], [data-vf-chip-default-remove]),
+    :where([data-vf-chip-remove])::before { transition: none; }
   }
   @media (forced-colors: active) {
     :where([data-vf-chip]) {
@@ -315,8 +354,29 @@
       background-color: GrayText;
       color: Canvas;
     }
-    :where([data-vf-chip]) > button[data-vf-chip-remove]:has(> [data-vf-chip-default-remove]):is(:hover, :active):not(:disabled) {
+    :where([data-vf-chip]) > button[data-vf-chip-remove]:is(:hover, :active):not(:disabled) {
       background: transparent;
+    }
+    :where([data-vf-chip]) > button[data-vf-chip-remove]:not(:has(> [data-vf-chip-default-remove])):is(:hover, :active):not(:disabled) {
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+    :where([data-vf-chip]) > button[data-vf-chip-remove]:not(:has(> [data-vf-chip-default-remove])):is(:hover, :active):not(:disabled)::before {
+      background: Highlight;
+      forced-color-adjust: none;
+    }
+    :where([data-vf-chip]:has(> [aria-pressed="true"])) > button[data-vf-chip-remove]:not(:has(> [data-vf-chip-default-remove])):is(:hover, :active):not(:disabled) {
+      color: Highlight;
+    }
+    :where([data-vf-chip]:has(> [aria-pressed="true"])) > button[data-vf-chip-remove]:not(:has(> [data-vf-chip-default-remove])):is(:hover, :active):not(:disabled)::before {
+      background: HighlightText;
+    }
+    :where([data-vf-chip]) > button[data-vf-chip-remove]:focus-visible::before {
+      outline-color: Highlight;
+      forced-color-adjust: none;
+    }
+    :where([data-vf-chip]:has(> [aria-pressed="true"])) > button[data-vf-chip-remove]:focus-visible::before {
+      outline-color: HighlightText;
     }
     :where([data-vf-chip]) > button[data-vf-chip-remove]:is(:hover, :active):not(:disabled) > [data-vf-chip-default-remove] {
       background-color: Highlight;

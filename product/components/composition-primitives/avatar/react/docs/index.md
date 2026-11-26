@@ -2,14 +2,13 @@
 
 ## React setup
 
-Import Avatar and AvatarGroup from the React package and load their shared styles once in your application.
+Import Avatar and AvatarGroup from the React package. Supported CSS-aware browser bundlers load their component styles automatically.
 
 ```tsx
 import { Avatar, AvatarGroup } from '@vyrnforge/react/avatar';
-import '@vyrnforge/web/styles/avatar.css';
 ```
 
-For icon avatars, use the public `Icon` component and its stylesheet. The runnable React examples below demonstrate image, letter and icon content, shape, fallback and group composition without repeating the showcase in this setup.
+For icon avatars, use the public `Icon` component. The runnable React examples below demonstrate image, letter and icon content, shape, fallback and group composition without repeating the showcase in this setup.
 
 ## React state and server rendering
 
