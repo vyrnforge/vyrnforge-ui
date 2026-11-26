@@ -124,6 +124,12 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  /* Multiline labels need an ordinary control radius, not a capsule whose
+     round caps intrude into the first and last lines at enlarged text sizes. */
+  :where([data-vf-chip][data-vf-chip-wrap]) { border-radius: var(--vf-control-radius); }
+  :where([data-vf-chip][data-vf-chip-wrap]) > [data-vf-chip-primary] {
+    padding-block: var(--vf-space-xs);
+  }
   :where([data-vf-chip][data-vf-chip-wrap] [data-vf-chip-label]) {
     white-space: normal;
     overflow-wrap: anywhere;
@@ -157,6 +163,13 @@
       background: Highlight;
       color: HighlightText;
       border-color: Highlight;
+      forced-color-adjust: none;
+    }
+    /* Chromium's automatic text backplates can cover HighlightText when an
+       inherited system highlight sits behind separate native buttons. Keep
+       the explicitly paired system colors, including the interior artwork. */
+    :where([data-vf-chip]:has(> [aria-pressed="true"]):not([data-vf-chip-disabled]) *) {
+      forced-color-adjust: none;
     }
     :where([data-vf-chip][data-vf-chip-disabled]) {
       background: Canvas;

@@ -13,7 +13,7 @@ function App() {
   return <Flow direction="inline" wrap="wrap" gap="sm" align="center">
     <Chip leading={<Icon icon={checkIcon} size="sm" />} tone="accent">Reviewed</Chip>
     <Chip leading={<Avatar name="Ada Lovelace" size="sm" decorative />}>Ada Lovelace</Chip>
-    <Chip trailing={<Icon icon={chevronRightIcon} size="sm" />} onClick={() => {}}>Details</Chip>
+    <Chip trailing={<Icon icon={chevronRightIcon} size="sm" />}>Details</Chip>
   </Flow>;
 }
 

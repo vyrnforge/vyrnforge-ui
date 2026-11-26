@@ -1034,7 +1034,7 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-pilot',
+  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-chip-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
   utilities: [

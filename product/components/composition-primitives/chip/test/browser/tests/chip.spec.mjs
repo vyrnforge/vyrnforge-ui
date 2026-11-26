@@ -42,5 +42,14 @@ test('Chip preserves logical order, wrapping, themes and motion preference', asy
   await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
   await expect(page.locator('#filter [data-vf-chip-selection]')).toBeVisible();
   await expect(page.locator('#filter')).toHaveCSS('transition-duration', '0s');
+  await expect(page.locator('#filter [data-vf-chip-label]')).toHaveCSS('forced-color-adjust', 'none');
+  await expect(page.locator('#filter [data-vf-chip-selection]')).toHaveCSS('forced-color-adjust', 'none');
+  await expect(page.locator('#filter [data-vf-chip-remove]')).toHaveCSS('forced-color-adjust', 'none');
+  const radius = await page.locator('#long').evaluate(el => ({
+    actual: getComputedStyle(el).borderTopLeftRadius,
+    control: getComputedStyle(el).getPropertyValue('--vf-control-radius').trim(),
+    height: el.getBoundingClientRect().height,
+  }));
+  expect(parseFloat(radius.actual)).toBeLessThan(radius.height / 4);
   await page.screenshot({ path: test.info().outputPath('chip-rtl-forced-colors.png'), fullPage: true });
 });
