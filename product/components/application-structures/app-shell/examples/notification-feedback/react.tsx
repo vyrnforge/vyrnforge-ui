@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from '@vyrnforge/react/button';
@@ -52,47 +53,47 @@ function App() {
 
   return (
     <main>
-      <h1>Notification and feedback selection</h1>
-      <p>This representative uses application-owned events and durable destinations. VyrnForge Toast supplies transient presentation only; it is not the event store or recovery owner.</p>
+      <Text as="h1" variant="heading-lg">Notification and feedback selection</Text>
+      <Text as="p">This representative uses application-owned events and durable destinations. VyrnForge Toast supplies transient presentation only; it is not the event store or recovery owner.</Text>
 
       <section aria-labelledby="save-heading">
-        <h2 id="save-heading">Profile save</h2>
-        <p data-saved-state>{saved ? 'Profile saved authoritatively.' : savePending ? 'Save pending; no success has been committed.' : 'Profile has unsaved changes.'}</p>
+        <Text as="h2" variant="heading-md" id="save-heading">Profile save</Text>
+        <Text as="p" data-saved-state>{saved ? 'Profile saved authoritatively.' : savePending ? 'Save pending; no success has been committed.' : 'Profile has unsaved changes.'}</Text>
         <Button type="button" loading={savePending} onClick={() => { setSavePending(true); setSaved(false); setSaveToast(false); }}>Save profile</Button>
       </section>
 
       <section aria-labelledby="jobs-heading">
-        <h2 id="jobs-heading">Background jobs</h2>
+        <Text as="h2" variant="heading-md" id="jobs-heading">Background jobs</Text>
         {jobFailed ? (
           <article data-job-record>
-            <h3>Quarterly export failed</h3>
-            <p>The durable job record remains available until the application resolves it.</p>
+            <Text as="h3" variant="heading-sm">Quarterly export failed</Text>
+            <Text as="p">The durable job record remains available until the application resolves it.</Text>
             <Button type="button" variant="secondary" onClick={() => { const next = retryCount + 1; setRetryCount(next); document.body.dataset.jobRetries = String(next); }}>Retry export</Button>
           </article>
-        ) : <p>No failed background jobs.</p>}
+        ) : <Text as="p">No failed background jobs.</Text>}
       </section>
 
       <section aria-labelledby="service-heading">
-        <h2 id="service-heading">Service status</h2>
+        <Text as="h2" variant="heading-md" id="service-heading">Service status</Text>
         {outage && outageVisible ? (
           <div data-outage-banner>
-            <strong>Reporting service outage</strong>
-            <p>Reporting is unavailable. Profile editing remains available.</p>
+            <Text as="strong" variant="label-md">Reporting service outage</Text>
+            <Text as="p">Reporting is unavailable. Profile editing remains available.</Text>
             <Button type="button" variant="secondary" onClick={() => setOutageVisible(false)}>Hide outage notice</Button>
           </div>
         ) : null}
-        {outage ? <p data-outage-durable>Reporting outage remains active.{!outageVisible ? ' Show the notice again when needed.' : ''}</p> : <p>All services available.</p>}
+        {outage ? <Text as="p" data-outage-durable>Reporting outage remains active.{!outageVisible ? ' Show the notice again when needed.' : ''}</Text> : <Text as="p">All services available.</Text>}
         {outage && !outageVisible ? <Button type="button" variant="secondary" onClick={() => setOutageVisible(true)}>Show outage notice</Button> : null}
       </section>
 
       <section aria-labelledby="security-heading">
-        <h2 id="security-heading">Security activity</h2>
+        <Text as="h2" variant="heading-md" id="security-heading">Security activity</Text>
         {securityNotice ? (
           <>
-            <div data-security-banner><strong>Critical security notice</strong><p>Review the new sign-in from the durable activity record.</p></div>
-            <article data-security-record><h3>Security activity record</h3><p>New sign-in from an unrecognized device. Review remains available here.</p></article>
+            <div data-security-banner><Text as="strong" variant="label-md">Critical security notice</Text><Text as="p">Review the new sign-in from the durable activity record.</Text></div>
+            <article data-security-record><Text as="h3" variant="heading-sm">Security activity record</Text><Text as="p">New sign-in from an unrecognized device. Review remains available here.</Text></article>
           </>
-        ) : <p>No new security activity.</p>}
+        ) : <Text as="p">No new security activity.</Text>}
       </section>
 
       <ToastViewport id="notification-viewport">

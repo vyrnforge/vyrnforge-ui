@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from '@vyrnforge/react/button';
@@ -130,11 +131,11 @@ function App() {
 
   return (
     <main>
-      <h1>Import records</h1>
-      <p>
+      <Text as="h1" variant="heading-lg">Import records</Text>
+      <Text as="p">
         This example uses a deterministic application-owned import service. VyrnForge owns file acquisition and button
         semantics, not transport or job orchestration.
-      </p>
+      </Text>
       <FileUploaderRoot
         onFilesChange={(next) => {
           setFiles(next);
@@ -160,8 +161,8 @@ function App() {
       </div>
 
       <section aria-labelledby="import-status-heading">
-        <h2 id="import-status-heading">Import status</h2>
-        <p role="status">{message}</p>
+        <Text as="h2" variant="heading-md" id="import-status-heading">Import status</Text>
+        <Text as="p" role="status">{message}</Text>
         {phase === 'starting' || phase === 'processing' || phase === 'cancel-requested' ? (
           <progress aria-label="Import progress" />
         ) : null}
