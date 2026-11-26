@@ -3260,4 +3260,6 @@ test('Inventory native authoring hosts across every product-owned React example'
     body: JSON.stringify(report, null, 2), contentType: 'application/json',
   });
   console.log('React example native host inventory:', JSON.stringify(report));
+  expect(findings.filter(item => ['a', 'button', 'input', 'textarea', 'select', 'img'].includes(item.tag)),
+    'Use public VyrnForge controls and links in consumer examples').toEqual([]);
 });

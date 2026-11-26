@@ -1,3 +1,4 @@
+import { Button } from '@vyrnforge/react/button';
 import { useState } from 'react';
 import { SelectContent, SelectFormControl, SelectOption, SelectRoot, SelectTrigger } from '@vyrnforge/react/select';
 
@@ -34,8 +35,8 @@ export function Example() {
         </SelectContent>
         <SelectFormControl name="plan" required options={options} />
       </SelectRoot>
-      <button type="submit">Submit</button>
-      <button type="reset">Reset</button>
+      <Button type="submit">Submit</Button>
+      <Button type="reset" variant="secondary">Reset</Button>
       <output aria-live="polite">{submitted ? `Submitted: ${submitted}` : 'Nothing submitted'}</output>
     </form>
   );

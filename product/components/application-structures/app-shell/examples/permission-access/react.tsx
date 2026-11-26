@@ -3,6 +3,7 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { AppShell, AppShellBody, AppShellHeader, AppShellMain } from '@vyrnforge/react/app-shell';
 import { Button } from '@vyrnforge/react/button';
+import { Textarea } from '@vyrnforge/react/textarea';
 import '@vyrnforge/web/styles/app-shell.css';
 import '@vyrnforge/web/styles/button.css';
 import './example.css';
@@ -115,7 +116,7 @@ function App() {
           <section className="permission-editor" aria-labelledby="permission-editor-heading">
             <Text as="h2" variant="heading-md" id="permission-editor-heading">Draft</Text>
             <label htmlFor="permission-draft">Plan notes</label>
-            <textarea
+            <Textarea
               id="permission-draft"
               value={draft}
               readOnly={!canEdit}
