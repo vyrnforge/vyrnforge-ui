@@ -89,3 +89,15 @@ test('ThemeScope maps React motion roles to canonical Web CSS without a new toke
   const empty = renderToStaticMarkup(createElement(ThemeScope, { motion: { unsupported: 'x' } }, 'Ignore'));
   assert.doesNotMatch(empty, /unsupported|undefined|--vf-/);
 });
+
+test('feedback aliases map to shared Web tokens and permit a local SSR override', () => {
+  assert.equal(colors.successForeground, 'var(--vf-color-success-foreground)');
+  assert.equal(colors.warningBorder, 'var(--vf-color-warning-border)');
+  assert.equal(colors.infoBackground, 'var(--vf-color-info-background)');
+  const html = renderToStaticMarkup(createElement(ThemeScope, {
+    colors: { successForeground: '#166534', warningBorder: '#b45309', infoBackground: '#f0f9ff' },
+  }, 'Feedback'));
+  assert.match(html, /--vf-color-success-foreground:#166534/);
+  assert.match(html, /--vf-color-warning-border:#b45309/);
+  assert.match(html, /--vf-color-info-background:#f0f9ff/);
+});

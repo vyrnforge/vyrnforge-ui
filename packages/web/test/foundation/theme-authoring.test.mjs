@@ -85,3 +85,14 @@ test('theme definition and stylesheet remain pure serializable data', () => {
   assert.doesNotMatch(css, /<style|<script|document\.|window\./);
   assert.match(css, /--vf-color-disabled-border: /);
 });
+
+test('feedback colors are themeable without changing action accent', () => {
+  const theme = createTheme({ name: 'feedback-brand', appearance: 'dark',
+    colors: { 'success-foreground': '#ffffff', 'warning-border': '#ffcc00', 'info-background': '#123456' },
+  });
+  assert.equal(theme.variables['--vf-color-success-foreground'], '#ffffff');
+  assert.equal(theme.variables['--vf-color-warning-border'], '#ffcc00');
+  assert.equal(theme.variables['--vf-color-info-background'], '#123456');
+  assert.equal(theme.variables['--vf-color-accent-background'], '#8db4ff');
+  assert.match(renderThemeCss(theme), /--vf-color-success-foreground: #ffffff;/);
+});

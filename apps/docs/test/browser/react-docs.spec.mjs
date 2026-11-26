@@ -289,7 +289,15 @@ test('Theme Builder edits independent light/dark tokens, filters roles and expor
   await expect(builder.getByRole('navigation', { name: 'Theme Builder sections' })
     .getByRole('link')).toHaveCount(4);
   const roles = builder.locator('[data-vf-docs-builder-roles]');
-  await expect(roles.getByRole('button')).toHaveCount(22);
+  await expect(roles.getByRole('button')).toHaveCount(32);
+  await builder.locator('#vf-builder-group').selectOption('Feedback');
+  await expect(roles.getByRole('button')).toHaveCount(9);
+  await expect(roles.getByRole('button', { name: /success foreground/ })).toBeVisible();
+  await expect(roles.getByRole('button', { name: /warning border/ })).toBeVisible();
+  await expect(roles.getByRole('button', { name: /info background/ })).toBeVisible();
+  await builder.locator('#vf-builder-group').selectOption('Disabled');
+  await expect(roles.getByRole('button')).toHaveCount(3);
+  await builder.locator('#vf-builder-group').selectOption('All');
   const light = builder.locator('[data-vf-docs-theme-preview="light"]');
   const dark = builder.locator('[data-vf-docs-theme-preview="dark"]');
   await expect(light).toHaveCSS('color-scheme', 'light');
