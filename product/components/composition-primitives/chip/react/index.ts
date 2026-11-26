@@ -120,7 +120,7 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(function Chip(
       : createElement('span', { 'data-vf-chip-primary': '' }, label);
 
   const removalProps = {
-    ref: removeRef, type: 'button' as const, variant: 'ghost' as const, size, disabled,
+    ref: removeRef, type: 'button' as const, variant: 'ghost' as const, size, disabled, iconOnly: true,
     'aria-label': removeLabel, 'data-vf-chip-remove': '', onClick: onRemove,
   };
 
@@ -133,5 +133,5 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(function Chip(
     'data-vf-chip-wrap': wrap ? '' : undefined,
     'data-vf-chip-interactive': interactive ? '' : undefined,
     'data-vf-chip-disabled': interactive && disabled ? '' : undefined,
-  }, primary, onRemove ? createElement(Button, removalProps, createElement('span', { 'aria-hidden': true }, removeIcon ?? '×')) : null);
+  }, primary, onRemove ? createElement(Button, removalProps, createElement('span', { 'aria-hidden': true, 'data-vf-chip-default-remove': removeIcon == null ? '' : undefined }, removeIcon ?? '×')) : null);
 });

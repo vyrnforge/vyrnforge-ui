@@ -289,7 +289,15 @@ test('Theme Builder edits independent light/dark tokens, filters roles and expor
   await expect(builder.getByRole('navigation', { name: 'Theme Builder sections' })
     .getByRole('link')).toHaveCount(4);
   const roles = builder.locator('[data-vf-docs-builder-roles]');
-  await expect(roles.getByRole('button')).toHaveCount(22);
+  await expect(roles.getByRole('button')).toHaveCount(32);
+  await builder.locator('#vf-builder-group').selectOption('Feedback');
+  await expect(roles.getByRole('button')).toHaveCount(9);
+  await expect(roles.getByRole('button', { name: /success foreground/ })).toBeVisible();
+  await expect(roles.getByRole('button', { name: /warning border/ })).toBeVisible();
+  await expect(roles.getByRole('button', { name: /info background/ })).toBeVisible();
+  await builder.locator('#vf-builder-group').selectOption('Disabled');
+  await expect(roles.getByRole('button')).toHaveCount(3);
+  await builder.locator('#vf-builder-group').selectOption('All');
   const light = builder.locator('[data-vf-docs-theme-preview="light"]');
   const dark = builder.locator('[data-vf-docs-theme-preview="dark"]');
   await expect(light).toHaveCSS('color-scheme', 'light');
@@ -2980,4 +2988,43 @@ test('Chip guide teaches capabilities in contextual sections and renders intrins
   const single = page.locator('[data-vf-chip]').first();
   expect(await multiline.evaluate(el => el.getBoundingClientRect().height)).toBeGreaterThan(await single.evaluate(el => el.getBoundingClientRect().height));
   await page.screenshot({ path: testInfo.outputPath('chip-multiline-desktop.png') });
+});
+
+
+test('React Chip guide exposes circular default and unchanged custom removal artwork', async ({ page }, testInfo) => {
+  for (const theme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: theme });
+    await page.setViewportSize({ width: 760, height: 260 });
+    await page.goto('/next/react/examples/chip/deletable/');
+    await page.locator('html').evaluate((el, value) => { el.dataset.vfTheme = value; }, theme);
+    const mark = page.locator('[data-vf-chip-default-remove]');
+    await expect(mark).toHaveCount(2);
+    await expect(mark.first()).toHaveCSS('border-radius', '50%');
+    await page.screenshot({ path: testInfo.outputPath('chip-deletable-' + theme + '.png') });
+    await page.goto('/next/react/examples/chip/custom-delete/');
+    await expect(page.locator('[data-vf-chip-remove] [data-vf-icon]')).toHaveCount(2);
+    await expect(page.locator('[data-vf-chip-default-remove]')).toHaveCount(0);
+    await page.screenshot({ path: testInfo.outputPath('chip-custom-delete-' + theme + '.png') });
+  }
+});
+
+
+test('React Chip actual pointer actions do not leak between the surface and close target', async ({ page }) => {
+  await page.goto('/next/react/examples/chip/action-removal/');
+  const primary = page.getByRole('button', { name: 'Design', exact: true });
+  const chip = primary.locator('..');
+  const remove = page.getByRole('button', { name: 'Remove Design' });
+  const mark = remove.locator('[data-vf-chip-default-remove]');
+  await expect(primary).toBeVisible();
+  const primaryBounds = await primary.boundingBox();
+  const removalBounds = await remove.boundingBox();
+  expect(primaryBounds.x + primaryBounds.width).toBeGreaterThanOrEqual(removalBounds.x + removalBounds.width);
+  // The primary's leading edge and the small trailing gutter are independent of removal.
+  await page.mouse.click(primaryBounds.x + 3, primaryBounds.y + primaryBounds.height / 2);
+  await page.mouse.click((removalBounds.x + removalBounds.width + primaryBounds.x + primaryBounds.width) / 2, primaryBounds.y + primaryBounds.height / 2);
+  await expect(page.getByRole('status')).toHaveText('Design activations: 2');
+  await expect(chip).toBeVisible();
+  await mark.click();
+  await expect(chip).toHaveCount(0);
+  await expect(page.getByRole('status')).toHaveText('Design activations: 2');
 });

@@ -11,8 +11,10 @@ const options: CreateThemeOptions = {
 const authored: ThemeDefinition = createTheme(options);
 const css: string = renderThemeCss(authored);
 void css;
+const feedbackRole: ThemeColorRole = 'success-background';
+void feedbackRole;
 // @ts-expect-error undocumented role
-const unsupportedRole: ThemeColorRole = 'success-background';
+const unsupportedRole: ThemeColorRole = 'rainbow-background';
 void unsupportedRole;
 
 // @ts-expect-error: invalid token names are not part of the generated contract

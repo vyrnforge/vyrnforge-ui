@@ -428,7 +428,8 @@ test('Elemental-primitives aggregate stylesheet is not a component owner and res
   assert.equal(loading.id, 'pattern:loading');
   assert.equal(loading.responsibility, null);
   assert.equal(loading.facets.canonicalRoot, 'product/patterns/loading/');
-  assert.deepEqual(Object.keys(loading.surfaces), ['web']);
+  assert.deepEqual(Object.keys(loading.surfaces), ['web', 'react']);
+  assert.ok(loading.surfaces.react.publicEntrypoints.includes('@vyrnforge/react/loading'));
 
   assert.deepEqual(productGraphProblems(), []);
 });

@@ -6,7 +6,7 @@ import type { IconProps, SvgIconProps } from '@vyrnforge/react/icon';
 const role: ColorRole = 'primary';
 const tone: TextTone = 'danger';
 const brand: ThemeName = 'acme';
-const overrides: ThemeColorOverrides = { primary: '#123456', onAccent: '#fff', danger: 'tomato' };
+const overrides: ThemeColorOverrides = { primary: '#123456', onAccent: '#fff', danger: 'tomato', successForeground: '#166534', warningBorder: '#b45309', infoBackground: '#f0f9ff' };
 const motion: ThemeMotionOverrides = { controlDuration: '80ms', entranceDuration: '480ms', standardEasing: 'linear' };
 const props: ThemeScopeProps = { as: 'section', theme: brand, colors: overrides, motion, 'aria-label': 'Brand section' };
 // @ts-expect-error unknown motion token roles must be rejected
