@@ -16,7 +16,7 @@ Use a leading Avatar or Icon, or a trailing Icon, for redundant visual informati
 
 ## Colors
 
-Neutral, accent, and danger map to current shared semantic theme roles. The filled accent uses the accent foreground and background pair; outlines preserve the readable text role. Do not use color alone to communicate meaning. The consumer can remap theme roles in a scope. Success, warning and info are tracked as a separate shared semantic token foundation.
+Neutral, accent, and danger map to current shared semantic theme roles. The filled accent uses the accent foreground and background pair; outlines preserve the readable text role. Do not use color alone to communicate meaning. The consumer can remap theme roles in a scope. Success, warning and info consume the admitted shared foreground, subtle background and border roles; accent remains an action/selection color. Selection, activation and announcement semantics are unchanged by tone.
 
 ## Sizes
 

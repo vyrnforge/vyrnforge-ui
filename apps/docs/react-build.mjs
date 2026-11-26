@@ -273,6 +273,21 @@ if (badgeTypeStart < 0 || badgeTypeEnd < 0 ||
 }
 const publicBadgeTypes = badgePublicSource.slice(badgeTypeStart, badgeTypeEnd).trim();
 
+const backdrop = reactModel.componentCatalog.find(entry => entry.id === 'backdrop');
+if (!backdrop?.apiAvailable || !backdrop.showcaseAvailable || !backdrop.frameworkContent || backdrop.examples.length !== 1) {
+  throw new Error('React Backdrop requires a public native CSS adapter and executable example');
+}
+const backdropPublicSourcePath = path.join(root, path.dirname(path.dirname(backdrop.frameworkSourcePath)), 'index.ts');
+const backdropData = { ...backdrop, publicTypes: await readFile(backdropPublicSourcePath, 'utf8') };
+const loading = reactModel.patternCatalog.find(entry => entry.id === 'loading');
+if (!loading?.apiAvailable || !loading.showcaseAvailable || !loading.frameworkContent ||
+    !loading.publicEntrypoints.includes('@vyrnforge/react/loading') ||
+    !webModel.packageManifest.exports?.['./styles/loading.css'] || loading.examples.length !== 1) {
+  throw new Error('React Loading requires a public pattern adapter, shared Web CSS and executable example');
+}
+const loadingPublicSourcePath = path.join(root, path.dirname(path.dirname(loading.frameworkSourcePath)), 'index.ts');
+const loadingData = { ...loading, publicTypes: await readFile(loadingPublicSourcePath, 'utf8') };
+
 const chip = reactModel.componentCatalog.find((entry) => entry.id === 'chip');
 const chipExamples = chip?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
 if (!chip?.showcaseAvailable || !chip.apiAvailable || !chip.sharedContent ||
@@ -375,8 +390,8 @@ const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 // Playground CSS belongs to React guide pages only. Bundle relative public CSS imports
 // so an iframe or Native Web inline theme clone never resolves them against a document URL.
-const playgroundViews = new Set(['guide', 'selection-checkbox', 'selection-radio', 'avatar', 'badge', 'chip', 'toggle', 'divider', 'list']);
-const playgroundStyles = ['checkbox', 'radio', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list', 'segmented-control'];
+const playgroundViews = new Set(['guide', 'selection-checkbox', 'selection-radio', 'avatar', 'badge', 'chip', 'toggle', 'divider', 'list', 'loading', 'backdrop']);
+const playgroundStyles = ['checkbox', 'radio', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list', 'loading', 'backdrop', 'segmented-control'];
 const playgroundStyleAsset = '/assets/react-playground.css';
 // The Color studio alone needs these public controls; other docs pages do not
 // pay for unrelated component styles or invent docs-specific component skins.
@@ -477,6 +492,16 @@ function linksFor(route) {
       guide: relative(dir, react + list.showcaseRoute, true),
       api: relative(dir, react + list.apiRoute, true),
       exampleBase: relative(dir, react + 'examples/list/', true),
+    },
+    backdrop: {
+      guide: relative(dir, react + backdrop.showcaseRoute, true),
+      api: relative(dir, react + backdrop.apiRoute, true),
+      exampleBase: relative(dir, react + 'examples/backdrop/', true),
+    },
+    loading: {
+      guide: relative(dir, react + loading.showcaseRoute, true),
+      api: relative(dir, react + loading.apiRoute, true),
+      exampleBase: relative(dir, react + 'examples/loading/', true),
     },
     chip: {
       guide: relative(dir, react + chip.showcaseRoute, true),
@@ -675,7 +700,7 @@ for (const example of listExamples) {
 }
 
 
-for (const example of [...badgeExamples, ...chipExamples]) {
+for (const example of [...badgeExamples, ...chipExamples, ...loading.examples, ...backdrop.examples]) {
   const [component, slug] = example.id.split('/');
   const asset = 'react-' + component + '-' + slug;
   await build({
@@ -903,6 +928,10 @@ const pageViews = [
     description: 'Rich semantic lists, native markers and composed actions' },
   { route: list.apiRoute, view: 'list-api', title: 'React List API',
     description: 'Source-backed React List and ListItem public props' },
+  { route: backdrop.showcaseRoute, view: 'backdrop', title: 'React Backdrop', description: 'Decorative local scrim and native modal paint' },
+  { route: backdrop.apiRoute, view: 'backdrop-api', title: 'React Backdrop API', description: 'Source-backed native Backdrop presentation props' },
+  { route: loading.showcaseRoute, view: 'loading', title: 'React Loading', description: 'Native progress, indicators, structured placeholders and custom loading feedback' },
+  { route: loading.apiRoute, view: 'loading-api', title: 'React Loading API', description: 'Source-backed React Loading presentation parts' },
   { route: chip.showcaseRoute, view: 'chip', title: 'React Chip', description: 'Compact labels, actions, filters and removal' },
   { route: chip.apiRoute, view: 'chip-api', title: 'React Chip API', description: 'Source-backed React Chip props' },
   { route: badge.showcaseRoute, view: 'badge', title: 'React Badge',
@@ -1020,6 +1049,8 @@ for (const page of pageViews) {
     image: page.view === 'image' || page.view === 'image-api' ? imageData : null,
     avatar: page.view === 'avatar' || page.view === 'avatar-api' ? avatarData : null,
     list: page.view === 'list' || page.view === 'list-api' ? listData : null,
+    backdrop: ['backdrop', 'backdrop-api'].includes(page.view) ? backdropData : null,
+    loading: ['loading', 'loading-api'].includes(page.view) ? loadingData : null,
     chip: page.view === 'chip' || page.view === 'chip-api' ? chipData : null,
     badge: page.view === 'badge' || page.view === 'badge-api' ? badgeData : null,
     divider: page.view === 'divider' || page.view === 'divider-api' ? dividerData : null,
@@ -1053,7 +1084,7 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-chip-pilot',
+  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-backdrop-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
   utilities: [
@@ -1099,6 +1130,18 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     examples: listExamples.map((example) => ({
       id: example.id, sourcePath: example.sourcePath, title: example.title,
     })),
+  },
+  backdrop: {
+    guideRoute: backdrop.showcaseRoute, apiRoute: backdrop.apiRoute,
+    publicEntrypoints: backdrop.publicEntrypoints, sharedSourcePath: backdrop.sharedSourcePath,
+    frameworkSourcePath: backdrop.frameworkSourcePath,
+    examples: backdrop.examples.map(({id, sourcePath}) => ({id, sourcePath})),
+  },
+  loading: {
+    guideRoute: loading.showcaseRoute, apiRoute: loading.apiRoute,
+    publicEntrypoints: loading.publicEntrypoints, sharedSourcePath: loading.sharedSourcePath,
+    frameworkSourcePath: loading.frameworkSourcePath,
+    examples: loading.examples.map(({id, sourcePath}) => ({id, sourcePath})),
   },
   chip: {
     guideRoute: chip.showcaseRoute, apiRoute: chip.apiRoute,

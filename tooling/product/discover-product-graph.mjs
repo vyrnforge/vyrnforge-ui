@@ -314,25 +314,28 @@ function normalizePatternNode(root, manifests, patternId, components) {
   if (metadata?.id !== patternId) throw new Error('Pattern metadata identity mismatch: ' + patternId);
   const facets = patternFacets(root, patternId);
   const exampleReferences = resolvePatternReferences(root, metadata, components, manifests, patternId);
-  const webRoot = `${canonicalRoot}/web/`;
-  const publicEntrypoints = exists(root, webRoot) ? componentPublicEntrypoints(manifests, 'web', patternId) : [];
-  const surfaces = exists(root, webRoot)
-    ? {
-        web: {
-          target: 'web',
-          package: 'web',
-          authoringMode: 'product-unit',
-          authoringPaths: [webRoot],
-          projectionPath: componentPackageProjectionPath('web', patternId),
-          legacyPaths: [],
-          publicEntrypoints,
-          dependencies: [],
-          browser: true,
-          types: null,
-          ssr: null,
-        },
-      }
-    : {};
+  const surfaces = Object.fromEntries(['web', 'react'].flatMap((target) => {
+    const authoringPath = `${canonicalRoot}/${target}/`;
+    if (!exists(root, authoringPath)) return [];
+    const publicEntrypoints = componentPublicEntrypoints(manifests, target, patternId);
+    if (target === 'react' && (!publicEntrypoints.length || !exists(root, authoringPath + 'index.ts'))) {
+      throw new Error('Pattern React adaptation requires an explicit public entrypoint and source: ' + patternId);
+    }
+    return [[target, {
+      target,
+      package: target,
+      authoringMode: 'product-unit',
+      authoringPaths: [authoringPath],
+      projectionPath: componentPackageProjectionPath(target, patternId),
+      legacyPaths: [],
+      publicEntrypoints,
+      dependencies: [],
+      browser: true,
+      types: target === 'react' ? `packages/react/test/components/${patternId}/api.types.ts` : null,
+      ssr: target === 'react' ? `packages/react/test/components/${patternId}/ssr.test.mjs` : null,
+    }]];
+  }));
+  const publicEntrypoints = unique(Object.values(surfaces).flatMap(surface => surface.publicEntrypoints));
   return {
     id: `pattern:${patternId}`,
     unitId: patternId,

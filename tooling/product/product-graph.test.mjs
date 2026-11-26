@@ -266,7 +266,8 @@ test('Elemental-primitives responsibility families preserve deliberate Native We
   assert.equal(loading.metadataPath, 'product/patterns/loading/pattern.json');
   assert.equal(loading.metadataSource, 'product-unit');
   assert.equal(loading.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(loading.surfaces), ['web']);
+  assert.deepEqual(Object.keys(loading.surfaces), ['web', 'react']);
+  assert.ok(loading.surfaces.react.publicEntrypoints.includes('@vyrnforge/react/loading'));
   assert.ok(loading.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/loading.css'));
 
   assert.deepEqual(productGraphProblems(), []);

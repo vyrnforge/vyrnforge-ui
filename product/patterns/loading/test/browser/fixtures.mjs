@@ -9,7 +9,25 @@ const stripImports = (css) => css
 export const browserFixture = {
   component: 'loading',
   prepare: async ({ port }) => {
-    if (port !== 'web') return;
+    if (port === 'react') {
+      const { build } = await import('esbuild');
+      const React = await import('react');
+      const { renderToString } = await import('react-dom/server');
+      const { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } = await import('@vyrnforge/react/loading');
+      const outDir = path.join(process.cwd(), 'dist/browser-fixtures/components/loading');
+      await mkdir(outDir, { recursive: true });
+      const h = React.createElement;
+      const markup = renderToString(h(Loading, { size: 'sm', 'aria-busy': true },
+        h(LoadingIndicator, { id: 'react-spinner' }), h(LoadingIndicator, { id: 'react-dots', variant: 'dots' }),
+        h(LoadingPlaceholder, { id: 'react-placeholder', shape: 'line' }),
+        h(LoadingProgress, { id: 'react-progress', value: 48, max: 100, 'aria-label': 'Uploading file' }),
+        h(LoadingProgress, { id: 'react-indeterminate', 'aria-label': 'Preparing import' }),
+        h(LoadingCustom, { id: 'react-custom', 'aria-hidden': true }, h('svg', { width: 16, height: 16 }))));
+      await build({ stdin: { contents: '@import "@vyrnforge/web/styles/loading.css";', loader: 'css', resolveDir: process.cwd() }, bundle: true, outfile: path.join(outDir, 'react-loading.css') });
+      await writeFile(path.join(outDir, 'react.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>React Loading fixture</title><link rel="stylesheet" href="./react-loading.css"></head><body><main><h1>Loading</h1>' + markup + '<p role="status">Loading account summary</p></main></body></html>');
+      return true;
+    }
+    if (port !== 'web') return false;
 
     const root = process.cwd();
     const outDir = path.join(root, 'dist/browser-fixtures/components/loading');

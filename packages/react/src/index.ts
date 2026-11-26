@@ -84,3 +84,5 @@ export * from './components/split-panel/index.js';
 export * from './components/toast/index.js';
 export * from './components/app-shell/index.js';
 export * from './components/side-nav/index.js';
+export * from './components/loading/index.js';
+export * from './components/backdrop/index.js';

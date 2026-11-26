@@ -192,6 +192,15 @@
       forced-color-adjust: auto;
     }
 
+    /* Forced colors can remove gradients. Keep the decorative indicator
+       visible using system paint rather than a private brand palette. */
+    :where([data-vf-loading-indicator][data-vf-loading-variant="dots"],
+      [data-vf-loading-indicator][data-vf-loading-variant="bars"],
+      [data-vf-loading-indicator][data-vf-loading-variant="pulse"]) {
+      color: CanvasText;
+      forced-color-adjust: none;
+    }
+
     :where([data-vf-loading-placeholder]) {
       background: CanvasText;
       opacity: 0.25;

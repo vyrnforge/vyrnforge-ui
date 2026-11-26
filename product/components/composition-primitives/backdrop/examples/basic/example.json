@@ -1,0 +1,18 @@
+{
+  "id": "backdrop/basic",
+  "title": "Local loading overlay",
+  "description": "Compose the visual scrim with a native busy region and authored status. The application owns blocking.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

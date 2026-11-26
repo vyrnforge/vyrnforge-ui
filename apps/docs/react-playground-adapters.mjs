@@ -5,6 +5,8 @@ import { Radio } from '@vyrnforge/react/radio';
 import { Avatar } from '@vyrnforge/react/avatar';
 import { Badge } from '@vyrnforge/react/badge';
 import { Chip } from '@vyrnforge/react/chip';
+import { Backdrop } from '@vyrnforge/react/backdrop';
+import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Divider } from '@vyrnforge/react/divider';
 import { List, ListItem } from '@vyrnforge/react/list';
@@ -247,7 +249,7 @@ export const chipPlayground = {
   fields: [text('label', 'Label', 'Engineering'),
     choice('variant', 'Variant', 'filled', ['filled', 'outlined']),
     choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
-    choice('tone', 'Tone', 'neutral', ['neutral', 'accent', 'danger']),
+    choice('tone', 'Tone', 'neutral', ['neutral', 'accent', 'danger', 'success', 'warning', 'info']),
     choice('mode', 'Mode', 'static', ['static', 'action', 'selectable', 'link']),
     choice('artwork', 'Artwork', 'none', ['none', 'icon', 'avatar', 'trailing']),
     bool('removable', 'Deletable'),
@@ -357,5 +359,70 @@ export const listPlayground = {
         attribute('marker', props.marker, 'none'), attribute('gutter', props.gutter, 'auto'),
         attribute('dividerInset', props.dividerInset, 'none'), 'aria-label="Project areas"'],
       listItems.map(item => markup('ListItem', [], item)).join('\n')));
+  },
+};
+
+const loadingParts = {
+  indicator: 'LoadingIndicator', placeholder: 'LoadingPlaceholder', progress: 'LoadingProgress', custom: 'LoadingCustom',
+};
+function LoadingPreview({ config }) {
+  const body = config.presentation === 'indicator' ? h(LoadingIndicator, { variant: config.variant })
+    : config.presentation === 'placeholder' ? h(LoadingPlaceholder, { shape: config.shape,
+      style: { inlineSize: config.shape === 'circle' ? '3rem' : '100%', minBlockSize: '3rem' } })
+    : config.presentation === 'progress' ? h(LoadingProgress, { 'aria-label': config.label || 'Loading',
+      value: config.indeterminate ? undefined : config.value, max: 100 })
+    : h(LoadingCustom, { 'aria-hidden': true }, h('svg', { width: 32, height: 32, viewBox: '0 0 32 32' },
+      h('circle', { cx: 16, cy: 16, r: 12, fill: 'none', stroke: 'currentColor', strokeWidth: 2 })));
+  return h(Flow, { gap: 'sm', style: { inlineSize: 'min(100%, 24rem)' } },
+    h(Loading, { size: config.size }, body),
+    h(Text, { as: 'p', variant: 'body-sm' }, config.label || 'Loading'));
+}
+export const loadingPlayground = {
+  fields: [choice('presentation', 'Presentation', 'indicator', ['indicator', 'placeholder', 'progress', 'custom']),
+    choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
+    {...choice('variant', 'Indicator', 'spinner', ['spinner', 'dots', 'bars', 'pulse']), available: c => c.presentation === 'indicator'},
+    {...choice('shape', 'Placeholder shape', 'block', ['block', 'line', 'circle']), available: c => c.presentation === 'placeholder'},
+    {...bool('indeterminate', 'Indeterminate'), available: c => c.presentation === 'progress'},
+    {kind: 'number', key: 'value', label: 'Progress', default: 48, min: 0, max: 100, step: 1,
+      available: c => c.presentation === 'progress' && !c.indeterminate},
+    text('label', 'Status text', 'Loading account summary')],
+  presets: [{ label: 'Upload progress', values: { presentation: 'progress', label: 'Uploading file', value: 48 } },
+    { label: 'Structured placeholder', values: { presentation: 'placeholder', shape: 'line' } }],
+  Preview: LoadingPreview,
+  source(config) {
+    const part = loadingParts[config.presentation];
+    const body = config.presentation === 'indicator'
+      ? markup(part, [attribute('variant', config.variant, 'spinner')])
+      : config.presentation === 'placeholder'
+        ? markup(part, [attribute('shape', config.shape, 'block'),
+          'style={{ inlineSize: ' + JSON.stringify(config.shape === 'circle' ? '3rem' : '100%') + ', minBlockSize: "3rem" }}'])
+        : config.presentation === 'progress'
+          ? markup(part, [attribute('aria-label', config.label || 'Loading'),
+            config.indeterminate ? '' : attribute('value', config.value), 'max={100}'])
+          : markup(part, ['aria-hidden={true}'], '<svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth={2} /></svg>');
+    return snippet([importLine('Loading, ' + part, 'loading')], '<>\n' +
+      indent(markup('Loading', [attribute('size', config.size, 'md')], body) + '\n<p>' +
+        content(config.label || 'Loading') + '</p>', 2) + '\n</>');
+  },
+};
+
+function BackdropPreview({ config }) {
+  return h(Flow, { gap: 'sm', style: { inlineSize: 'min(100%, 24rem)' } },
+    h('div', { style: { position: 'relative', isolation: 'isolate', padding: 'var(--vf-space-md)',
+      border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)' } },
+      h(Text, { as: 'p' }, 'Account summary'),
+      h(Button, { type: 'button', variant: 'secondary' }, 'View statement'),
+      h(Backdrop, { hidden: config.hidden, style: { opacity: config.opacity } })),
+    h(Text, { as: 'p', variant: 'body-sm' }, 'The scrim is visual-only; the underlying action is not disabled.'));
+}
+export const backdropPlayground = {
+  fields: [bool('hidden', 'Hidden'), {kind: 'number', key: 'opacity', label: 'Opacity', min: 0, max: 1, step: 0.1, default: 1}],
+  Preview: BackdropPreview,
+  source(config) {
+    // A positioned containing block is necessary to demonstrate the local scrim.
+    return snippet([importLine('Backdrop', 'backdrop'), importLine('Button', 'button')],
+      markup('div', ['style={{ position: "relative", isolation: "isolate" }}'],
+        '<Button type="button" variant="secondary">View statement</Button>\n' +
+        markup('Backdrop', [flag('hidden', config.hidden), config.opacity !== 1 ? 'style={{ opacity: ' + config.opacity + ' }}' : ''])));
   },
 };

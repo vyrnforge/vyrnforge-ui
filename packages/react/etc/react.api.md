@@ -41,6 +41,7 @@ import { LiHTMLAttributes } from 'react';
 import { MouseEvent as MouseEvent_2 } from 'react';
 import { MouseEventHandler } from 'react';
 import { PointerEventHandler } from 'react';
+import { ProgressHTMLAttributes } from 'react';
 import { ProviderProps } from 'react';
 import { ReactElement } from 'react';
 import { ReactEventHandler } from 'react';
@@ -257,6 +258,21 @@ export type AvatarShape = 'rounded' | 'square';
 export type AvatarSize = 'sm' | 'md' | 'lg';
 
 // @public
+export const Backdrop: ForwardRefExoticComponent<BackdropProps & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export interface BackdropProps {
+    // (undocumented)
+    className?: string;
+    // (undocumented)
+    hidden?: boolean;
+    // (undocumented)
+    id?: string;
+    // (undocumented)
+    style?: CSSProperties;
+}
+
+// @public
 export const Badge: ForwardRefExoticComponent<BadgeProps & RefAttributes<HTMLSpanElement>>;
 
 // @public
@@ -419,7 +435,7 @@ export type ChipProps = Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'onC
 export type ChipSize = 'sm' | 'md' | 'lg';
 
 // @public (undocumented)
-export type ChipTone = 'neutral' | 'accent' | 'danger';
+export type ChipTone = 'neutral' | 'accent' | 'danger' | 'success' | 'warning' | 'info';
 
 // @public (undocumented)
 export type ChipVariant = 'filled' | 'outlined';
@@ -2338,6 +2354,60 @@ export type ListSpacing = 'none' | 'sm' | 'md' | 'lg';
 
 // @public (undocumented)
 export type ListVariant = 'plain' | 'divided' | 'bordered';
+
+// @public
+export const Loading: ForwardRefExoticComponent<LoadingProps & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export const LoadingCustom: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export type LoadingCustomProps = ComponentPropsWithoutRef<'div'>;
+
+// @public
+export const LoadingIndicator: ForwardRefExoticComponent<LoadingIndicatorProps & RefAttributes<HTMLSpanElement>>;
+
+// @public (undocumented)
+export interface LoadingIndicatorProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-hidden' | 'tabIndex' | 'dangerouslySetInnerHTML'> {
+    // (undocumented)
+    variant?: LoadingVariant;
+}
+
+// @public (undocumented)
+export const LoadingPlaceholder: ForwardRefExoticComponent<LoadingPlaceholderProps & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export interface LoadingPlaceholderProps extends Omit<ComponentPropsWithoutRef<'div'>, 'children' | 'role' | 'aria-hidden' | 'tabIndex' | 'dangerouslySetInnerHTML'> {
+    // (undocumented)
+    shape?: LoadingPlaceholderShape;
+}
+
+// @public (undocumented)
+export type LoadingPlaceholderShape = 'block' | 'line' | 'circle';
+
+// @public (undocumented)
+export const LoadingProgress: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ProgressHTMLAttributes<HTMLProgressElement>, HTMLProgressElement>, "ref">, "role" | "value" | "max"> & {
+value?: number;
+max?: number;
+} & RefAttributes<HTMLProgressElement>>;
+
+// @public (undocumented)
+export type LoadingProgressProps = Omit<ComponentPropsWithoutRef<'progress'>, 'value' | 'max' | 'role'> & {
+    value?: number;
+    max?: number;
+};
+
+// @public (undocumented)
+export interface LoadingProps extends ComponentPropsWithoutRef<'div'> {
+    // (undocumented)
+    size?: LoadingSize;
+}
+
+// @public (undocumented)
+export type LoadingSize = 'sm' | 'md' | 'lg';
+
+// @public (undocumented)
+export type LoadingVariant = 'spinner' | 'dots' | 'bars' | 'pulse';
 
 // @public (undocumented)
 export const MenubarContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
@@ -4921,7 +4991,7 @@ export type ToggleGroupType = 'single' | 'multiple';
 
 // @public (undocumented)
 export const tokens: Readonly<{
-    color: Readonly<Record<"primary" | "secondary" | "accent" | "danger" | "text" | "muted" | "subtle" | "onAccent" | "accentHover" | "accentPressed" | "accentSubtle" | "accentSubtleHover" | "dangerBackground" | "background" | "surface" | "surfaceSubtle" | "surfaceHover" | "surfacePressed" | "border" | "borderStrong" | "borderRequired" | "focus" | "disabledText" | "disabledBackground" | "disabledBorder", `var(--vf-${string})`>>;
+    color: Readonly<Record<"primary" | "secondary" | "accent" | "danger" | "text" | "muted" | "subtle" | "onAccent" | "accentHover" | "accentPressed" | "accentSubtle" | "accentSubtleHover" | "dangerBackground" | "dangerForeground" | "successForeground" | "successBackground" | "successBorder" | "warningForeground" | "warningBackground" | "warningBorder" | "infoForeground" | "infoBackground" | "infoBorder" | "background" | "surface" | "surfaceSubtle" | "surfaceHover" | "surfacePressed" | "border" | "borderStrong" | "borderRequired" | "focus" | "disabledText" | "disabledBackground" | "disabledBorder", `var(--vf-${string})`>>;
     space: Readonly<{
         none: `var(--vf-${string})`;
         '2xs': `var(--vf-${string})`;

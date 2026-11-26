@@ -56,7 +56,7 @@
   },
   "profileVariability": [
     "static, actionable, selectable, navigational and removable",
-    "filled/outlined, neutral/accent/danger, sm/md/lg",
+    "filled/outlined, neutral/accent/danger/success/warning/info, sm/md/lg",
     "RTL, dark, forced colors, reduced motion and reflow"
   ],
   "notes": [

@@ -5,7 +5,7 @@ import ts from 'typescript';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeConfiguration, defaultsFor } from '../../playground-config.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground } from '../../react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground } from '../../react-playground-adapters.mjs';
 
 test('Button playground keeps configuration, interaction and generated usage synchronized', async ({ page }) => {
   await page.goto('/next/react/components/button/');
@@ -147,6 +147,9 @@ test('Generated playground examples typecheck and bundle against installed publi
     [buttonPlayground, { artwork: 'icon only' }], [togglePlayground, { iconOnly: true, pressed: true }],
     [dividerPlayground, { orientation: 'vertical', textDirection: 'bottom-to-top', textAlign: 'end' }],
     [listPlayground, { as: 'ol', variant: 'divided', marker: 'auto', gutter: 'lg', dividerInset: 'gutter' }],
+    [loadingPlayground, {}], [loadingPlayground, { presentation: 'progress', value: 72 }],
+    [loadingPlayground, { presentation: 'placeholder', shape: 'circle' }], [loadingPlayground, { presentation: 'custom' }],
+    [backdropPlayground, {}], [backdropPlayground, { hidden: true, opacity: 0.5 }],
   ];
   const generated = new Map(scenarios.map(([adapter, patch], index) => [
     path.join(root, 'apps/docs', 'generated-playground-' + index + '.tsx'),
@@ -194,7 +197,9 @@ test('Chip shared playground covers old link, artwork, custom removal, wrapping 
   await playground.getByRole('textbox', { name: 'Label' }).fill('Frontend');
   await playground.getByRole('radio', { name: 'link', exact: true }).check();
   await playground.getByRole('radio', { name: 'outlined', exact: true }).check();
-  await playground.getByRole('radio', { name: 'danger', exact: true }).check();
+  await playground.getByRole('combobox', { name: 'Tone' }).selectOption('success');
+  await expect(preview.locator('[data-vf-chip]')).toHaveAttribute('data-vf-chip-tone', 'success');
+  await playground.getByRole('combobox', { name: 'Tone' }).selectOption('danger');
   await playground.getByRole('radio', { name: 'lg', exact: true }).check();
   await playground.getByRole('radio', { name: 'avatar', exact: true }).check();
   await playground.getByRole('checkbox', { name: 'Deletable' }).check();

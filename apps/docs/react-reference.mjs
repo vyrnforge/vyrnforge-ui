@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -194,6 +194,7 @@ function navigation(view, links, topic) {
       { id: 'badge', title: 'Badge', href: links.badge.guide },
       { id: 'chip', title: 'Chip', href: links.chip.guide },
     ] },
+    { label: 'Feedback', items: [{ id: 'backdrop', title: 'Backdrop', href: links.backdrop.guide }, { id: 'loading', title: 'Loading', href: links.loading.guide }] },
     { label: 'Libraries', items: [
       { id: 'icon-library', title: 'VyrnForge Icons', href: links.icon.library },
     ] },
@@ -213,6 +214,8 @@ function navigation(view, links, topic) {
       { id: 'avatar-api', title: 'Avatar API', href: links.avatar.api },
       { id: 'badge-api', title: 'Badge API', href: links.badge.api },
       { id: 'chip-api', title: 'Chip API', href: links.chip.api },
+      { id: 'backdrop-api', title: 'Backdrop API', href: links.backdrop.api },
+      { id: 'loading-api', title: 'Loading API', href: links.loading.api },
       ...['text', 'code', 'kbd'].map((id) => ({
         id: 'typography-api:' + id,
         title: id === 'kbd' ? 'Kbd API' : id[0].toUpperCase() + id.slice(1) + ' API',
@@ -865,7 +868,7 @@ function listApi(list, links) {
 
 function compactExample(example, links, component = 'badge', topicHeading = '') {
   const slug = example.id.slice(component.length + 1);
-  const componentTitle = component === 'chip' ? 'Chip' : 'Badge';
+  const componentTitle = component[0].toUpperCase() + component.slice(1);
   return h('article', { key: example.id, id: 'react-' + component + '-example-' + slug,
     className: 'vf-docs-example', ['data-vf-docs-react-' + component + '-example']: example.id },
     example.title === topicHeading ? null : h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
@@ -880,6 +883,40 @@ function compactExample(example, links, component = 'badge', topicHeading = '') 
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
       h(CodeBlock, { tabIndex: 0 }, example.source)));
+}
+// Feedback guides share the same preview/source renderer and native-first content.
+function feedbackUsage(unit, links, adapter) {
+  const prefix = 'react-' + unit.id;
+  const sections = [
+    { id: prefix + '-setup', heading: 'Get started' },
+    { id: prefix + '-playground', heading: 'Playground' },
+    { id: prefix + '-examples', heading: 'Examples' },
+    { id: prefix + '-guidelines', heading: 'Usage and accessibility' },
+    { id: prefix + '-reference', heading: 'Related API' },
+  ];
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
+    guideToc(sections),
+    h('article', { className: 'vf-docs-article', ['data-vf-docs-react-' + unit.id]: '' },
+      guideHeader(unit.sharedContent, 'React · Feedback', unit.standardReferences),
+      guidePart(sections[0], [...renderBlocks(unit.frameworkContent.intro),
+        ...guideBlocks(unit.frameworkContent, 'React setup')]),
+      guidePart(sections[1], [h(ComponentPlayground, { adapter, title: unit.title })]),
+      guidePart(sections[2], unit.examples.map(example => compactExample(example, links, unit.id))),
+      guidePart(sections[3], guideSubsections(unit.sharedContent, unit.sharedContent.sections
+        .filter(section => section.heading !== 'Native Web' && section.heading !== 'Framework boundary')
+        .map(section => section.heading), prefix + '-guidance')),
+      guidePart(sections[4], [h(Link, { href: links[unit.id].api }, 'View ' + unit.title + ' public React API')])));
+}
+function feedbackApi(unit, links) {
+  return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': unit.id },
+    h('header', { className: 'vf-docs-component-header' },
+      h('h1', null, unit.title + ' API'), evidenceDisclosure(unit.standardReferences)),
+    h('section', null, h('h2', null, 'Public entrypoint and shared stylesheet'),
+      h('ul', null, ...unit.publicEntrypoints.map(name => h('li', { key: name }, h(Code, null, name))),
+        h('li', null, h(Code, null, '@vyrnforge/web/styles/' + unit.id + '.css')))),
+    h('section', null, h('h2', null, 'React source and public types'),
+      h(CodeBlock, { tabIndex: 0 }, unit.publicTypes)),
+    h(Link, { href: links[unit.id].guide }, 'View ' + unit.title + ' examples'));
 }
 function chipUsage(chip, links) {
   if (!chip?.sharedContent || !chip?.frameworkContent || !chip.examples?.length) return null;
@@ -1383,7 +1420,7 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, h(Link, { href: links.rtl }, 'Use right-to-left content'))));
 }
 
-function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection) {
+function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop) {
   if (selection) return view.endsWith('-api') ? selectionApi(selection, links) : selectionGuide(selection, links);
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
@@ -1478,6 +1515,10 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   if (view === 'divider-api') return dividerApi(divider, links);
   if (view === 'list') return listUsage(list, links);
   if (view === 'list-api') return listApi(list, links);
+  if (view === 'backdrop') return feedbackUsage(backdrop, links, backdropPlayground);
+  if (view === 'backdrop-api') return feedbackApi(backdrop, links);
+  if (view === 'loading') return feedbackUsage(loading, links, loadingPlayground);
+  if (view === 'loading-api') return feedbackApi(loading, links);
   if (view === 'chip') return chipUsage(chip, links);
   if (view === 'chip-api') return chipApi(chip, links);
   if (view === 'badge') return badgeUsage(badge, links);
@@ -1530,7 +1571,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   }
   return buttonUsageGuide(button, links);
 }
-export function ReactReferencePage({ view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection }) {
+export function ReactReferencePage({ view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -1578,6 +1619,10 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
     { title: 'Image', href: links.image.guide, keywords: 'image img responsive alt decorative caption figure native JSX' },
     { title: 'Image API', href: links.image.api, keywords: 'imageprops img loading decoding srcset sizes ref types' },
+    { title: 'Backdrop', href: links.backdrop.guide, keywords: 'scrim loading overlay native dialog backdrop decorative region' },
+    { title: 'Backdrop API', href: links.backdrop.api, keywords: 'BackdropProps hidden style ref' },
+    { title: 'Loading', href: links.loading.guide, keywords: 'progress loading spinner dots bars pulse skeleton placeholder custom async' },
+    { title: 'Loading API', href: links.loading.api, keywords: 'LoadingProgress LoadingIndicator LoadingPlaceholder native progress' },
     { title: 'Chip', href: links.chip.guide, keywords: 'chip tag compact label filter clickable removable dismiss selected avatar icon' },
     { title: 'Chip API', href: links.chip.api, keywords: 'chipprops selected onremove removelabel ref' },
     { title: 'Badge', href: links.badge.guide,
@@ -1662,7 +1707,7 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
           h(Link, { href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection))),
+        body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));
