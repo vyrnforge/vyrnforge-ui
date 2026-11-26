@@ -4,6 +4,7 @@ const port = process.env.VF_COMPONENT_PORT === 'react' ? 'react' : 'web';
 
 test('TextField keeps native labels, editing, descriptions, reset, and focus', async ({ page }, testInfo) => {
   await page.goto('/components/text-field/' + port + '.html');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   const email = page.getByRole('textbox', { name: 'Email', exact: true });
   const notes = page.getByRole('textbox', { name: 'Notes', exact: true });
   await expect(email).toHaveAccessibleDescription(
