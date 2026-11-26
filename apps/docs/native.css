@@ -417,6 +417,24 @@
     overflow-wrap: anywhere;
   }
 
+  .vf-docs-main .vf-docs-standards-intro,
+  .vf-docs-main .vf-docs-criterion-note {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-sm);
+    line-height: var(--vf-line-height-relaxed);
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .vf-docs-main .vf-docs-criterion-note {
+    padding-inline: var(--vf-space-sm);
+  }
+
+  .vf-docs-standards-details a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
   .vf-docs-standards-note {
     color: var(--vf-color-text-muted);
     font-size: var(--vf-font-size-xs);
