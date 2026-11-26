@@ -4354,7 +4354,7 @@ export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 export type TextElement = 'span' | 'p' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote' | 'q' | 'cite' | 'strong' | 'em' | 'small' | 'mark' | 'abbr' | 'sub' | 'sup' | 'del' | 'ins' | 'time' | 'figcaption';
 
 // @public
-export const TextField: ForwardRefExoticComponent<TextFieldProps & RefAttributes<HTMLInputElement | HTMLTextAreaElement>>;
+export const TextField: ForwardRefExoticComponent<TextFieldProps & RefAttributes<HTMLTextAreaElement | HTMLInputElement>>;
 
 // @public (undocumented)
 export interface TextFieldAppearanceProps {

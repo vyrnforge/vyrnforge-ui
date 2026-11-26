@@ -108,8 +108,10 @@ test('Textarea retains native rows and cols without overflowing a narrow RTL con
   await expect(editable).toHaveAttribute('cols', '30');
   const fits = await editable.evaluate((node) => node.getBoundingClientRect().width <= node.parentElement.getBoundingClientRect().width + 1);
   expect(fits).toBe(true);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   for (const theme of ['light', 'dark']) {
     await page.locator('html').evaluate((node, value) => node.setAttribute('data-vf-theme', value), theme);
+    await expect(editable).toHaveCSS('background-color', theme === 'light' ? 'rgb(255, 255, 255)' : 'rgb(24, 24, 27)');
     await page.screenshot({ path: testInfo.outputPath(`textarea-narrow-${theme}-${port}.png`), fullPage: true });
   }
   await page.emulateMedia({ forcedColors: 'active' });
