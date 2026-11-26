@@ -2,6 +2,7 @@ import { createElement, forwardRef } from 'react';
 import type { ComponentPropsWithoutRef, MouseEvent, ReactNode, Ref } from 'react';
 import { Button } from '../button/index.js';
 import { Link } from '../link/index.js';
+import { SvgIcon } from '../icon/index.js';
 import { ToggleButton } from '../toggle-button/index.js';
 
 export type ChipTone = 'neutral' | 'accent' | 'danger' | 'success' | 'warning' | 'info';
@@ -133,5 +134,6 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(function Chip(
     'data-vf-chip-wrap': wrap ? '' : undefined,
     'data-vf-chip-interactive': interactive ? '' : undefined,
     'data-vf-chip-disabled': interactive && disabled ? '' : undefined,
-  }, primary, onRemove ? createElement(Button, removalProps, createElement('span', { 'aria-hidden': true, 'data-vf-chip-default-remove': removeIcon == null ? '' : undefined }, removeIcon ?? '×')) : null);
+  }, primary, onRemove ? createElement(Button, removalProps, createElement('span', { 'aria-hidden': true, 'data-vf-chip-default-remove': removeIcon == null ? '' : undefined }, removeIcon ?? createElement(SvgIcon, { size: 'sm' },
+    createElement('path', { d: 'M6 6L18 18M18 6L6 18', fill: 'none', stroke: 'currentColor', strokeWidth: 3, strokeLinecap: 'round' })))) : null);
 });

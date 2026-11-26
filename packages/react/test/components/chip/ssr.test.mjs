@@ -53,7 +53,9 @@ test('disabled link Chip cannot navigate and is not a tab stop', () => {
 test('default removal artwork is decorative and custom removal artwork bypasses the circle', () => {
   const defaultHtml = renderToStaticMarkup(h(Chip, { onRemove() {}, removeLabel: 'Remove Draft' }, 'Draft'));
   assert.match(defaultHtml, /data-vf-icon-only=""/);
-  assert.match(defaultHtml, /aria-hidden="true" data-vf-chip-default-remove="">×/);
+  assert.match(defaultHtml, /aria-hidden="true" data-vf-chip-default-remove=""><svg/);
+  assert.match(defaultHtml, /d="M6 6L18 18M18 6L6 18"/);
+  assert.match(defaultHtml, /focusable="false"/);
   const customHtml = renderToStaticMarkup(h(Chip, { onRemove() {}, removeLabel: 'Remove Draft', removeIcon: h('span', null, 'Custom') }, 'Draft'));
   assert.doesNotMatch(customHtml, /data-vf-chip-default-remove/);
   assert.match(customHtml, /Custom/);

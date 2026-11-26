@@ -8,11 +8,13 @@ export const browserFixture = {
     const root = process.cwd();
     const target = path.join(root, 'dist/browser-fixtures/components/chip');
     await mkdir(target, { recursive: true });
-    const paths = ['styles/tokens.css', 'components/button/button.css', 'components/toggle-button/toggle-button.css', 'components/link/link.css', 'components/chip/chip.css'];
+    const paths = ['styles/tokens.css', 'components/button/button.css', 'components/toggle-button/toggle-button.css', 'components/link/link.css', 'components/icon/icon.css', 'components/chip/chip.css'];
     const css = await Promise.all(paths.map(async file => (await readFile(path.join(root, 'packages/web/dist', file), 'utf8')).replace(/^@import\s+["'][^"']+["'];\s*$/gm, '')));
     await writeFile(path.join(target, 'chip.css'), css.join('\n') + '\nbody{background:var(--vf-color-surface);color:var(--vf-color-text)}main{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;padding:1rem;min-inline-size:0;box-sizing:border-box}h1{flex-basis:100%}#long{max-inline-size:100%}');
     const label = value => '<span data-vf-chip-label>' + value + '</span>';
-    const close = '<button type="button" data-vf-button data-vf-icon-only data-vf-chip-remove aria-label="Remove React"><span aria-hidden="true" data-vf-chip-default-remove>×</span></button>';
+    const defaultGlyph = '<svg data-vf-icon data-vf-size="sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6L18 18M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
+    const customGlyph = '<svg data-vf-icon data-vf-size="sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12H19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    const close = '<button type="button" data-vf-button data-vf-icon-only data-vf-chip-remove aria-label="Remove React"><span aria-hidden="true" data-vf-chip-default-remove>' + defaultGlyph + '</span></button>';
     const long = 'A long descriptive category that must remain available to assistive technology';
     const removalCases = ['neutral', 'accent', 'danger', 'success', 'warning', 'info'].flatMap(tone =>
       ['filled', 'outlined'].map(variant => ({ tone, variant, size: 'md', id: 'remove-' + tone + '-' + variant })));
@@ -24,7 +26,7 @@ export const browserFixture = {
       '<span id="' + id + '" data-vf-chip data-vf-chip-tone="' + tone + '" data-vf-chip-variant="' + variant + '" data-vf-chip-size="' + size + '"' +
       (disabled ? ' data-vf-chip-disabled' : '') + '><span data-vf-chip-primary>' + label(tone) + '</span>' +
       '<button type="button" data-vf-button data-vf-icon-only data-vf-chip-remove aria-label="Remove ' + id + '"' + (disabled ? ' disabled' : '') +
-      '><span aria-hidden="true"' + (custom ? '' : ' data-vf-chip-default-remove') + '>' + (custom ? '−' : '×') + '</span></button></span>').join('');
+      '><span aria-hidden="true"' + (custom ? '' : ' data-vf-chip-default-remove') + '>' + (custom ? customGlyph : defaultGlyph) + '</span></button></span>').join('');
     let body = '<main><h1>Chip specimens</h1>' +
       '<span id="static" data-vf-chip data-vf-chip-size="sm"><span data-vf-chip-primary>' + label('Engineering') + '</span></span>' +
       '<span id="action" data-vf-chip><button type="button" data-vf-button data-vf-chip-primary>' + label('Open') + '</button></span>' +
@@ -47,7 +49,7 @@ export const browserFixture = {
         h(Chip, { id: 'disabled-link', href: '#long', disabled: true }, 'Disabled link'),
         ...removalCases.map(({ id, tone, variant, size, disabled, custom }) => h(Chip, {
           key: id, id, tone, variant, size, disabled, onRemove() {}, removeLabel: 'Remove ' + id,
-          ...(custom ? { removeIcon: h('span', null, '−') } : {}),
+          ...(custom ? { removeIcon: h('svg', { 'data-vf-icon': '', 'data-vf-size': 'sm', viewBox: '0 0 24 24', 'aria-hidden': true, focusable: false }, h('path', { d: 'M5 12H19', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' })) } : {}),
         }, tone))));
     }
     await writeFile(path.join(target, port + '.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Chip fixture</title><link rel="stylesheet" href="./chip.css"></head><body>' + body + '</body></html>');
