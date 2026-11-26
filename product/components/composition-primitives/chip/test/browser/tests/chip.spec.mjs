@@ -83,7 +83,7 @@ test('default removal mark has independent geometry and contrast across tones an
     await page.emulateMedia({ colorScheme: theme });
     await page.locator('html').evaluate((el, value) => { el.dataset.vfTheme = value; }, theme);
     const mark = page.locator('[id^="remove-"]:not(#remove-disabled) [data-vf-chip-default-remove]');
-    await expect(mark).toHaveCount(8);
+    await expect(mark).toHaveCount(14);
     const specimens = await mark.evaluateAll(nodes => {
       const luminance = color => {
         const rgb = color.match(/[\d.]+/g).slice(0, 3).map(value => Number(value) / 255)
@@ -184,6 +184,7 @@ test('semantic feedback Chip tones use canonical foreground, fill and outline in
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(url);
   for (const theme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
     await page.locator('html').evaluate((el, value) => { el.dataset.vfTheme = value; }, theme);
     for (const tone of ['success', 'warning', 'info']) {
       for (const variant of ['filled', 'outlined']) {
@@ -207,9 +208,10 @@ test('semantic feedback Chip tones use canonical foreground, fill and outline in
         else expect(values.outline).toBe(values.border);
       }
     }
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   }
-  await page.emulateMedia({ forcedColors: 'active' });
+  await page.emulateMedia({ forcedColors: 'active', colorScheme: 'dark' });
   await expect(page.locator('#remove-success-filled')).toBeVisible();
   await expect(page.locator('#remove-warning-outlined')).toContainText('warning');
-  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await expect(page.locator('#remove-success-filled')).toHaveCSS('border-top-style', 'solid');
 });
