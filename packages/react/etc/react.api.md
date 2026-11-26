@@ -370,14 +370,35 @@ export type ChipProps = Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'onC
     trailing?: ReactNode;
     wrap?: boolean;
     disabled?: boolean;
+} & ({
+    href: string;
+    target?: string;
+    rel?: string;
+    linkRef?: Ref<HTMLAnchorElement>;
+    actionRef?: never;
+    onClick?: never;
+    selectable?: false;
+    selected?: never;
+    defaultSelected?: never;
+    onSelectedChange?: never;
+} | {
+    href?: never;
+    target?: never;
+    rel?: never;
+    linkRef?: never;
     actionRef?: Ref<HTMLButtonElement>;
     onClick?: (event: MouseEvent_2<HTMLButtonElement>) => void;
-} & ({
     selectable: true;
     selected?: boolean;
     defaultSelected?: boolean;
     onSelectedChange?: (selected: boolean, event: MouseEvent_2<HTMLButtonElement>) => void;
 } | {
+    href?: never;
+    target?: never;
+    rel?: never;
+    linkRef?: never;
+    actionRef?: Ref<HTMLButtonElement>;
+    onClick?: (event: MouseEvent_2<HTMLButtonElement>) => void;
     selectable?: false;
     selected?: never;
     defaultSelected?: never;

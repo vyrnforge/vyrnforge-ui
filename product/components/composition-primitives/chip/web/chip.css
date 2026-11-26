@@ -1,6 +1,7 @@
 @layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
 @import "../../styles/tokens.css";
 @import "../toggle-button/toggle-button.css";
+@import "../link/link.css";
 
 @layer vyrnforge.components {
   :where([data-vf-chip]) {
@@ -105,19 +106,21 @@
     font-size: var(--vf-font-size-lg);
     line-height: var(--vf-line-height-none);
   }
-  :where([data-vf-chip]) > button:is([data-vf-chip-primary], [data-vf-chip-remove]):hover:not(:disabled) {
+  :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):hover:not(:disabled,[aria-disabled="true"]) {
     background: var(--vf-color-surface-hover);
   }
-  :where([data-vf-chip]) > button:is([data-vf-chip-primary], [data-vf-chip-remove]):active:not(:disabled) {
+  :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):active:not(:disabled,[aria-disabled="true"]) {
     background: var(--vf-color-surface-pressed);
   }
-  :where([data-vf-chip]) > button:is([data-vf-chip-primary], [data-vf-chip-remove]):focus-visible {
+  :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):focus-visible {
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
     position: relative;
     z-index: 1;
   }
-  :where([data-vf-chip]) > button:disabled { cursor: not-allowed; }
+  :where([data-vf-chip]) > :is(button:disabled, a[aria-disabled="true"]) { cursor: not-allowed; }
+  :where([data-vf-chip]) > a[data-vf-chip-primary] { text-decoration-line: underline; }
+  :where([data-vf-chip]) > a[data-vf-chip-primary][aria-disabled="true"] { text-decoration-line: none; }
   :where([data-vf-chip-label]) {
     min-inline-size: 0;
     overflow: hidden;
@@ -176,11 +179,13 @@
       color: GrayText;
       border-color: GrayText;
     }
-    :where([data-vf-chip]) > button:is([data-vf-chip-primary], [data-vf-chip-remove]):is(:hover,:active):not(:disabled) {
+    :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):is(:hover,:active):not(:disabled,[aria-disabled="true"]) {
       background: ButtonFace;
       color: ButtonText;
     }
-    :where([data-vf-chip]) > button:is([data-vf-chip-primary], [data-vf-chip-remove]):focus-visible {
+    :where([data-vf-chip]) > a[data-vf-chip-primary]:not([aria-disabled="true"]) { color: LinkText; }
+    :where([data-vf-chip]) > a[data-vf-chip-primary][aria-disabled="true"] { color: GrayText; }
+    :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):focus-visible {
       outline-color: Highlight;
     }
   }

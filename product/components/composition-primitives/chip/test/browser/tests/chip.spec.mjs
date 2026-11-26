@@ -53,3 +53,19 @@ test('Chip preserves logical order, wrapping, themes and motion preference', asy
   expect(parseFloat(radius.actual)).toBeLessThan(radius.height / 4);
   await page.screenshot({ path: test.info().outputPath('chip-rtl-forced-colors.png'), fullPage: true });
 });
+
+test('navigation retains native link keyboard semantics and disabled links cannot navigate', async ({ page }) => {
+  await page.goto(url);
+  const link = page.getByRole('link', { name: 'Documentation' });
+  const disabled = page.getByRole('link', { name: 'Disabled link' });
+  await expect(link).toHaveAttribute('href', '#long');
+  await expect(disabled).toHaveAttribute('aria-disabled', 'true');
+  await expect(disabled).not.toHaveAttribute('href', /.+/);
+  await link.focus();
+  await page.keyboard.press('Space');
+  expect(new URL(page.url()).hash).toBe('');
+  await page.keyboard.press('Enter');
+  expect(new URL(page.url()).hash).toBe('#long');
+  await page.keyboard.press('Tab');
+  await expect(disabled).not.toBeFocused();
+});

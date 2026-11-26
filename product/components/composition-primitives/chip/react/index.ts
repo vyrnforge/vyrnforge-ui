@@ -1,6 +1,7 @@
 import { createElement, forwardRef } from 'react';
 import type { ComponentPropsWithoutRef, MouseEvent, ReactNode, Ref } from 'react';
 import { Button } from '../button/index.js';
+import { Link } from '../link/index.js';
 import { ToggleButton } from '../toggle-button/index.js';
 
 export type ChipTone = 'neutral' | 'accent' | 'danger';
@@ -21,17 +22,40 @@ export type ChipProps = Omit<ComponentPropsWithoutRef<'span'>,
   /** Wrap the full label instead of truncating it when constrained. */
   wrap?: boolean;
   disabled?: boolean;
-  /** Ref to the primary native button, when present. The forwarded ref is the stable root. */
-  actionRef?: Ref<HTMLButtonElement>;
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 } & (
   | {
+      /** Link mode uses a native anchor. Disabled links have no href or tab stop. */
+      href: string;
+      target?: string;
+      rel?: string;
+      linkRef?: Ref<HTMLAnchorElement>;
+      actionRef?: never;
+      onClick?: never;
+      selectable?: false;
+      selected?: never;
+      defaultSelected?: never;
+      onSelectedChange?: never;
+    }
+  | {
+      href?: never;
+      target?: never;
+      rel?: never;
+      linkRef?: never;
+      /** Ref to the primary native button. The forwarded ref is the stable root. */
+      actionRef?: Ref<HTMLButtonElement>;
+      onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
       selectable: true;
       selected?: boolean;
       defaultSelected?: boolean;
       onSelectedChange?: (selected: boolean, event: MouseEvent<HTMLButtonElement>) => void;
     }
   | {
+      href?: never;
+      target?: never;
+      rel?: never;
+      linkRef?: never;
+      actionRef?: Ref<HTMLButtonElement>;
+      onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
       selectable?: false;
       selected?: never;
       defaultSelected?: never;
@@ -57,12 +81,13 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(function Chip(
   {
     children, tone = 'neutral', size = 'md', variant = 'filled', leading, trailing,
     wrap = false, disabled = false, selectable, selected, defaultSelected,
-    onSelectedChange, onClick, actionRef, onRemove, removeLabel, removeIcon, removeRef,
+    onSelectedChange, onClick, actionRef, href, target, rel, linkRef,
+    onRemove, removeLabel, removeIcon, removeRef,
     ...nativeProps
   },
   ref
 ) {
-  const interactive = Boolean(selectable || onClick || onRemove);
+  const interactive = Boolean(selectable || onClick || onRemove || href !== undefined);
   const label = [
     leading == null ? null : createElement('span', { key: 'leading', 'data-vf-chip-leading': '', 'aria-hidden': true }, leading),
     selectable ? createElement('span', { key: 'selection', 'data-vf-chip-selection': '', 'aria-hidden': true }, '✓') : null,
@@ -73,7 +98,17 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(function Chip(
     ref: actionRef, type: 'button' as const, disabled, size,
     'data-vf-chip-primary': '', onClick,
   };
-  const primary = selectable
+  const linkProps = {
+    ref: linkRef, 'data-vf-chip-primary': '',
+    href: disabled ? undefined : href,
+    target: disabled ? undefined : target,
+    rel: disabled ? undefined : rel,
+    role: disabled ? 'link' : undefined,
+    'aria-disabled': disabled ? true : undefined,
+  };
+  const primary = href !== undefined
+    ? createElement(Link, linkProps, label)
+    : selectable
     ? createElement(ToggleButton, {
         ...actionProps,
         ...(selected === undefined ? {} : { pressed: selected }),

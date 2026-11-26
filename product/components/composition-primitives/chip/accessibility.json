@@ -4,7 +4,7 @@
   "reviewStatus": "review-required",
   "nativeBaseline": {
     "kind": "native",
-    "reference": "readable text or native action/pressed button with independent sibling native removal button"
+    "reference": "Readable text, native action/pressed button or native anchor with independent sibling removal button"
   },
   "wcag": {
     "target": "2.2 AA",
@@ -32,7 +32,8 @@
   "ownership": {
     "library": [
       "Expose native buttons and persistent aria-pressed through ToggleButton; keep removal a sibling action",
-      "Preserve full text under truncation, decorative artwork, focus indicators and disabled controls"
+      "Preserve full text under truncation, decorative artwork, focus indicators and disabled controls",
+      "Preserve native anchor keyboard/navigation semantics; disabled links have no href or tab stop."
     ],
     "consumer": [
       "Provide localized visible label and item-specific removal label",
@@ -54,7 +55,7 @@
     "assistiveTechnology": "review-required"
   },
   "profileVariability": [
-    "static, actionable, selectable and removable",
+    "static, actionable, selectable, navigational and removable",
     "filled/outlined, neutral/accent/danger, sm/md/lg",
     "RTL, dark, forced colors, reduced motion and reflow"
   ],

@@ -34,3 +34,17 @@ test('wrap keeps the full accessible text and selection mark is decorative', () 
   assert.match(html, /aria-hidden="true">✓/);
   assert.match(html, /Long label that must remain available/);
 });
+
+test('link Chip renders a native anchor and sibling removal button', () => {
+  const html = renderToStaticMarkup(h(Chip, { href: '/docs', target: '_blank', rel: 'noopener', onRemove() {}, removeLabel: 'Remove Docs' }, 'Docs'));
+  assert.match(html, /<a[^>]*href="\/docs"/);
+  assert.match(html, /target="_blank"/);
+  assert.match(html, /<\/a><button/);
+  assert.doesNotMatch(html, /aria-pressed/);
+});
+test('disabled link Chip cannot navigate and is not a tab stop', () => {
+  const html = renderToStaticMarkup(h(Chip, { href: '/docs', disabled: true }, 'Docs'));
+  assert.match(html, /role="link"/);
+  assert.match(html, /aria-disabled="true"/);
+  assert.doesNotMatch(html, /href=|tabindex=/i);
+});
