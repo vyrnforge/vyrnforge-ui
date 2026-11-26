@@ -1,4 +1,4 @@
-import { standardsCopy, criteriaHeading, mappingLabel, criterionLearningNote } from './standards-presentation.mjs';
+import { standardsCopy, criteriaHeading, criterionLearningNote } from './standards-presentation.mjs';
 import { visibleGuideSections } from './guide-presentation.mjs';
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -105,21 +105,20 @@ function renderAccessibilityStandards(references, headingId = 'accessibility-evi
   const nativeBaseline = references.nativeBaseline;
   const hasNativeLink = references.hasNativeReference;
   const baselineNote = nativeBaseline && !hasNativeLink
-    ? `<p class="vf-docs-standards-baseline">Semantic baseline: ${escapeHtml(nativeBaseline)}</p>` : '';
+    ? `<p class="vf-docs-standards-baseline">${escapeHtml(standardsCopy.baselineLabel)}: ${escapeHtml(nativeBaseline)}</p>` : '';
   const showDetails = criteria.length || baselineNote;
   const summary = criteriaHeading(criteria.length);
   const reviewNote = references.reviewStatus === 'review-required' ? ' ' + standardsCopy.reviewRequired : '';
 
   return `<details class="vf-docs-reference-details" data-vf-docs-standards-disclosure><summary>${escapeHtml(standardsCopy.title)}</summary><section class="vf-docs-standards" data-vf-flow data-vf-flow-gap="sm" data-vf-docs-accessibility aria-labelledby="${escapeHtml(headingId)}">
     <h2 id="${escapeHtml(headingId)}">${escapeHtml(standardsCopy.heading)}</h2>
-    <p class="vf-docs-standards-intro">${escapeHtml(standardsCopy.introduction)}</p>
     <ul class="vf-docs-standards-primary" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="xs" aria-label="Standards">${references.standards.map((item) => `<li>${renderStandardLink(item)}</li>`).join('')}</ul>
     ${showDetails ? `<details class="vf-docs-standards-details">
       <summary>${escapeHtml(summary)}</summary>
-      ${criteria.length ? `<p class="vf-docs-standards-intro">${escapeHtml(standardsCopy.criteriaIntroduction)}</p><ul data-vf-auto-grid data-vf-auto-grid-gap="sm" style="--vf-auto-grid-min-item-size:20rem" aria-label="Mapped WCAG criteria">${criteria.map((item) => `<li>${renderCriterionLink(item)}${criterionLearningNote(item) ? `<p class="vf-docs-criterion-note">${escapeHtml(criterionLearningNote(item))}</p>` : ''}</li>`).join('')}</ul>` : ''}
+      ${criteria.length ? `<ul data-vf-auto-grid data-vf-auto-grid-gap="sm" style="--vf-auto-grid-min-item-size:20rem" aria-label="WCAG requirements">${criteria.map((item) => `<li>${renderCriterionLink(item)}${criterionLearningNote(item) ? `<p class="vf-docs-criterion-note">${escapeHtml(criterionLearningNote(item))}</p>` : ''}</li>`).join('')}</ul>` : ''}
       ${baselineNote}
     </details>` : ''}
-    <p class="vf-docs-standards-note">${escapeHtml(standardsCopy.mappingLabel)}: <strong>${escapeHtml(mappingLabel(references.mappingStatus))}</strong>.${escapeHtml(reviewNote)} ${escapeHtml(standardsCopy.scope)}</p>
+    <p class="vf-docs-standards-note">${escapeHtml(reviewNote.trim())}${reviewNote ? ' ' : ''}${escapeHtml(standardsCopy.scope)}</p>
   </section></details>`;
 }
 
