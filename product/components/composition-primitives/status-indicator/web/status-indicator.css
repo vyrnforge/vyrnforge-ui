@@ -1,0 +1,25 @@
+@import '../../styles/tokens.css';
+@import '../../styles/internal/feedback.css';
+@layer vyrnforge.components {
+  :where([data-vf-status-indicator]) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vf-space-xs);
+    color: var(--_vf-feedback-foreground);
+    font-family: var(--vf-font-family-sans);
+    font-size: var(--vf-font-size-sm);
+    overflow-wrap: anywhere;
+    max-inline-size: 100%;
+  }
+  :where([data-vf-status-indicator-dot]) {
+    display: inline-block;
+    flex: none;
+    inline-size: var(--vf-space-sm);
+    block-size: var(--vf-space-sm);
+    border-radius: 50%;
+    background: currentColor;
+  }
+  @media (forced-colors: active) {
+    :where([data-vf-status-indicator-dot]) { background: CanvasText; forced-color-adjust: none; }
+  }
+}

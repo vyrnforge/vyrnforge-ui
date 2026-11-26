@@ -1,0 +1,40 @@
+/* Shared paint only; semantic severity never selects a live-region role. */
+@layer vyrnforge.components {
+  :where([data-vf-feedback]) {
+    --_vf-feedback-foreground: var(--vf-color-text);
+    --_vf-feedback-background: var(--vf-color-surface-subtle);
+    --_vf-feedback-border: var(--vf-color-border-required);
+  }
+  :where([data-vf-feedback][data-vf-feedback-severity="informational"]) {
+    --_vf-feedback-foreground: var(--vf-color-info-foreground);
+    --_vf-feedback-background: var(--vf-color-info-background);
+    --_vf-feedback-border: var(--vf-color-info-border);
+  }
+  :where([data-vf-feedback][data-vf-feedback-severity="success"]) {
+    --_vf-feedback-foreground: var(--vf-color-success-foreground);
+    --_vf-feedback-background: var(--vf-color-success-background);
+    --_vf-feedback-border: var(--vf-color-success-border);
+  }
+  :where([data-vf-feedback][data-vf-feedback-severity="warning"]) {
+    --_vf-feedback-foreground: var(--vf-color-warning-foreground);
+    --_vf-feedback-background: var(--vf-color-warning-background);
+    --_vf-feedback-border: var(--vf-color-warning-border);
+  }
+  :where([data-vf-feedback][data-vf-feedback-severity="error"]) {
+    --_vf-feedback-foreground: var(--vf-color-danger-foreground);
+    --_vf-feedback-background: var(--vf-color-danger-background);
+    --_vf-feedback-border: var(--vf-color-danger-border);
+  }
+  :where([data-vf-feedback][data-vf-feedback-severity="critical"]) {
+    --_vf-feedback-foreground: var(--vf-color-danger-foreground);
+    --_vf-feedback-background: var(--vf-color-danger-background);
+    --_vf-feedback-border: var(--vf-color-danger-border);
+  }
+  @media (forced-colors: active) {
+    :where([data-vf-feedback]) {
+      --_vf-feedback-foreground: CanvasText;
+      --_vf-feedback-background: Canvas;
+      --_vf-feedback-border: CanvasText;
+    }
+  }
+}

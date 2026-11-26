@@ -120,6 +120,12 @@ export type AccordionType = 'single' | 'multiple';
 // @public (undocumented)
 export type AccordionValue = string | readonly string[];
 
+// @public
+export const Alert: ForwardRefExoticComponent<AlertProps & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export type AlertAnnouncement = 'none' | 'polite' | 'assertive';
+
 // @public (undocumented)
 export const AlertDialogAction: typeof DialogClose;
 
@@ -161,6 +167,30 @@ export const AlertDialogTitle: typeof DialogTitle;
 
 // @public (undocumented)
 export type AlertDialogTitleProps = ComponentProps<typeof AlertDialogTitle>;
+
+// @public (undocumented)
+export interface AlertProps extends Omit<ComponentPropsWithoutRef<'div'>, 'role' | 'aria-live' | 'aria-atomic'> {
+    // (undocumented)
+    actions?: ReactNode;
+    // (undocumented)
+    announcement?: AlertAnnouncement;
+    // (undocumented)
+    dismiss?: {
+        label: string;
+        onDismiss(): void;
+    };
+    // (undocumented)
+    heading?: ReactNode;
+    // (undocumented)
+    icon?: ReactNode;
+    // (undocumented)
+    severity?: FeedbackSeverity;
+    // (undocumented)
+    variant?: AlertVariant;
+}
+
+// @public (undocumented)
+export type AlertVariant = 'subtle' | 'outlined';
 
 // @public (undocumented)
 export const AppShell: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
@@ -1851,6 +1881,9 @@ export const DrawerTitle: typeof DialogTitle;
 // @public (undocumented)
 export type DrawerTitleProps = ComponentProps<typeof DrawerTitle>;
 
+// @public
+export type FeedbackSeverity = 'informational' | 'success' | 'warning' | 'error' | 'critical';
+
 // @public (undocumented)
 export const FileInput: ForwardRefExoticComponent<FileInputProps & RefAttributes<HTMLInputElement>>;
 
@@ -3348,6 +3381,17 @@ export interface SplitPanelRootProps extends ComponentPropsWithoutRef<'div'> {
     onSizeChange?(v: number): void;
     // (undocumented)
     size?: number;
+}
+
+// @public
+export const StatusIndicator: ForwardRefExoticComponent<StatusIndicatorProps & RefAttributes<HTMLSpanElement>>;
+
+// @public (undocumented)
+export interface StatusIndicatorProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-live' | 'tabIndex'> {
+    // (undocumented)
+    children: string;
+    // (undocumented)
+    severity?: FeedbackSeverity;
 }
 
 // @public
