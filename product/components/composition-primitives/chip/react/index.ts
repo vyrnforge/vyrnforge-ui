@@ -120,7 +120,7 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(function Chip(
       : createElement('span', { 'data-vf-chip-primary': '' }, label);
 
   const removalProps = {
-    ref: removeRef, type: 'button' as const, variant: 'ghost' as const, size, disabled,
+    ref: removeRef, type: 'button' as const, variant: 'ghost' as const, size, disabled, iconOnly: true,
     'aria-label': removeLabel, 'data-vf-chip-remove': '', onClick: onRemove,
   };
 

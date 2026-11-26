@@ -117,10 +117,16 @@
     padding-inline-end: var(--vf-space-2xs);
   }
   :where([data-vf-chip]) > [data-vf-chip-remove] {
+    /* Compose Button's icon-only mode. Its standalone square geometry must
+       not set the height of the compound Chip or clip a multiline label. */
     flex: none;
-    inline-size: calc(var(--vf-control-height-sm) - var(--vf-space-xs));
-    min-inline-size: calc(var(--vf-control-height-sm) - var(--vf-space-sm));
+    block-size: auto;
+    inline-size: max(1.5rem, calc(var(--vf-control-height-sm) - var(--vf-space-xs)));
+    min-inline-size: 1.5rem;
+    min-block-size: max(1.5rem, calc(var(--_vf-chip-height) - 2px));
+    padding-block: 0;
     padding-inline: var(--vf-space-2xs);
+    gap: 0;
     border-start-start-radius: 0;
     border-end-start-radius: 0;
     font-size: var(--vf-font-size-lg);

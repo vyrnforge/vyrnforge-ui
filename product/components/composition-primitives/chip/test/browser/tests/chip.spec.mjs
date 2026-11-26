@@ -12,6 +12,7 @@ test('Chip has independent native actions, readable labels and sequential focus'
   const filter = page.getByRole('button', { name: 'React', exact: true });
   const remove = page.getByRole('button', { name: 'Remove React' });
   await expect(filter).toHaveAttribute('aria-pressed', 'true');
+  await expect(remove).toHaveAttribute('data-vf-icon-only', '');
   await expect(page.locator('#filter button button')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Unavailable' })).toBeDisabled();
   for (const control of [action, filter, remove]) {
@@ -111,6 +112,7 @@ test('default removal mark has independent geometry and contrast across tones an
       expect(item.inkContrast, item.id + ' mark contrast').toBeGreaterThanOrEqual(3);
     }
     await expect(page.locator('#remove-custom [data-vf-chip-default-remove]')).toHaveCount(0);
+    await expect(page.locator('#remove-custom [data-vf-chip-remove]')).toHaveAttribute('data-vf-icon-only', '');
     await expect(page.getByRole('button', { name: 'Remove remove-disabled' })).toBeDisabled();
     const button = page.getByRole('button', { name: 'Remove remove-neutral-filled' });
     const circle = button.locator('[data-vf-chip-default-remove]');

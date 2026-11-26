@@ -12,7 +12,7 @@ export const browserFixture = {
     const css = await Promise.all(paths.map(async file => (await readFile(path.join(root, 'packages/web/dist', file), 'utf8')).replace(/^@import\s+["'][^"']+["'];\s*$/gm, '')));
     await writeFile(path.join(target, 'chip.css'), css.join('\n') + '\nbody{background:var(--vf-color-surface);color:var(--vf-color-text)}main{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;padding:1rem;min-inline-size:0;box-sizing:border-box}h1{flex-basis:100%}#long{max-inline-size:100%}');
     const label = value => '<span data-vf-chip-label>' + value + '</span>';
-    const close = '<button type="button" data-vf-button data-vf-chip-remove aria-label="Remove React"><span aria-hidden="true" data-vf-chip-default-remove>×</span></button>';
+    const close = '<button type="button" data-vf-button data-vf-icon-only data-vf-chip-remove aria-label="Remove React"><span aria-hidden="true" data-vf-chip-default-remove>×</span></button>';
     const long = 'A long descriptive category that must remain available to assistive technology';
     const removalCases = ['neutral', 'accent', 'danger'].flatMap(tone =>
       ['filled', 'outlined'].map(variant => ({ tone, variant, size: 'md', id: 'remove-' + tone + '-' + variant })));
@@ -23,7 +23,7 @@ export const browserFixture = {
     const nativeRemovalCases = removalCases.map(({ tone, variant, size, id, disabled, custom }) =>
       '<span id="' + id + '" data-vf-chip data-vf-chip-tone="' + tone + '" data-vf-chip-variant="' + variant + '" data-vf-chip-size="' + size + '"' +
       (disabled ? ' data-vf-chip-disabled' : '') + '><span data-vf-chip-primary>' + label(tone) + '</span>' +
-      '<button type="button" data-vf-button data-vf-chip-remove aria-label="Remove ' + id + '"' + (disabled ? ' disabled' : '') +
+      '<button type="button" data-vf-button data-vf-icon-only data-vf-chip-remove aria-label="Remove ' + id + '"' + (disabled ? ' disabled' : '') +
       '><span aria-hidden="true"' + (custom ? '' : ' data-vf-chip-default-remove') + '>' + (custom ? '−' : '×') + '</span></button></span>').join('');
     let body = '<main><h1>Chip specimens</h1>' +
       '<span id="static" data-vf-chip data-vf-chip-size="sm"><span data-vf-chip-primary>' + label('Engineering') + '</span></span>' +
