@@ -6,10 +6,14 @@
   aria-labelledby="example-dialog-title"
   aria-describedby="example-dialog-description"
 >
-  <h2 id="example-dialog-title" data-vf-dialog-title>Edit profile</h2>
-  <p id="example-dialog-description" data-vf-dialog-description>Update the fields you want to change.</p>
+  <div data-vf-dialog-header data-vf-divider>
+    <h2 id="example-dialog-title" data-vf-dialog-title>Edit profile</h2>
+    <p id="example-dialog-description" data-vf-dialog-description>Update the fields you want to change.</p>
+  </div>
   <div data-vf-dialog-body>Profile form content</div>
-  <button type="button" data-vf-dialog-close>Close</button>
+  <div data-vf-dialog-footer data-vf-divider>
+    <button type="button" data-vf-dialog-close>Close</button>
+  </div>
 </dialog>
 <script>
   const trigger = document.querySelector('#dialog-trigger');

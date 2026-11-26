@@ -13,3 +13,7 @@ Use a visible DialogTitle or an authored accessible name. Supply descriptionId a
 ## Composition
 
 Reuse Button for the trigger and native DialogClose for dismissal. The close part accepts native button attributes and can use the shared Button styling hooks. Use AlertDialog for a required acknowledgement or high-risk decision, and Drawer for an edge-attached modal panel. Application owns business actions, validation and committed state.
+
+## Surface anatomy
+
+Optional header, body and footer regions organize authored content and actions. In Native Web use the shared `data-vf-dialog-header`, `data-vf-dialog-body` and `data-vf-dialog-footer` hooks; `data-vf-divider` adds a boundary to header or footer. Flat compositions remain supported. Structured direct children allow the body to scroll while actions remain available; very short surfaces may scroll as a whole. Regions add no dismissal or decision policy.

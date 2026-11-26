@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { DialogBody, DialogClose, DialogDescription, DialogRoot, DialogTitle } from '@vyrnforge/react/dialog';
+import { DialogBody, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogRoot, DialogTitle } from '@vyrnforge/react/dialog';
 import { Button } from '@vyrnforge/react/button';
 
 function Example() {
@@ -11,12 +11,16 @@ function Example() {
         Open dialog
       </Button>
       <DialogRoot open={open} onOpenChange={setOpen} backdropDismiss descriptionId="example-dialog-description">
-        <DialogTitle>Edit profile</DialogTitle>
-        <DialogDescription id="example-dialog-description">Update the fields you want to change.</DialogDescription>
+        <DialogHeader divider>
+          <DialogTitle>Edit profile</DialogTitle>
+          <DialogDescription id="example-dialog-description">Update the fields you want to change.</DialogDescription>
+        </DialogHeader>
         <DialogBody>Profile form content</DialogBody>
-        <DialogClose data-vf-button="" data-vf-variant="secondary">
-          Close
-        </DialogClose>
+        <DialogFooter divider>
+          <DialogClose data-vf-button="" data-vf-variant="secondary">
+            Close
+          </DialogClose>
+        </DialogFooter>
       </DialogRoot>
     </>
   );

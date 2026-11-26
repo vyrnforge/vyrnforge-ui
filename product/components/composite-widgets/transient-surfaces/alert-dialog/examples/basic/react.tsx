@@ -5,6 +5,8 @@ import {
   AlertDialogBody,
   AlertDialogCancel,
   AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
   AlertDialogRoot,
   AlertDialogTitle,
 } from '@vyrnforge/react/alert-dialog';
@@ -20,19 +22,21 @@ function Example() {
         Review deletion
       </Button>
       <AlertDialogRoot open={open} onOpenChange={setOpen} descriptionId="deletion-description">
-        <AlertDialogTitle>Delete “Q4 Roadmap”?</AlertDialogTitle>
-        <AlertDialogDescription id="deletion-description">
-          This shared collection is used by 18 collaborators and cannot be restored.
-        </AlertDialogDescription>
+        <AlertDialogHeader divider>
+          <AlertDialogTitle>Delete “Q4 Roadmap”?</AlertDialogTitle>
+          <AlertDialogDescription id="deletion-description">
+            This shared collection is used by 18 collaborators and cannot be restored.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
         <AlertDialogBody>This is a demonstration, not an actual deletion.</AlertDialogBody>
-        <Flow direction="inline" gap="sm" wrap="wrap">
+        <AlertDialogFooter divider>
           <AlertDialogCancel autoFocus data-vf-button="" data-vf-variant="secondary">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction data-vf-button="" onClick={() => setConfirmed(true)}>
             Delete collection
           </AlertDialogAction>
-        </Flow>
+        </AlertDialogFooter>
       </AlertDialogRoot>
       <p role="status">{confirmed ? 'Example decision confirmed' : ''}</p>
     </Flow>

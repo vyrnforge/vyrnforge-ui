@@ -8,9 +8,9 @@ import { Chip } from '@vyrnforge/react/chip';
 import { Backdrop } from '@vyrnforge/react/backdrop';
 import { StatusIndicator } from '@vyrnforge/react/status-indicator';
 import { Alert } from '@vyrnforge/react/alert';
-import { DialogRoot, DialogTitle, DialogDescription, DialogClose } from '@vyrnforge/react/dialog';
-import { AlertDialogRoot, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from '@vyrnforge/react/alert-dialog';
-import { DrawerRoot, DrawerTitle, DrawerDescription, DrawerClose } from '@vyrnforge/react/drawer';
+import { DialogHeader, DialogBody, DialogFooter, DialogRoot, DialogTitle, DialogDescription, DialogClose } from '@vyrnforge/react/dialog';
+import { AlertDialogHeader, AlertDialogBody, AlertDialogFooter, AlertDialogRoot, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from '@vyrnforge/react/alert-dialog';
+import { DrawerHeader, DrawerBody, DrawerFooter, DrawerRoot, DrawerTitle, DrawerDescription, DrawerClose } from '@vyrnforge/react/drawer';
 import { ToastViewport, ToastRoot, ToastTitle, ToastDescription, ToastClose } from '@vyrnforge/react/toast';
 
 import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
@@ -470,20 +470,20 @@ export const alertPlayground = {
 };
 
 const modalParts = {
-  dialog: [DialogRoot, DialogTitle, DialogDescription, DialogClose],
-  'alert-dialog': [AlertDialogRoot, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction],
-  drawer: [DrawerRoot, DrawerTitle, DrawerDescription, DrawerClose],
+  dialog: [DialogRoot, DialogHeader, DialogBody, DialogFooter, DialogTitle, DialogDescription, DialogClose],
+  'alert-dialog': [AlertDialogRoot, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction],
+  drawer: [DrawerRoot, DrawerHeader, DrawerBody, DrawerFooter, DrawerTitle, DrawerDescription, DrawerClose],
 };
 const modalNames = {
-  dialog: ['DialogRoot', 'DialogTitle', 'DialogDescription', 'DialogClose'],
-  'alert-dialog': ['AlertDialogRoot', 'AlertDialogTitle', 'AlertDialogDescription', 'AlertDialogCancel', 'AlertDialogAction'],
-  drawer: ['DrawerRoot', 'DrawerTitle', 'DrawerDescription', 'DrawerClose'],
+  dialog: ['DialogRoot', 'DialogHeader', 'DialogBody', 'DialogFooter', 'DialogTitle', 'DialogDescription', 'DialogClose'],
+  'alert-dialog': ['AlertDialogRoot', 'AlertDialogHeader', 'AlertDialogBody', 'AlertDialogFooter', 'AlertDialogTitle', 'AlertDialogDescription', 'AlertDialogCancel', 'AlertDialogAction'],
+  drawer: ['DrawerRoot', 'DrawerHeader', 'DrawerBody', 'DrawerFooter', 'DrawerTitle', 'DrawerDescription', 'DrawerClose'],
 };
 function modalAdapter(id) {
   const required = id === 'alert-dialog';
   const edge = id === 'drawer';
-  const [Root, Title, Description, Close, Action] = modalParts[id];
-  const [rootName, titleName, descriptionName, closeName, actionName] = modalNames[id];
+  const [Root, Header, Body, Footer, Title, Description, Close, Action] = modalParts[id];
+  const [rootName, headerName, bodyName, footerName, titleName, descriptionName, closeName, actionName] = modalNames[id];
   function Preview({ config }) {
     const [open, setOpen] = useState(false);
     const descriptionId = useId();
@@ -492,15 +492,19 @@ function modalAdapter(id) {
       ...(edge ? { placement: config.placement } : {}) };
     return h(Flow, { gap: 'sm' },
       h(Button, { type: 'button', onClick: () => setOpen(true) }, 'Open ' + id.replace('-', ' ')),
-      h(Root, props, h(Title, null, config.title || 'Details'),
-        h(Description, { id: descriptionId }, config.message || 'Review this information.'),
-        h(Flow, { direction: 'inline', gap: 'sm', wrap: 'wrap' },
+      h(Root, props,
+        h(Header, { divider: config.dividers }, h(Title, null, config.title || 'Details'),
+          h(Description, { id: descriptionId }, config.message || 'Review this information.')),
+        h(Body, null, config.longContent ? Array.from({ length: 24 }, (_, index) =>
+          h('p', { key: index }, 'Additional details ' + (index + 1))) : 'Task content'),
+        h(Footer, { divider: config.dividers },
           h(Close, { autoFocus: required || undefined, 'data-vf-button': '', 'data-vf-variant': 'secondary' }, required ? 'Cancel' : 'Close'),
           required ? h(Action, { 'data-vf-button': '' }, 'Confirm example') : null)));
   }
   return {
     fields: [text('title', 'Title', required ? 'Review this decision' : 'Details'),
       text('message', 'Description', 'Review this information before continuing.'),
+      bool('dividers', 'Section dividers'), bool('longContent', 'Long content'),
       ...(!required ? [bool('backdropDismiss', 'Backdrop dismissal')] : []),
       ...(edge ? [choice('placement', 'Placement', 'end', ['start', 'end', 'top', 'bottom'])] : [])],
     Preview,
@@ -511,12 +515,17 @@ function modalAdapter(id) {
         '  return (', '    <Flow gap="sm">', '      <Button type="button" onClick={() => setOpen(true)}>Open ' + id.replace('-', ' ') + '</Button>',
         '      <' + rootName + ' open={open} onOpenChange={setOpen} descriptionId={descriptionId}' +
           (!required && config.backdropDismiss ? ' backdropDismiss' : '') + (edge && config.placement !== 'end' ? ' placement=' + quoted(config.placement) : '') + '>',
-        '        <' + titleName + '>' + content(config.title || 'Details') + '</' + titleName + '>',
-        '        <' + descriptionName + ' id={descriptionId}>' + content(config.message || 'Review this information.') + '</' + descriptionName + '>',
-        '        <Flow direction="inline" gap="sm" wrap="wrap">',
+        '        <' + headerName + (config.dividers ? ' divider' : '') + '>',
+        '          <' + titleName + '>' + content(config.title || 'Details') + '</' + titleName + '>',
+        '          <' + descriptionName + ' id={descriptionId}>' + content(config.message || 'Review this information.') + '</' + descriptionName + '>',
+        '        </' + headerName + '>',
+        '        <' + bodyName + '>',
+        config.longContent ? '          {Array.from({ length: 24 }, (_, index) => <p key={index}>Additional details {index + 1}</p>)}' : '          Task content',
+        '        </' + bodyName + '>',
+        '        <' + footerName + (config.dividers ? ' divider' : '') + '>',
         '          <' + closeName + (required ? ' autoFocus' : '') + ' data-vf-button="" data-vf-variant="secondary">' + (required ? 'Cancel' : 'Close') + '</' + closeName + '>',
         ...(required ? ['          <' + actionName + ' data-vf-button="">Confirm example</' + actionName + '>'] : []),
-        '        </Flow>', '      </' + rootName + '>', '    </Flow>', '  );', '}'].join('\n');
+        '        </' + footerName + '>', '      </' + rootName + '>', '    </Flow>', '  );', '}'].join('\n');
     },
   };
 }
