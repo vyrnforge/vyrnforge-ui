@@ -179,11 +179,16 @@
 
   /* A real label remains associated with its editor. The legend is decorative and
      uses the same typography as the raised label to create a genuine border gap. */
-  :where([data-vf-text-field-label-placement='floating'] > [data-vf-text-field-control]) {
+  :where([data-vf-text-field-label-placement='floating']) {
     --_vf-floating-label-font: var(
       --vf-text-field-label-font,
       var(--vf-font-weight-medium) var(--vf-font-size-xs)/var(--vf-line-height-normal) var(--vf-font-family-sans)
     );
+    font: var(--_vf-floating-label-font);
+    padding-block-start: max(var(--vf-space-sm), 0.5lh);
+  }
+  :where([data-vf-text-field-label-placement='floating'] > [data-vf-text-field-control]) {
+    font: var(--_vf-floating-label-font);
     min-block-size: calc(var(--_vf-text-field-height) + var(--vf-space-md));
   }
   :where([data-vf-text-field-label-placement='floating'] [data-vf-text-field-label]) {
@@ -201,9 +206,6 @@
     transition:
       inset-block-start var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       font-size var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
-  }
-  :where([data-vf-text-field-label-placement='floating']) {
-    padding-block-start: var(--vf-space-sm);
   }
   :where(
     [data-vf-text-field-label-placement='floating'][data-vf-text-field-variant='outlined']
@@ -263,9 +265,19 @@
         [data-vf-text-field-variant='filled'],
         [data-vf-text-field-variant='underlined']
       )
-      [data-vf-text-field-value]
+      > [data-vf-text-field-control]
   ) {
     padding-block-start: calc(1lh + var(--vf-space-2xs));
+  }
+  :where(
+    [data-vf-text-field-label-placement='floating']:is(
+        [data-vf-text-field-variant='filled'],
+        [data-vf-text-field-variant='underlined']
+      )
+      [data-vf-text-field-value]
+  ) {
+    min-block-size: 0;
+    padding-block-start: var(--vf-space-2xs);
   }
   @supports selector(:has(*)) {
     :where(
