@@ -28,7 +28,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-list-pilot');
+  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-list-chip-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -61,6 +61,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     'icons/', 'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
     'components/list/', 'api/components/list/',
+    'components/chip/', 'api/components/chip/',
     'components/badge/', 'api/components/badge/',
     'components/avatar/', 'api/components/avatar/',
   ]);
@@ -107,6 +108,20 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     const frame = 'dist/docs/next/react/examples/icon/' + slug + '/index.html';
     expect(readFileSync(frame, 'utf8')).toContain('react-icon-' + slug + '.js');
     expect(readFileSync(frame, 'utf8')).toContain('react-icon-' + slug + '.css');
+  }
+  expect(manifest.chip).toMatchObject({
+    guideRoute: 'components/chip/', apiRoute: 'api/components/chip/',
+    publicEntrypoints: ['@vyrnforge/react/chip'],
+    frameworkSourcePath: 'product/components/composition-primitives/chip/react/docs/index.md',
+  });
+  expect(manifest.chip.examples.map(example => example.id)).toEqual([
+    'chip/action-removal', 'chip/appearance', 'chip/array', 'chip/artwork', 'chip/basic', 'chip/clickable', 'chip/custom-delete', 'chip/deletable', 'chip/icon', 'chip/links', 'chip/multiline', 'chip/playground', 'chip/removal', 'chip/selection', 'chip/sizes',
+  ]);
+  for (const example of manifest.chip.examples) {
+    const slug = example.id.slice('chip/'.length);
+    const frame = readFileSync('dist/docs/next/react/examples/chip/' + slug + '/index.html', 'utf8');
+    expect(frame).toContain('react-chip-' + slug + '.js');
+    expect(frame).toContain('react-chip-' + slug + '.css');
   }
   expect(manifest.badge).toMatchObject({
     guideRoute: 'components/badge/', apiRoute: 'api/components/badge/',
@@ -2798,7 +2813,7 @@ test('React selection guides render responsive light and dark previews and prese
 });
 
 test('all React component guide and API titles own exactly one standards disclosure when mapped', async ({ page, browser }, testInfo) => {
-  const ids = ['button', 'toggle-button', 'toggle-group', 'checkbox', 'radio', 'layout', 'text', 'code', 'kbd', 'icon', 'divider', 'list', 'badge', 'avatar', 'image'];
+  const ids = ['button', 'toggle-button', 'toggle-group', 'checkbox', 'radio', 'layout', 'text', 'code', 'kbd', 'icon', 'divider', 'list', 'badge', 'avatar', 'image', 'chip'];
   for (const id of ids) {
     for (const prefix of ['components', 'api/components']) {
       await page.goto('/next/react/' + prefix + '/' + id + '/');
@@ -2837,4 +2852,149 @@ test('all React component guide and API titles own exactly one standards disclos
   await page.screenshot({ path: testInfo.outputPath('react-button-standards-desktop-closed.png') });
   await page.locator('header h1 + [data-vf-docs-standards-disclosure] > summary').click();
   await page.screenshot({ path: testInfo.outputPath('react-button-standards-desktop-open.png') });
+});
+
+test('React Chip guide uses public components and supports independent selection/removal', async ({ page }) => {
+  await page.goto('/next/react/components/chip/');
+  const guide = page.locator('[data-vf-docs-react-chip]');
+  await expect(guide.getByRole('heading', { name: 'Chip', level: 1 })).toBeVisible();
+  await expect(guide.locator('section[aria-labelledby="react-chip-setup"] pre code')).toContainText("@vyrnforge/react/chip");
+  const selectionFrame = guide.locator('[data-vf-docs-react-chip-example="chip/selection"] iframe');
+  await selectionFrame.scrollIntoViewIfNeeded();
+  const selection = selectionFrame.contentFrame();
+  const filter = selection.getByRole('button', { name: 'Assigned to me' });
+  await expect(filter).toHaveAttribute('aria-pressed', 'false');
+  await filter.focus();
+  await page.keyboard.press('Space');
+  await expect(filter).toHaveAttribute('aria-pressed', 'true');
+  await expect(selection.getByRole('button', { name: 'Unavailable' })).toBeDisabled();
+  const removalFrame = guide.locator('[data-vf-docs-react-chip-example="chip/removal"] iframe');
+  await removalFrame.scrollIntoViewIfNeeded();
+  const removal = removalFrame.contentFrame();
+  const remove = removal.getByRole('button', { name: 'Remove Design' });
+  await remove.focus();
+  await page.keyboard.press('Enter');
+  await expect(remove).toHaveCount(0);
+  await expect(removal.getByRole('button', { name: 'Remove Build' })).toBeFocused();
+  await expect(removal.getByRole('button', { name: 'Build', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Chip API', exact: true }).click();
+  await expect(page.locator('[data-vf-docs-react-api="chip"]')).toContainText('export type ChipProps');
+});
+
+test('React Chip responsive and forced-colors examples retain readable labels and independent targets', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await page.goto('/next/react/examples/chip/removal/');
+  const chip = page.locator('[data-vf-chip]').first();
+  const remove = page.getByRole('button', { name: 'Remove Design' });
+  await expect(remove).toBeVisible();
+  expect(await remove.evaluate(el => el.getBoundingClientRect().width)).toBeGreaterThanOrEqual(24);
+  await expect(chip).toHaveCSS('transition-duration', '0s');
+  await page.locator('html').evaluate(el => { el.dir = 'rtl'; el.dataset.vfTheme = 'dark'; });
+  expect(await page.locator('body').evaluate(el => el.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.screenshot({ path: test.info().outputPath('chip-rtl-forced-colors.png'), fullPage: true });
+});
+
+
+test('React Chip actual-size appearance, artwork and removal evidence in light and dark', async ({ page }, testInfo) => {
+  for (const [theme, width, height] of [['light', 1280, 720], ['dark', 390, 844]]) {
+    await page.setViewportSize({ width, height });
+    for (const example of ['appearance', 'artwork', 'removal']) {
+      await page.goto('/next/react/examples/chip/' + example + '/');
+      await page.locator('html').evaluate((el, value) => { el.dataset.vfTheme = value; }, theme);
+      await expect(page.locator('[data-vf-chip]').first()).toBeVisible();
+      expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+      await page.screenshot({ path: testInfo.outputPath('chip-' + example + '-' + theme + '.png') });
+    }
+  }
+});
+
+
+test('React Chip navigation and removal remain separate native actions', async ({ page }) => {
+  await page.goto('/next/react/examples/chip/links/');
+  const link = page.getByRole('link', { name: 'Project link', exact: true });
+  const remove = page.getByRole('button', { name: 'Remove Project link' });
+  await expect(link).toHaveAttribute('href', '#chip-destination');
+  await expect(link.locator('button')).toHaveCount(0);
+  await link.focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#chip-destination$/);
+  await remove.focus();
+  await page.keyboard.press('Enter');
+  await expect(link).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Restore link' })).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Unavailable link' })).toHaveAttribute('aria-disabled', 'true');
+  await page.goto('/next/react/examples/chip/action-removal/');
+  await page.getByRole('button', { name: 'Design', exact: true }).click();
+  await expect(page.getByRole('status')).toHaveText('Design activations: 1');
+  await page.getByRole('button', { name: 'Remove Draft' }).click();
+  await expect(page.getByRole('status')).toHaveText('Design activations: 1');
+  await expect(page.getByRole('button', { name: 'Design', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Remove Draft' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Remove Design' }).click();
+  await expect(page.getByRole('button', { name: 'Design', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('status')).toHaveText('Design activations: 1');
+});
+
+test('React Chip playground matches configuration and generated public source', async ({ page }, testInfo) => {
+  await page.goto('/next/react/examples/chip/playground/');
+  const label = page.getByRole('textbox', { name: 'Label', exact: true });
+  const source = page.getByRole('textbox', { name: 'Generated React usage' });
+  await label.fill('Frontend');
+  await page.getByRole('group', { name: 'Mode', exact: true }).getByRole('radio', { name: 'link', exact: true }).check();
+  await page.getByRole('group', { name: 'Variant', exact: true }).getByRole('radio', { name: 'outlined', exact: true }).check();
+  await page.getByRole('group', { name: 'Tone', exact: true }).getByRole('radio', { name: 'danger', exact: true }).check();
+  await page.getByRole('group', { name: 'Size', exact: true }).getByRole('radio', { name: 'lg', exact: true }).check();
+  await page.getByRole('group', { name: 'Artwork', exact: true }).getByRole('radio', { name: 'avatar', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'Deletable' }).check();
+  await page.getByRole('checkbox', { name: 'Custom delete icon' }).check();
+  await page.getByRole('checkbox', { name: 'Multiline' }).check();
+  const chip = page.locator('[data-vf-chip]');
+  await expect(chip).toHaveAttribute('data-vf-chip-tone', 'danger');
+  await expect(chip).toHaveAttribute('data-vf-chip-variant', 'outlined');
+  await expect(chip).toHaveAttribute('data-vf-chip-size', 'lg');
+  await expect(chip.locator('[data-vf-avatar]')).toBeVisible();
+  await expect(chip.locator('[data-vf-chip-remove] [data-vf-icon]')).toBeVisible();
+  await expect(source).toHaveValue(/href="#chip-playground-destination"/);
+  await expect(source).toHaveValue(/removeIcon=\{<Icon icon=\{trashIcon\}/);
+  await page.getByRole('checkbox', { name: 'Disabled' }).check();
+  await expect(page.getByRole('link', { name: 'Frontend' })).toHaveAttribute('aria-disabled', 'true');
+  await page.getByRole('checkbox', { name: 'Disabled' }).uncheck();
+  await page.getByRole('group', { name: 'Mode', exact: true }).getByRole('radio', { name: 'selectable', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'Selected' }).check();
+  await expect(page.getByRole('button', { name: 'Frontend', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Remove Frontend' }).click();
+  await expect(chip).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Restore', exact: true })).toBeFocused();
+  await page.getByRole('button', { name: 'Reset configuration' }).click();
+  await expect(label).toHaveValue('Engineering');
+  await expect(chip).toHaveAttribute('data-vf-chip-tone', 'neutral');
+  await expect(source).not.toHaveValue(/onRemove=/);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  await page.screenshot({ path: testInfo.outputPath('chip-playground-mobile.png'), fullPage: true });
+});
+
+
+test('Chip guide teaches capabilities in contextual sections and renders intrinsic-size comparisons', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/next/react/components/chip/');
+  const guide = page.locator('[data-vf-docs-react-chip]');
+  for (const title of ['Basic chip', 'Actions', 'Adornment', 'Colors', 'Sizes', 'Multiline', 'Chip arrays', 'Playground']) {
+    await expect(guide.getByRole('heading', { level: 2, name: title, exact: true })).toBeVisible();
+  }
+  await expect(guide.getByRole('heading', { name: 'Basic chip', exact: true })).toHaveCount(1);
+  const basic = guide.locator('[data-vf-docs-react-chip-example="chip/basic"] iframe');
+  await basic.scrollIntoViewIfNeeded();
+  const chips = basic.contentFrame().locator('[data-vf-chip]');
+  await expect(chips).toHaveCount(2);
+  await expect(chips.nth(0)).toHaveAttribute('data-vf-chip-variant', 'filled');
+  await expect(chips.nth(1)).toHaveAttribute('data-vf-chip-variant', 'outlined');
+  expect(await chips.nth(0).evaluate(el => el.getBoundingClientRect().width)).toBeLessThan(160);
+  await page.screenshot({ path: testInfo.outputPath('chip-guide-desktop.png') });
+  await page.goto('/next/react/examples/chip/multiline/');
+  const multiline = page.locator('[data-vf-chip-wrap]');
+  const single = page.locator('[data-vf-chip]').first();
+  expect(await multiline.evaluate(el => el.getBoundingClientRect().height)).toBeGreaterThan(await single.evaluate(el => el.getBoundingClientRect().height));
+  await page.screenshot({ path: testInfo.outputPath('chip-multiline-desktop.png') });
 });

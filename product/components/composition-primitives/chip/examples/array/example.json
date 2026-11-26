@@ -1,0 +1,14 @@
+{
+  "id": "chip/array",
+  "title": "Chip arrays",
+  "description": "Wrap a collection of labels with Flow; use TagGroup for managed removal.",
+  "documentationSection": "Chip arrays",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

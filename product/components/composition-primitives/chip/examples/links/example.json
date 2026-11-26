@@ -1,0 +1,14 @@
+{
+  "id": "chip/links",
+  "title": "Clickable links",
+  "description": "Navigate through native anchors; a removal action stays independent.",
+  "documentationSection": "Actions",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

@@ -1,10 +1,10 @@
 # Badge
 
-Badge is a small noninteractive **anchored indicator** on an existing element. Its indicator displays a count, short text or dot. The wrapped element keeps its native semantics and behavior. Badge is not a standalone capsule label; Chip is reserved as a separate future capability.
+Badge is a small noninteractive **anchored indicator** on an existing element. Its indicator displays a count, short text or dot. The wrapped element keeps its native semantics and behavior. Badge is not a standalone capsule label; Chip is a separate capability.
 
 ## When to use
 
-Use Badge to supplement an existing icon, button, Avatar, list item or other visual target with a compact numeric count or dot. For standalone metadata such as Draft, New or Blocked, use ordinary Text; do not borrow Badge as a Chip. TagGroup owns managed collections of interactive tags. Badge itself does not manage notifications, status sources, actions or focus.
+Use Badge to supplement an existing icon, button, Avatar, list item or other visual target with a compact numeric count or dot. For standalone metadata such as Draft, New or Blocked, use Chip or ordinary Text; do not borrow Badge as a Chip. TagGroup owns managed collections of interactive tags. Badge itself does not manage notifications, status sources, actions or focus.
 
 ## Counts and visibility
 

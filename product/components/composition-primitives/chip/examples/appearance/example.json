@@ -1,0 +1,14 @@
+{
+  "id": "chip/appearance",
+  "title": "Semantic tones",
+  "description": "Compare the three current theme roles in both variants.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Colors"
+}

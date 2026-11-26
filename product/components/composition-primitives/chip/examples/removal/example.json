@@ -1,0 +1,14 @@
+{
+  "id": "chip/removal",
+  "title": "Removable array",
+  "description": "TagGroup manages removal focus when a selected item is removed.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Chip arrays"
+}
