@@ -623,7 +623,7 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="states-and-async-work"] a[href="https://www.w3.org/TR/wai-aria-1.2/#aria-busy"]'))
     .toHaveText('aria-busy="true"');
   await expect(evidence).toContainText('Mapping status: Mapped');
-  await expect(evidence).toContainText('does not demonstrate conformance.');
+  await expect(evidence).toContainText('does not demonstrate conformance;');
   await expect(page.locator('article[data-vf-docs-component="button"] .vf-docs-evidence')).toHaveCount(0);
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
@@ -654,7 +654,7 @@ test('Button header holds all mapped accessibility standards and criterion links
       await expect(criteria.getByRole('link')).toHaveCount(0);
       await expect(summary).toBeVisible();
       await expect(labels).toContainText('Mapping status: Mapped');
-      await expect(labels).toContainText('does not demonstrate conformance.');
+      await expect(labels).toContainText('does not demonstrate conformance;');
       const sources = [
         ['HTML button', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element'],
         ['WCAG 2.2 AA (target)', 'https://www.w3.org/TR/WCAG22/'],
