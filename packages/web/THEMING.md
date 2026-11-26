@@ -88,3 +88,21 @@ does not imply accessible foreground or interactive state colors.
 
 RTL direction, localization, reduced motion and density remain independent
 from theme identities, following the existing VyrnForge foundation contracts.
+
+## Customize TextField as a component
+
+Optional component-owned tokens are accepted by the same pure theme authoring function. They are not a second theme system: shared Web CSS resolves absent values from the existing semantic roles at the point of consumption.
+
+```ts
+const fieldTheme = createTheme({
+  name: 'field-brand',
+  tokens: {
+    '--vf-text-field-value-font': '400 1rem/1.5 var(--vf-font-family-sans)',
+    '--vf-text-field-label-font': '600 0.875rem/1.5 var(--vf-font-family-sans)',
+    '--vf-text-field-placeholder-font': '400 0.875rem/1.5 var(--vf-font-family-sans)',
+    '--vf-text-field-radius': '0.75rem',
+  },
+});
+```
+
+Use `renderThemeCss(fieldTheme)` and select its existing theme scope. The value, placeholder, label, message and affix roles each accept a CSS font shorthand (`--vf-text-field-<role>-font`) and letter-spacing length or normal (`--vf-text-field-<role>-letter-spacing`). Default placeholder typography inherits the value; other roles use shared control/body roles. Also available: radius (length), background and border-color (CSS colors); their fallbacks are the semantic control radius, variant surface and required border. Semantic focus/disabled/invalid colors remain authoritative. Custom themes must still be checked for contrast, enlarged text and focus visibility. Native input className/style overrides intentionally target the editing control, not the field root.

@@ -218,3 +218,20 @@ export const darkThemeCompilation = compileRuntimeTokenDefinitions(
 
 export const runtimeTokenDefaults = runtimeTokenCompilation.cssValues;
 export const darkThemeOverrides = darkThemeCompilation.cssValues;
+
+// Optional component-owned tokens: fallbacks live in canonical component CSS.
+export const componentThemeTokens = Object.freeze([
+  "--vf-text-field-value-font",
+  "--vf-text-field-value-letter-spacing",
+  "--vf-text-field-placeholder-font",
+  "--vf-text-field-placeholder-letter-spacing",
+  "--vf-text-field-label-font",
+  "--vf-text-field-label-letter-spacing",
+  "--vf-text-field-message-font",
+  "--vf-text-field-message-letter-spacing",
+  "--vf-text-field-affix-font",
+  "--vf-text-field-affix-letter-spacing",
+  "--vf-text-field-radius",
+  "--vf-text-field-background",
+  "--vf-text-field-border-color"
+]);

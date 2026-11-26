@@ -109,7 +109,8 @@
     "./styles/chip.css": "./dist/components/chip/chip.css",
     "./styles/backdrop.css": "./dist/components/backdrop/backdrop.css",
     "./styles/status-indicator.css": "./dist/components/status-indicator/status-indicator.css",
-    "./styles/alert.css": "./dist/components/alert/alert.css"
+    "./styles/alert.css": "./dist/components/alert/alert.css",
+    "./styles/text-field.css": "./dist/components/text-field/text-field.css"
   },
   "dependencies": {
     "@vyrnforge/core": "workspace:*"

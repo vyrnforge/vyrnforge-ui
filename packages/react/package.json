@@ -385,6 +385,12 @@
       "browser": "./dist/components/alert/browser.js",
       "import": "./dist/components/alert/index.js",
       "default": "./dist/components/alert/index.js"
+    },
+    "./text-field": {
+      "types": "./dist/components/text-field/index.d.ts",
+      "browser": "./dist/components/text-field/browser.js",
+      "import": "./dist/components/text-field/index.js",
+      "default": "./dist/components/text-field/index.js"
     }
   },
   "dependencies": {
