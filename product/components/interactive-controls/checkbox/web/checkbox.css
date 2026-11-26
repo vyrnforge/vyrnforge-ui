@@ -56,7 +56,9 @@
     border-block-end: calc(var(--_vf-checkbox-indicator) / 12) solid currentColor;
     border-right: calc(var(--_vf-checkbox-indicator) / 12) solid currentColor;
     inline-size: calc(var(--_vf-checkbox-indicator) / 4);
-    transform: rotate(45deg) scale(0);
+    /* The painted L sits below its rotated border-box center. Offset the artwork,
+       not the native target; the mixed mark overrides this transform. */
+    transform: translateY(calc(var(--_vf-checkbox-indicator) / -12)) rotate(45deg) scale(0);
     transform-origin: center;
     pointer-events: none;
     transition: transform var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
@@ -75,7 +77,7 @@
     --_vf-checkbox-border: var(--vf-color-accent-background-hover);
   }
   :where(input[data-vf-checkbox]:checked)::after {
-    transform: rotate(45deg) scale(1);
+    transform: translateY(calc(var(--_vf-checkbox-indicator) / -12)) rotate(45deg) scale(1);
   }
   :where(input[data-vf-checkbox]:indeterminate)::after {
     background: currentColor;
