@@ -24,10 +24,38 @@ const choice = (key, label, value, options) => ({ kind: 'choice', key, label, de
   options: options.map(option => ({ value: option, label: option })) });
 const importLine = (component, path) => "import { " + component + " } from '@vyrnforge/react/" + path + "';";
 const styleLine = path => "import '@vyrnforge/web/styles/" + path + ".css';";
-const compositionImports = [importLine('Flow', 'layout'), importLine('Text', 'text'), styleLine('layout'), styleLine('text')];
 const label = (config, fallback) => config.label.trim() || fallback;
-const flag = (name, enabled) => enabled ? ' ' + name : '';
-const attribute = (name, value, defaultValue) => value === defaultValue ? '' : ' ' + name + '=' + jsxText(value);
+// Author concise JSX, with expression escaping only when needed for literal strings.
+const flag = (name, enabled) => enabled ? name : '';
+const quoted = value => typeof value === 'string' && !/["&<>{}\r\n]/.test(value)
+  ? '"' + value + '"' : jsxText(value);
+const attribute = (name, value, defaultValue) => value === defaultValue ? '' : name + '=' + quoted(value);
+const content = value => /^[^&<>{}\r\n]+$/.test(value) && value === value.trim() ? value : jsxText(value);
+const indent = (value, spaces) => value.split('\n').map(line => ' '.repeat(spaces) + line).join('\n');
+function markup(name, attributes, children) {
+  const props = attributes.filter(Boolean);
+  const opening = '<' + name + (props.length ? ' ' + props.join(' ') : '');
+  const multiline = props.length > 1 && opening.length > 72;
+  const start = multiline ? '<' + name + '\n' + props.map(prop => '  ' + prop).join('\n') + '\n' : opening;
+  if (children === undefined) return start + (multiline ? '/>' : ' />');
+  const end = '</' + name + '>';
+  if (!children.includes('\n') && !children.startsWith('<') && !multiline && start.length + children.length + end.length < 88) {
+    return start + '>' + children + end;
+  }
+  return start + '>\n' + indent(children, 2) + '\n' + end;
+}
+// Pure snippets are JSX to paste inside an existing React component. Only examples
+// whose selected behavior needs state/callbacks include a minimal component function.
+function snippet(imports, jsx, { setup = [], signature } = {}) {
+  const body = signature || setup.length
+    ? ['export function Example(' + (signature ?? '') + ') {',
+      ...setup.map(line => '  ' + line), '  return (', indent(jsx, 4), '  );', '}'].join('\n')
+    : jsx;
+  return [...new Set(imports), '', body].join('\n');
+}
+const iconImports = (symbol, path) => [
+  importLine('Icon', 'icon'), "import { " + symbol + " } from '@vyrnforge/icons/" + path + "';", styleLine('icon'),
+];
 
 function buttonProps(config) {
   return { type: 'button', variant: config.variant, size: config.size, disabled: config.disabled, loading: config.loading,
@@ -39,7 +67,7 @@ function ButtonPreview({ config }) {
     h(Button, { ...buttonProps(config), onClick: () => setCount(n => n + 1) },
       config.artwork !== 'none' ? h(Icon, { icon: bookmarkIcon }) : null,
       config.artwork !== 'icon only' ? label(config, 'Save changes') : null),
-    h(Text, { role: 'status', variant: 'body-sm' }, 'Activations: ' + count));
+    h(Text, { role: 'status', variant: 'body-sm', className: 'vf-docs-playground-feedback' }, count ? 'Activations: ' + count : ''));
 }
 export const buttonPlayground = {
   fields: [text('label', 'Label', 'Save changes'),
@@ -51,19 +79,13 @@ export const buttonPlayground = {
   Preview: ButtonPreview,
   source(config) {
     const props = buttonProps(config);
-    return [
-      "import { useState } from 'react';", importLine('Button', 'button'), styleLine('button'), ...compositionImports,
-      ...(config.artwork !== 'none' ? [importLine('Icon', 'icon'), "import { bookmarkIcon } from '@vyrnforge/icons/bookmark';", styleLine('icon')] : []),
-      '', 'export function Example() {', '  const [count, setCount] = useState(0);', '  return (',
-      '    <Flow align="center" gap="sm">',
-      '      <Button type="button"' + attribute('variant', props.variant, 'primary') + attribute('size', props.size, 'md') +
-        flag('disabled', props.disabled) + flag('loading', props.loading) +
-        (props.iconOnly ? ' iconOnly aria-label=' + jsxText(props['aria-label']) : '') + ' onClick={() => setCount(n => n + 1)}>' +
-        (config.artwork !== 'none' ? '<Icon icon={bookmarkIcon} />' : '') +
-        (props.iconOnly ? '' : jsxText(label(config, 'Save changes'))) + '</Button>',
-      '      <Text role="status" variant="body-sm">Activations: {count}</Text>',
-      '    </Flow>', '  );', '}',
-    ].join('\n');
+    return snippet([importLine('Button', 'button'), styleLine('button'),
+      ...(config.artwork !== 'none' ? iconImports('bookmarkIcon', 'bookmark') : [])],
+    markup('Button', ['type="button"', attribute('variant', props.variant, 'primary'),
+      attribute('size', props.size, 'md'), flag('disabled', props.disabled), flag('loading', props.loading),
+      flag('iconOnly', props.iconOnly), props.iconOnly ? attribute('aria-label', props['aria-label']) : ''],
+    [config.artwork !== 'none' ? '<Icon icon={bookmarkIcon} />' : '',
+      props.iconOnly ? '' : content(label(config, 'Save changes'))].filter(Boolean).join('\n')));
   },
 };
 
@@ -80,17 +102,16 @@ export const checkboxPlayground = {
     bool('disabled', 'Disabled'), bool('required', 'Required')],
   Preview: CheckboxPreview,
   source(config) {
-    return [
-      "import { useState } from 'react';", importLine('Checkbox', 'checkbox'), styleLine('checkbox'), ...compositionImports,
-      '', 'export function Example() {', '  const [selection, setSelection] = useState<' +
-        "'unchecked' | 'checked' | 'mixed'>(" + JSON.stringify(config.selection) + ');',
-      '  return (', '    <Flow as="label" direction="inline" align="center" gap="sm">',
-      '      <Checkbox checked={selection === "checked"} indeterminate={selection === "mixed"}' +
-        flag('disabled', config.disabled) + flag('required', config.required) +
-        ' onChange={event => setSelection(event.currentTarget.checked ? "checked" : "unchecked")} />',
-      '      <Text as="span">' + jsxText(label(config, 'Include a gift receipt')) + '</Text>',
-      '    </Flow>', '  );', '}',
-    ].join('\n');
+    const mixed = config.selection === 'mixed';
+    const checkbox = markup('Checkbox', [
+      mixed ? 'checked={selection === "checked"}' : flag('defaultChecked', config.selection === 'checked'),
+      mixed ? 'indeterminate={selection === "mixed"}' : '', flag('disabled', config.disabled),
+      flag('required', config.required),
+      mixed ? 'onChange={event => setSelection(event.currentTarget.checked ? "checked" : "unchecked")}' : '',
+    ]);
+    return snippet([...(mixed ? ["import { useState } from 'react';"] : []), importLine('Checkbox', 'checkbox'), styleLine('checkbox')],
+      markup('label', [], checkbox + '\n' + content(label(config, 'Include a gift receipt'))),
+      mixed ? { setup: ['const [selection, setSelection] = useState<"unchecked" | "checked" | "mixed">("mixed");'] } : {});
   },
 };
 
@@ -108,19 +129,12 @@ export const radioPlayground = {
     bool('disabled', 'Disabled'), bool('required', 'Required')],
   Preview: RadioPreview,
   source(config) {
-    return [
-      "import { useId, useState } from 'react';", importLine('Radio', 'radio'), styleLine('radio'), ...compositionImports,
-      '', 'export function Example() {', '  const name = useId();',
-      '  const [selection, setSelection] = useState(' + JSON.stringify(config.selection) + ');',
-      '  return (', '    <Flow as="fieldset" gap="sm" style={{ minInlineSize: 0 }}>', '      <legend>Delivery</legend>',
-      ...['standard', 'express'].flatMap(value => [
-        '      <Flow as="label" direction="inline" align="center" gap="sm">',
-        '        <Radio name={name} value="' + value + '" checked={selection === "' + value + '"}' +
-          flag('disabled', config.disabled) + flag('required', config.required) +
-          ' onChange={() => setSelection("' + value + '")} />',
-        '        <Text as="span">' + (value === 'standard' ? 'Standard' : 'Express') + '</Text>', '      </Flow>',
-      ]), '    </Flow>', '  );', '}',
-    ].join('\n');
+    // A same-name native group and its labels are semantic requirements, not demo chrome.
+    return snippet([importLine('Radio', 'radio'), styleLine('radio')],
+      markup('fieldset', [], '<legend>Delivery</legend>\n' + ['standard', 'express'].map(value =>
+        markup('label', [], markup('Radio', ['name="delivery"', attribute('value', value),
+          flag('defaultChecked', config.selection === value), flag('disabled', config.disabled), flag('required', config.required)]) +
+          '\n' + (value === 'standard' ? 'Standard' : 'Express'))).join('\n')));
   },
 };
 
@@ -145,19 +159,11 @@ export const avatarPlayground = {
   source(config) {
     const props = avatarProps(config);
     const icon = config.appearance === 'icon';
-    return [
-      importLine('Avatar', 'avatar'), styleLine('avatar'),
-      ...(icon ? [importLine('Icon', 'icon'), "import { userIcon } from '@vyrnforge/icons/user';", styleLine('icon')] : []),
-      ...(props.decorative ? compositionImports : []),
-      '', 'export function Example() {', '  return (',
-      ...(props.decorative ? ['    <Flow align="center" gap="sm">'] : []),
-      (props.decorative ? '      ' : '    ') + '<Avatar name=' + jsxText(props.name) +
-        attribute('size', props.size, 'md') + attribute('shape', props.shape, 'rounded') +
-        flag('decorative', props.decorative) + (icon ? ' appearance="icon" icon={<Icon icon={userIcon} />}' :
-          props.initials ? ' initials=' + jsxText(props.initials) : '') + ' />',
-      ...(props.decorative ? ['      <Text>' + jsxText(props.name) + '</Text>', '    </Flow>'] : []),
-      '  );', '}',
-    ].join('\n');
+    const avatar = markup('Avatar', [attribute('name', props.name), attribute('size', props.size, 'md'),
+      attribute('shape', props.shape, 'rounded'), flag('decorative', props.decorative),
+      icon ? 'appearance="icon"' : '', icon ? 'icon={<Icon icon={userIcon} />}' : attribute('initials', props.initials, undefined)]);
+    return snippet([importLine('Avatar', 'avatar'), styleLine('avatar'), ...(icon ? iconImports('userIcon', 'user') : [])],
+      props.decorative ? '<>\n' + indent(avatar + '\n<span>' + content(props.name) + '</span>', 2) + '\n</>' : avatar);
   },
 };
 
@@ -189,19 +195,15 @@ export const badgePlayground = {
   Preview: BadgePreview,
   source(config) {
     const props = badgeProps(config);
-    return [
-      importLine('Badge', 'badge'), styleLine('badge'), importLine('Button', 'button'), styleLine('button'),
-      '', 'export function Example() {', '  return (',
-      '    <Badge' + attribute('variant', props.variant, 'standard') +
-        (props.variant === 'standard' ? ' badgeContent={' + props.badgeContent + '}' +
-          attribute('max', props.max, 99) + flag('showZero', props.showZero) : '') +
-        attribute('tone', props.tone, 'neutral') + attribute('size', props.size, 'md') +
-        flag('invisible', props.invisible) +
-        (config.vertical !== 'top' || config.horizontal !== 'end'
-          ? ' anchorOrigin={{ vertical: ' + JSON.stringify(config.vertical) + ', horizontal: ' + JSON.stringify(config.horizontal) + ' }}' : '') + '>',
-      '      <Button type="button" variant="secondary" aria-label=' + jsxText(badgeName(config)) + '>Inbox</Button>',
-      '    </Badge>', '  );', '}',
-    ].join('\n');
+    return snippet([importLine('Badge', 'badge'), styleLine('badge'), importLine('Button', 'button'), styleLine('button')],
+      markup('Badge', [attribute('variant', props.variant, 'standard'),
+        props.variant === 'standard' ? attribute('badgeContent', props.badgeContent) : '',
+        props.variant === 'standard' ? attribute('max', props.max, 99) : '',
+        flag('showZero', props.showZero), attribute('tone', props.tone, 'neutral'),
+        attribute('size', props.size, 'md'), flag('invisible', props.invisible),
+        config.vertical !== 'top' || config.horizontal !== 'end'
+          ? 'anchorOrigin={{ vertical: ' + JSON.stringify(config.vertical) + ', horizontal: ' + JSON.stringify(config.horizontal) + ' }}' : ''],
+      markup('Button', ['type="button"', 'variant="secondary"', attribute('aria-label', badgeName(config))], 'Inbox')));
   },
 };
 
@@ -238,9 +240,8 @@ function ChipPreview({ config, update }) {
       : h(Button, { ref: restore, type: 'button', variant: 'secondary', onClick: () => {
         shouldFocus.current = true; setVisible(true);
       } }, 'Restore'),
-    h(Text, { role: 'status', variant: 'body-sm' }, !visible ? 'Chip removed' :
-      config.mode === 'action' ? 'Activations: ' + clicks :
-      config.mode === 'selectable' ? (config.selected ? 'Selected' : 'Not selected') : 'Live preview'),
+    h(Text, { role: 'status', variant: 'body-sm', className: 'vf-docs-playground-feedback' }, !visible ? 'Chip removed' :
+      config.mode === 'action' && clicks ? 'Activations: ' + clicks : ''),
     config.mode === 'link' ? h(Text, { as: 'p', id: destination, tabIndex: -1, variant: 'body-sm' }, 'Link example destination') : null);
 }
 export const chipPlayground = {
@@ -258,56 +259,27 @@ export const chipPlayground = {
   Preview: ChipPreview,
   source(config) {
     const props = chipProps(config, '#chip-destination');
-    const hasIcon = ['icon', 'trailing'].includes(config.artwork) || (config.removable && config.customRemove);
-    const stateful = config.mode === 'action' || config.mode === 'selectable' || config.removable;
-    const tag = '<Chip' + attribute('variant', props.variant, 'filled') + attribute('size', props.size, 'md') +
-      attribute('tone', props.tone, 'neutral') + flag('disabled', props.disabled) + flag('wrap', props.wrap) +
-      (config.mode === 'link' ? ' href="#chip-destination"' : config.mode === 'action' ? ' onClick={() => setClicks(n => n + 1)}' :
-        config.mode === 'selectable' ? ' selectable selected={selected} onSelectedChange={setSelected}' : '') +
-      (config.artwork === 'icon' ? ' leading={<Icon icon={tagIcon} size="sm" />}' :
-        config.artwork === 'avatar' ? ' leading={<Avatar name="Engineering" decorative size="sm" />}' :
-        config.artwork === 'trailing' ? ' trailing={<Icon icon={chevronRightIcon} size="sm" />}' : '') +
-      (config.removable ? ' onRemove={() => setVisible(false)} removeLabel=' + jsxText(props.removeLabel) +
-        (config.customRemove ? ' removeIcon={<Icon icon={trashIcon} size="sm" />}' : '') : '') +
-      '>' + jsxText(props.children) + '</Chip>';
-    return [
-      ...(stateful ? ["import { useState" + (config.removable ? ', useEffect, useRef' : '') + " } from 'react';"] : []),
-      importLine('Chip', 'chip'), styleLine('chip'), ...compositionImports,
-      ...(config.mode === 'selectable' ? [styleLine('toggle-button')] : []),
-      ...(config.removable || config.mode === 'action' ? [styleLine('button')] : []),
-      ...(config.mode === 'link' ? [styleLine('link')] : []),
-      ...(hasIcon ? [importLine('Icon', 'icon'), styleLine('icon')] : []),
-      ...(config.artwork === 'icon' ? ["import { tagIcon } from '@vyrnforge/icons/tag';"] : []),
-      ...(config.artwork === 'trailing' ? ["import { chevronRightIcon } from '@vyrnforge/icons/chevron-right';"] : []),
-      ...(config.removable && config.customRemove ? ["import { trashIcon } from '@vyrnforge/icons/trash';"] : []),
-      ...(config.artwork === 'avatar' ? [importLine('Avatar', 'avatar'), styleLine('avatar')] : []),
-      ...(config.removable ? [importLine('Button', 'button')] : []),
-      '', 'export function Example() {',
-      ...(config.mode === 'action' ? ['  const [clicks, setClicks] = useState(0);'] : []),
-      ...(config.mode === 'selectable' ? ['  const [selected, setSelected] = useState(' + config.selected + ');'] : []),
-      ...(config.removable ? ['  const [visible, setVisible] = useState(true);',
-        '  const restore = useRef<HTMLButtonElement>(null);',
-        '  const root = useRef<HTMLSpanElement>(null);',
-        '  const shouldFocus = useRef(false);',
-        '  useEffect(() => {',
-        '    if (!visible) restore.current?.focus();',
-        '    else if (shouldFocus.current) {',
-        '      shouldFocus.current = false;',
-        '      root.current?.querySelector<HTMLElement>("button:not(:disabled), a[href]")?.focus();',
-        '    }',
-        '  }, [visible]);'] : []),
-      '  return (', '    <Flow align="center" gap="sm">',
-      ...(config.removable ? ['      {visible ? ' + tag.replace('<Chip', '<Chip ref={root}') + ' :',
-        '        <Button ref={restore} type="button" variant="secondary" onClick={() => {',
-        '          shouldFocus.current = true; setVisible(true);',
-        '        }}>Restore</Button>}'] : ['      ' + tag]),
-      '      <Text role="status" variant="body-sm">' +
-        (config.removable ? '{!visible ? "Chip removed" : ' : '{') +
-        (config.mode === 'action' ? '"Activations: " + clicks' : config.mode === 'selectable' ? 'selected ? "Selected" : "Not selected"' : '"Live preview"') +
-        '}</Text>',
-      ...(config.mode === 'link' ? ['      <Text as="p" id="chip-destination" tabIndex={-1} variant="body-sm">Link example destination</Text>'] : []),
-      '    </Flow>', '  );', '}',
-    ].join('\n');
+    const callbacks = [
+      ...(config.mode === 'action' ? ['onClick'] : []), ...(config.removable ? ['onRemove'] : []),
+    ];
+    return snippet([importLine('Chip', 'chip'), styleLine('chip'),
+      ...(config.artwork === 'icon' ? iconImports('tagIcon', 'tag') : []),
+      ...(config.artwork === 'trailing' ? iconImports('chevronRightIcon', 'chevron-right') : []),
+      ...(config.removable && config.customRemove ? iconImports('trashIcon', 'trash') : []),
+      ...(config.artwork === 'avatar' ? [importLine('Avatar', 'avatar'), styleLine('avatar')] : [])],
+    markup('Chip', [attribute('variant', props.variant, 'filled'), attribute('size', props.size, 'md'),
+      attribute('tone', props.tone, 'neutral'), flag('disabled', props.disabled), flag('wrap', props.wrap),
+      config.mode === 'link' ? attribute('href', props.href) : '',
+      config.mode === 'action' ? 'onClick={onClick}' : '',
+      flag('selectable', config.mode === 'selectable'), flag('defaultSelected', config.mode === 'selectable' && config.selected),
+      config.artwork === 'icon' ? 'leading={<Icon icon={tagIcon} size="sm" />}' : '',
+      config.artwork === 'avatar' ? 'leading={<Avatar name="Engineering" decorative size="sm" />}' : '',
+      config.artwork === 'trailing' ? 'trailing={<Icon icon={chevronRightIcon} size="sm" />}' : '',
+      config.removable ? 'onRemove={onRemove}' : '', config.removable ? attribute('removeLabel', props.removeLabel) : '',
+      config.removable && config.customRemove ? 'removeIcon={<Icon icon={trashIcon} size="sm" />}' : ''], content(props.children)),
+    callbacks.length ? {
+      signature: '{ ' + callbacks.join(', ') + ' }: { ' + callbacks.map(name => name + ': () => void').join('; ') + ' }',
+    } : {});
   },
 };
 
@@ -323,14 +295,16 @@ export const togglePlayground = {
     bool('pressed', 'Pressed'), bool('disabled', 'Disabled'), bool('iconOnly', 'Icon only')],
   Preview: TogglePreview,
   source(config) {
-    return ["import { useState } from 'react';", importLine('ToggleButton', 'toggle-button'), styleLine('toggle-button'),
-      ...(config.iconOnly ? [importLine('Icon', 'icon'), "import { bookmarkIcon } from '@vyrnforge/icons/bookmark';", styleLine('icon')] : []),
-      '', 'export function Example() {', '  const [pressed, setPressed] = useState(' + config.pressed + ');',
-      '  return (', '    <ToggleButton pressed={pressed} onPressedChange={setPressed}' +
-        attribute('size', config.size, 'md') + flag('disabled', config.disabled) +
-        (config.iconOnly ? ' iconOnly aria-label=' + jsxText(toggleLabel(config)) : '') + '>',
-      '      ' + (config.iconOnly ? '<Icon icon={bookmarkIcon} variant={pressed ? "filled" : "outlined"} />' : jsxText(toggleLabel(config))),
-      '    </ToggleButton>', '  );', '}'].join('\n');
+    const controlled = config.iconOnly;
+    return snippet([...(controlled ? ["import { useState } from 'react';"] : []),
+      importLine('ToggleButton', 'toggle-button'), styleLine('toggle-button'),
+      ...(controlled ? iconImports('bookmarkIcon', 'bookmark') : [])],
+    markup('ToggleButton', [controlled ? 'pressed={pressed}' : flag('defaultPressed', config.pressed),
+      controlled ? 'onPressedChange={setPressed}' : '', attribute('size', config.size, 'md'),
+      flag('disabled', config.disabled), flag('iconOnly', config.iconOnly),
+      config.iconOnly ? attribute('aria-label', toggleLabel(config)) : ''],
+    controlled ? '<Icon icon={bookmarkIcon} variant={pressed ? "filled" : "outlined"} />' : content(toggleLabel(config))),
+    controlled ? { setup: ['const [pressed, setPressed] = useState(' + config.pressed + ');'] } : {});
   },
 };
 function dividerProps(config) {
@@ -351,15 +325,11 @@ export const dividerPlayground = {
   Preview: DividerPreview,
   source(config) {
     const props = dividerProps(config);
-    return [importLine('Divider', 'divider'), styleLine('divider'), ...compositionImports,
-      '', 'export function Example() {', '  return (',
-      '    <Flow gap="md"' + (config.orientation === 'vertical' ? ' direction="inline"' : '') +
-        ' style={{ inlineSize: "100%", maxInlineSize: "20rem" }}>', '      <Text>Draft</Text>',
-      '      <Divider' + attribute('orientation', props.orientation, 'horizontal') +
-        (config.label.trim() ? attribute('textAlign', props.textAlign, 'center') : '') +
-        (props.textDirection ? attribute('textDirection', props.textDirection, 'top-to-bottom') : '') +
-        (config.label.trim() ? '>' + jsxText(config.label) + '</Divider>' : ' />'),
-      '      <Text>Published</Text>', '    </Flow>', '  );', '}'].join('\n');
+    return snippet([importLine('Divider', 'divider'), styleLine('divider')],
+      markup('Divider', [attribute('orientation', props.orientation, 'horizontal'),
+        config.label.trim() ? attribute('textAlign', props.textAlign, 'center') : '',
+        props.textDirection ? attribute('textDirection', props.textDirection, 'top-to-bottom') : ''],
+      config.label.trim() ? content(config.label) : undefined));
   },
 };
 const listItems = ['Design tokens', 'Components', 'Documentation'];
@@ -382,14 +352,11 @@ export const listPlayground = {
   Preview: ListPreview,
   source(config) {
     const props = listProps(config);
-    return ["import { List, ListItem } from '@vyrnforge/react/list';", styleLine('list'),
-      '', 'export function Example() {', '  return (',
-      '    <List' + attribute('as', props.as, 'ul') + attribute('variant', props.variant, 'plain') +
-        attribute('size', props.size, 'md') + attribute('spacing', props.spacing, 'none') +
-        attribute('marker', props.marker, 'none') + attribute('gutter', props.gutter, 'auto') +
-        attribute('dividerInset', props.dividerInset, 'none') +
-        ' aria-label="Project areas" style={{ inlineSize: "100%", maxInlineSize: "20rem" }}>',
-      ...listItems.map(item => '      <ListItem>' + jsxText(item) + '</ListItem>'),
-      '    </List>', '  );', '}'].join('\n');
+    return snippet(["import { List, ListItem } from '@vyrnforge/react/list';", styleLine('list')],
+      markup('List', [attribute('as', props.as, 'ul'), attribute('variant', props.variant, 'plain'),
+        attribute('size', props.size, 'md'), attribute('spacing', props.spacing, 'none'),
+        attribute('marker', props.marker, 'none'), attribute('gutter', props.gutter, 'auto'),
+        attribute('dividerInset', props.dividerInset, 'none'), 'aria-label="Project areas"'],
+      listItems.map(item => markup('ListItem', [], item)).join('\n')));
   },
 };

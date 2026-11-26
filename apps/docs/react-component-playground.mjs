@@ -4,6 +4,7 @@ import { Text } from '@vyrnforge/react/text';
 import { Button } from '@vyrnforge/react/button';
 import { Input } from '@vyrnforge/react/input';
 import { Radio } from '@vyrnforge/react/radio';
+import { SegmentedControlRoot, SegmentedControlItem } from '@vyrnforge/react/segmented-control';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { CodeBlock } from '@vyrnforge/react/code';
@@ -20,8 +21,18 @@ function ConfigurationField({ field, config, update, disabled }) {
     h(Flow, { as: 'label', direction: 'inline', gap: 'xs', align: 'center' },
       h(Checkbox, { ...common, checked: value, onChange: e => update(field.key, e.currentTarget.checked) }),
       h(Text, { as: 'span' }, field.label)), description);
+  // Use the public native-radio-backed segmented control for short, mutually exclusive choices.
+  // Longer labels retain radios/selects instead of squeezing text into tiny segments.
+  if (field.kind === 'choice' && field.options.length <= 3 && field.options.every(option => option.label.length <= 10)) {
+    return h(Flow, { gap: 'xs', className: 'vf-docs-playground-field' },
+      h(Text, { as: 'span', id: id + '-label', variant: 'body-sm' }, field.label),
+      h(SegmentedControlRoot, { value, name: id, 'aria-labelledby': id + '-label',
+        'aria-describedby': common['aria-describedby'], onValueChange: next => update(field.key, next) },
+        ...field.options.map(option => h(SegmentedControlItem, { key: option.value, value: option.value, disabled: locked }, option.label))),
+      description);
+  }
   if (field.kind === 'choice' && field.options.length <= 4) return h(Flow, {
-    as: 'fieldset', gap: 'xs', disabled: locked,
+    as: 'fieldset', gap: 'xs', disabled: locked, className: 'vf-docs-playground-field',
     'aria-describedby': common['aria-describedby'],
     style: { border: 0, margin: 0, padding: 0, minInlineSize: 0 },
   }, h('legend', null, h(Text, { as: 'span', variant: 'body-sm' }, field.label)),
@@ -30,8 +41,8 @@ function ConfigurationField({ field, config, update, disabled }) {
       h(Radio, { name: id, value: option.value, checked: value === option.value,
         onChange: () => update(field.key, option.value) }),
       h(Text, { as: 'span', variant: 'body-sm' }, option.label)))), description);
-  return h(Flow, { gap: 'xs' },
-    h('label', { htmlFor: id }, h(Text, { as: 'span' }, field.label)),
+  return h(Flow, { gap: 'xs', className: 'vf-docs-playground-field' },
+    h('label', { htmlFor: id }, h(Text, { as: 'span', variant: 'body-sm' }, field.label)),
     field.kind === 'choice'
       ? h(NativeSelect, { ...common, value, onChange: e => update(field.key, e.currentTarget.value) },
           ...field.options.map(option => h('option', { key: option.value, value: option.value }, option.label)))
@@ -94,24 +105,38 @@ export function ComponentPlayground({ adapter, title }) {
       } else setFeedback('Clipboard unavailable. Select and copy the source manually.');
     }
   }
-  return h(Flow, { gap: 'lg', 'data-vf-docs-component-playground': title },
-    h(Flow, { as: 'section', gap: 'sm', 'aria-label': title + ' preview',
-      className: 'vf-docs-component-playground-preview', align: 'center', justify: 'center' },
-      h(adapter.Preview, { key: revision, config, update })),
-    h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': id + '-config' },
-      h(Text, { as: 'h3', id: id + '-config', variant: 'heading-sm' }, 'Configuration'),
-      h(AutoGrid, { minItemSize: '12rem', gap: 'md' },
-        ...adapter.fields.map(field => h(ConfigurationField, { key: field.key, field, config, update, disabled: !ready }))),
-      adapter.presets?.length ? h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'sm', align: 'center' },
-        h(Text, { as: 'span', variant: 'body-sm' }, 'Presets:'),
-        ...adapter.presets.map(preset => h(Button, { key: preset.label, type: 'button', variant: 'secondary',
-          disabled: !ready, onClick: () => restore(preset.values) }, preset.label))) : null),
-    h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': id + '-source' },
-      h(Text, { as: 'h3', id: id + '-source', variant: 'heading-sm' }, 'React usage'),
+  const properties = adapter.fields.filter(field => field.kind !== 'boolean');
+  const options = adapter.fields.filter(field => field.kind === 'boolean');
+  const field = definition => h(ConfigurationField, {
+    key: definition.key, field: definition, config, update, disabled: !ready,
+  });
+  return h('div', { className: 'vf-docs-playground', 'data-vf-docs-component-playground': title },
+    h('div', { className: 'vf-docs-playground-workbench' },
+      h(Flow, { as: 'section', className: 'vf-docs-component-playground-preview',
+        gap: 'sm', 'aria-label': title + ' preview' },
+        h(Text, { as: 'h3', variant: 'body-sm', tone: 'secondary' }, 'Preview'),
+        h(Flow, { className: 'vf-docs-playground-canvas', gap: 'sm', align: 'center', justify: 'center' },
+          h(adapter.Preview, { key: revision, config, update }))),
+      h(Flow, { as: 'section', className: 'vf-docs-playground-configuration', gap: 'md', 'aria-labelledby': id + '-config' },
+        h(Flow, { direction: 'inline', align: 'center', justify: 'space-between', wrap: 'wrap', gap: 'xs' },
+          h(Text, { as: 'h3', id: id + '-config', variant: 'heading-sm' }, 'Configuration'),
+          h(Button, { type: 'button', size: 'sm', variant: 'ghost', disabled: !ready,
+            onClick: () => restore(), 'aria-label': 'Reset playground' }, 'Reset')),
+        h(AutoGrid, { minItemSize: '10rem', gap: 'md', className: 'vf-docs-playground-properties' },
+          ...properties.map(field)),
+        options.length ? h(Flow, { as: 'fieldset', gap: 'xs', className: 'vf-docs-playground-options' },
+          h('legend', null, h(Text, { as: 'span', variant: 'body-sm', tone: 'secondary' }, 'Options')),
+          h(AutoGrid, { minItemSize: '8rem', gap: 'sm' }, ...options.map(field))) : null,
+        adapter.presets?.length ? h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'xs', align: 'center' },
+          h(Text, { as: 'span', variant: 'body-sm', tone: 'secondary' }, 'Presets'),
+          ...adapter.presets.map(preset => h(Button, { key: preset.label, type: 'button', variant: 'secondary', size: 'sm',
+            disabled: !ready, onClick: () => restore(preset.values) }, preset.label))) : null)),
+    h(Flow, { as: 'section', className: 'vf-docs-playground-source', gap: 'sm', 'aria-labelledby': id + '-source' },
+      h(Flow, { direction: 'inline', wrap: 'wrap', align: 'center', justify: 'space-between', gap: 'xs' },
+        h(Text, { as: 'h3', id: id + '-source', variant: 'heading-sm' }, 'React usage'),
+        h(Button, { type: 'button', size: 'sm', variant: 'secondary', disabled: !ready, onClick: copy,
+          'aria-label': 'Copy React usage' }, 'Copy code')),
       h('div', { role: 'region', 'aria-label': 'Generated React usage' },
         h(CodeBlock, { ref: sourceRegion, tabIndex: 0, dir: 'ltr', 'aria-label': 'React source code' }, source)),
-      h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'sm' },
-        h(Button, { type: 'button', variant: 'secondary', disabled: !ready, onClick: copy }, 'Copy React usage'),
-        h(Button, { type: 'button', variant: 'ghost', disabled: !ready, onClick: () => restore() }, 'Reset playground')),
-      h(Text, { role: 'status', variant: 'body-sm' }, feedback)));
+      h(Text, { role: 'status', variant: 'body-sm', className: 'vf-docs-playground-feedback' }, feedback)));
 }

@@ -376,7 +376,7 @@ const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
 // Playground CSS belongs to React guide pages only. Bundle relative public CSS imports
 // so an iframe or Native Web inline theme clone never resolves them against a document URL.
 const playgroundViews = new Set(['guide', 'selection-checkbox', 'selection-radio', 'avatar', 'badge', 'chip', 'toggle', 'divider', 'list']);
-const playgroundStyles = ['checkbox', 'radio', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list'];
+const playgroundStyles = ['checkbox', 'radio', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list', 'segmented-control'];
 const playgroundStyleAsset = '/assets/react-playground.css';
 // The Color studio alone needs these public controls; other docs pages do not
 // pay for unrelated component styles or invent docs-specific component skins.
