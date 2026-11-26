@@ -8,10 +8,11 @@ import { Slider } from '@vyrnforge/react/slider';
 import { Text } from '@vyrnforge/react/text';
 import { presets, buildTheme, Segment, Picker, PreviewScene, contrast } from './react-theme-studio.mjs';
 
-const groups = ['All', 'Accent', 'Surfaces', 'Text', 'Borders', 'Danger', 'Focus', 'Disabled'];
+const groups = ['All', 'Accent', 'Surfaces', 'Text', 'Borders', 'Feedback', 'Danger', 'Focus', 'Disabled'];
 const groupFor = (role) => role.startsWith('accent-') ? 'Accent' :
   role.startsWith('surface') ? 'Surfaces' : role.startsWith('text') ? 'Text' :
   role.startsWith('border') ? 'Borders' : role.startsWith('danger') ? 'Danger' :
+  /^(success|warning|info)-/.test(role) ? 'Feedback' :
   role.startsWith('focus') ? 'Focus' : 'Disabled';
 const validSlug = (name) => /^[a-z][a-z0-9-]*$/.test(name) &&
   !['light', 'dark', 'system'].includes(name);

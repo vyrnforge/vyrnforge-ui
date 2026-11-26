@@ -276,10 +276,10 @@ const publicBadgeTypes = badgePublicSource.slice(badgeTypeStart, badgeTypeEnd).t
 const chip = reactModel.componentCatalog.find((entry) => entry.id === 'chip');
 const chipExamples = chip?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
 if (!chip?.showcaseAvailable || !chip.apiAvailable || !chip.sharedContent ||
-    !chip.frameworkContent || chipExamples.length !== 15 ||
+    !chip.frameworkContent || chipExamples.length !== 14 ||
     !chip.publicEntrypoints.includes('@vyrnforge/react/chip') ||
     !webModel.packageManifest.exports?.['./styles/chip.css']) {
-  throw new Error('React Chip requires its public product graph, canonical styling and fifteen examples');
+  throw new Error('React Chip requires its public product graph, canonical styling and fourteen focused examples');
 }
 const chipPublicSourcePath = path.join(root,
   path.dirname(path.dirname(chip.frameworkSourcePath)), 'index.ts');
@@ -373,6 +373,11 @@ const publicDividerTypes = dividerPublicSource.slice(dividerTypeStart, dividerTy
 
 const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
+// Playground CSS belongs to React guide pages only. Bundle relative public CSS imports
+// so an iframe or Native Web inline theme clone never resolves them against a document URL.
+const playgroundViews = new Set(['guide', 'selection-checkbox', 'selection-radio', 'avatar', 'badge', 'chip', 'toggle', 'divider', 'list']);
+const playgroundStyles = ['checkbox', 'radio', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list'];
+const playgroundStyleAsset = '/assets/react-playground.css';
 // The Color studio alone needs these public controls; other docs pages do not
 // pay for unrelated component styles or invent docs-specific component skins.
 const themeStudioStyles = [
@@ -533,6 +538,11 @@ await mkdir(reactRoot, { recursive: true });
 await mkdir(path.join(outRoot, 'assets'), { recursive: true });
 
 await build({
+  stdin: { contents: playgroundStyles.map(id => '@import "@vyrnforge/web/styles/' + id + '.css";').join('\n'),
+    resolveDir: root, loader: 'css', sourcefile: 'react-playground.css' },
+  bundle: true, outfile: path.join(outRoot, 'assets/react-playground.css'), logLevel: 'silent',
+});
+await build({
   entryPoints: [path.join(root, 'apps/docs/react-hydrate.mjs')],
   bundle: true, platform: 'browser', format: 'esm', target: 'es2022',
   outfile: path.join(outRoot, 'assets/react-reference.js'), logLevel: 'silent',
@@ -690,6 +700,14 @@ for (const example of [...badgeExamples, ...chipExamples]) {
     '#root{min-width:0}' + (component === 'chip' && slug !== 'playground' ? 'body{box-sizing:border-box;min-height:100vh;display:grid;align-items:center}#root{width:100%}' : '') + '</style></head><body><div id="root"></div><script src="' +
     escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }
+
+// Preserve the previous standalone playground URL without shipping a second implementation.
+const legacyChipPlayground = 'examples/chip/playground/';
+const chipPlaygroundDestination = relative(directory(legacyChipPlayground), channel + '/react/' + chip.showcaseRoute, true) + '#react-chip-playground';
+await writePage(legacyChipPlayground, '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+  '<title>Chip playground · VyrnForge</title><meta http-equiv="refresh" content="0;url=' +
+  escapeHtml(chipPlaygroundDestination) + '"></head><body><a href="' + escapeHtml(chipPlaygroundDestination) +
+  '">Open the Chip playground</a></body></html>');
 
 for (const example of avatarExamples) {
   const slug = example.id.slice('avatar/'.length);
@@ -1010,7 +1028,8 @@ for (const page of pageViews) {
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
-  const styles = [...shellStyles, ...(['color', 'builder'].includes(page.view) ? themeStudioStyles : []),
+  const styles = [...shellStyles, ...(playgroundViews.has(page.view) ? [playgroundStyleAsset] : []),
+    ...(['color', 'builder'].includes(page.view) ? themeStudioStyles : []),
     ...(page.view === 'icon-library' ? iconExplorerStyles : []),
     ...(page.view === 'overlay' ? overlayStyles : []),
     ...(page.view === 'motion' ? motionStyles : [])]
