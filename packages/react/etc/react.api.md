@@ -368,9 +368,11 @@ export const CarouselViewport: ForwardRefExoticComponent<Omit<DetailedHTMLProps<
 export const Checkbox: ForwardRefExoticComponent<CheckboxProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
     // (undocumented)
     indeterminate?: boolean;
+    // (undocumented)
+    size?: 'sm' | 'md' | 'lg';
 }
 
 // @public

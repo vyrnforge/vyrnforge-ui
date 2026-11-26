@@ -310,6 +310,10 @@ indeterminate: {
 type: BooleanConstructor;
 default: boolean;
 };
+size: {
+type: PropType<'sm' | 'md' | 'lg'>;
+default: string;
+};
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
@@ -317,8 +321,13 @@ indeterminate: {
 type: BooleanConstructor;
 default: boolean;
 };
+size: {
+type: PropType<'sm' | 'md' | 'lg'>;
+default: string;
+};
 }>> & Readonly<{}>, {
 indeterminate: boolean;
+size: 'sm' | 'md' | 'lg';
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)

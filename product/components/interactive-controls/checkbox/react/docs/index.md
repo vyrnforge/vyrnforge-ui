@@ -12,6 +12,10 @@ Use `defaultChecked` for uncontrolled state or `checked` with `onChange` for con
 
 Pass the independent boolean `indeterminate` prop. React synchronizes the real DOM property after mount and activation. It is not an HTML attribute and cannot be serialized as a native mixed state before hydration. Keep the owner value synchronized with the selected items.
 
+## Sizes
+
+Pass `size="sm"`, `size="md"` (default), or `size="lg"`. This is a visual size, not the native numeric HTML input size attribute (which does not apply to checkboxes). The control remains the original input and the label remains independent.
+
 ## Required and disabled states
 
 A native form performs constraint validation and reset for uncontrolled checked values. Reset controlled state explicitly in the application. Associate error text with `aria-describedby` and use `aria-invalid` for application-owned validation.

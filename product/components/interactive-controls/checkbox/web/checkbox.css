@@ -2,100 +2,123 @@
 
 @layer vyrnforge.components {
   :where(input[data-vf-checkbox]) {
+    --_vf-checkbox-indicator: var(--vf-space-lg);
+    --_vf-checkbox-target: max(24px, var(--_vf-checkbox-indicator));
+    --_vf-checkbox-fill: var(--vf-color-surface);
+    --_vf-checkbox-border: var(--vf-color-border-required);
     appearance: none;
-    background: var(--vf-color-surface);
-    border: 1px solid var(--vf-color-border-required);
-    border-radius: 0.25rem;
-    block-size: 1.5rem;
+    background: transparent;
+    border: 0;
+    border-radius: calc(var(--_vf-checkbox-indicator) / 6);
+    block-size: var(--_vf-checkbox-target);
+    min-block-size: var(--_vf-checkbox-target);
     box-sizing: border-box;
     color: var(--vf-color-accent-foreground);
     cursor: pointer;
-    display: grid;
+    display: inline-grid;
     flex-shrink: 0;
-    inline-size: 1.5rem;
+    inline-size: var(--_vf-checkbox-target);
+    min-inline-size: var(--_vf-checkbox-target);
     margin: 0;
-    place-content: center;
+    padding: 0;
+    place-items: center;
+    vertical-align: middle;
+  }
+
+  :where(input[data-vf-checkbox][data-vf-size="sm"]) {
+    --_vf-checkbox-indicator: calc(var(--vf-space-lg) - var(--vf-space-xs));
+  }
+  :where(input[data-vf-checkbox][data-vf-size="lg"]) {
+    --_vf-checkbox-indicator: calc(var(--vf-space-lg) + var(--vf-space-xs));
+  }
+
+  /* Paint the indicator independently of the native pointer/focus target. */
+  :where(input[data-vf-checkbox])::before {
+    content: "";
+    grid-area: 1 / 1;
+    box-sizing: border-box;
+    inline-size: var(--_vf-checkbox-indicator);
+    block-size: var(--_vf-checkbox-indicator);
+    border: 1px solid var(--_vf-checkbox-border);
+    border-radius: inherit;
+    background: var(--_vf-checkbox-fill);
+    pointer-events: none;
     transition:
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
-  :where(input[data-vf-checkbox])::before {
-    block-size: 0.5rem;
-    border-block-end: 0.125rem solid currentColor;
-    border-right: 0.125rem solid currentColor;
+  :where(input[data-vf-checkbox])::after {
     content: "";
-    inline-size: 0.25rem;
+    grid-area: 1 / 1;
+    box-sizing: content-box;
+    block-size: calc(var(--_vf-checkbox-indicator) / 3);
+    border-block-end: calc(var(--_vf-checkbox-indicator) / 12) solid currentColor;
+    border-right: calc(var(--_vf-checkbox-indicator) / 12) solid currentColor;
+    inline-size: calc(var(--_vf-checkbox-indicator) / 6);
     transform: rotate(45deg) scale(0);
     transform-origin: center;
+    pointer-events: none;
     transition: transform var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
   :where(input[data-vf-checkbox]:hover:not(:disabled):not(:checked):not(:indeterminate)) {
-    background: var(--vf-color-surface-hover);
-    border-color: var(--vf-color-text-subtle);
+    --_vf-checkbox-fill: var(--vf-color-surface-hover);
+    --_vf-checkbox-border: var(--vf-color-text-subtle);
   }
-
   :where(input[data-vf-checkbox]:checked, input[data-vf-checkbox]:indeterminate) {
-    background: var(--vf-color-accent-background);
-    border-color: var(--vf-color-accent-background);
+    --_vf-checkbox-fill: var(--vf-color-accent-background);
+    --_vf-checkbox-border: var(--vf-color-accent-background);
   }
-
   :where(input[data-vf-checkbox]:checked:hover:not(:disabled), input[data-vf-checkbox]:indeterminate:hover:not(:disabled)) {
-    background: var(--vf-color-accent-background-hover);
-    border-color: var(--vf-color-accent-background-hover);
+    --_vf-checkbox-fill: var(--vf-color-accent-background-hover);
+    --_vf-checkbox-border: var(--vf-color-accent-background-hover);
   }
-
-  :where(input[data-vf-checkbox]:checked)::before {
+  :where(input[data-vf-checkbox]:checked)::after {
     transform: rotate(45deg) scale(1);
   }
-
-  :where(input[data-vf-checkbox]:indeterminate)::before {
+  :where(input[data-vf-checkbox]:indeterminate)::after {
     background: currentColor;
-    block-size: 0.125rem;
+    block-size: calc(var(--_vf-checkbox-indicator) / 12);
     border: 0;
-    inline-size: 0.625rem;
+    inline-size: calc(var(--_vf-checkbox-indicator) * 5 / 12);
     transform: none;
   }
-
   :where(input[data-vf-checkbox]:focus-visible) {
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
   }
-
   :where(input[data-vf-checkbox]:disabled) {
-    background: var(--vf-color-disabled-background);
-    border-color: var(--vf-color-disabled-border);
+    --_vf-checkbox-fill: var(--vf-color-disabled-background);
+    --_vf-checkbox-border: var(--vf-color-disabled-border);
     color: var(--vf-color-disabled-foreground);
     cursor: not-allowed;
   }
-
   :where(input[data-vf-checkbox]:disabled:checked, input[data-vf-checkbox]:disabled:indeterminate) {
-    background: var(--vf-color-disabled-foreground);
-    border-color: var(--vf-color-disabled-foreground);
+    --_vf-checkbox-fill: var(--vf-color-disabled-foreground);
+    --_vf-checkbox-border: var(--vf-color-disabled-foreground);
     color: var(--vf-color-surface);
   }
-
   :where(input[data-vf-checkbox]:not(:disabled):user-invalid, input[data-vf-checkbox]:not(:disabled)[aria-invalid="true"]) {
-    border-color: var(--vf-color-danger-border);
+    --_vf-checkbox-border: var(--vf-color-danger-border);
   }
-
   @media (prefers-reduced-motion: reduce) {
     :where(input[data-vf-checkbox]),
-    :where(input[data-vf-checkbox])::before { transition: none; }
+    :where(input[data-vf-checkbox])::before,
+    :where(input[data-vf-checkbox])::after { transition: none; }
   }
-
   @media (forced-colors: active) {
     :where(input[data-vf-checkbox]) {
       appearance: auto;
+      display: inline-block;
       accent-color: Highlight;
       background: Canvas;
       border-color: CanvasText;
       color: CanvasText;
       forced-color-adjust: auto;
     }
-
-    :where(input[data-vf-checkbox])::before { display: none; }
+    :where(input[data-vf-checkbox])::before,
+    :where(input[data-vf-checkbox])::after { display: none; }
     :where(input[data-vf-checkbox]:focus-visible) { outline-color: Highlight; }
     :where(input[data-vf-checkbox]:disabled) { border-color: GrayText; color: GrayText; }
   }
