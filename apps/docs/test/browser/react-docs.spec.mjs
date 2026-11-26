@@ -3117,9 +3117,11 @@ test('React feedback modal and Toast guides use native interaction and shared pl
   const toast = page.locator('[data-vf-docs-component-playground="Toast"]');
   await toast.getByRole('checkbox', { name: 'Persistent' }).check();
   await toast.getByRole('button', { name: 'Show notification' }).click();
-  await expect(toast.getByRole('status')).toBeVisible();
+  const toastMessage = toast.locator('[data-vf-toast-root]');
+  await expect(toastMessage).toBeVisible();
+  await expect(toastMessage).toHaveAttribute('role', 'status');
   await toast.getByRole('button', { name: 'Dismiss notification' }).click();
-  await expect(toast.getByRole('status')).toHaveCount(0);
+  await expect(toastMessage).toHaveCount(0);
 });
 test('Feedback composition guides have executable examples and no fictional package API', async ({ page }) => {
   for (const id of ['banner', 'empty-state', 'inline-feedback', 'feedback-composition']) {
@@ -3134,12 +3136,16 @@ test('Feedback composition guides have executable examples and no fictional pack
 
 test('Feedback recovery and notification examples retain application-owned state', async ({ page }) => {
   await page.goto('/next/react/patterns/feedback-composition/');
-  const undo = page.locator('[data-vf-docs-react-feedback-composition-example="feedback-composition/undo"] iframe').contentFrame();
+  const undoFrame = page.locator('[data-vf-docs-react-feedback-composition-example="feedback-composition/undo"] iframe');
+  await undoFrame.scrollIntoViewIfNeeded();
+  const undo = undoFrame.contentFrame();
   await undo.getByRole('button', { name: 'Archive example report' }).click();
   await expect(undo.getByRole('button', { name: 'Undo archive' })).toBeFocused();
   await undo.getByRole('button', { name: 'Undo archive' }).click();
   await expect(undo.getByRole('button', { name: 'Archive example report' })).toBeFocused();
-  const history = page.locator('[data-vf-docs-react-feedback-composition-example="feedback-composition/notification-history"] iframe').contentFrame();
+  const historyFrame = page.locator('[data-vf-docs-react-feedback-composition-example="feedback-composition/notification-history"] iframe');
+  await historyFrame.scrollIntoViewIfNeeded();
+  const history = historyFrame.contentFrame();
   await history.getByRole('button', { name: 'Complete example export' }).click();
   await expect(history.getByRole('list')).toContainText('Example export 1 is ready.');
   await history.getByRole('button', { name: 'Dismiss notification' }).click();
