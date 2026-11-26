@@ -16,4 +16,4 @@ Reuse Button for the trigger and native DialogClose for dismissal. The close par
 
 ## Surface anatomy
 
-Optional header, body and footer regions organize authored content and actions. In Native Web use the shared `data-vf-dialog-header`, `data-vf-dialog-body` and `data-vf-dialog-footer` hooks; `data-vf-divider` adds a boundary to header or footer. Flat compositions remain supported. Structured direct children allow the body to scroll while actions remain available; very short surfaces may scroll as a whole. Regions add no dismissal or decision policy.
+Optional header, body and footer regions organize authored content and actions. In Native Web use the shared `data-vf-dialog-header`, `data-vf-dialog-body` and `data-vf-dialog-footer` hooks; `data-vf-dialog-divider` adds a boundary to header or footer. Flat compositions remain supported. Structured direct children allow the body to scroll while actions remain available; very short surfaces may scroll as a whole. Regions add no dismissal or decision policy.

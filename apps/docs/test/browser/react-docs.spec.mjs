@@ -3165,7 +3165,10 @@ test('structured Dialog playground keeps footer available with long content and 
   await trigger.click();
   const modal = playground.getByRole('dialog');
   const body = modal.locator('[data-vf-dialog-body]');
-  await expect(modal.locator('[data-vf-dialog-header]')).toHaveAttribute('data-vf-divider', '');
+  await expect(modal.locator('[data-vf-dialog-header]')).toHaveAttribute('data-vf-dialog-divider', '');
+  await expect(modal.locator('[data-vf-dialog-footer]')).toHaveAttribute('data-vf-dialog-divider', '');
+  await expect(modal.locator('[data-vf-dialog-footer]')).toHaveCSS('pointer-events', 'auto');
+  await expect(modal.locator('[data-vf-dialog-header]')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
   expect(await body.evaluate(element => element.scrollHeight > element.clientHeight)).toBe(true);
   await modal.getByRole('button', { name: 'Close', exact: true }).click();
   await expect(modal).toBeHidden();

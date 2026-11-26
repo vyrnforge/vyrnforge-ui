@@ -12,7 +12,7 @@ test('React AlertDialog structured regions are SSR-safe', () => {
     createElement(AlertDialogBody, null, 'Content'),
     createElement(AlertDialogFooter, null, 'Actions'),
   ));
-  assert.match(html, /data-vf-dialog-header="" data-vf-divider=""/);
+  assert.match(html, /data-vf-dialog-header="" data-vf-dialog-divider=""/);
   assert.match(html, /data-vf-dialog-footer=""/);
   assert.doesNotMatch(html, /<dialog[^>]*\sopen(?:=|\s|>)/);
 });

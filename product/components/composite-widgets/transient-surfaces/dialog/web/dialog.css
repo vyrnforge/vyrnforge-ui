@@ -52,12 +52,12 @@
     gap: var(--vf-space-sm);
   }
 
-  :where([data-vf-dialog-header][data-vf-divider]) {
+  :where([data-vf-dialog-header][data-vf-dialog-divider]) {
     border-block-end: 1px solid var(--vf-color-border);
     padding-block-end: var(--vf-space-md);
   }
 
-  :where([data-vf-dialog-footer][data-vf-divider]) {
+  :where([data-vf-dialog-footer][data-vf-dialog-divider]) {
     border-block-start: 1px solid var(--vf-color-border);
     padding-block-start: var(--vf-space-md);
   }

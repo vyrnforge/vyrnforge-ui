@@ -259,7 +259,7 @@ export function DialogHeader({ divider = false, ...props }: DialogHeaderProps): 
   return createElement('div', {
     ...props,
     'data-vf-dialog-header': '',
-    'data-vf-divider': divider ? '' : undefined,
+    'data-vf-dialog-divider': divider ? '' : undefined,
   });
 }
 
@@ -268,7 +268,7 @@ export function DialogFooter({ divider = false, ...props }: DialogFooterProps): 
   return createElement('div', {
     ...props,
     'data-vf-dialog-footer': '',
-    'data-vf-divider': divider ? '' : undefined,
+    'data-vf-dialog-divider': divider ? '' : undefined,
   });
 }
 

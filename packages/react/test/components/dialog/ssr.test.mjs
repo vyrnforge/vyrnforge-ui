@@ -38,7 +38,7 @@ test('structured Dialog regions preserve authored attributes and native SSR visi
     createElement(DialogBody, null, 'Content'),
     createElement(DialogFooter, null, createElement(DialogClose, null, 'Close')),
   ));
-  assert.match(html, /data-vf-dialog-header="" data-vf-divider=""/);
+  assert.match(html, /data-vf-dialog-header="" data-vf-dialog-divider=""/);
   assert.match(html, /class="custom-header"/);
   assert.match(html, /data-vf-dialog-footer=""/);
   assert.doesNotMatch(html, /<dialog[^>]*\sopen(?:=|\s|>)/);
