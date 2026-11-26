@@ -588,7 +588,7 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   const headerDisclosure = page.locator('article[data-vf-docs-component="button"] > header [data-vf-docs-standards-disclosure]');
   await expect(headerDisclosure).not.toHaveAttribute('open', '');
   await headerDisclosure.locator(':scope > summary').click();
-  await expect(evidence.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
+  await expect(evidence.getByRole('heading', { name: 'Reference standards' })).toBeVisible();
   const standards = evidence.getByRole('list', { name: 'Standards', exact: true });
   for (const [name, source] of [
     ['HTML button', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element'],
@@ -601,12 +601,13 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   const disclosure = evidence.locator('details.vf-docs-standards-details');
   const summary = disclosure.locator('summary');
   await expect(disclosure).not.toHaveAttribute('open', '');
-  await expect(summary).toHaveText('7 WCAG criteria');
+  await expect(summary).toHaveText('WCAG success criteria (7)');
   const criteria = evidence.getByRole('list', { name: 'Mapped WCAG criteria', exact: true });
   await expect(criteria.getByRole('link')).toHaveCount(0);
   await summary.click();
   await expect(disclosure).toHaveAttribute('open', '');
   await expect(criteria.getByRole('link')).toHaveCount(7);
+  await expect(criteria.getByText('Support keyboard operation of functionality.', { exact: true })).toBeVisible();
   for (const [criterion, title, slug] of [
     ['1.3.1', 'Info and Relationships', 'info-and-relationships'],
     ['1.4.11', 'Non-text Contrast', 'non-text-contrast'],
@@ -621,8 +622,8 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   }
   await expect(page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="states-and-async-work"] a[href="https://www.w3.org/TR/wai-aria-1.2/#aria-busy"]'))
     .toHaveText('aria-busy="true"');
-  await expect(evidence).toContainText('Mapping status: mapped');
-  await expect(evidence).toContainText('not a blanket compliance claim.');
+  await expect(evidence).toContainText('Mapping status: Mapped');
+  await expect(evidence).toContainText('does not demonstrate conformance.');
   await expect(page.locator('article[data-vf-docs-component="button"] .vf-docs-evidence')).toHaveCount(0);
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
@@ -648,12 +649,12 @@ test('Button header holds all mapped accessibility standards and criterion links
       const disclosure = labels.locator('details.vf-docs-standards-details');
       const summary = disclosure.locator('summary');
       await expect(disclosure).not.toHaveAttribute('open', '');
-      await expect(summary).toHaveText('7 WCAG criteria');
+      await expect(summary).toHaveText('WCAG success criteria (7)');
       const criteria = labels.getByRole('list', { name: 'Mapped WCAG criteria' });
       await expect(criteria.getByRole('link')).toHaveCount(0);
       await expect(summary).toBeVisible();
-      await expect(labels).toContainText('Mapping status: mapped');
-      await expect(labels).toContainText('not a blanket compliance claim.');
+      await expect(labels).toContainText('Mapping status: Mapped');
+      await expect(labels).toContainText('does not demonstrate conformance.');
       const sources = [
         ['HTML button', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element'],
         ['WCAG 2.2 AA (target)', 'https://www.w3.org/TR/WCAG22/'],
@@ -1175,15 +1176,14 @@ test('all metadata-backed guides and API references use one title-adjacent stand
 
     expect(count, `${productPage.route}: evidence block must follow product metadata`)
       .toBe(references ? 1 : 0);
-    expect([...markup.matchAll(/<h2[^>]*>([^<]+)<\/h2>/g)].map(match => match[1]).filter(heading => /^(?:(?:React|Native Web|Semantic layout and) )?accessibility(?:$|[ ,:])/i.test(heading) && heading !== 'Accessibility evidence')).toEqual([]);
+    expect([...markup.matchAll(/<h2[^>]*>([^<]+)<\/h2>/g)].map(match => match[1]).filter(heading => /^(?:(?:React|Native Web|Semantic layout and) )?accessibility(?:$|[ ,:])/i.test(heading) && heading !== 'Reference standards')).toEqual([]);
     if (!references) continue;
     backedPages += 1;
-    expect(markup).toMatch(/<h1[^>]*>[^<]*<\/h1>\s*<details[^>]*data-vf-docs-standards-disclosure[^>]*><summary>Standards and evidence mapping<\/summary>/);
-    expect(markup).toContain('not a blanket compliance claim');
-    expect(markup).toContain('Mapping status: <strong>' + references.mappingStatus + '</strong>');
+    expect(markup).toMatch(/<h1[^>]*>[^<]*<\/h1>\s*<details[^>]*data-vf-docs-standards-disclosure[^>]*><summary>Accessibility standards<\/summary>/);
+    expect(markup).toContain('does not demonstrate conformance');
+    expect(markup).toContain('Mapping status: <strong>' + references.mappingStatus.replaceAll('-', ' ').replace(/^./, char => char.toUpperCase()) + '</strong>');
     if (references.criteria.length) {
-      const countLabel = references.criteria.length === 1 ? 'criterion' : 'criteria';
-      expect(markup).toContain('<summary>' + references.criteria.length + ' WCAG ' + countLabel + '</summary>');
+      expect(markup).toContain('<summary>WCAG success criteria (' + references.criteria.length + ')</summary>');
     }
     for (const standard of references.standards) {
       if (standard.url) expect(markup, `${productPage.route} missing ${standard.label}`).toContain('href="' + standard.url + '"');
@@ -1249,7 +1249,7 @@ test('non-Button API pages expose the same accessible standards disclosure', asy
     await headerDisclosure.locator(':scope > summary').click();
     const section = headerDisclosure.locator('[data-vf-docs-accessibility]');
     await expect(section).toHaveCount(1);
-    await expect(section.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
+    await expect(section.getByRole('heading', { name: 'Reference standards' })).toBeVisible();
     const details = section.locator('details');
     await expect(details).not.toHaveAttribute('open', '');
     await details.locator('summary').click();
