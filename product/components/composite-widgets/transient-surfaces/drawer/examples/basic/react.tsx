@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { DrawerBody, DrawerClose, DrawerRoot, DrawerTitle } from '@vyrnforge/react/drawer';
+import { DrawerBody, DrawerClose, DrawerFooter, DrawerHeader, DrawerRoot, DrawerTitle } from '@vyrnforge/react/drawer';
 import { Button } from '@vyrnforge/react/button';
 
 function Example() {
@@ -11,11 +11,15 @@ function Example() {
         Open settings
       </Button>
       <DrawerRoot open={open} onOpenChange={setOpen} placement="end">
-        <DrawerTitle>Settings</DrawerTitle>
+        <DrawerHeader divider>
+          <DrawerTitle>Settings</DrawerTitle>
+        </DrawerHeader>
         <DrawerBody>Settings content</DrawerBody>
-        <DrawerClose data-vf-button="" data-vf-variant="secondary">
-          Close
-        </DrawerClose>
+        <DrawerFooter divider>
+          <DrawerClose data-vf-button="" data-vf-variant="secondary">
+            Close
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerRoot>
     </>
   );

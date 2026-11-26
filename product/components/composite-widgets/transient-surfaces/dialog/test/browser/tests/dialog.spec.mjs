@@ -170,3 +170,31 @@ test('React Dialog enters using the shared recipe and never waits for an animati
   await page.keyboard.press('Escape');
   await expect(trigger).toBeFocused();
 });
+
+test('Web structured regions preserve closed visibility, scrollable body and reachable footer', async ({ page }) => {
+  test.skip(port !== 'web', 'Web owns canonical anatomy styling.');
+  await page.setViewportSize({ width: 320, height: 480 });
+  await page.goto('/components/dialog/web.html');
+  const dialog = page.locator('#web-structured-dialog');
+  await expect(dialog).toBeHidden();
+  await dialog.evaluate((element) => {
+    element.dir = 'rtl';
+    element.showModal();
+  });
+  const body = dialog.locator('[data-vf-dialog-body]');
+  const footer = dialog.locator('[data-vf-dialog-footer]');
+  await expect(dialog).toBeVisible();
+  await expect(footer).toBeVisible();
+  await expect(footer).toHaveCSS('justify-content', 'flex-end');
+  expect(await body.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true);
+  const bounds = await dialog.boundingBox();
+  expect(bounds.x).toBeGreaterThanOrEqual(0);
+  expect(bounds.x + bounds.width).toBeLessThanOrEqual(321);
+  await body.focus();
+  await page.keyboard.press('End');
+  await expect.poll(() => body.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await expect(footer).toBeVisible();
+  await dialog.evaluate((element) => element.close());
+  await expect(dialog).toBeHidden();
+});

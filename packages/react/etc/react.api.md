@@ -157,6 +157,18 @@ export type AlertDialogDismissReason = DialogDismissReason;
 export type AlertDialogDismissRequest = DialogDismissRequest;
 
 // @public (undocumented)
+export const AlertDialogFooter: typeof DialogFooter;
+
+// @public (undocumented)
+export type AlertDialogFooterProps = ComponentProps<typeof AlertDialogFooter>;
+
+// @public (undocumented)
+export const AlertDialogHeader: typeof DialogHeader;
+
+// @public (undocumented)
+export type AlertDialogHeaderProps = ComponentProps<typeof AlertDialogHeader>;
+
+// @public (undocumented)
 export function AlertDialogRoot(props: AlertDialogRootProps): FunctionComponentElement<DialogRootProps & RefAttributes<HTMLDialogElement>>;
 
 // @public (undocumented)
@@ -1482,6 +1494,22 @@ export interface DialogDismissRequest {
 }
 
 // @public (undocumented)
+export function DialogFooter(input: DialogFooterProps): ReactElement;
+
+// @public (undocumented)
+export type DialogFooterProps = HTMLAttributes<HTMLDivElement> & {
+    divider?: boolean;
+};
+
+// @public (undocumented)
+export function DialogHeader(input: DialogHeaderProps): ReactElement;
+
+// @public (undocumented)
+export type DialogHeaderProps = HTMLAttributes<HTMLDivElement> & {
+    divider?: boolean;
+};
+
+// @public (undocumented)
 export const DialogRoot: ForwardRefExoticComponent<DialogRootProps & RefAttributes<HTMLDialogElement>>;
 
 // @public (undocumented)
@@ -1862,6 +1890,18 @@ export const DrawerDescription: typeof DialogDescription;
 
 // @public (undocumented)
 export type DrawerDescriptionProps = ComponentProps<typeof DrawerDescription>;
+
+// @public (undocumented)
+export const DrawerFooter: typeof DialogFooter;
+
+// @public (undocumented)
+export type DrawerFooterProps = ComponentProps<typeof DrawerFooter>;
+
+// @public (undocumented)
+export const DrawerHeader: typeof DialogHeader;
+
+// @public (undocumented)
+export type DrawerHeaderProps = ComponentProps<typeof DrawerHeader>;
 
 // @public (undocumented)
 export type DrawerPlacement = 'start' | 'end' | 'top' | 'bottom';

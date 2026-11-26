@@ -15,6 +15,7 @@ import {
   type HTMLAttributes,
   type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
+  type ReactElement,
   type ReactNode,
   type RefObject,
 } from 'react';
@@ -250,6 +251,24 @@ export function DialogDescription({ id, ...props }: DialogDescriptionProps) {
     ...props,
     id: id ?? context.descriptionId ?? `${context.rootId}-description`,
     'data-vf-dialog-description': '',
+  });
+}
+
+export type DialogHeaderProps = HTMLAttributes<HTMLDivElement> & { divider?: boolean };
+export function DialogHeader({ divider = false, ...props }: DialogHeaderProps): ReactElement {
+  return createElement('div', {
+    ...props,
+    'data-vf-dialog-header': '',
+    'data-vf-dialog-divider': divider ? '' : undefined,
+  });
+}
+
+export type DialogFooterProps = HTMLAttributes<HTMLDivElement> & { divider?: boolean };
+export function DialogFooter({ divider = false, ...props }: DialogFooterProps): ReactElement {
+  return createElement('div', {
+    ...props,
+    'data-vf-dialog-footer': '',
+    'data-vf-dialog-divider': divider ? '' : undefined,
   });
 }
 

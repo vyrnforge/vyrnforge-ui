@@ -3111,6 +3111,9 @@ test('React feedback modal and Toast guides use native interaction and shared pl
     await trigger.click();
     const modal = playground.getByRole(role);
     await expect(modal).toBeVisible();
+    await expect(modal.locator('[data-vf-dialog-header]')).toBeVisible();
+    await expect(modal.locator('[data-vf-dialog-body]')).toBeVisible();
+    await expect(modal.locator('[data-vf-dialog-footer]')).toBeVisible();
     expect(await modal.evaluate(element => element.matches(':modal'))).toBe(true);
     await modal.getByRole('button', { name: close, exact: true }).click();
     await expect(modal).toBeHidden();
@@ -3153,4 +3156,39 @@ test('Feedback recovery and notification examples retain application-owned state
   await expect(history.getByRole('list')).toContainText('Example export 1 is ready.');
   await history.getByRole('button', { name: 'Dismiss notification' }).click();
   await expect(history.getByRole('list')).toContainText('Example export 1 is ready.');
+});
+
+test('structured Dialog playground keeps footer available with long content and short viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 480 });
+  await page.goto('/next/react/components/dialog/');
+  const playground = page.locator('[data-vf-docs-react-dialog] [data-vf-docs-component-playground]');
+  await playground.getByRole('checkbox', { name: 'Section dividers' }).check();
+  await playground.getByRole('checkbox', { name: 'Long content' }).check();
+  const trigger = playground.getByRole('button', { name: 'Open dialog' });
+  await trigger.click();
+  const modal = playground.getByRole('dialog');
+  const body = modal.locator('[data-vf-dialog-body]');
+  await expect(modal.locator('[data-vf-dialog-header]')).toHaveAttribute('data-vf-dialog-divider', '');
+  await expect(modal.locator('[data-vf-dialog-footer]')).toHaveAttribute('data-vf-dialog-divider', '');
+  await expect(modal.locator('[data-vf-dialog-footer]')).toHaveCSS('pointer-events', 'auto');
+  await expect(modal.locator('[data-vf-dialog-header]')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  expect(await body.evaluate(element => element.scrollHeight > element.clientHeight)).toBe(true);
+  await modal.getByRole('button', { name: 'Close', exact: true }).click();
+  await expect(modal).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
+test('Dialog playground supports omitting both presentational regions without losing accessible name', async ({ page }) => {
+  await page.goto('/next/react/components/dialog/');
+  const playground = page.locator('[data-vf-docs-react-dialog] [data-vf-docs-component-playground]');
+  await playground.getByRole('checkbox', { name: 'Header', exact: true }).uncheck();
+  await playground.getByRole('checkbox', { name: 'Footer', exact: true }).uncheck();
+  const trigger = playground.getByRole('button', { name: 'Open dialog' });
+  await trigger.click();
+  const modal = playground.getByRole('dialog', { name: 'Details' });
+  await expect(modal).toBeVisible();
+  await expect(modal.locator('[data-vf-dialog-header], [data-vf-dialog-footer]')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await expect(modal).toBeHidden();
+  await expect(trigger).toBeFocused();
 });
