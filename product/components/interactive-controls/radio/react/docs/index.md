@@ -2,7 +2,7 @@
 
 ## React setup
 
-Import Radio from `@vyrnforge/react/radio` and load `@vyrnforge/web/styles/radio.css`. The ref points to the native HTMLInputElement.
+Import Radio from `@vyrnforge/react/radio`. Supported CSS-aware browser bundlers load its component styles automatically. The ref points to the native HTMLInputElement.
 
 ## Controlled and uncontrolled state
 

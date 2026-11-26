@@ -3004,10 +3004,15 @@ test('React Chip guide exposes circular default and unchanged custom removal art
     const mark = page.locator('[data-vf-chip-default-remove]');
     await expect(mark).toHaveCount(2);
     await expect(mark.first()).toHaveCSS('border-radius', '50%');
+    await expect(mark.locator('svg[data-vf-icon]')).toHaveCount(2);
     await page.screenshot({ path: testInfo.outputPath('chip-deletable-' + theme + '.png') });
     await page.goto('/next/react/examples/chip/custom-delete/');
     await expect(page.locator('[data-vf-chip-remove] [data-vf-icon]')).toHaveCount(2);
     await expect(page.locator('[data-vf-chip-default-remove]')).toHaveCount(0);
+    const custom = page.locator('[data-vf-chip-remove]').first();
+    await custom.hover();
+    expect(await custom.evaluate(el => getComputedStyle(el, '::before').borderRadius)).toBe('50%');
+    await expect(custom).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     await page.screenshot({ path: testInfo.outputPath('chip-custom-delete-' + theme + '.png') });
   }
 });

@@ -2,7 +2,7 @@
 
 ## React setup
 
-Import Checkbox from `@vyrnforge/react/checkbox` and load `@vyrnforge/web/styles/checkbox.css`. The forwarded ref points to the actual HTMLInputElement. Use native `name`, `value`, `id`, `required`, `disabled`, and accessible labeling attributes.
+Import Checkbox from `@vyrnforge/react/checkbox`. Supported CSS-aware browser bundlers load its component styles automatically. The forwarded ref points to the actual HTMLInputElement. Use native `name`, `value`, `id`, `required`, `disabled`, and accessible labeling attributes.
 
 ## Controlled and uncontrolled state
 
