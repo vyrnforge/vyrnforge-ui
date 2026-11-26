@@ -74,8 +74,11 @@ test('navigation retains native link keyboard semantics and disabled links canno
 
 test('default removal mark has independent geometry and contrast across tones and themes', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 900, height: 600 });
+  // Measure the settled theme colors, not an intermediate transition frame.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(url);
   for (const theme of ['light', 'dark']) {
+    await page.mouse.move(0, 0);
     await page.emulateMedia({ colorScheme: theme });
     await page.locator('html').evaluate((el, value) => { el.dataset.vfTheme = value; }, theme);
     const mark = page.locator('[id^="remove-"]:not(#remove-disabled) [data-vf-chip-default-remove]');
@@ -98,7 +101,7 @@ test('default removal mark has independent geometry and contrast across tones an
         const surface = rootColor === 'rgba(0, 0, 0, 0)' ? getComputedStyle(document.body).backgroundColor : rootColor;
         const rect = node.getBoundingClientRect();
         return { id: root.id, width: rect.width, height: rect.height, targetWidth: target.width, targetHeight: target.height,
-          radius: style.borderRadius, circleContrast: ratio(style.backgroundColor, surface),
+          radius: style.borderRadius, colors: [style.backgroundColor, surface, style.color], circleContrast: ratio(style.backgroundColor, surface),
           inkContrast: ratio(style.color, style.backgroundColor) };
       });
     });
@@ -108,12 +111,13 @@ test('default removal mark has independent geometry and contrast across tones an
       expect(item.width).toBeLessThan(item.targetWidth);
       expect(item.targetWidth).toBeGreaterThanOrEqual(24);
       expect(item.targetHeight).toBeGreaterThanOrEqual(24);
-      expect(item.circleContrast, item.id + ' circle contrast').toBeGreaterThanOrEqual(3);
-      expect(item.inkContrast, item.id + ' mark contrast').toBeGreaterThanOrEqual(3);
+      expect(item.circleContrast, item.id + ' circle contrast: ' + item.colors.join(' / ')).toBeGreaterThanOrEqual(3);
+      expect(item.inkContrast, item.id + ' mark contrast: ' + item.colors.join(' / ')).toBeGreaterThanOrEqual(3);
     }
     await expect(page.locator('#remove-custom [data-vf-chip-default-remove]')).toHaveCount(0);
     await expect(page.locator('#remove-custom [data-vf-chip-remove]')).toHaveAttribute('data-vf-icon-only', '');
     await expect(page.getByRole('button', { name: 'Remove remove-disabled' })).toBeDisabled();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
     const button = page.getByRole('button', { name: 'Remove remove-neutral-filled' });
     const circle = button.locator('[data-vf-chip-default-remove]');
     await button.hover();

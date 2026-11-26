@@ -87,6 +87,12 @@
     --_vf-chip-remove-ink: var(--vf-color-disabled-background);
   }
 
+  /* A removal-only disabled Chip still has an ordinary, readable text
+     label. Only its removal action is inactive. */
+  :where([data-vf-chip][data-vf-chip-disabled]) > span[data-vf-chip-primary] {
+    color: var(--vf-color-text-muted);
+  }
+
   /* The existing Button/ToggleButton controls keep their semantics and native
      activation. This compound's visual treatment overrides only their geometry. */
   :where([data-vf-chip]) > [data-vf-chip-primary],
@@ -246,6 +252,9 @@
     :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):is(:hover,:active):not(:disabled,[aria-disabled="true"]) {
       background: ButtonFace;
       color: ButtonText;
+    }
+    :where([data-vf-chip][data-vf-chip-disabled]) > span[data-vf-chip-primary] {
+      color: CanvasText;
     }
     :where([data-vf-chip-default-remove]) {
       forced-color-adjust: none;
