@@ -75,8 +75,10 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(function Chip(
   };
   const primary = selectable
     ? createElement(ToggleButton, {
-        ...actionProps, pressed: selected, defaultPressed: defaultSelected,
-        onPressedChange: onSelectedChange,
+        ...actionProps,
+        ...(selected === undefined ? {} : { pressed: selected }),
+        ...(defaultSelected === undefined ? {} : { defaultPressed: defaultSelected }),
+        ...(onSelectedChange === undefined ? {} : { onPressedChange: onSelectedChange }),
       }, label)
     : onClick
       ? createElement(Button, { ...actionProps, variant: 'ghost' }, label)
