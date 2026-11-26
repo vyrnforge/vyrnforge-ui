@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { DialogBody, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogRoot, DialogTitle } from '@vyrnforge/react/dialog';
+import {
+  DialogBody,
+  DialogClose,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+} from '@vyrnforge/react/dialog';
 import { Button } from '@vyrnforge/react/button';
 
 function Example() {

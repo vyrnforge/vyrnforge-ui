@@ -25,9 +25,7 @@
   }
 
   /* Opt-in structure; closed dialogs retain native hidden display. */
-  :where(
-    [data-vf-dialog-root][open]:has(> [data-vf-dialog-body]):has(> [data-vf-dialog-header], > [data-vf-dialog-footer])
-  ) {
+  :where([data-vf-dialog-root][open]:has(> [data-vf-dialog-header], > [data-vf-dialog-footer])) {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -68,7 +66,8 @@
     margin-block: 0;
   }
 
-  :where([data-vf-dialog-root][open]:has(> [data-vf-dialog-header], > [data-vf-dialog-footer]) > [data-vf-dialog-body]) {
+  :where([data-vf-dialog-root][open]:has(> [data-vf-dialog-header]) > [data-vf-dialog-body]),
+  :where([data-vf-dialog-root][open]:has(> [data-vf-dialog-footer]) > [data-vf-dialog-body]) {
     flex: 1 1 auto;
     min-block-size: var(--vf-space-xl);
     overflow: auto;

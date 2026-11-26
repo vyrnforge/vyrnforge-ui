@@ -13,7 +13,7 @@ export const browserFixture = {
       </dialog>
       <dialog id="web-structured-dialog" data-vf-dialog-root aria-labelledby="web-structured-title">
         <div data-vf-dialog-header data-vf-divider><h2 id="web-structured-title" data-vf-dialog-title>Structured dialog</h2></div>
-        <div data-vf-dialog-body tabindex="0" aria-label="Details">${Array.from({ length: 30 }, (_, index) => '<p>Detail ' + (index + 1) + '</p>').join('')}</div>
+        <div data-vf-dialog-body tabindex="0" role="region" aria-label="Details">${Array.from({ length: 30 }, (_, index) => '<p>Detail ' + (index + 1) + '</p>').join('')}</div>
         <div data-vf-dialog-footer data-vf-divider><button type="button" data-vf-dialog-close>Close</button></div>
       </dialog>`,
     },

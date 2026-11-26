@@ -499,7 +499,7 @@ function modalAdapter(id) {
       h(Root, props,
         config.header ? h(Header, { divider: config.dividers }, title, description) : title,
         config.header ? null : description,
-        h(Body, config.longContent ? { tabIndex: 0, 'aria-label': 'Details' } : null, config.longContent ? Array.from({ length: 24 }, (_, index) =>
+        h(Body, config.longContent ? { tabIndex: 0, role: 'region', 'aria-label': 'Details' } : null, config.longContent ? Array.from({ length: 24 }, (_, index) =>
           h('p', { key: index }, 'Additional details ' + (index + 1))) : 'Task content'),
         config.footer ? h(Footer, { divider: config.dividers }, close, action) : close,
         config.footer ? null : action));
@@ -523,7 +523,7 @@ function modalAdapter(id) {
         (config.header ? '          <' : '        <') + titleName + '>' + content(config.title || 'Details') + '</' + titleName + '>',
         (config.header ? '          <' : '        <') + descriptionName + ' id={descriptionId}>' + content(config.message || 'Review this information.') + '</' + descriptionName + '>',
         ...(config.header ? ['        </' + headerName + '>'] : []),
-        '        <' + bodyName + (config.longContent ? ' tabIndex={0} aria-label="Details"' : '') + '>',
+        '        <' + bodyName + (config.longContent ? ' tabIndex={0} role="region" aria-label="Details"' : '') + '>',
         config.longContent ? '          {Array.from({ length: 24 }, (_, index) => <p key={index}>Additional details {index + 1}</p>)}' : '          Task content',
         '        </' + bodyName + '>',
         ...(config.footer ? ['        <' + footerName + (config.dividers ? ' divider' : '') + '>'] : []),
