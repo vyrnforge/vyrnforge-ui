@@ -5,7 +5,7 @@ import ts from 'typescript';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeConfiguration, defaultsFor } from '../../playground-config.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground } from '../../react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground } from '../../react-playground-adapters.mjs';
 
 test('Button playground keeps configuration, interaction and generated usage synchronized', async ({ page }) => {
   await page.goto('/next/react/components/button/');
@@ -17,7 +17,7 @@ test('Button playground keeps configuration, interaction and generated usage syn
   await playground.getByRole('radio', { name: 'lg', exact: true }).check();
   await expect(button).toHaveAttribute('data-vf-variant', 'secondary');
   await expect(button).toHaveAttribute('data-vf-size', 'lg');
-  await expect(code).toContainText('variant={"secondary"}');
+  await expect(code).toContainText('variant="secondary"');
   await button.focus();
   await button.press('Space');
   await expect(preview.getByRole('status')).toHaveText('Activations: 1');
@@ -27,7 +27,7 @@ test('Button playground keeps configuration, interaction and generated usage syn
   await playground.getByRole('button', { name: 'Reset playground' }).click();
   await expect(button).toBeEnabled();
   await expect(code).not.toContainText(/<Button[^>]*\bvariant=/);
-  await expect(preview.getByRole('status')).toHaveText('Activations: 0');
+  await expect(preview.getByRole('status')).toBeEmpty();
 });
 
 test('Checkbox and Radio playground previews update configuration and source', async ({ page }) => {
@@ -38,7 +38,7 @@ test('Checkbox and Radio playground previews update configuration and source', a
   await expect(preview.getByRole('checkbox')).toHaveJSProperty('indeterminate', true);
   await preview.getByRole('checkbox').click();
   await expect(checkbox.getByRole('radio', { name: 'checked', exact: true })).toBeChecked();
-  await expect(checkbox.getByRole('region', { name: 'Generated React usage' })).toContainText('>("checked")');
+  await expect(checkbox.getByRole('region', { name: 'Generated React usage' })).toContainText('defaultChecked');
 
   await page.goto('/next/react/components/radio/');
   const radio = page.locator('[data-vf-docs-component-playground="Radio"]');
@@ -46,7 +46,7 @@ test('Checkbox and Radio playground previews update configuration and source', a
   await radioPreview.getByRole('radio', { name: 'Standard' }).focus();
   await radioPreview.getByRole('radio', { name: 'Standard' }).press('ArrowRight');
   await expect(radioPreview.getByRole('radio', { name: 'Express' })).toBeChecked();
-  await expect(radio.getByRole('region', { name: 'Generated React usage' })).toContainText('useState("express")');
+  await expect(radio.getByRole('region', { name: 'Generated React usage' })).toContainText('<Radio name="delivery" value="express" defaultChecked');
 });
 
 test('Playground preserves source and reflows at narrow widths with clipboard denied', async ({ page }, testInfo) => {
@@ -58,11 +58,11 @@ test('Playground preserves source and reflows at narrow widths with clipboard de
   await page.setViewportSize({ width: 375, height: 900 });
   await page.goto('/next/react/components/button/');
   const playground = page.locator('[data-vf-docs-component-playground="Button"]');
-  await expect(playground.getByRole('button', { name: 'Copy React usage' })).toBeEnabled();
+  await expect(playground.getByRole('button', { name: 'Copy code' })).toBeEnabled();
   await playground.screenshot({ path: testInfo.outputPath('playground-mobile-light.png') });
   await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
   await playground.screenshot({ path: testInfo.outputPath('playground-mobile-dark.png') });
-  await playground.getByRole('button', { name: 'Copy React usage' }).click();
+  await playground.getByRole('button', { name: 'Copy code' }).click();
   await expect(playground.getByRole('region', { name: 'Generated React usage' }).locator('pre')).toBeFocused();
   await expect(playground.getByText('Source selected. Use your device copy command.')).toBeVisible();
   await expect(playground).toBeVisible();
@@ -121,7 +121,7 @@ test('Chip guide uses the shared playground, with valid source and removal focus
   await playground.getByRole('checkbox', { name: 'Custom delete icon' }).check();
   await preview.getByRole('button', { name: 'Engineering', exact: true }).click();
   await expect(playground.getByRole('checkbox', { name: 'Selected' })).toBeChecked();
-  await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('useState(true)');
+  await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('defaultSelected');
   await preview.getByRole('button', { name: 'Remove Engineering' }).click();
   await expect(preview.getByRole('button', { name: 'Restore' })).toBeFocused();
   await playground.getByRole('button', { name: 'Reset playground' }).click();
@@ -147,14 +147,14 @@ test('Generated playground examples typecheck and bundle against installed publi
     [buttonPlayground, { artwork: 'icon only' }], [togglePlayground, { iconOnly: true, pressed: true }],
     [dividerPlayground, { orientation: 'vertical', textDirection: 'bottom-to-top', textAlign: 'end' }],
     [listPlayground, { as: 'ol', variant: 'divided', marker: 'auto', gutter: 'lg', dividerInset: 'gutter' }],
+    [loadingPlayground, {}], [loadingPlayground, { presentation: 'progress', value: 72 }],
+    [loadingPlayground, { presentation: 'placeholder', shape: 'circle' }], [loadingPlayground, { presentation: 'custom' }],
+    [backdropPlayground, {}], [backdropPlayground, { hidden: true, opacity: 0.5 }],
   ];
   const generated = new Map(scenarios.map(([adapter, patch], index) => [
     path.join(root, 'apps/docs', 'generated-playground-' + index + '.tsx'),
     adapter.source(normalizeConfiguration(adapter.fields, { ...defaultsFor(adapter.fields), ...patch })),
   ]));
-  // CSS imports are legal bundler side effects rather than TypeScript modules.
-  // The separate esbuild checks below resolve every real public CSS path.
-  generated.set(path.join(root, 'apps/docs', 'generated-playground-css.d.ts'), "declare module '*.css';");
   const options = { noEmit: true, strict: true, skipLibCheck: true, jsx: ts.JsxEmit.ReactJSX,
     target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext,
     moduleResolution: ts.ModuleResolutionKind.Bundler, esModuleInterop: true };
@@ -165,19 +165,27 @@ test('Generated playground examples typecheck and bundle against installed publi
   host.fileExists = name => generated.has(name) || exists(name);
   host.readFile = name => generated.get(name) ?? read(name);
   host.getSourceFile = (name, version, ...args) => generated.has(name)
-    ? ts.createSourceFile(name, generated.get(name), version, true, name.endsWith('.d.ts') ? ts.ScriptKind.TS : ts.ScriptKind.TSX)
+    ? ts.createSourceFile(name, generated.get(name), version, true, ts.ScriptKind.TSX)
     : get(name, version, ...args);
   const program = ts.createProgram([...generated.keys()], options, host);
   const diagnostics = ts.getPreEmitDiagnostics(program);
   expect(diagnostics.map(d => ts.flattenDiagnosticMessageText(d.messageText, '\n'))).toEqual([]);
-  // Bundle every representative configuration, including actual CSS and icon imports.
+  // Prove the displayed imports alone resolve browser wrappers and extract canonical component CSS.
   for (const [name, source] of generated) {
-    if (name.endsWith('.d.ts')) continue;
+    expect(source).not.toContain('@vyrnforge/web/styles');
     const output = await build({ stdin: { contents: source, sourcefile: name, resolveDir: root, loader: 'tsx' },
-      bundle: true, write: false, platform: 'browser', format: 'esm', jsx: 'automatic',
+      bundle: true, write: false, metafile: true, platform: 'browser', format: 'esm', jsx: 'automatic',
       outdir: path.join(root, 'dist', 'playground-source-check'), logLevel: 'silent' });
     expect(output.outputFiles.some(file => file.path.endsWith('.js'))).toBe(true);
-    expect(output.outputFiles.some(file => file.path.endsWith('.css'))).toBe(true);
+    const css = output.outputFiles.find(file => file.path.endsWith('.css'));
+    expect(css?.text).toBeTruthy();
+    const componentImports = [...source.matchAll(/from '@vyrnforge\/react\/([a-z-]+)'/g)].map(match => match[1]);
+    expect(componentImports.length).toBeGreaterThan(0);
+    for (const component of componentImports) {
+      expect(Object.keys(output.metafile.inputs).some(input => input.endsWith('/components/' + component + '/browser.js'))).toBe(true);
+      expect(Object.keys(output.metafile.inputs).some(input => input.endsWith('/components/' + component + '/' + component + '.css'))).toBe(true);
+    }
+    expect(css.text).not.toMatch(/@layer\s+vyrnforge\.reset\s*\{/);
   }
 });
 
@@ -239,5 +247,40 @@ test('ToggleButton, Divider and List guides share the playground and public prop
   await expect(listPreview).toHaveAttribute('data-vf-list-variant', 'divided');
   await expect(listPreview).toHaveAttribute('data-vf-list-gutter', 'lg');
   await expect(listPreview.locator('li')).toHaveCount(3);
-  await expect(list.getByRole('region', { name: 'Generated React usage' })).toContainText('as={"ol"}');
+  await expect(list.getByRole('region', { name: 'Generated React usage' })).toContainText('as="ol"');
+});
+
+test('Playground source is component-first, without preview-only scaffolding', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/button/');
+  const button = page.locator('[data-vf-docs-component-playground="Button"]');
+  const code = button.getByRole('region', { name: 'Generated React usage' });
+  await expect(code).toHaveText("import { Button } from '@vyrnforge/react/button'; <Button type=\"button\">Save changes</Button>");
+  await expect(code).not.toContainText(/Flow|Text|useState|Activations/);
+  await button.getByRole('radio', { name: 'secondary' }).check();
+  await button.getByRole('radio', { name: 'lg' }).check();
+  await expect(code).toContainText('<Button type="button" variant="secondary" size="lg">Save changes</Button>');
+  await button.getByRole('radio', { name: 'icon only' }).check();
+  await expect(code).toContainText('iconOnly');
+  await expect(code).toContainText('aria-label="Save changes"');
+  await expect(code).toContainText("import { bookmarkIcon } from '@vyrnforge/icons/bookmark';");
+  await button.getByRole('button', { name: 'Reset playground' }).click();
+  await expect(code).not.toContainText('bookmarkIcon');
+
+  await page.goto('/next/react/components/chip/');
+  const chip = page.locator('[data-vf-docs-component-playground="Chip"]');
+  const source = chip.getByRole('region', { name: 'Generated React usage' });
+  await expect(source).toHaveText("import { Chip } from '@vyrnforge/react/chip'; <Chip>Engineering</Chip>");
+  await chip.getByRole('radio', { name: 'selectable' }).check();
+  await chip.getByRole('checkbox', { name: 'Selected' }).check();
+  await chip.getByRole('checkbox', { name: 'Deletable' }).check();
+  await expect(source).toContainText('defaultSelected');
+  await expect(source).toContainText('onRemove={onRemove}');
+  await expect(source).not.toContainText(/@vyrnforge\/react\/(?:layout|text)|Restore|Live preview|useEffect/);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await chip.screenshot({ path: testInfo.outputPath('chip-configured-desktop-light.png') });
+  await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
+  await chip.screenshot({ path: testInfo.outputPath('chip-configured-desktop-dark.png') });
+  await page.setViewportSize({ width: 320, height: 800 });
+  await chip.screenshot({ path: testInfo.outputPath('chip-configured-mobile-dark.png') });
+  expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
 });

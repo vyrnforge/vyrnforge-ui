@@ -6,7 +6,6 @@ Render a straight horizontal or vertical line with optional readable text. The R
 
 ```tsx
 import { Divider } from '@vyrnforge/react/divider';
-import '@vyrnforge/web/styles/divider.css';
 
 <Divider />
 <Divider orientation="vertical" />
@@ -18,7 +17,7 @@ import '@vyrnforge/web/styles/divider.css';
 <Divider orientation="vertical" textDirection="bottom-to-top">Previous</Divider>
 ```
 
-No provider, wrapper div, CSS-in-JS system or extra runtime is required. Use `<hr />` directly for a semantic thematic break.
+Supported CSS-aware browser bundlers load the Divider stylesheet automatically. No provider, wrapper div, CSS-in-JS system or extra runtime is required. Use `<hr />` directly for a semantic thematic break.
 
 ## React authoring
 

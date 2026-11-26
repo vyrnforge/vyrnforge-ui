@@ -2,7 +2,7 @@
 
 ## React setup
 
-Import `ToggleButton` from `@vyrnforge/react/toggle-button` and load `@vyrnforge/web/styles/toggle-button.css` in the browser. The default `type` is `button`.
+Import `ToggleButton` from `@vyrnforge/react/toggle-button`. Supported CSS-aware browser bundlers load its component styles automatically. The default `type` is `button`.
 
 ## Controlled and uncontrolled state
 

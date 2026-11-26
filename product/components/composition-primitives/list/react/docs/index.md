@@ -2,7 +2,7 @@
 
 ## React setup
 
-Import List and ListItem from `@vyrnforge/react/list`. CSS-aware browser bundles can extract canonical `@vyrnforge/web/styles/list.css`; SSR applications must deliver the same stylesheet to the client. The React host emits native lists and list items with no local interaction state or effects.
+Import List and ListItem from `@vyrnforge/react/list`. Supported CSS-aware browser bundles automatically extract the canonical component stylesheet; SSR applications must deliver the extracted CSS to the client. The React host emits native lists and list items with no local interaction state or effects.
 
 ## Composition with existing VyrnForge components
 
