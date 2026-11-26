@@ -24,7 +24,7 @@ Required applies to this individual checkbox. A native required checkbox must be
 
 ## Sizes
 
-Choose small, medium (default), or large. At a 16px root font size the indicators are 20, 24 and 28 CSS pixels respectively; the native input maintains at least a 24px square target. Check and mixed artwork and the radius scale with the indicator. Label typography is independently composed. Native forced-colors presentation retains the native control and target instead of forcing custom artwork.
+Choose small, medium (default), or large. At a 16px root font size the indicators are 20, 24 and 28 CSS pixels respectively; the native input maintains at least a 24px square target. Check and mixed artwork and the radius scale with the indicator. The checked artwork is centered independently of its rotated bounding box; the mixed mark remains centered without an offset. Label typography is independently composed. Native forced-colors presentation retains the native control and target instead of forcing custom artwork.
 
 ## Accessibility and styling
 

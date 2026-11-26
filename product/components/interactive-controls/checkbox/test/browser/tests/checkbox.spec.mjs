@@ -47,7 +47,23 @@ test('checkbox sizes preserve distinct indicators, native target, state and focu
       const rect = input.getBoundingClientRect();
       const indicator = getComputedStyle(input, '::before');
       const mark = getComputedStyle(input, '::after');
-      return { size, target: rect.width, height: rect.height, indicator: parseFloat(indicator.width),
+      // Measure the transformed painted border polygons, not the invisible
+      // rectangle that encloses the L. Both checked and disabled use this art.
+      const paintedCenter = (style) => {
+        const right = parseFloat(style.borderRightWidth);
+        const bottom = parseFloat(style.borderBottomWidth);
+        const w = parseFloat(style.width) + right + parseFloat(style.borderLeftWidth);
+        const h = parseFloat(style.height) + bottom + parseFloat(style.borderTopWidth);
+        const matrix = new DOMMatrixReadOnly(style.transform);
+        const points = [[w-right,0],[w,0],[w,h],[0,h],[0,h-bottom],[w-right,h-bottom]]
+          .map(([x,y]) => matrix.transformPoint({ x: x-w/2, y: y-h/2 }));
+        const xs = points.map(point => point.x), ys = points.map(point => point.y);
+        return { x: (Math.min(...xs)+Math.max(...xs))/2, y: (Math.min(...ys)+Math.max(...ys))/2 };
+      };
+      const center = paintedCenter(mark);
+      const disabledCenter = paintedCenter(getComputedStyle(document.getElementById(size + '-disabled'), '::after'));
+      const mixedTransform = getComputedStyle(document.getElementById(size + '-mixed'), '::after').transform;
+      return { size, center, disabledCenter, mixedTransform, target: rect.width, height: rect.height, indicator: parseFloat(indicator.width),
         indicatorHeight: parseFloat(indicator.height), mark: parseFloat(mark.height), markWidth: parseFloat(mark.width), mixedWidth: parseFloat(getComputedStyle(document.getElementById(size + '-mixed'), '::after').width), radius: parseFloat(indicator.borderRadius) };
     });
   });
@@ -60,6 +76,13 @@ test('checkbox sizes preserve distinct indicators, native target, state and focu
     expect(value.markWidth).toBeCloseTo(value.indicator / 4, 1);
     expect(value.mixedWidth).toBeCloseTo(value.indicator * 7 / 12, 1);
     expect(value.radius).toBeCloseTo(value.indicator / 6, 1);
+    // Browser border widths may round to whole device pixels; allow a small
+    // subpixel tolerance, but reject the original multi-pixel downward offset.
+    for (const center of [value.center, value.disabledCenter]) {
+      expect(Math.abs(center.x)).toBeLessThan(0.5);
+      expect(Math.abs(center.y)).toBeLessThan(0.5);
+    }
+    expect(value.mixedTransform).toBe('none');
   }
   const small = page.locator('#sm-unchecked');
   const bounds = await small.boundingBox();
