@@ -28,7 +28,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-list-chip-pilot');
+  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-list-chip-loading-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -61,6 +61,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     'icons/', 'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
     'components/list/', 'api/components/list/',
+    'patterns/loading/', 'api/patterns/loading/',
     'components/chip/', 'api/components/chip/',
     'components/badge/', 'api/components/badge/',
     'components/avatar/', 'api/components/avatar/',
@@ -3027,4 +3028,21 @@ test('React Chip actual pointer actions do not leak between the surface and clos
   await mark.click();
   await expect(chip).toHaveCount(0);
   await expect(page.getByRole('status')).toHaveText('Design activations: 2');
+});
+
+test('React Loading guide reuses the shared playground and native progress', async ({ page }) => {
+  await page.goto('/next/react/patterns/loading/');
+  const playground = page.locator('[data-vf-docs-component-playground="Loading"]');
+  await expect(playground.locator('[data-vf-loading-indicator]')).toBeVisible();
+  await playground.getByRole('radio', { name: 'progress', exact: true }).check();
+  const progress = playground.getByRole('progressbar');
+  await expect(progress).toHaveJSProperty('value', 48);
+  await playground.getByRole('checkbox', { name: 'Indeterminate' }).check();
+  await expect(progress).not.toHaveAttribute('value');
+  await playground.getByRole('radio', { name: 'placeholder', exact: true }).check();
+  await expect(playground.locator('[data-vf-loading-placeholder]')).toBeVisible();
+  await expect(page.frameLocator('iframe[title*="Loading presentations"]').locator('[data-vf-loading-indicator]').first()).toBeVisible();
+  await page.goto('/next/react/api/patterns/loading/');
+  await expect(page.getByRole('heading', { name: 'Loading API', exact: true })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-api="loading"]')).toContainText('LoadingProgress');
 });

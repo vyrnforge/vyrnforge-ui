@@ -1,9 +1,10 @@
+import { createRoot } from 'react-dom/client';
 import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
 import { Flow } from '@vyrnforge/react/layout';
 import '@vyrnforge/web/styles/loading.css';
 import '@vyrnforge/web/styles/layout.css';
 
-export default function Example() {
+function Example() {
   return (
     <Flow direction="block" gap="lg">
       <Loading size="lg">
@@ -32,3 +33,5 @@ export default function Example() {
     </Flow>
   );
 }
+
+createRoot(document.querySelector('#root')!).render(<Example />);
