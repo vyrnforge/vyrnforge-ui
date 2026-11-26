@@ -222,9 +222,6 @@
   ) {
     outline: none;
   }
-  :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus) > [data-vf-text-field-outline]) {
-    border-width: 2px;
-  }
   :where([data-vf-text-field-outline]) {
     position: absolute;
     inset: -1px;
@@ -237,6 +234,9 @@
     border-radius: inherit;
     font: var(--_vf-floating-label-font);
     letter-spacing: var(--vf-text-field-label-letter-spacing, normal);
+  }
+  :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus) > [data-vf-text-field-outline]) {
+    border-width: 2px;
   }
   :where([data-vf-text-field-outline] > legend) {
     margin-inline-start: calc(var(--_vf-text-field-inline-padding) - var(--vf-space-2xs));
