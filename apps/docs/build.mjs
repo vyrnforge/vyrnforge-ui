@@ -1,3 +1,4 @@
+import { visibleGuideSections } from './guide-presentation.mjs';
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -110,7 +111,7 @@ function renderAccessibilityStandards(references, headingId = 'accessibility-evi
     : 'Semantic baseline';
   const reviewNote = references.reviewStatus === 'review-required' ? ' Accessibility review required.' : '';
 
-  return `<section class="vf-docs-standards" data-vf-flow data-vf-flow-gap="sm" data-vf-docs-accessibility aria-labelledby="${escapeHtml(headingId)}">
+  return `<details class="vf-docs-reference-details" data-vf-docs-standards-disclosure><summary>Standards and evidence mapping</summary><section class="vf-docs-standards" data-vf-flow data-vf-flow-gap="sm" data-vf-docs-accessibility aria-labelledby="${escapeHtml(headingId)}">
     <h2 id="${escapeHtml(headingId)}">Accessibility evidence</h2>
     <ul class="vf-docs-standards-primary" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="xs" aria-label="Standards">${references.standards.map((item) => `<li>${renderStandardLink(item)}</li>`).join('')}</ul>
     ${showDetails ? `<details class="vf-docs-standards-details">
@@ -119,7 +120,7 @@ function renderAccessibilityStandards(references, headingId = 'accessibility-evi
       ${baselineNote}
     </details>` : ''}
     <p class="vf-docs-standards-note">Mapping status: <strong>${escapeHtml(references.mappingStatus)}</strong>.${reviewNote} References and evidence mappings only; not a blanket compliance claim.</p>
-  </section>`;
+  </section></details>`;
 }
 
 function renderInline(value) {
@@ -591,8 +592,8 @@ function renderFoundation(page) {
       <header class="vf-docs-component-header">
         <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Foundation</p>
         <h1>${escapeHtml(page.title)}</h1>
-        <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">${escapeHtml(page.description)}</p>
         ${renderAccessibilityStandards(page.standardReferences)}
+        <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">${escapeHtml(page.description)}</p>
       </header>
       <section>
         <h2>Public entrypoints</h2>
@@ -818,7 +819,7 @@ function renderTableOfContents(entries) {
 function renderFrameworkContent(content, uniqueId) {
   if (!content) return { markup: '', toc: [] };
   const introId = uniqueId('Native Web integration');
-  const sections = content.sections.map((section) => ({ ...section, id: uniqueId(section.heading) }));
+  const sections = visibleGuideSections(content.sections).map((section) => ({ ...section, id: uniqueId(section.heading) }));
   return {
     toc: [{ id: introId, label: 'Native Web integration' }, ...sections.map((section) => ({ id: section.id, label: section.heading }))],
     markup: `<section aria-labelledby="${escapeHtml(introId)}">
@@ -843,17 +844,15 @@ function renderComponent(page) {
   };
 
   const setupId = uniqueId('Native Web setup');
-  const sectionModels = page.content.sections.map((section) => ({ ...section, id: uniqueId(section.heading) }));
+  const sectionModels = visibleGuideSections(page.content.sections, page.examples).map((section) => ({ ...section, id: uniqueId(section.heading) }));
   const framework = renderFrameworkContent(page.frameworkContent, uniqueId);
   const featuredExample = page.examples.find((example) => !example.documentationSection) ?? page.examples[0];
   const remainingExamples = page.examples.filter((example) =>
     example.id !== featuredExample.id && !example.documentationSection);
   const usageId = uniqueId('Usage preview');
   const examplesId = remainingExamples.length ? uniqueId('More examples') : null;
-  const evidenceId = uniqueId('Accessibility evidence');
   const referenceId = uniqueId('Reference');
   const toc = [
-    { id: evidenceId, label: 'Accessibility evidence' },
     { id: setupId, label: 'Native Web setup' },
     { id: usageId, label: 'Usage preview' },
     ...sectionModels.map((section) => ({ id: section.id, label: section.heading })),
@@ -864,7 +863,7 @@ function renderComponent(page) {
 
   const sections = sectionModels.map((section) => {
     const examplesForSection = page.examples.filter((example) =>
-      example.id !== featuredExample.id && example.documentationSection === section.heading);
+      example.id !== featuredExample.id && example.documentationSection === (section.sourceHeading ?? section.heading));
     return `<section aria-labelledby="${escapeHtml(section.id)}">
     <h2 id="${escapeHtml(section.id)}">${escapeHtml(section.heading)}</h2>
     ${renderBlocks(section.blocks)}
@@ -889,8 +888,8 @@ function renderComponent(page) {
             <span>Guide</span>
           </div>
           <h1>${escapeHtml(page.content.title)}</h1>
+          ${renderAccessibilityStandards(page.standardReferences)}
           <div data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">${renderBlocks(page.content.intro)}</div>
-          ${renderAccessibilityStandards(page.standardReferences, evidenceId)}
         </header>
         <section aria-labelledby="${escapeHtml(setupId)}">
           <h2 id="${escapeHtml(setupId)}">Native Web setup</h2>
@@ -931,8 +930,8 @@ function renderComponent(page) {
 
 function renderPatternGuide(page) {
   const currentPageDirectory = pageDirectory(page.route);
-  const sections = page.content.sections.map((section) =>
-    '<section><h2>' + escapeHtml(section.heading) + '</h2>' + renderBlocks(section.blocks) + page.examples.filter((example) => example.documentationSection === section.heading).map(renderExample).join('') + '</section>').join('');
+  const sections = visibleGuideSections(page.content.sections, page.examples).map((section) =>
+    '<section><h2>' + escapeHtml(section.heading) + '</h2>' + renderBlocks(section.blocks) + page.examples.filter((example) => example.documentationSection === (section.sourceHeading ?? section.heading)).map(renderExample).join('') + '</section>').join('');
   const examples = page.exampleReferences.flatMap((reference) => reference.frameworks.map((adaptation) =>
     '<li>' + escapeHtml(reference.title) + ' — ' + escapeHtml(documentationFrameworks[adaptation.framework].label) +
     ' example (repository source): <a data-vf-link href="https://github.com/vyrnforge/vyrnforge-ui/blob/main/' +
@@ -944,8 +943,9 @@ function renderPatternGuide(page) {
     content: renderBreadcrumbs(page, currentPageDirectory, 'Patterns') +
       '<article class="vf-docs-article" data-vf-flow data-vf-flow-gap="3xl" data-vf-docs-pattern="' + escapeHtml(page.id) + '">' +
       '<header class="vf-docs-component-header"><h1>' + escapeHtml(page.content.title) + '</h1>' +
+      renderAccessibilityStandards(page.standardReferences) +
       '<div data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">' + renderBlocks(page.content.intro) + '</div>' +
-      renderAccessibilityStandards(page.standardReferences) + '</header>' + sections +
+      '</header>' + sections +
       (examples ? '<section><h2>Referenced examples</h2><p>Guide only. Referenced examples run in repository browser fixtures in the indicated framework; this Native Web page does not execute them or provide a pattern API.</p><ul>' + examples + '</ul></section>' : '') +
       (page.id === 'button-group' ? '<section><h2>Related guides</h2><ul><li><a data-vf-link href="' + artifactHref(currentPageDirectory, routeTarget('components/button/')) + '">Button</a></li><li><a data-vf-link href="' + artifactHref(currentPageDirectory, routeTarget('components/toggle-button/')) + '">ToggleButton</a></li></ul></section>' : '') + '</article>',
   });
@@ -963,8 +963,8 @@ function renderApiPage(page) {
       <header class="vf-docs-component-header">
         <div class="vf-docs-page-meta" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="xs"><span>Native Web</span><span>${escapeHtml(page.kind === 'pattern' ? 'Pattern' : componentCategory(page).label)}</span><span>API Reference</span></div>
         <h1>${escapeHtml(page.title)} API</h1>
-        <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Verified from the public Native Web package surface. Use the corresponding guide for design and usage guidance when one is available.</p>
         ${renderAccessibilityStandards(page.standardReferences)}
+        <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Verified from the public Native Web package surface. Use the corresponding guide for design and usage guidance when one is available.</p>
       </header>
       <section>
         <h2>Public entrypoints</h2>
