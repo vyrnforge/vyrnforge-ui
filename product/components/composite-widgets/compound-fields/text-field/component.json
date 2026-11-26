@@ -1,0 +1,13 @@
+{
+  "id": "text-field",
+  "name": "TextField",
+  "documentation": {
+    "group": "form-controls"
+  },
+  "styling": {
+    "dependencies": [
+      "input",
+      "textarea"
+    ]
+  }
+}
