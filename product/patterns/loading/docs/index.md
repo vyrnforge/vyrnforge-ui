@@ -122,4 +122,23 @@ Reduced-motion removes non-essential continuous movement while keeping every bui
 
 ## Framework boundary
 
-The first implementation is Native Web CSS because the family is presentation- and native-semantics-oriented. React, Angular, Vue, and Elements wrappers are not required merely for symmetry. If wrappers are later justified, custom children/templates/slots remain first-class.
+The canonical implementation is Native Web CSS because the family is presentation- and native-semantics-oriented. The React-first adapter projects the same presentation hooks without owning any application async state. It does not create separate component ownership for Skeleton, Spinner or Progress. Other framework wrappers are not required merely for symmetry.
+
+### React
+
+Import `Loading`, `LoadingIndicator`, `LoadingPlaceholder`, `LoadingProgress` and `LoadingCustom` from `@vyrnforge/react/loading`. The browser entrypoint uses the same Web stylesheet; SSR-safe imports do not load CSS. Supply the public Web stylesheet explicitly if your bundler does not select browser exports.
+
+`Loading` is an optional div scope with size sm/md/lg and authored children. Place aria-busy on the affected region and author a status outside it if the status must be announced while the region is busy. Indicator and Placeholder are decorative; the native progress element must have an accessible name, and omission of value preserves indeterminate semantics. Custom children remain first-class.
+
+```tsx
+import { Loading, LoadingIndicator, LoadingProgress } from '@vyrnforge/react/loading';
+
+<>
+  <Loading aria-busy={true} size="sm">
+    <LoadingIndicator />
+  </Loading>
+  <p role="status">Loading account summary</p>
+  <LoadingProgress aria-label="Uploading file" value={48} max={100} />
+</>
+```
+

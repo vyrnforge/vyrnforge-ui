@@ -5,6 +5,7 @@ import { Radio } from '@vyrnforge/react/radio';
 import { Avatar } from '@vyrnforge/react/avatar';
 import { Badge } from '@vyrnforge/react/badge';
 import { Chip } from '@vyrnforge/react/chip';
+import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Divider } from '@vyrnforge/react/divider';
 import { List, ListItem } from '@vyrnforge/react/list';
@@ -391,5 +392,49 @@ export const listPlayground = {
         ' aria-label="Project areas" style={{ inlineSize: "100%", maxInlineSize: "20rem" }}>',
       ...listItems.map(item => '      <ListItem>' + jsxText(item) + '</ListItem>'),
       '    </List>', '  );', '}'].join('\n');
+  },
+};
+
+const loadingParts = {
+  indicator: 'LoadingIndicator', placeholder: 'LoadingPlaceholder', progress: 'LoadingProgress', custom: 'LoadingCustom',
+};
+function LoadingPreview({ config }) {
+  const body = config.presentation === 'indicator' ? h(LoadingIndicator, { variant: config.variant })
+    : config.presentation === 'placeholder' ? h(LoadingPlaceholder, { shape: config.shape,
+      style: { inlineSize: config.shape === 'circle' ? '3rem' : '100%', minBlockSize: '3rem' } })
+    : config.presentation === 'progress' ? h(LoadingProgress, { 'aria-label': config.label || 'Loading',
+      value: config.indeterminate ? undefined : config.value, max: 100 })
+    : h(LoadingCustom, { 'aria-hidden': true }, h('svg', { width: 32, height: 32, viewBox: '0 0 32 32' },
+      h('circle', { cx: 16, cy: 16, r: 12, fill: 'none', stroke: 'currentColor', strokeWidth: 2 })));
+  return h(Flow, { gap: 'sm', style: { inlineSize: 'min(100%, 24rem)' } },
+    h(Loading, { size: config.size }, body),
+    h(Text, { as: 'p', variant: 'body-sm' }, config.label || 'Loading'));
+}
+export const loadingPlayground = {
+  fields: [choice('presentation', 'Presentation', 'indicator', ['indicator', 'placeholder', 'progress', 'custom']),
+    choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
+    {...choice('variant', 'Indicator', 'spinner', ['spinner', 'dots', 'bars', 'pulse']), available: c => c.presentation === 'indicator'},
+    {...choice('shape', 'Placeholder shape', 'block', ['block', 'line', 'circle']), available: c => c.presentation === 'placeholder'},
+    {...bool('indeterminate', 'Indeterminate'), available: c => c.presentation === 'progress'},
+    {kind: 'number', key: 'value', label: 'Progress', default: 48, min: 0, max: 100, step: 1,
+      available: c => c.presentation === 'progress' && !c.indeterminate},
+    text('label', 'Status text', 'Loading account summary')],
+  presets: [{ label: 'Upload progress', values: { presentation: 'progress', label: 'Uploading file', value: 48 } },
+    { label: 'Structured placeholder', values: { presentation: 'placeholder', shape: 'line' } }],
+  Preview: LoadingPreview,
+  source(config) {
+    const part = loadingParts[config.presentation];
+    const body = config.presentation === 'indicator' ? '<LoadingIndicator' + attribute('variant', config.variant, 'spinner') + ' />'
+      : config.presentation === 'placeholder' ? '<LoadingPlaceholder' + attribute('shape', config.shape, 'block') +
+        ' style={{ inlineSize: ' + JSON.stringify(config.shape === 'circle' ? '3rem' : '100%') + ', minBlockSize: "3rem" }} />'
+      : config.presentation === 'progress' ? '<LoadingProgress aria-label=' + jsxText(config.label || 'Loading') +
+        (config.indeterminate ? '' : ' value={' + config.value + '}') + ' max={100} />'
+      : '<LoadingCustom aria-hidden={true}><svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth={2} /></svg></LoadingCustom>';
+    return [importLine('Loading, ' + part, 'loading'), styleLine('loading'), ...compositionImports,
+      '', 'export default function Example() {', '  return (',
+      '    <Flow gap="sm" style={{ inlineSize: "min(100%, 24rem)" }}>',
+      '      <Loading' + attribute('size', config.size, 'md') + '>' + body + '</Loading>',
+      '      <Text as="p" variant="body-sm">' + jsxText(config.label || 'Loading') + '</Text>',
+      '    </Flow>', '  );', '}'].join('\n');
   },
 };

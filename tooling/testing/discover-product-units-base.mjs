@@ -173,7 +173,9 @@ export function discoverProductUnits(root = repoRoot) {
     const exports = new Set(Object.keys(packageManifests.get(port)?.exports ?? {}).map(componentIdFromFrameworkExport).filter(Boolean));
     frameworkExports.set(port, exports);
     for (const id of exports) {
-      if (!componentRoots.has(id)) throw new Error(`Public component ${port}/${id} is missing canonical ownership`);
+      if (!componentRoots.has(id) && !(port === 'react' && existingPath(root, `product/patterns/${id}/pattern.json`) && existingPath(root, `product/patterns/${id}/react/index.ts`))) {
+        throw new Error(`Public component ${port}/${id} is missing canonical ownership`);
+      }
     }
   }
   const webExports = new Set(Object.keys(packageManifests.get('web')?.exports ?? {}).map(componentIdFromWebExport).filter(Boolean));

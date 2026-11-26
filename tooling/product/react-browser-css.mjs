@@ -27,7 +27,7 @@ export function reactBrowserCssPlan({ root = repoRoot, react, web, graph } = {})
     throw new Error('React root must expose browser CSS and retain native SSR import');
   }
 
-  const owners = new Map(productGraph.components
+  const owners = new Map([...productGraph.components, ...(productGraph.patterns ?? [])]
     .filter((unit) => unit.surfaces?.react?.publicEntrypoints?.length)
     .map((unit) => [unit.unitId, unit]));
   const entries = [];
