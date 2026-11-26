@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { AppShell, AppShellBody, AppShellHeader, AppShellMain } from '@vyrnforge/react/app-shell';
@@ -66,22 +67,22 @@ function App() {
 
   return (
     <AppShell>
-      <AppShellHeader><strong>Performance UX evidence</strong></AppShellHeader>
+      <AppShellHeader><Text as="strong" variant="label-md">Performance UX evidence</Text></AppShellHeader>
       <AppShellBody>
         <AppShellMain className="perf-main">
           <header className="perf-heading">
             <div>
-              <h1>Measured performance without fake certainty</h1>
-              <p>This bounded example records browser measurements as diagnostics while preserving truthful task state and recovery.</p>
+              <Text as="h1" variant="heading-lg">Measured performance without fake certainty</Text>
+              <Text as="p">This bounded example records browser measurements as diagnostics while preserving truthful task state and recovery.</Text>
             </div>
-            <span className="perf-badge">2,000 records · 50 per page</span>
+            <Text as="span" className="perf-badge">2,000 records · 50 per page</Text>
           </header>
 
           <section className="perf-panel" aria-labelledby="large-data-heading">
             <div className="perf-section-heading">
               <div>
-                <h2 id="large-data-heading">Large collection</h2>
-                <p id="list-status" role="status">Showing records {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, records.length)} of {records.length}. {lastMeasurement}</p>
+                <Text as="h2" variant="heading-md" id="large-data-heading">Large collection</Text>
+                <Text as="p" id="list-status" role="status">Showing records {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, records.length)} of {records.length}. {lastMeasurement}</Text>
               </div>
               <div className="perf-actions" aria-label="Pagination">
                 <Button type="button" variant="secondary" disabled={page === 0} onClick={() => changePage(page - 1)}>Previous page</Button>
@@ -98,27 +99,27 @@ function App() {
           </section>
 
           <section className="perf-panel" aria-labelledby="save-heading">
-            <h2 id="save-heading">Delayed save with truthful feedback</h2>
+            <Text as="h2" variant="heading-md" id="save-heading">Delayed save with truthful feedback</Text>
             <label htmlFor="performance-note">Review note</label>
             <Textarea id="performance-note" value={note} onChange={(event) => { setNote(event.currentTarget.value); setSaveState('idle'); }} />
             <div className="perf-actions">
               <Button type="button" loading={saveState === 'saving'} onClick={save} disabled={saveState === 'saving'}>Save note</Button>
-              <span role="status" aria-live="polite">{saveState === 'saving' ? 'Saving note…' : saveState === 'saved' ? 'Note saved by the deterministic fake service.' : 'Changes are not saved yet.'}</span>
+              <Text as="span" role="status" aria-live="polite">{saveState === 'saving' ? 'Saving note…' : saveState === 'saved' ? 'Note saved by the deterministic fake service.' : 'Changes are not saved yet.'}</Text>
             </div>
           </section>
 
           <section className="perf-panel" aria-labelledby="lazy-heading">
-            <h2 id="lazy-heading">Optional deferred capability</h2>
-            <p>The primary collection is usable before this optional module is requested.</p>
+            <Text as="h2" variant="heading-md" id="lazy-heading">Optional deferred capability</Text>
+            <Text as="p">The primary collection is usable before this optional module is requested.</Text>
             <div className="perf-actions">
               <Button type="button" variant="secondary" onClick={loadDetail} disabled={detailState === 'loading'}>{detailState === 'loading' ? 'Loading detail…' : 'Load optional detail'}</Button>
-              <span role="status" aria-live="polite">{detail}</span>
+              <Text as="span" role="status" aria-live="polite">{detail}</Text>
             </div>
           </section>
 
           <section className="perf-panel" aria-labelledby="motion-heading">
-            <h2 id="motion-heading">Non-essential transition</h2>
-            <p>The indicator uses a short transform/opacity transition and disables that transition when reduced motion is requested.</p>
+            <Text as="h2" variant="heading-md" id="motion-heading">Non-essential transition</Text>
+            <Text as="p">The indicator uses a short transform/opacity transition and disables that transition when reduced motion is requested.</Text>
             <div className="perf-motion" data-testid="motion-indicator">Measured state change</div>
           </section>
         </AppShellMain>

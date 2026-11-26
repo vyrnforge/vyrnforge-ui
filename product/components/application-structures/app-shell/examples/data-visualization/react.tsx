@@ -1,3 +1,5 @@
+import { Link } from '@vyrnforge/react/link';
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { AppShell, AppShellBody, AppShellHeader, AppShellMain, AppShellNavigation } from '@vyrnforge/react/app-shell';
@@ -61,14 +63,14 @@ function App() {
 
   return (
     <AppShell data-example-locale={locale}>
-      <AppShellHeader><strong>Operations overview</strong></AppShellHeader>
+      <AppShellHeader><Text as="strong" variant="label-md">Operations overview</Text></AppShellHeader>
       <AppShellBody>
         <AppShellNavigation className="viz-navigation">
           <nav aria-label="Operations overview sections">
-            <strong>Overview</strong>
+            <Text as="strong" variant="label-md">Overview</Text>
             <ul>
-              <li><a href="#completion-trend">Completion trend</a></li>
-              <li><a href="#channel-comparison">Channel comparison</a></li>
+              <li><Link href="#completion-trend">Completion trend</Link></li>
+              <li><Link href="#channel-comparison">Channel comparison</Link></li>
             </ul>
           </nav>
         </AppShellNavigation>
@@ -76,17 +78,17 @@ function App() {
           <div className="viz-dashboard">
             <header className="viz-dashboard-heading">
               <div>
-                <h1>Order completion overview</h1>
-                <p>Decision view for completed orders and weekly completion rate.</p>
+                <Text as="h1" variant="heading-lg">Order completion overview</Text>
+                <Text as="p">Decision view for completed orders and weekly completion rate.</Text>
               </div>
-              <p className="viz-freshness"><strong>As of:</strong> 24 Aug 2026 · Source: example operations dataset</p>
+              <Text as="p" className="viz-freshness"><Text as="strong" variant="label-md">As of:</Text> 24 Aug 2026 · Source: example operations dataset</Text>
             </header>
 
             <section id="completion-trend" className="viz-panel" aria-labelledby="trend-title">
               <div className="viz-panel-heading">
                 <div>
-                  <h2 id="trend-title">Weekly completion rate, 6 Jul–24 Aug 2026</h2>
-                  <p id="trend-summary">Completion increased from 71% to an estimated 85%; the 20 Jul observation is missing, and the 24 Aug estimate ranges from 82% to 88%.</p>
+                  <Text as="h2" variant="heading-md" id="trend-title">Weekly completion rate, 6 Jul–24 Aug 2026</Text>
+                  <Text as="p" id="trend-summary">Completion increased from 71% to an estimated 85%; the 20 Jul observation is missing, and the 24 Aug estimate ranges from 82% to 88%.</Text>
                 </div>
                 <span className="viz-unit">Percent of orders</span>
               </div>
@@ -151,8 +153,8 @@ function App() {
             <section id="channel-comparison" className="viz-panel" aria-labelledby="channel-title">
               <div className="viz-panel-heading">
                 <div>
-                  <h2 id="channel-title">Completed orders by channel</h2>
-                  <p id="channel-summary">Web leads with {number.format(channels[0].value)} completed orders, followed by Partner at {number.format(channels[1].value)}.</p>
+                  <Text as="h2" variant="heading-md" id="channel-title">Completed orders by channel</Text>
+                  <Text as="p" id="channel-summary">Web leads with {number.format(channels[0].value)} completed orders, followed by Partner at {number.format(channels[1].value)}.</Text>
                 </div>
                 <span className="viz-unit">Orders</span>
               </div>
@@ -162,7 +164,7 @@ function App() {
                   <div className="viz-bar-row" key={channel.label}>
                     <span className="viz-bar-label">{channel.label}</span>
                     <div className="viz-bar-track" aria-hidden="true"><span className="viz-bar" style={{ inlineSize: `${(channel.value / maxChannel) * 100}%` }} /></div>
-                    <strong className="viz-bar-value">{number.format(channel.value)}</strong>
+                    <Text as="strong" variant="label-md" className="viz-bar-value">{number.format(channel.value)}</Text>
                   </div>
                 ))}
                 <div className="viz-zero-label" aria-hidden="true">0</div>

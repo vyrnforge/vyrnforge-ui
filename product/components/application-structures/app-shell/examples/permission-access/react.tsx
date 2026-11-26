@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { AppShell, AppShellBody, AppShellHeader, AppShellMain } from '@vyrnforge/react/app-shell';
@@ -88,31 +89,31 @@ function App() {
   return (
     <AppShell>
       <AppShellHeader className="permission-shell-header">
-        <strong>Document workspace</strong>
+        <Text as="strong" variant="label-md">Document workspace</Text>
         {impersonating ? (
           <div className="permission-identity-context" aria-label="Impersonation context">
-            <p><strong>Avery</strong> is acting as <strong>Jordan</strong>.</p>
+            <Text as="p"><Text as="strong" variant="label-md">Avery</Text> is acting as <Text as="strong" variant="label-md">Jordan</Text>.</Text>
             <Button type="button" variant="secondary" onClick={() => setImpersonating(false)}>End impersonation</Button>
           </div>
         ) : (
-          <p>Avery is using their own identity.</p>
+          <Text as="p">Avery is using their own identity.</Text>
         )}
       </AppShellHeader>
       <AppShellBody>
         <AppShellMain className="permission-example-main">
           <header>
-            <h1>Quarterly plan</h1>
-            <p>Illustrative organization role: <strong>Editor</strong>. Action availability comes from resource capabilities, not the role label.</p>
+            <Text as="h1" variant="heading-lg">Quarterly plan</Text>
+            <Text as="p">Illustrative organization role: <Text as="strong" variant="label-md">Editor</Text>. Action availability comes from resource capabilities, not the role label.</Text>
           </header>
 
           <section className="permission-status" aria-labelledby="permission-status-heading">
-            <h2 id="permission-status-heading">Access status</h2>
-            <p>{message}</p>
-            <p>Current capability: {canEdit ? 'Can edit this document' : 'View only'}. Last committed value: “{savedValue}”.</p>
+            <Text as="h2" variant="heading-md" id="permission-status-heading">Access status</Text>
+            <Text as="p">{message}</Text>
+            <Text as="p">Current capability: {canEdit ? 'Can edit this document' : 'View only'}. Last committed value: “{savedValue}”.</Text>
           </section>
 
           <section className="permission-editor" aria-labelledby="permission-editor-heading">
-            <h2 id="permission-editor-heading">Draft</h2>
+            <Text as="h2" variant="heading-md" id="permission-editor-heading">Draft</Text>
             <label htmlFor="permission-draft">Plan notes</label>
             <textarea
               id="permission-draft"
@@ -121,7 +122,7 @@ function App() {
               aria-describedby={!canEdit ? 'permission-readonly-help' : undefined}
               onChange={(event) => setDraft(event.currentTarget.value)}
             />
-            {!canEdit ? <p id="permission-readonly-help">You can review and copy this preserved draft, but you cannot save changes without edit access.</p> : null}
+            {!canEdit ? <Text as="p" id="permission-readonly-help">You can review and copy this preserved draft, but you cannot save changes without edit access.</Text> : null}
             <div className="permission-actions">
               <Button type="button" disabled={!canEdit} onClick={save}>Save changes</Button>
               {!canEdit ? (
@@ -133,8 +134,8 @@ function App() {
           </section>
 
           <section aria-labelledby="permission-demo-heading">
-            <h2 id="permission-demo-heading">Fake permission service controls</h2>
-            <p>These controls exist only to exercise STD-16 state transitions. They do not represent a VyrnForge permission runtime.</p>
+            <Text as="h2" variant="heading-md" id="permission-demo-heading">Fake permission service controls</Text>
+            <Text as="p">These controls exist only to exercise STD-16 state transitions. They do not represent a VyrnForge permission runtime.</Text>
             <div className="permission-demo-controls">
               <Button type="button" variant="secondary" onClick={grantEditAccess}>Grant edit access for demo</Button>
               <Button type="button" variant="secondary" onClick={revokeEditAccess}>Revoke edit access for demo</Button>

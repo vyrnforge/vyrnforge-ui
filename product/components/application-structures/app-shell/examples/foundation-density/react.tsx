@@ -46,7 +46,7 @@ function App() {
         </div>
 
         <div data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="xs">
-          <span id="foundation-updates-label">Product updates</span>
+          <Text as="span" id="foundation-updates-label">Product updates</Text>
           <Switch aria-labelledby="foundation-updates-label" checked={updates} onChange={(event) => setUpdates(event.currentTarget.checked)} />
         </div>
 
