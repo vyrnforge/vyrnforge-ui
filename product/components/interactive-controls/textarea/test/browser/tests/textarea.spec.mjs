@@ -81,3 +81,39 @@ test('Textarea preserves native multiline form semantics and shared styling acro
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });
+
+
+test('Textarea keeps disabled presentation authoritative when application invalid state remains', async ({ page }) => {
+  await page.goto(`/components/textarea/${port}.html`);
+  const disabled = page.locator('#disabled');
+  for (const forcedColors of ['none', 'active']) {
+    await page.emulateMedia({ forcedColors });
+    const before = await disabled.evaluate((node) => getComputedStyle(node).borderColor);
+    await disabled.evaluate((node) => node.setAttribute('aria-invalid', 'true'));
+    await expect(disabled).toBeDisabled();
+    await expect(disabled).toHaveAttribute('aria-invalid', 'true');
+    await expect.poll(() => disabled.evaluate((node) => getComputedStyle(node).borderColor)).toBe(before);
+    await disabled.evaluate((node) => node.removeAttribute('aria-invalid'));
+  }
+});
+
+test('Textarea retains native rows and cols without overflowing a narrow RTL container', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 760 });
+  await page.goto(`/components/textarea/${port}.html`);
+  const editable = page.locator('#editable');
+  await page.locator('html').evaluate((node) => { node.dir = 'rtl'; node.style.fontSize = '200%'; });
+  await editable.focus();
+  await expect(editable).toBeFocused();
+  await expect(editable).toHaveAttribute('rows', '4');
+  await expect(editable).toHaveAttribute('cols', '30');
+  const fits = await editable.evaluate((node) => node.getBoundingClientRect().width <= node.parentElement.getBoundingClientRect().width + 1);
+  expect(fits).toBe(true);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((node, value) => node.setAttribute('data-vf-theme', value), theme);
+    await expect(editable).toHaveCSS('background-color', theme === 'light' ? 'rgb(255, 255, 255)' : 'rgb(24, 24, 27)');
+    await page.screenshot({ path: testInfo.outputPath(`textarea-narrow-${theme}-${port}.png`), fullPage: true });
+  }
+  await page.emulateMedia({ forcedColors: 'active' });
+  await page.screenshot({ path: testInfo.outputPath(`textarea-narrow-forced-colors-${port}.png`), fullPage: true });
+});

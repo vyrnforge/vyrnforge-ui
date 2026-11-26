@@ -13,6 +13,7 @@
     line-height: var(--vf-line-height-normal);
     min-block-size: var(--vf-control-height-md);
     min-inline-size: 0;
+    max-inline-size: 100%;
     padding-block: var(--vf-space-sm);
     padding-inline: 0.75rem;
     transition:
@@ -42,7 +43,7 @@
 
   :where(textarea[data-vf-textarea]:read-only:not(:disabled)) { background: var(--vf-color-surface-subtle); }
 
-  :where(textarea[data-vf-textarea]:user-invalid, textarea[data-vf-textarea][aria-invalid="true"]) { border-color: var(--vf-color-danger-border); }
+  :where(textarea[data-vf-textarea]:not(:disabled):user-invalid, textarea[data-vf-textarea]:not(:disabled)[aria-invalid="true"]) { border-color: var(--vf-color-danger-border); }
 
   @media (prefers-reduced-motion: reduce) { :where(textarea[data-vf-textarea]) { transition: none; } }
 
@@ -55,6 +56,6 @@
     }
     :where(textarea[data-vf-textarea]:focus-visible) { outline-color: Highlight; }
     :where(textarea[data-vf-textarea]:disabled) { border-color: GrayText; color: GrayText; }
-    :where(textarea[data-vf-textarea]:user-invalid, textarea[data-vf-textarea][aria-invalid="true"]) { border-color: Highlight; }
+    :where(textarea[data-vf-textarea]:not(:disabled):user-invalid, textarea[data-vf-textarea]:not(:disabled)[aria-invalid="true"]) { border-color: Highlight; }
   }
 }
