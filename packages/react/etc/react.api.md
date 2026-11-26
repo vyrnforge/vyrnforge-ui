@@ -4976,7 +4976,7 @@ export type ToggleGroupType = 'single' | 'multiple';
 
 // @public (undocumented)
 export const tokens: Readonly<{
-    color: Readonly<Record<"primary" | "secondary" | "accent" | "danger" | "text" | "muted" | "subtle" | "onAccent" | "accentHover" | "accentPressed" | "accentSubtle" | "accentSubtleHover" | "dangerBackground" | "background" | "surface" | "surfaceSubtle" | "surfaceHover" | "surfacePressed" | "border" | "borderStrong" | "borderRequired" | "focus" | "disabledText" | "disabledBackground" | "disabledBorder", `var(--vf-${string})`>>;
+    color: Readonly<Record<"primary" | "secondary" | "accent" | "danger" | "text" | "muted" | "subtle" | "onAccent" | "accentHover" | "accentPressed" | "accentSubtle" | "accentSubtleHover" | "dangerBackground" | "dangerForeground" | "successForeground" | "successBackground" | "successBorder" | "warningForeground" | "warningBackground" | "warningBorder" | "infoForeground" | "infoBackground" | "infoBorder" | "background" | "surface" | "surfaceSubtle" | "surfaceHover" | "surfacePressed" | "border" | "borderStrong" | "borderRequired" | "focus" | "disabledText" | "disabledBackground" | "disabledBorder", `var(--vf-${string})`>>;
     space: Readonly<{
         none: `var(--vf-${string})`;
         '2xs': `var(--vf-${string})`;
