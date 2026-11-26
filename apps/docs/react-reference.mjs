@@ -694,8 +694,7 @@ function iconExample(example, links) {
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' example',
       src: links.icon.exampleBase + slug + '/',
-      sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy',
-      ...(component === 'chip' ? { 'data-vf-docs-example-id': example.id } : {}) }),
+      sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy' }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
       h(CodeBlock, { tabIndex: 0 }, example.source)));
@@ -868,7 +867,8 @@ function compactExample(example, links, component = 'badge') {
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' ' + componentTitle + ' example',
       src: links[component].exampleBase + slug + '/',
-      sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy' }),
+      sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy',
+      ...(component === 'chip' ? { 'data-vf-docs-example-id': example.id } : {}) }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
       h(CodeBlock, { tabIndex: 0 }, example.source)));
