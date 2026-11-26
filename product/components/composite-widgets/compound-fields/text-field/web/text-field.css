@@ -13,6 +13,7 @@
     --_vf-text-field-height: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     --_vf-text-field-padding: var(--_vf-density-input-padding-block, 0.4375rem);
     --_vf-text-field-background: var(--vf-color-surface);
+    --_vf-text-field-inline-padding: calc(var(--vf-space-sm) + var(--vf-space-xs));
   }
   :where([data-vf-text-field][hidden]) {
     display: none;
@@ -35,25 +36,27 @@
   :where([data-vf-text-field][data-vf-text-field-variant='filled']) {
     --_vf-text-field-background: var(--vf-color-surface-subtle);
   }
+  :where([data-vf-text-field][data-vf-text-field-variant='underlined']) {
+    --_vf-text-field-background: transparent;
+  }
   :where([data-vf-text-field-label]) {
     font: var(
       --vf-text-field-label-font,
       var(--vf-font-weight-medium) var(--vf-font-size-sm)/var(--vf-line-height-normal) var(--vf-font-family-sans)
     );
     letter-spacing: var(--vf-text-field-label-letter-spacing, normal);
+    color: var(--_vf-text-field-label-color, var(--vf-color-text));
     overflow-wrap: anywhere;
   }
   :where([data-vf-text-field-control]) {
     display: flex;
     align-items: center;
     min-inline-size: 0;
-    box-sizing: border-box;
-    border: 1px solid var(--vf-text-field-border-color, var(--vf-color-border-required));
-    border-radius: var(--vf-text-field-radius, var(--vf-control-radius));
-    background: var(--vf-text-field-background, var(--_vf-text-field-background));
-    transition:
-      background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
-      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+    position: relative;
+    --_vf-field-radius: var(--vf-text-field-radius, var(--vf-control-radius));
+    --_vf-field-border-default: var(--vf-text-field-border-color, var(--vf-color-border-required));
+    --_vf-field-surface-default: var(--vf-text-field-background, var(--_vf-text-field-background));
+    --_vf-field-hover-surface: var(--_vf-field-surface-default);
   }
   :where([data-vf-text-field-control] > [data-vf-text-field-value]) {
     flex: 1 1 auto;
@@ -61,8 +64,9 @@
     max-inline-size: 100%;
     min-block-size: calc(var(--_vf-text-field-height) - 2px);
     padding-block: var(--_vf-text-field-padding);
-    padding-inline: var(--vf-space-sm);
+    padding-inline: var(--_vf-text-field-inline-padding);
     background: transparent;
+    color: var(--_vf-field-foreground);
     border: 0;
     border-radius: 0;
     font: var(
@@ -72,7 +76,7 @@
     );
     letter-spacing: var(--vf-text-field-value-letter-spacing, normal);
   }
-  :where([data-vf-text-field-value]::placeholder) {
+  :where([data-vf-text-field-value])::placeholder {
     font: var(--vf-text-field-placeholder-font, inherit);
     letter-spacing: var(--vf-text-field-placeholder-letter-spacing, inherit);
   }
@@ -104,10 +108,10 @@
     letter-spacing: var(--vf-text-field-affix-letter-spacing, normal);
   }
   :where([data-vf-text-field-leading], [data-vf-text-field-prefix]) {
-    padding-inline-start: var(--vf-space-sm);
+    padding-inline-start: var(--_vf-text-field-inline-padding);
   }
   :where([data-vf-text-field-trailing], [data-vf-text-field-suffix]) {
-    padding-inline-end: var(--vf-space-sm);
+    padding-inline-end: var(--_vf-text-field-inline-padding);
   }
   :where([data-vf-text-field-description], [data-vf-text-field-error]) {
     font: var(
@@ -127,39 +131,194 @@
   :where([data-vf-text-field-status='success'] > [data-vf-text-field-description]) {
     color: var(--vf-color-success-foreground);
   }
-  :where([data-vf-text-field-control]:hover:not(:has(> [data-vf-text-field-value]:is(:disabled, [readonly])))) {
-    background: var(--vf-color-surface-hover);
-  }
-  :where([data-vf-text-field-control]:has(> [data-vf-text-field-value][readonly])) {
-    background: var(--vf-color-surface-subtle);
-  }
   :where([data-vf-text-field-status='warning'] > [data-vf-text-field-control]) {
-    border-color: var(--vf-color-warning-border);
+    --_vf-field-border-default: var(--vf-color-warning-border);
   }
   :where([data-vf-text-field-status='success'] > [data-vf-text-field-control]) {
-    border-color: var(--vf-color-success-border);
+    --_vf-field-border-default: var(--vf-color-success-border);
   }
-  :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:is(:user-invalid, [aria-invalid='true']))) {
-    border-color: var(--vf-color-danger-border);
+  :where([data-vf-text-field]:has([data-vf-text-field-value]:focus)) {
+    --_vf-text-field-label-color: var(--vf-color-accent-background);
   }
-  :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:disabled)) {
-    background: var(--vf-color-disabled-background);
-    border-color: var(--vf-color-disabled-border);
+  :where([data-vf-text-field]:has([data-vf-text-field-value]:is(:user-invalid, [aria-invalid='true']))) {
+    --_vf-text-field-label-color: var(--vf-color-danger-foreground);
   }
-  :where([data-vf-text-field-control] > [data-vf-text-field-value]:is(:hover, :disabled, [readonly])) {
-    background: transparent;
+  :where([data-vf-text-field]:has([data-vf-text-field-value]:disabled)) {
+    --_vf-text-field-label-color: var(--vf-color-disabled-foreground);
   }
-  :where([data-vf-text-field-control] > [data-vf-text-field-value]:disabled) {
-    color: var(--vf-color-disabled-foreground);
+  :where([data-vf-text-field-value]:disabled) {
+    cursor: not-allowed;
+  }
+  :where([data-vf-text-field-control]:has(> textarea)) {
+    align-items: flex-start;
+  }
+  :where([data-vf-text-field-control] > textarea) {
+    resize: vertical;
+  }
+  :where([data-vf-text-field-control] > [data-vf-text-field-value]:focus-visible) {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: -2px;
   }
   @supports selector(:has(*)) {
-    :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus-visible)) {
-      outline: 2px solid var(--vf-color-focus-ring);
-      outline-offset: 2px;
-    }
     :where([data-vf-text-field-control] > [data-vf-text-field-value]:focus-visible) {
       outline: none;
     }
+  }
+  :where(
+    [data-vf-text-field-variant='filled'] > [data-vf-text-field-control],
+    [data-vf-text-field-variant='underlined'] > [data-vf-text-field-control]
+  ) {
+    border-color: transparent;
+    border-block-end: 2px solid var(--_vf-field-border);
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+  :where([data-vf-text-field-variant='underlined'] > [data-vf-text-field-control]) {
+    border-radius: 0;
+  }
+
+  /* A real label remains associated with its editor. The legend is decorative and
+     uses the same typography as the raised label to create a genuine border gap. */
+  :where([data-vf-text-field-label-placement='floating']) {
+    --_vf-floating-label-font: var(
+      --vf-text-field-label-font,
+      var(--vf-font-weight-medium) var(--vf-font-size-xs)/var(--vf-line-height-normal) var(--vf-font-family-sans)
+    );
+    font: var(--_vf-floating-label-font);
+    padding-block-start: max(var(--vf-space-sm), 0.5lh);
+  }
+  :where([data-vf-text-field-label-placement='floating'] > [data-vf-text-field-control]) {
+    font: var(--_vf-floating-label-font);
+    min-block-size: calc(var(--_vf-text-field-height) + var(--vf-space-md));
+  }
+  :where([data-vf-text-field-label-placement='floating'] [data-vf-text-field-label]) {
+    position: absolute;
+    z-index: 1;
+    inset-inline-start: var(--_vf-text-field-inline-padding);
+    inset-block-start: 0;
+    max-inline-size: calc(100% - 2 * var(--_vf-text-field-inline-padding));
+    font: var(--_vf-floating-label-font);
+    letter-spacing: var(--vf-text-field-label-letter-spacing, normal);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transform: translateY(-50%);
+    transition:
+      inset-block-start var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      font-size var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
+  :where(
+    [data-vf-text-field-label-placement='floating'][data-vf-text-field-variant='outlined']
+      > [data-vf-text-field-control]
+  ) {
+    border-color: transparent;
+  }
+  :where(
+    [data-vf-text-field-label-placement='floating'][data-vf-text-field-variant='outlined'] [data-vf-text-field-value]
+  ) {
+    align-self: stretch;
+  }
+  :where(
+    [data-vf-text-field-label-placement='floating'][data-vf-text-field-variant='outlined']
+      > [data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus)
+  ) {
+    outline: none;
+  }
+  :where([data-vf-text-field-outline]) {
+    position: absolute;
+    inset: -1px;
+    inset-block-start: calc(-0.5lh - 1px);
+    min-inline-size: 0;
+    padding: 0;
+    margin: 0;
+    pointer-events: none;
+    border: 1px solid var(--_vf-field-border);
+    border-radius: inherit;
+    font: var(--_vf-floating-label-font);
+    letter-spacing: var(--vf-text-field-label-letter-spacing, normal);
+  }
+  :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus) > [data-vf-text-field-outline]) {
+    border-width: 2px;
+  }
+  :where([data-vf-text-field-outline] > legend) {
+    margin-inline-start: calc(var(--_vf-text-field-inline-padding) - var(--vf-space-2xs));
+    padding-inline: var(--vf-space-2xs);
+    max-inline-size: calc(100% - 2 * var(--_vf-text-field-inline-padding) + 2 * var(--vf-space-2xs));
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  :where([data-vf-text-field-outline] > legend > span) {
+    visibility: hidden;
+  }
+  :where(
+    [data-vf-text-field-label-placement='floating']:is(
+        [data-vf-text-field-variant='filled'],
+        [data-vf-text-field-variant='underlined']
+      )
+      [data-vf-text-field-label]
+  ) {
+    inset-block-start: var(--vf-space-2xs);
+    transform: none;
+  }
+  :where(
+    [data-vf-text-field-label-placement='floating']:is(
+        [data-vf-text-field-variant='filled'],
+        [data-vf-text-field-variant='underlined']
+      )
+      > [data-vf-text-field-control]
+  ) {
+    padding-block-start: calc(1lh + var(--vf-space-2xs));
+  }
+  :where(
+    [data-vf-text-field-label-placement='floating']:is(
+        [data-vf-text-field-variant='filled'],
+        [data-vf-text-field-variant='underlined']
+      )
+      [data-vf-text-field-value]
+  ) {
+    min-block-size: 0;
+    padding-block-start: var(--vf-space-2xs);
+  }
+  @supports selector(:has(*)) {
+    :where(
+      [data-vf-text-field-label-placement='floating']:not([data-vf-text-field-always-raised])
+        > [data-vf-text-field-control]:has(
+          > input[data-vf-text-field-value]:placeholder-shown:not(:focus):not(:autofill)
+        )
+        > [data-vf-text-field-label]
+    ) {
+      inset-block-start: 50%;
+      font: var(
+        --vf-text-field-value-font,
+        var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal)
+          var(--vf-control-font-family)
+      );
+      color: var(--_vf-text-field-label-color, var(--vf-color-text-muted));
+      transform: translateY(-50%);
+    }
+    :where(
+      [data-vf-text-field-label-placement='floating']:not([data-vf-text-field-always-raised])
+        > [data-vf-text-field-control]:has(
+          > input[data-vf-text-field-value]:placeholder-shown:not(:focus):not(:autofill)
+        )
+        > [data-vf-text-field-outline]
+        > legend
+    ) {
+      max-inline-size: 0;
+      padding-inline: 0;
+    }
+    :where(
+      [data-vf-text-field-label-placement='floating']:not([data-vf-text-field-always-raised])
+        input[data-vf-text-field-value]:placeholder-shown:not(:focus):not(:autofill)
+    )::placeholder {
+      opacity: 0;
+    }
+  }
+  :where([data-vf-text-field-label-placement='floating'] [data-vf-text-field-label]:hover) {
+    cursor: text;
+  }
+  :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:disabled) > [data-vf-text-field-label]) {
+    cursor: not-allowed;
   }
   @supports (field-sizing: content) {
     :where(textarea[data-vf-text-field-autosize]) {
@@ -168,32 +327,11 @@
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    :where([data-vf-text-field-control]) {
+    :where([data-vf-text-field-label]) {
       transition: none;
     }
   }
   @media (forced-colors: active) {
-    :where([data-vf-text-field-control]) {
-      background: Field;
-      border-color: FieldText;
-      color: FieldText;
-    }
-    :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:is(:user-invalid, [aria-invalid='true']))) {
-      border-color: Highlight;
-    }
-    :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus-visible)) {
-      outline-color: Highlight;
-    }
-    :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:disabled)) {
-      border-color: GrayText;
-    }
-    :where([data-vf-text-field-control] > [data-vf-text-field-value]) {
-      background: transparent;
-      color: FieldText;
-    }
-    :where([data-vf-text-field-control] > [data-vf-text-field-value]:disabled) {
-      color: GrayText;
-    }
     :where(
       [data-vf-text-field-label],
       [data-vf-text-field-description],
@@ -202,6 +340,31 @@
       [data-vf-text-field-suffix]
     ) {
       color: CanvasText;
+    }
+    :where([data-vf-text-field]:has([data-vf-text-field-value]:disabled) [data-vf-text-field-label]) {
+      color: GrayText;
+    }
+    :where(
+      [data-vf-text-field-label-placement='floating']
+        > [data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus)
+        > [data-vf-text-field-label]
+    ) {
+      color: Highlight;
+    }
+    :where(
+      [data-vf-text-field-variant='filled'] > [data-vf-text-field-control],
+      [data-vf-text-field-variant='underlined'] > [data-vf-text-field-control]
+    ) {
+      border-color: transparent;
+      border-block-end-color: var(--_vf-field-border);
+      forced-color-adjust: none;
+    }
+    :where(
+      [data-vf-text-field-label-placement='floating'][data-vf-text-field-variant='outlined']
+        > [data-vf-text-field-control]
+    ) {
+      border-color: transparent;
+      forced-color-adjust: none;
     }
   }
 }

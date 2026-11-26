@@ -167,11 +167,13 @@ function navigation(view, links, topic) {
       { id: 'guide', title: 'Button', href: links.guide },
       { id: 'toggle', title: 'ToggleButton', href: links.toggle.guide },
       { id: 'toggle-group', title: 'ToggleGroup', href: links.toggleGroup.guide },
-      { id: 'input', title: 'Input', href: links.input.guide },
-      { id: 'textarea', title: 'Textarea', href: links.textarea.guide },
       { id: 'text-field', title: 'TextField', href: links['text-field'].guide },
       { id: 'selection-checkbox', title: 'Checkbox', href: links.selection.checkbox.guide },
       { id: 'selection-radio', title: 'Radio', href: links.selection.radio.guide },
+    ] },
+    { label: 'Text entry primitives', items: [
+      { id: 'input', title: 'Input', href: links.input.guide },
+      { id: 'textarea', title: 'Textarea', href: links.textarea.guide },
     ] },
     { label: 'Patterns', items: [
       { id: 'button-group', title: 'Button Group', href: links.buttonGroup.guide },

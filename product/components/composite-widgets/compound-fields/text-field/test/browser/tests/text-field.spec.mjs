@@ -62,3 +62,47 @@ test('TextField keeps native labels, editing, descriptions, reset, and focus', a
   await email.focus();
   await page.screenshot({ path: testInfo.outputPath('text-field-' + port + '-rtl-forced-colors.png'), fullPage: true });
 });
+
+test('floating label follows native focus, value and reset without replacing the accessible name', async ({
+  page,
+}, testInfo) => {
+  await page.goto('/components/text-field/' + port + '.html');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const editor = page.getByRole('textbox', { name: 'Floating email', exact: true });
+  const field = page.locator('[data-vf-text-field]').filter({ has: editor });
+  const label = field.locator('label');
+  const legend = field.locator('legend');
+  await expect(editor).toHaveAccessibleName('Floating email');
+  const resting = await label.evaluate((node) => node.getBoundingClientRect().top);
+  await expect(legend).toHaveCSS('max-inline-size', '0px');
+  await expect.poll(() => editor.evaluate((el) => getComputedStyle(el, '::placeholder').opacity)).toBe('0');
+  await editor.focus();
+  await expect.poll(() => editor.evaluate((el) => getComputedStyle(el, '::placeholder').opacity)).toBe('1');
+  await expect.poll(() => label.evaluate((node) => node.getBoundingClientRect().top)).toBeLessThan(resting);
+  await expect(legend).not.toHaveCSS('max-inline-size', '0px');
+  await expect(field.locator('fieldset')).toHaveCSS('border-top-width', '2px');
+  await editor.fill('ada@example.com');
+  await editor.blur();
+  await expect(legend).not.toHaveCSS('max-inline-size', '0px');
+  await page.getByRole('button', { name: 'Reset' }).click();
+  await expect(editor).toHaveValue('');
+  await expect(legend).toHaveCSS('max-inline-size', '0px');
+  for (const width of [1280, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const theme of ['light', 'dark']) {
+      await page.locator('html').evaluate((el, theme) => {
+        el.dataset.vfTheme = theme;
+        el.dir = 'rtl';
+      }, theme);
+      await editor.focus();
+      await page.screenshot({
+        path: testInfo.outputPath('floating-field-' + port + '-' + width + '-' + theme + '.png'),
+        fullPage: true,
+      });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width + 1);
+      expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    }
+  }
+  await page.emulateMedia({ forcedColors: 'active' });
+  await page.screenshot({ path: testInfo.outputPath('floating-field-' + port + '-forced-colors.png'), fullPage: true });
+});

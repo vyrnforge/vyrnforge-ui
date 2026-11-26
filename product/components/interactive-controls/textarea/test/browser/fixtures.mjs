@@ -9,8 +9,9 @@ export const browserFixture = {
     await mkdir(outDir, { recursive: true });
 
     const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
-    const textareaCss = (await readFile(path.join(root, 'packages/web/dist/components/textarea/textarea.css'), 'utf8')).replace('@import "../../styles/tokens.css";\n', '');
-    await writeFile(path.join(outDir, 'textarea.css'), `${tokensCss}\n${textareaCss}`);
+    const formControlsCss = await readFile(path.join(root, 'packages/web/dist/styles/form-controls.css'), 'utf8');
+    const textareaCss = (await readFile(path.join(root, 'packages/web/dist/components/textarea/textarea.css'), 'utf8')).replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
+    await writeFile(path.join(outDir, 'textarea.css'), `${tokensCss}\n${formControlsCss}\n${textareaCss}`);
 
     const fields = `
   <form id="form">

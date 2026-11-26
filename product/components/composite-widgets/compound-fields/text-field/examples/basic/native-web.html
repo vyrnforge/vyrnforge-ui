@@ -1,6 +1,14 @@
-<div data-vf-text-field data-vf-text-field-full-width data-vf-text-field-variant="outlined">
-  <label data-vf-text-field-label for="email">Email address</label>
+<div
+  data-vf-text-field
+  data-vf-text-field-full-width
+  data-vf-text-field-variant="outlined"
+  data-vf-text-field-label-placement="floating"
+>
   <div data-vf-text-field-control>
+    <label data-vf-text-field-label for="email">Email address</label>
+    <fieldset data-vf-text-field-outline aria-hidden="true">
+      <legend><span>Email address</span></legend>
+    </fieldset>
     <input
       data-vf-input
       data-vf-text-field-value
@@ -8,6 +16,7 @@
       name="email"
       type="email"
       autocomplete="email"
+      placeholder="name@example.com"
       aria-describedby="email-help"
     />
   </div>

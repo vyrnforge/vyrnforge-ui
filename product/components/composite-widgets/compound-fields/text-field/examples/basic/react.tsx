@@ -7,6 +7,7 @@ function Example() {
     <Flow gap="md">
       <TextField
         label="Email address"
+        labelPlacement="floating"
         name="email"
         type="email"
         autoComplete="email"
@@ -15,6 +16,8 @@ function Example() {
       />
       <TextField
         label="Biography"
+        labelPlacement="floating"
+        variant="underlined"
         name="biography"
         multiline
         rows={3}
@@ -24,6 +27,7 @@ function Example() {
       />
       <TextField
         label="Account name"
+        labelPlacement="floating"
         defaultValue="Atlas"
         error="Choose a different account name."
         variant="filled"
