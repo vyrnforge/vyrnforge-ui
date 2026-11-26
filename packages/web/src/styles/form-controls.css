@@ -2,16 +2,19 @@
 @layer vyrnforge.components {
   :where(input[data-vf-input], textarea[data-vf-textarea]) {
     box-sizing: border-box;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  :where(input[data-vf-input]:not([data-vf-text-field-value]), textarea[data-vf-textarea]:not([data-vf-text-field-value])) {
     color: var(--vf-color-text);
     font-family: var(--vf-control-font-family);
     font-size: var(--vf-control-font-size);
     font-weight: var(--vf-font-weight-regular);
     line-height: var(--vf-line-height-normal);
-    min-inline-size: 0;
-    max-inline-size: 100%;
   }
 
-  :where(input[data-vf-input]::placeholder, textarea[data-vf-textarea]::placeholder) {
+  :where(input[data-vf-input], textarea[data-vf-textarea])::placeholder {
     color: var(--vf-color-text-subtle);
     opacity: 1;
   }
@@ -20,6 +23,7 @@
     --_vf-field-surface: var(--_vf-field-surface-default, var(--vf-color-surface));
     --_vf-field-border: var(--_vf-field-border-default, var(--vf-color-border-required));
     --_vf-field-foreground: var(--vf-color-text);
+    --_vf-field-inline-padding: calc(var(--vf-space-sm) + var(--vf-space-xs));
     box-sizing: border-box;
     background: var(--_vf-field-surface);
     border: 1px solid var(--_vf-field-border);

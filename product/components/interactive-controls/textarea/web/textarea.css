@@ -2,9 +2,9 @@
 @import "../../styles/form-controls.css";
 
 @layer vyrnforge.components {
-  :where(textarea[data-vf-textarea]) {
+  :where(textarea[data-vf-textarea]:not([data-vf-text-field-value])) {
     min-block-size: var(--vf-control-height-md);
     padding-block: var(--vf-space-sm);
-    padding-inline: 0.75rem;
+    padding-inline: var(--_vf-field-inline-padding);
   }
 }

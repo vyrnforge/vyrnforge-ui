@@ -13,7 +13,7 @@
     --_vf-text-field-height: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     --_vf-text-field-padding: var(--_vf-density-input-padding-block, 0.4375rem);
     --_vf-text-field-background: var(--vf-color-surface);
-    --_vf-text-field-inline-padding: var(--vf-space-md);
+    --_vf-text-field-inline-padding: calc(var(--vf-space-sm) + var(--vf-space-xs));
   }
   :where([data-vf-text-field][hidden]) {
     display: none;
@@ -45,6 +45,7 @@
       var(--vf-font-weight-medium) var(--vf-font-size-sm)/var(--vf-line-height-normal) var(--vf-font-family-sans)
     );
     letter-spacing: var(--vf-text-field-label-letter-spacing, normal);
+    color: var(--_vf-text-field-label-color, var(--vf-color-text));
     overflow-wrap: anywhere;
   }
   :where([data-vf-text-field-control]) {
@@ -75,7 +76,7 @@
     );
     letter-spacing: var(--vf-text-field-value-letter-spacing, normal);
   }
-  :where([data-vf-text-field-value]::placeholder) {
+  :where([data-vf-text-field-value])::placeholder {
     font: var(--vf-text-field-placeholder-font, inherit);
     letter-spacing: var(--vf-text-field-placeholder-letter-spacing, inherit);
   }
@@ -136,14 +137,14 @@
   :where([data-vf-text-field-status='success'] > [data-vf-text-field-control]) {
     --_vf-field-border-default: var(--vf-color-success-border);
   }
-  :where([data-vf-text-field]:has([data-vf-text-field-value]:focus) [data-vf-text-field-label]) {
-    color: var(--vf-color-accent-background);
+  :where([data-vf-text-field]:has([data-vf-text-field-value]:focus)) {
+    --_vf-text-field-label-color: var(--vf-color-accent-background);
   }
-  :where([data-vf-text-field]:has([data-vf-text-field-value]:is(:user-invalid, [aria-invalid='true'])) [data-vf-text-field-label]) {
-    color: var(--vf-color-danger-foreground);
+  :where([data-vf-text-field]:has([data-vf-text-field-value]:is(:user-invalid, [aria-invalid='true']))) {
+    --_vf-text-field-label-color: var(--vf-color-danger-foreground);
   }
-  :where([data-vf-text-field]:has([data-vf-text-field-value]:disabled) [data-vf-text-field-label]) {
-    color: var(--vf-color-disabled-foreground);
+  :where([data-vf-text-field]:has([data-vf-text-field-value]:disabled)) {
+    --_vf-text-field-label-color: var(--vf-color-disabled-foreground);
   }
   :where([data-vf-text-field-value]:disabled) {
     cursor: not-allowed;
@@ -177,6 +178,7 @@
      uses the same typography as the raised label to create a genuine border gap. */
   :where([data-vf-text-field-label-placement='floating'] > [data-vf-text-field-control]) {
     --_vf-floating-label-font: var(--vf-text-field-label-font, var(--vf-font-weight-medium) var(--vf-font-size-xs)/var(--vf-line-height-normal) var(--vf-font-family-sans));
+    min-block-size: calc(var(--_vf-text-field-height) + var(--vf-space-md));
   }
   :where([data-vf-text-field-label-placement='floating'] [data-vf-text-field-label]) {
     position: absolute;
@@ -194,11 +196,20 @@
       inset-block-start var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       font-size var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
-  :where([data-vf-text-field-label-placement='floating'][data-vf-text-field-variant='outlined']) {
+  :where([data-vf-text-field-label-placement='floating']) {
     padding-block-start: var(--vf-space-sm);
   }
   :where([data-vf-text-field-label-placement='floating'][data-vf-text-field-variant='outlined'] > [data-vf-text-field-control]) {
     border-color: transparent;
+  }
+  :where([data-vf-text-field-label-placement='floating'][data-vf-text-field-variant='outlined'] [data-vf-text-field-value]) {
+    align-self: stretch;
+  }
+  :where([data-vf-text-field-label-placement='floating'][data-vf-text-field-variant='outlined'] > [data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus)) {
+    outline: none;
+  }
+  :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus) > [data-vf-text-field-outline]) {
+    border-width: 2px;
   }
   :where([data-vf-text-field-outline]) {
     position: absolute;
@@ -231,17 +242,17 @@
     padding-block-start: calc(1lh + var(--vf-space-2xs));
   }
   @supports selector(:has(*)) {
-    :where([data-vf-text-field-label-placement='floating']:not([data-vf-text-field-always-raised]) > [data-vf-text-field-control]:has(> input[data-vf-text-field-value]:placeholder-shown:not(:focus)) > [data-vf-text-field-label]) {
+    :where([data-vf-text-field-label-placement='floating']:not([data-vf-text-field-always-raised]) > [data-vf-text-field-control]:has(> input[data-vf-text-field-value]:placeholder-shown:not(:focus):not(:autofill)) > [data-vf-text-field-label]) {
       inset-block-start: 50%;
       font: var(--vf-text-field-value-font, var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal) var(--vf-control-font-family));
-      color: var(--_vf-field-foreground);
+      color: var(--_vf-text-field-label-color, var(--vf-color-text-muted));
       transform: translateY(-50%);
     }
-    :where([data-vf-text-field-label-placement='floating']:not([data-vf-text-field-always-raised]) > [data-vf-text-field-control]:has(> input[data-vf-text-field-value]:placeholder-shown:not(:focus)) > [data-vf-text-field-outline] > legend) {
+    :where([data-vf-text-field-label-placement='floating']:not([data-vf-text-field-always-raised]) > [data-vf-text-field-control]:has(> input[data-vf-text-field-value]:placeholder-shown:not(:focus):not(:autofill)) > [data-vf-text-field-outline] > legend) {
       max-inline-size: 0;
       padding-inline: 0;
     }
-    :where([data-vf-text-field-label-placement='floating']:not([data-vf-text-field-always-raised]) input[data-vf-text-field-value]:placeholder-shown:not(:focus)::placeholder) {
+    :where([data-vf-text-field-label-placement='floating']:not([data-vf-text-field-always-raised]) input[data-vf-text-field-value]:placeholder-shown:not(:focus):not(:autofill))::placeholder {
       opacity: 0;
     }
   }
@@ -268,6 +279,9 @@
     }
     :where([data-vf-text-field]:has([data-vf-text-field-value]:disabled) [data-vf-text-field-label]) {
       color: GrayText;
+    }
+    :where([data-vf-text-field-label-placement='floating'] > [data-vf-text-field-control]:has(> [data-vf-text-field-value]:focus) > [data-vf-text-field-label]) {
+      color: Highlight;
     }
     :where([data-vf-text-field-variant='filled'] > [data-vf-text-field-control], [data-vf-text-field-variant='underlined'] > [data-vf-text-field-control]) {
       border-color: transparent;

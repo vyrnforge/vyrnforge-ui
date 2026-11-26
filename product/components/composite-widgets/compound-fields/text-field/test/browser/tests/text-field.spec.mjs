@@ -73,9 +73,12 @@ test('floating label follows native focus, value and reset without replacing the
   await expect(editor).toHaveAccessibleName('Floating email');
   const resting = await label.evaluate((node) => node.getBoundingClientRect().top);
   await expect(legend).toHaveCSS('max-inline-size', '0px');
+  await expect.poll(() => editor.evaluate((el) => getComputedStyle(el, '::placeholder').opacity)).toBe('0');
   await editor.focus();
+  await expect.poll(() => editor.evaluate((el) => getComputedStyle(el, '::placeholder').opacity)).toBe('1');
   await expect.poll(() => label.evaluate((node) => node.getBoundingClientRect().top)).toBeLessThan(resting);
   await expect(legend).not.toHaveCSS('max-inline-size', '0px');
+  await expect(field.locator('fieldset')).toHaveCSS('border-top-width', '2px');
   await editor.fill('ada@example.com');
   await editor.blur();
   await expect(legend).not.toHaveCSS('max-inline-size', '0px');
