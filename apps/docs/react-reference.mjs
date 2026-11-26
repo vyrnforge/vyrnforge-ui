@@ -855,12 +855,12 @@ function listApi(list, links) {
       'View List composition examples')));
 }
 
-function compactExample(example, links, component = 'badge') {
+function compactExample(example, links, component = 'badge', topicHeading = '') {
   const slug = example.id.slice(component.length + 1);
   const componentTitle = component === 'chip' ? 'Chip' : 'Badge';
   return h('article', { key: example.id, id: 'react-' + component + '-example-' + slug,
     className: 'vf-docs-example', ['data-vf-docs-react-' + component + '-example']: example.id },
-    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+    example.title === topicHeading ? null : h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
       align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
       h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title),
         h(Text, { as: 'p' }, example.description))),
@@ -894,7 +894,7 @@ function chipUsage(chip, links) {
       ...sections.slice(1, -1).map(section => guidePart(section, [
         ...guideBlocks(chip.sharedContent, section.heading),
         ...examples.filter(example => example.documentationSection === section.heading)
-          .map(example => compactExample(example, links, 'chip')),
+          .map(example => compactExample(example, links, 'chip', section.heading)),
       ])),
       guidePart(sections.at(-1), [
         ...guideBlocks(chip.sharedContent, 'When to use'),

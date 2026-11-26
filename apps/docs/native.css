@@ -857,7 +857,7 @@
 
   /* Compact specimens need less vertical chrome than the full configurator. */
   [data-vf-docs-react-chip] .vf-docs-react-example-frame[data-vf-docs-example-id] {
-    min-block-size: 9rem;
+    min-block-size: 8rem;
   }
 
   [data-vf-docs-react-chip] .vf-docs-react-example-frame[data-vf-docs-example-id="chip/playground"] {

@@ -2981,6 +2981,7 @@ test('Chip guide teaches capabilities in contextual sections and renders intrins
   for (const title of ['Basic chip', 'Actions', 'Adornment', 'Colors', 'Sizes', 'Multiline', 'Chip arrays', 'Playground']) {
     await expect(guide.getByRole('heading', { level: 2, name: title, exact: true })).toBeVisible();
   }
+  await expect(guide.getByRole('heading', { name: 'Basic chip', exact: true })).toHaveCount(1);
   const basic = guide.locator('[data-vf-docs-react-chip-example="chip/basic"] iframe');
   await basic.scrollIntoViewIfNeeded();
   const chips = basic.contentFrame().locator('[data-vf-chip]');

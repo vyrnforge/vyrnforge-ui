@@ -687,7 +687,7 @@ for (const example of [...badgeExamples, ...chipExamples]) {
     styles + '<link rel="stylesheet" href="' +
     escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
     '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
-    '#root{min-width:0}</style></head><body><div id="root"></div><script src="' +
+    '#root{min-width:0}' + (component === 'chip' && slug !== 'playground' ? 'body{box-sizing:border-box;min-height:100vh;display:grid;align-items:center}#root{width:100%}' : '') + '</style></head><body><div id="root"></div><script src="' +
     escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }
 
