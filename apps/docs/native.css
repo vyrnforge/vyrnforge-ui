@@ -33,14 +33,14 @@
     inset-inline-start: var(--vf-space-sm);
     padding: var(--vf-space-sm) var(--vf-space-md);
     position: fixed;
-    transform: translateY(-200%);
+    clip-path: inset(50%);
     z-index: 100;
   }
 
   .vf-docs-skip:focus {
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
-    transform: translateY(0);
+    clip-path: none;
   }
 
   /* Constrain only the demonstration canvas so the RTL wrapping example
@@ -1828,3 +1828,11 @@
 }
 [data-vf-docs-component-playground] { min-inline-size: 0; }
 [data-vf-docs-component-playground] [role='region'] { min-inline-size: 0; max-inline-size: 100%; }
+
+/* Generated usage remains selectable, keyboard-scrollable and readable at 320px. */
+[data-vf-docs-component-playground] pre[data-vf-code-block] {
+  max-block-size: 24rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

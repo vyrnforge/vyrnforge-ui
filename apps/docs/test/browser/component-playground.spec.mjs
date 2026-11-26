@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test';
 import axeCore from 'axe-core';
+import { build } from 'esbuild';
+import ts from 'typescript';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { normalizeConfiguration, defaultsFor } from '../../playground-config.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground } from '../../react-playground-adapters.mjs';
 
 test('Button playground keeps configuration, interaction and generated usage synchronized', async ({ page }) => {
   await page.goto('/next/react/components/button/');
@@ -52,13 +58,16 @@ test('Playground preserves source and reflows at narrow widths with clipboard de
   await page.setViewportSize({ width: 375, height: 900 });
   await page.goto('/next/react/components/button/');
   const playground = page.locator('[data-vf-docs-component-playground="Button"]');
+  await expect(playground.getByRole('button', { name: 'Copy React usage' })).toBeEnabled();
+  await playground.screenshot({ path: testInfo.outputPath('playground-mobile-light.png') });
+  await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
+  await playground.screenshot({ path: testInfo.outputPath('playground-mobile-dark.png') });
   await playground.getByRole('button', { name: 'Copy React usage' }).click();
   await expect(playground.getByRole('region', { name: 'Generated React usage' }).locator('pre')).toBeFocused();
   await expect(playground.getByText('Source selected. Use your device copy command.')).toBeVisible();
   await expect(playground).toBeVisible();
-  await playground.screenshot({ path: testInfo.outputPath('playground-mobile-light.png') });
-  await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
-  await playground.screenshot({ path: testInfo.outputPath('playground-mobile-dark.png') });
+  expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  await playground.screenshot({ path: testInfo.outputPath('playground-mobile-copy-fallback.png') });
 });
 
 test('Playground desktop and accessibility adaptations', async ({ page }, testInfo) => {
@@ -121,4 +130,46 @@ test('Chip guide uses the shared playground, with valid source and removal focus
   await playground.screenshot({ path: testInfo.outputPath('chip-shared-playground-desktop.png') });
   await page.setViewportSize({ width: 390, height: 844 });
   await playground.screenshot({ path: testInfo.outputPath('chip-shared-playground-mobile.png') });
+});
+
+test('Generated playground examples typecheck and bundle against installed public entrypoints', async () => {
+  test.setTimeout(90_000);
+  const root = fileURLToPath(new URL('../../../../', import.meta.url));
+  const scenarios = [
+    [buttonPlayground, {}], [buttonPlayground, { variant: 'secondary', size: 'lg', loading: true, disabled: true, label: '<Save>{x}' }],
+    [checkboxPlayground, { selection: 'mixed', required: true }], [radioPlayground, { selection: 'express' }],
+    [avatarPlayground, { appearance: 'icon', decorative: true, size: 'lg', shape: 'square' }],
+    [avatarPlayground, { initials: 'VF' }], [badgePlayground, { variant: 'dot', tone: 'danger' }],
+    [badgePlayground, { count: 127, max: 50, horizontal: 'start', showZero: true }],
+    [chipPlayground, {}], [chipPlayground, { mode: 'action', artwork: 'avatar', size: 'sm' }],
+    [chipPlayground, { mode: 'selectable', selected: true, artwork: 'icon', removable: true, customRemove: true }],
+    [chipPlayground, { mode: 'link', artwork: 'trailing', removable: true, wrap: true }],
+  ];
+  const generated = new Map(scenarios.map(([adapter, patch], index) => [
+    path.join(root, 'apps/docs', 'generated-playground-' + index + '.tsx'),
+    adapter.source(normalizeConfiguration(adapter.fields, { ...defaultsFor(adapter.fields), ...patch })),
+  ]));
+  const options = { noEmit: true, strict: true, skipLibCheck: true, jsx: ts.JsxEmit.ReactJSX,
+    target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext,
+    moduleResolution: ts.ModuleResolutionKind.Bundler, esModuleInterop: true };
+  const host = ts.createCompilerHost(options);
+  const read = host.readFile.bind(host);
+  const exists = host.fileExists.bind(host);
+  const get = host.getSourceFile.bind(host);
+  host.fileExists = name => generated.has(name) || exists(name);
+  host.readFile = name => generated.get(name) ?? read(name);
+  host.getSourceFile = (name, version, ...args) => generated.has(name)
+    ? ts.createSourceFile(name, generated.get(name), version, true, ts.ScriptKind.TSX)
+    : get(name, version, ...args);
+  const program = ts.createProgram([...generated.keys()], options, host);
+  const diagnostics = ts.getPreEmitDiagnostics(program);
+  expect(diagnostics.map(d => ts.flattenDiagnosticMessageText(d.messageText, '\n'))).toEqual([]);
+  // Bundle every representative configuration, including actual CSS and icon imports.
+  for (const [name, source] of generated) {
+    const output = await build({ stdin: { contents: source, sourcefile: name, resolveDir: root, loader: 'tsx' },
+      bundle: true, write: false, platform: 'browser', format: 'esm', jsx: 'automatic',
+      outdir: path.join(root, 'dist', 'playground-source-check'), logLevel: 'silent' });
+    expect(output.outputFiles.some(file => file.path.endsWith('.js'))).toBe(true);
+    expect(output.outputFiles.some(file => file.path.endsWith('.css'))).toBe(true);
+  }
 });
