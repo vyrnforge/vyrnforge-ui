@@ -14,7 +14,7 @@ export const browserFixture = {
     const label = value => '<span data-vf-chip-label>' + value + '</span>';
     const close = '<button type="button" data-vf-button data-vf-icon-only data-vf-chip-remove aria-label="Remove React"><span aria-hidden="true" data-vf-chip-default-remove>×</span></button>';
     const long = 'A long descriptive category that must remain available to assistive technology';
-    const removalCases = ['neutral', 'accent', 'danger'].flatMap(tone =>
+    const removalCases = ['neutral', 'accent', 'danger', 'success', 'warning', 'info'].flatMap(tone =>
       ['filled', 'outlined'].map(variant => ({ tone, variant, size: 'md', id: 'remove-' + tone + '-' + variant })));
     removalCases.push({ tone: 'neutral', variant: 'filled', size: 'sm', id: 'remove-small' },
       { tone: 'neutral', variant: 'filled', size: 'lg', id: 'remove-large' },

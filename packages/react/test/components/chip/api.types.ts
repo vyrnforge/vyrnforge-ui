@@ -8,8 +8,10 @@ const remove: ChipProps = { children: 'Design', onRemove: () => {}, removeLabel:
 const noMode: ChipProps = { children: 'Open', selected: true };
 // @ts-expect-error removal must have an accessible label
 const noName: ChipProps = { children: 'Design', onRemove: () => {} };
+const success: ChipProps = { children: 'Completed', tone: 'success' };
+void success;
 // @ts-expect-error semantic tone has to be approved
-const invalidTone: ChipProps = { children: 'Review', tone: 'success' };
+const invalidTone: ChipProps = { children: 'Review', tone: 'rainbow' };
 // @ts-expect-error root is not a focus target
 const invalidFocus: ChipProps = { children: 'Review', tabIndex: 0 };
 void [Chip, RootChip, basic, select, remove, noMode, noName, invalidTone, invalidFocus];

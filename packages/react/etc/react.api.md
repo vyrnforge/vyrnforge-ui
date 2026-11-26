@@ -419,7 +419,7 @@ export type ChipProps = Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'onC
 export type ChipSize = 'sm' | 'md' | 'lg';
 
 // @public (undocumented)
-export type ChipTone = 'neutral' | 'accent' | 'danger';
+export type ChipTone = 'neutral' | 'accent' | 'danger' | 'success' | 'warning' | 'info';
 
 // @public (undocumented)
 export type ChipVariant = 'filled' | 'outlined';
