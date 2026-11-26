@@ -2998,3 +2998,21 @@ test('Chip guide teaches capabilities in contextual sections and renders intrins
   expect(await multiline.evaluate(el => el.getBoundingClientRect().height)).toBeGreaterThan(await single.evaluate(el => el.getBoundingClientRect().height));
   await page.screenshot({ path: testInfo.outputPath('chip-multiline-desktop.png') });
 });
+
+
+test('React Chip guide exposes circular default and unchanged custom removal artwork', async ({ page }, testInfo) => {
+  for (const theme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: theme });
+    await page.setViewportSize({ width: 760, height: 260 });
+    await page.goto('/next/react/examples/chip/deletable/');
+    await page.locator('html').evaluate((el, value) => { el.dataset.vfTheme = value; }, theme);
+    const mark = page.locator('[data-vf-chip-default-remove]');
+    await expect(mark).toHaveCount(2);
+    await expect(mark.first()).toHaveCSS('border-radius', '50%');
+    await page.screenshot({ path: testInfo.outputPath('chip-deletable-' + theme + '.png') });
+    await page.goto('/next/react/examples/chip/custom-delete/');
+    await expect(page.locator('[data-vf-chip-remove] [data-vf-icon]')).toHaveCount(2);
+    await expect(page.locator('[data-vf-chip-default-remove]')).toHaveCount(0);
+    await page.screenshot({ path: testInfo.outputPath('chip-custom-delete-' + theme + '.png') });
+  }
+});

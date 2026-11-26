@@ -8,7 +8,7 @@ The default filled chip emphasizes a label with a surface. Use the outlined vari
 
 ## Actions
 
-Use a native button for a command, a pressed button for persistent filter selection, and a native link for navigation. A removal action is an independently named sibling button; it never nests inside an action or link. Native Enter/Space activates buttons; Enter activates links. Disabled navigation removes its destination and tab stop. Selection can be controlled or uncontrolled; filtering and actual removal belong to the consumer. Restore focus when a removed chip owned focus.
+Use a native button for a command, a pressed button for persistent filter selection, and a native link for navigation. A removal action is an independently named sibling button; it never nests inside an action or link. The default close mark uses a small, contrasting circular surface within the larger native hit target. Custom removal artwork is not wrapped in the default circle. Native Enter/Space activates buttons; Enter activates links. Disabled navigation removes its destination and tab stop. Selection can be controlled or uncontrolled; filtering and actual removal belong to the consumer. Restore focus when a removed chip owned focus.
 
 ## Adornment
 

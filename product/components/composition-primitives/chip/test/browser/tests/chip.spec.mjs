@@ -69,3 +69,65 @@ test('navigation retains native link keyboard semantics and disabled links canno
   await page.keyboard.press('Tab');
   await expect(disabled).not.toBeFocused();
 });
+
+
+test('default removal mark has independent geometry and contrast across tones and themes', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 900, height: 600 });
+  await page.goto(url);
+  for (const theme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: theme });
+    await page.locator('html').evaluate((el, value) => { el.dataset.vfTheme = value; }, theme);
+    const mark = page.locator('[id^="remove-"]:not(#remove-disabled) [data-vf-chip-default-remove]');
+    await expect(mark).toHaveCount(8);
+    const specimens = await mark.evaluateAll(nodes => {
+      const luminance = color => {
+        const rgb = color.match(/[\d.]+/g).slice(0, 3).map(value => Number(value) / 255)
+          .map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+        return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
+      };
+      const ratio = (first, second) => {
+        const a = luminance(first), b = luminance(second);
+        return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+      };
+      return nodes.map(node => {
+        const style = getComputedStyle(node);
+        const target = node.closest('button').getBoundingClientRect();
+        const root = node.closest('[data-vf-chip]');
+        const rootColor = getComputedStyle(root).backgroundColor;
+        const surface = rootColor === 'rgba(0, 0, 0, 0)' ? getComputedStyle(document.body).backgroundColor : rootColor;
+        const rect = node.getBoundingClientRect();
+        return { id: root.id, width: rect.width, height: rect.height, targetWidth: target.width, targetHeight: target.height,
+          radius: style.borderRadius, circleContrast: ratio(style.backgroundColor, surface),
+          inkContrast: ratio(style.color, style.backgroundColor) };
+      });
+    });
+    for (const item of specimens) {
+      expect(item.width).toBe(item.height);
+      expect(item.radius).toBe('50%');
+      expect(item.width).toBeLessThan(item.targetWidth);
+      expect(item.targetWidth).toBeGreaterThanOrEqual(24);
+      expect(item.targetHeight).toBeGreaterThanOrEqual(24);
+      expect(item.circleContrast, item.id + ' circle contrast').toBeGreaterThanOrEqual(3);
+      expect(item.inkContrast, item.id + ' mark contrast').toBeGreaterThanOrEqual(3);
+    }
+    await expect(page.locator('#remove-custom [data-vf-chip-default-remove]')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Remove remove-disabled' })).toBeDisabled();
+    const button = page.getByRole('button', { name: 'Remove remove-neutral-filled' });
+    const circle = button.locator('[data-vf-chip-default-remove]');
+    await button.hover();
+    await expect(circle).toHaveCSS('outline-offset', '1px');
+    await page.mouse.down();
+    await expect(circle).toHaveCSS('outline-offset', '0px');
+    await page.mouse.up();
+    await button.focus();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Shift+Tab');
+    await expect(button).toBeFocused();
+    await expect(button).toHaveCSS('outline-style', 'solid');
+    await page.screenshot({ path: testInfo.outputPath('chip-removal-circle-' + theme + '.png'), fullPage: true });
+  }
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await expect(page.locator('#filter [data-vf-chip-default-remove]')).toHaveCSS('forced-color-adjust', 'none');
+  await expect(page.locator('#filter [data-vf-chip-default-remove]')).toHaveCSS('transition-duration', '0s');
+  await page.screenshot({ path: testInfo.outputPath('chip-removal-circle-forced-colors.png'), fullPage: true });
+});

@@ -7,6 +7,11 @@
   :where([data-vf-chip]) {
     --_vf-chip-height: var(--vf-control-height-sm);
     --_vf-chip-font: var(--vf-font-size-sm);
+    --_vf-chip-remove-mark-size: var(--vf-font-size-md);
+    --_vf-chip-remove-disc: var(--vf-color-text-muted);
+    --_vf-chip-remove-ink: var(--vf-color-surface);
+    --_vf-chip-remove-disc-hover: var(--vf-color-text);
+    --_vf-chip-remove-ink-hover: var(--vf-color-surface);
     --_vf-chip-bg: var(--vf-color-surface-pressed);
     --_vf-chip-border: transparent;
     --_vf-chip-fg: var(--vf-color-text);
@@ -34,15 +39,23 @@
   :where([data-vf-chip][data-vf-chip-size="sm"]) {
     --_vf-chip-height: calc(var(--vf-control-height-sm) - var(--vf-space-xs));
     --_vf-chip-font: var(--vf-font-size-xs);
+    --_vf-chip-remove-mark-size: var(--vf-font-size-sm);
   }
   :where([data-vf-chip][data-vf-chip-size="lg"]) {
     --_vf-chip-height: var(--vf-control-height-md);
     --_vf-chip-font: var(--vf-font-size-md);
+    --_vf-chip-remove-mark-size: var(--vf-font-size-lg);
   }
   :where([data-vf-chip][data-vf-chip-tone="accent"]) {
     --_vf-chip-bg: var(--vf-color-accent-background);
     --_vf-chip-border: transparent;
     --_vf-chip-fg: var(--vf-color-accent-foreground);
+  }
+  :where([data-vf-chip][data-vf-chip-tone="accent"][data-vf-chip-variant="filled"]:not(:has(> [aria-pressed="true"]))) {
+    --_vf-chip-remove-disc: var(--vf-color-accent-foreground);
+    --_vf-chip-remove-ink: var(--vf-color-accent-background);
+    --_vf-chip-remove-disc-hover: var(--vf-color-accent-foreground);
+    --_vf-chip-remove-ink-hover: var(--vf-color-accent-background-pressed);
   }
   :where([data-vf-chip][data-vf-chip-tone="danger"]) {
     --_vf-chip-bg: var(--vf-color-danger-background);
@@ -70,6 +83,8 @@
     --_vf-chip-bg: var(--vf-color-disabled-background);
     --_vf-chip-border: var(--vf-color-disabled-border);
     --_vf-chip-fg: var(--vf-color-disabled-foreground);
+    --_vf-chip-remove-disc: var(--vf-color-disabled-foreground);
+    --_vf-chip-remove-ink: var(--vf-color-disabled-background);
   }
 
   /* The existing Button/ToggleButton controls keep their semantics and native
@@ -111,6 +126,23 @@
     font-size: var(--vf-font-size-lg);
     line-height: var(--vf-line-height-none);
   }
+  /* The visual mark is smaller than the native hit target. Keep custom
+     removal artwork untouched and keep focus on the actual sibling button. */
+  :where([data-vf-chip-default-remove]) {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_vf-chip-remove-mark-size);
+    block-size: var(--_vf-chip-remove-mark-size);
+    border-radius: 50%;
+    background-color: var(--_vf-chip-remove-disc);
+    color: var(--_vf-chip-remove-ink);
+    font-size: var(--_vf-chip-remove-mark-size);
+    font-weight: var(--vf-font-weight-semibold);
+    line-height: 1;
+    transition: background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
   :where([data-vf-chip]) > [data-vf-chip-primary]:has(> [data-vf-chip-leading]) {
     padding-inline-start: var(--vf-space-xs);
   }
@@ -125,6 +157,18 @@
   }
   :where([data-vf-chip][data-vf-chip-tone="accent"][data-vf-chip-variant="filled"]:not(:has(> [aria-pressed="true"]))) > :is(button,a):is([data-vf-chip-primary],[data-vf-chip-remove]):active:not(:disabled,[aria-disabled="true"]) {
     background: var(--vf-color-accent-background-pressed);
+  }
+  :where([data-vf-chip]) > button[data-vf-chip-remove]:has(> [data-vf-chip-default-remove]):is(:hover, :active):not(:disabled) {
+    background: transparent;
+  }
+  :where([data-vf-chip]) > button[data-vf-chip-remove]:is(:hover, :active):not(:disabled) > [data-vf-chip-default-remove] {
+    background-color: var(--_vf-chip-remove-disc-hover);
+    color: var(--_vf-chip-remove-ink-hover);
+    outline: 1px solid var(--_vf-chip-remove-disc-hover);
+    outline-offset: 1px;
+  }
+  :where([data-vf-chip]) > button[data-vf-chip-remove]:active:not(:disabled) > [data-vf-chip-default-remove] {
+    outline-offset: 0;
   }
   :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):focus-visible {
     outline: 2px solid var(--vf-color-focus-ring);
@@ -168,7 +212,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :where([data-vf-chip]) { transition: none; }
+    :where([data-vf-chip], [data-vf-chip-default-remove]) { transition: none; }
   }
   @media (forced-colors: active) {
     :where([data-vf-chip]) {
@@ -196,6 +240,32 @@
     :where([data-vf-chip]) > :is(button, a):is([data-vf-chip-primary], [data-vf-chip-remove]):is(:hover,:active):not(:disabled,[aria-disabled="true"]) {
       background: ButtonFace;
       color: ButtonText;
+    }
+    :where([data-vf-chip-default-remove]) {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+      color: Canvas;
+    }
+    :where([data-vf-chip]:has(> [aria-pressed="true"]):not([data-vf-chip-disabled]) [data-vf-chip-default-remove]) {
+      background-color: HighlightText;
+      color: Highlight;
+    }
+    :where([data-vf-chip][data-vf-chip-disabled] [data-vf-chip-default-remove]) {
+      background-color: GrayText;
+      color: Canvas;
+    }
+    :where([data-vf-chip]) > button[data-vf-chip-remove]:has(> [data-vf-chip-default-remove]):is(:hover, :active):not(:disabled) {
+      background: transparent;
+    }
+    :where([data-vf-chip]) > button[data-vf-chip-remove]:is(:hover, :active):not(:disabled) > [data-vf-chip-default-remove] {
+      background-color: Highlight;
+      color: HighlightText;
+      outline-color: Highlight;
+    }
+    :where([data-vf-chip]:has(> [aria-pressed="true"])) > button[data-vf-chip-remove]:is(:hover, :active):not(:disabled) > [data-vf-chip-default-remove] {
+      background-color: HighlightText;
+      color: Highlight;
+      outline-color: HighlightText;
     }
     :where([data-vf-chip]) > a[data-vf-chip-primary]:not([aria-disabled="true"]) { color: LinkText; }
     :where([data-vf-chip]) > a[data-vf-chip-primary][aria-disabled="true"] { color: GrayText; }
