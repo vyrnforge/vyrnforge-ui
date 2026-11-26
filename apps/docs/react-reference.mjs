@@ -17,6 +17,8 @@ import { ThemeBuilder } from './react-theme-builder.mjs';
 import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
+import { ComponentPlayground } from './react-component-playground.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -474,8 +476,9 @@ function buttonUsageGuide(button, links) {
     })),
     { id: 'react-reference', heading: 'Related components and API' },
   ];
+  const playgroundSection = { id: 'react-button-playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc([sections[0], playgroundSection, ...sections.slice(1)]),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-component': 'button' },
       guideHeader(button.sharedContent, 'React · Components · Actions', button.standardReferences),
@@ -484,6 +487,7 @@ function buttonUsageGuide(button, links) {
         h('p', { key: 'shared-setup' }, 'For shared styling and server-rendering setup, see ',
           h(Link, { href: links.home }, 'React overview'), '.'),
       ]),
+      guidePart(playgroundSection, [h(ComponentPlayground, { adapter: buttonPlayground, title: 'Button' })]),
       ...sections.slice(1, -1).map((section) => {
         const heading = section.sourceHeading;
         const demonstrations = heading === 'When to use' ? mainExample :
@@ -603,12 +607,15 @@ function selectionGuide(unit, links) {
   const routeLinks = links.selection[unit.id];
   const topics = visibleGuideSections(unit.sharedContent.sections, unit.examples).map(section => ({ ...section, id: prefix + slug(section.heading) }));
   const sections = [...(unit.frameworkContent ? [{ id: prefix + 'setup', heading: 'Get started' }] : []), ...topics];
+  const adapter = unit.id === 'checkbox' ? checkboxPlayground : unit.id === 'radio' ? radioPlayground : null;
+  const playgroundSection = { id: prefix + 'playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(adapter ? [sections[0], playgroundSection, ...sections.slice(1)] : sections),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-selection': unit.id },
       guideHeader(unit.sharedContent, unit.guideOnly ? 'React · Patterns · Forms' : 'React · Components · Forms', unit.standardReferences),
       ...(unit.frameworkContent ? [guidePart(sections[0], guideBlocks(unit.frameworkContent, 'React setup'))] : []),
+      ...(adapter ? [guidePart(playgroundSection, [h(ComponentPlayground, { adapter, title: unit.title })])] : []),
       ...topics.map(section => guidePart(section, [
         ...renderBlocks(section.blocks),
         ...guideBlocks(unit.frameworkContent, section.heading),

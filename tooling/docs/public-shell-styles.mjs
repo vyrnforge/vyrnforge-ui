@@ -7,6 +7,8 @@ export const documentationShellStyleSpecifiers = Object.freeze([
   '@vyrnforge/web/styles/app-shell.css',
   '@vyrnforge/web/styles/side-nav.css',
   '@vyrnforge/web/styles/input.css',
+  '@vyrnforge/web/styles/checkbox.css',
+  '@vyrnforge/web/styles/radio.css',
   '@vyrnforge/web/styles/search-field.css',
   '@vyrnforge/web/styles/native-select.css',
   '@vyrnforge/web/styles/link.css',

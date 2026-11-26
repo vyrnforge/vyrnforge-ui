@@ -1800,3 +1800,13 @@
     overflow-wrap: anywhere;
   }
 }
+
+/* Documentation-only preview geometry; product controls keep their own styles. */
+.vf-docs-component-playground-preview {
+  min-block-size: 8rem;
+  padding: var(--vf-space-md);
+  overflow-wrap: anywhere;
+  min-inline-size: 0;
+}
+[data-vf-docs-component-playground] { min-inline-size: 0; }
+[data-vf-docs-component-playground] [role='region'] { min-inline-size: 0; max-inline-size: 100%; }
