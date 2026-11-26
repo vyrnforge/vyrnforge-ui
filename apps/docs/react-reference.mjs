@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -194,7 +194,7 @@ function navigation(view, links, topic) {
       { id: 'badge', title: 'Badge', href: links.badge.guide },
       { id: 'chip', title: 'Chip', href: links.chip.guide },
     ] },
-    { label: 'Feedback', items: [{ id: 'loading', title: 'Loading', href: links.loading.guide }] },
+    { label: 'Feedback', items: [{ id: 'backdrop', title: 'Backdrop', href: links.backdrop.guide }, { id: 'loading', title: 'Loading', href: links.loading.guide }] },
     { label: 'Libraries', items: [
       { id: 'icon-library', title: 'VyrnForge Icons', href: links.icon.library },
     ] },
@@ -214,6 +214,7 @@ function navigation(view, links, topic) {
       { id: 'avatar-api', title: 'Avatar API', href: links.avatar.api },
       { id: 'badge-api', title: 'Badge API', href: links.badge.api },
       { id: 'chip-api', title: 'Chip API', href: links.chip.api },
+      { id: 'backdrop-api', title: 'Backdrop API', href: links.backdrop.api },
       { id: 'loading-api', title: 'Loading API', href: links.loading.api },
       ...['text', 'code', 'kbd'].map((id) => ({
         id: 'typography-api:' + id,
@@ -1419,7 +1420,7 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, h(Link, { href: links.rtl }, 'Use right-to-left content'))));
 }
 
-function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading) {
+function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop) {
   if (selection) return view.endsWith('-api') ? selectionApi(selection, links) : selectionGuide(selection, links);
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
@@ -1514,6 +1515,8 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   if (view === 'divider-api') return dividerApi(divider, links);
   if (view === 'list') return listUsage(list, links);
   if (view === 'list-api') return listApi(list, links);
+  if (view === 'backdrop') return feedbackUsage(backdrop, links, backdropPlayground);
+  if (view === 'backdrop-api') return feedbackApi(backdrop, links);
   if (view === 'loading') return feedbackUsage(loading, links, loadingPlayground);
   if (view === 'loading-api') return feedbackApi(loading, links);
   if (view === 'chip') return chipUsage(chip, links);
@@ -1568,7 +1571,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   }
   return buttonUsageGuide(button, links);
 }
-export function ReactReferencePage({ view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading }) {
+export function ReactReferencePage({ view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -1616,6 +1619,8 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
     { title: 'Image', href: links.image.guide, keywords: 'image img responsive alt decorative caption figure native JSX' },
     { title: 'Image API', href: links.image.api, keywords: 'imageprops img loading decoding srcset sizes ref types' },
+    { title: 'Backdrop', href: links.backdrop.guide, keywords: 'scrim loading overlay native dialog backdrop decorative region' },
+    { title: 'Backdrop API', href: links.backdrop.api, keywords: 'BackdropProps hidden style ref' },
     { title: 'Loading', href: links.loading.guide, keywords: 'progress loading spinner dots bars pulse skeleton placeholder custom async' },
     { title: 'Loading API', href: links.loading.api, keywords: 'LoadingProgress LoadingIndicator LoadingPlaceholder native progress' },
     { title: 'Chip', href: links.chip.guide, keywords: 'chip tag compact label filter clickable removable dismiss selected avatar icon' },
@@ -1702,7 +1707,7 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
           h(Link, { href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading))),
+        body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, chip, list, overlayGuide, motionGuide, requestedTopic, selection, loading, backdrop))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));
