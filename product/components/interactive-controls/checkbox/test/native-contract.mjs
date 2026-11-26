@@ -1,8 +1,8 @@
 export default {
   id: 'checkbox', exportName: 'Checkbox', angularName: 'VfCheckboxDirective',
-  markup: '<label for="control">Choice</label><input id="control" name="control" type="checkbox" data-vf-checkbox>',
-  angular: '<label for="control">Choice</label><input id="control" name="control" vfCheckbox [indeterminate]="true">',
-  props: { name: 'control', indeterminate: true }, hydrate: true, webInlineScript: 'document.querySelector("#control").indeterminate=true;', semantics: { tag: 'INPUT', type: 'checkbox' },
+  markup: '<label for="control">Choice</label><input id="control" name="control" type="checkbox" data-vf-checkbox data-vf-size="sm">',
+  angular: '<label for="control">Choice</label><input id="control" name="control" vfCheckbox size="sm" [indeterminate]="true">',
+  props: { name: 'control', size: 'sm', indeterminate: true }, hydrate: true, webInlineScript: 'document.querySelector("#control").indeterminate=true;', semantics: { tag: 'INPUT', type: 'checkbox' },
   reducedMotion: true,
   async assertBrowser({ control, expect }) {
     expect(await control.evaluate((element) => element.indeterminate)).toBe(true);
@@ -16,7 +16,8 @@ export default {
       element.setAttribute('aria-invalid', 'true');
       return color;
     });
-    await expect(control).toHaveCSS('border-top-color', danger);
+    await expect(control).toHaveAttribute('data-vf-size', 'sm');
+    await expect.poll(() => control.evaluate(element => getComputedStyle(element, '::before').borderTopColor)).toBe(danger);
     await control.evaluate((element) => element.removeAttribute('aria-invalid'));
     const box = await control.boundingBox();
     expect(box?.width ?? 0).toBeGreaterThanOrEqual(24);

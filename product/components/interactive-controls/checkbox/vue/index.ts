@@ -1,4 +1,5 @@
 import { defineComponent, h, ref, watchEffect } from 'vue';
+import type { PropType } from 'vue';
 
 function callClickListener(listener: unknown, event: MouseEvent): void {
   if (Array.isArray(listener)) {
@@ -11,7 +12,10 @@ function callClickListener(listener: unknown, event: MouseEvent): void {
 export const Checkbox = defineComponent({
   name: 'VfCheckbox',
   inheritAttrs: false,
-  props: { indeterminate: { type: Boolean, default: false } },
+  props: {
+    indeterminate: { type: Boolean, default: false },
+    size: { type: String as PropType<'sm' | 'md' | 'lg'>, default: 'md' },
+  },
   setup(props, { attrs }) {
     const element = ref<HTMLInputElement>();
     watchEffect(() => {
@@ -24,6 +28,7 @@ export const Checkbox = defineComponent({
         ref: element,
         type: 'checkbox',
         'data-vf-checkbox': '',
+        'data-vf-size': props.size,
         onClick: (event: MouseEvent) => {
           callClickListener(onClick, event);
           if (element.value) element.value.indeterminate = props.indeterminate;

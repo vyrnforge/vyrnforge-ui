@@ -584,9 +584,16 @@ export class VfCheckboxDirective {
     // (undocumented)
     readonly indeterminate: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
+    readonly size: InputSignal<"sm" | "md" | "lg">;
+    // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfCheckboxDirective, "input[vfCheckbox]", never, {
         "indeterminate": {
             "alias": "indeterminate";
+            "required": false;
+            "isSignal": true;
+        };
+        "size": {
+            "alias": "size";
             "required": false;
             "isSignal": true;
         };

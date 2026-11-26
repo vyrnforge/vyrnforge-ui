@@ -6,12 +6,13 @@ function assignRef<T>(ref: ForwardedRef<T>, value: T | null): void {
   else if (ref) ref.current = value;
 }
 
-export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   indeterminate?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { indeterminate = false, onClick, ...nativeProps },
+  { indeterminate = false, size = 'md', onClick, ...nativeProps },
   forwardedRef
 ) {
   const localRef = useRef<HTMLInputElement | null>(null);
@@ -27,6 +28,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
     },
     type: 'checkbox',
     'data-vf-checkbox': '',
+    'data-vf-size': size,
     onClick: (event: MouseEvent<HTMLInputElement>) => {
       onClick?.(event);
       event.currentTarget.indeterminate = indeterminate;

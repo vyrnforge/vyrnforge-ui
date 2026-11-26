@@ -63,7 +63,9 @@ test('TextField keeps native labels, editing, descriptions, reset, and focus', a
   await page.screenshot({ path: testInfo.outputPath('text-field-' + port + '-rtl-forced-colors.png'), fullPage: true });
 });
 
-test('floating label follows native focus, value and reset without replacing the accessible name', async ({ page }, testInfo) => {
+test('floating label follows native focus, value and reset without replacing the accessible name', async ({
+  page,
+}, testInfo) => {
   await page.goto('/components/text-field/' + port + '.html');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const editor = page.getByRole('textbox', { name: 'Floating email', exact: true });
