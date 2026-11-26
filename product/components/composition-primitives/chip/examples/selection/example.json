@@ -1,7 +1,7 @@
 {
   "id": "chip/selection",
-  "title": "Actions and selection",
-  "description": "Activate, toggle uncontrolled state, or own independent filter state in React.",
+  "title": "Selectable chips",
+  "description": "Use native pressed state for filters. Controlled and uncontrolled modes are supported.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {
@@ -9,5 +9,6 @@
       "language": "tsx",
       "source": "react.tsx"
     }
-  }
+  },
+  "documentationSection": "Actions"
 }

@@ -1,8 +1,8 @@
 {
   "id": "chip/links",
-  "title": "Link chips",
-  "description": "Navigate through a real anchor. Removal stays a separate button, and a disabled link has no destination.",
-  "documentationSection": "Selection and dismissal",
+  "title": "Clickable links",
+  "description": "Navigate through native anchors; a removal action stays independent.",
+  "documentationSection": "Actions",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

@@ -1,7 +1,7 @@
 {
   "id": "chip/appearance",
-  "title": "Sizes, variants and tones",
-  "description": "Compare compact sizes and semantic filled/outlined combinations.",
+  "title": "Semantic tones",
+  "description": "Compare the three current theme roles in both variants.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {
@@ -9,5 +9,6 @@
       "language": "tsx",
       "source": "react.tsx"
     }
-  }
+  },
+  "documentationSection": "Colors"
 }

@@ -1,11 +1,11 @@
 import { createRoot } from 'react-dom/client';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Chip, type ChipProps, type ChipSize, type ChipTone, type ChipVariant } from '@vyrnforge/react/chip';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 import { Button } from '@vyrnforge/react/button';
 import { Input } from '@vyrnforge/react/input';
-import { NativeSelect } from '@vyrnforge/react/native-select';
+import { Radio } from '@vyrnforge/react/radio';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Textarea } from '@vyrnforge/react/textarea';
 import { Icon } from '@vyrnforge/react/icon';
@@ -18,7 +18,7 @@ import '@vyrnforge/web/styles/layout.css';
 import '@vyrnforge/web/styles/text.css';
 import '@vyrnforge/web/styles/button.css';
 import '@vyrnforge/web/styles/input.css';
-import '@vyrnforge/web/styles/native-select.css';
+import '@vyrnforge/web/styles/radio.css';
 import '@vyrnforge/web/styles/checkbox.css';
 import '@vyrnforge/web/styles/textarea.css';
 import '@vyrnforge/web/styles/icon.css';
@@ -43,6 +43,7 @@ function App() {
   const restoreRef = useRef<HTMLButtonElement>(null);
   const sourceRef = useRef<HTMLTextAreaElement>(null);
   const label = config.label.trim() || 'Engineering';
+  useEffect(() => { if (!visible) restoreRef.current?.focus(); }, [visible]);
   function update<K extends keyof typeof defaults>(key: K, value: (typeof defaults)[K]) {
     setConfig(current => ({ ...current, [key]: value }));
     setCopyStatus('');
@@ -54,7 +55,7 @@ function App() {
     : config.mode === 'action' ? { onClick: () => setClicks(n => n + 1) }
     : config.mode === 'selectable' ? { selectable: true as const, selected, onSelectedChange: setSelected } : {};
   const removeProps = config.removable ? {
-    onRemove: () => { setVisible(false); restoreRef.current?.focus(); },
+    onRemove: () => setVisible(false),
     removeLabel: 'Remove ' + label,
     ...(config.customRemove ? { removeIcon: <Icon icon={trashIcon} size="sm" /> } : {}),
   } : {};
@@ -63,7 +64,9 @@ function App() {
     ...(leading ? { leading } : {}), ...(trailing ? { trailing } : {}), ...modeProps, ...removeProps };
   // This usage snippet and the live preview share one configuration.
   const props = [
-    'variant=' + JSON.stringify(config.variant), 'size=' + JSON.stringify(config.size), 'tone=' + JSON.stringify(config.tone),
+    ...(config.variant !== 'filled' ? ['variant=' + JSON.stringify(config.variant)] : []),
+    ...(config.size !== 'md' ? ['size=' + JSON.stringify(config.size)] : []),
+    ...(config.tone !== 'neutral' ? ['tone=' + JSON.stringify(config.tone)] : []),
     ...(config.mode === 'link' ? ['href="#chip-playground-destination"'] : []),
     ...(config.mode === 'action' ? ['onClick={handleClick}'] : []),
     ...(config.mode === 'selectable' ? ['selectable', 'selected={selected}', 'onSelectedChange={setSelected}'] : []),
@@ -87,7 +90,9 @@ function App() {
     ...(config.removable ? ['// handleRemove commits removal and restores collection focus.'] : []),
     ...(config.mode === 'action' ? ['// handleClick performs the primary action.'] : []),
     ...(config.mode === 'link' ? ['// Supply your own destination.'] : []),
-    '<Chip', ...props.map(prop => '  ' + prop), '>', '  {' + JSON.stringify(label) + '}', '</Chip>',
+    props.length
+      ? '<Chip\n' + props.map(prop => '  ' + prop).join('\n') + '\n>{' + JSON.stringify(label) + '}</Chip>'
+      : '<Chip>{' + JSON.stringify(label) + '}</Chip>',
   ].join('\n');
 
   function reset() {
@@ -103,25 +108,27 @@ function App() {
     }
   }
   return <Flow gap="md">
-    <Text as="h3" variant="heading-sm">Preview</Text>
-    <Flow direction="inline" wrap="wrap" align="center" gap="sm">
-      {visible && <Chip {...chipProps} />}
-      <Button ref={restoreRef} variant="secondary" type="button" onClick={() => setVisible(true)}>Restore</Button>
+    <Flow as="section" aria-label="Chip preview" align="center" justify="center" gap="sm"
+      style={{ minBlockSize: '7rem' }}>
+      {visible ? <Chip {...chipProps} /> : <Text variant="body-sm">Chip removed</Text>}
+      {!visible && <Button ref={restoreRef} variant="secondary" type="button" onClick={() => setVisible(true)}>Restore</Button>}
+      <Text role="status" variant="body-sm">{config.mode === 'selectable' ? (selected ? 'Selected' : 'Not selected')
+        : config.mode === 'action' ? 'Activations: ' + clicks : visible ? 'Live preview' : 'Chip removed'}</Text>
     </Flow>
-    <Text role="status">{config.mode === 'selectable' ? (selected ? 'Selected' : 'Not selected')
-      : config.mode === 'action' ? 'Activations: ' + clicks : visible ? 'Chip visible' : 'Chip removed'}</Text>
-    <Text as="h3" variant="heading-sm">Configuration</Text>
     <Flow as="label" gap="xs"><Text as="span">Label</Text><Input value={config.label} onChange={event => update('label', event.currentTarget.value)} /></Flow>
-    <AutoGrid minItemSize="8rem" gap="md">
-      {(Object.keys(options) as Array<keyof typeof options>).map(key => <Flow as="label" key={key} gap="xs">
-        <Text as="span">{key[0]!.toUpperCase() + key.slice(1)}</Text>
-        <NativeSelect value={config[key]} onChange={event => {
-          const value = event.currentTarget.value as (typeof defaults)[typeof key];
-          update(key, value);
-          if (key === 'mode') setSelected(false);
-        }}>
-          {options[key].map(value => <option key={value} value={value}>{value}</option>)}
-        </NativeSelect>
+    <AutoGrid minItemSize="14rem" gap="md">
+      {(Object.keys(options) as Array<keyof typeof options>).map(key => <Flow as="fieldset" key={key} gap="xs"
+        style={{ border: 0, padding: 0, margin: 0, minInlineSize: 0 }}>
+        <legend><Text as="span" variant="body-sm">{key[0]!.toUpperCase() + key.slice(1)}</Text></legend>
+        <Flow direction="inline" wrap="wrap" align="center" gap="sm">
+          {options[key].map(value => <Flow as="label" key={value} direction="inline" align="center" gap="xs">
+            <Radio name={'chip-' + key} value={value} checked={config[key] === value} onChange={() => {
+              update(key, value as (typeof defaults)[typeof key]);
+              if (key === 'mode') setSelected(false);
+            }} />
+            <Text as="span" variant="body-sm">{value}</Text>
+          </Flow>)}
+        </Flow>
       </Flow>)}
     </AutoGrid>
     <Flow direction="inline" wrap="wrap" gap="md">
@@ -136,13 +143,13 @@ function App() {
       </Flow>
     </Flow>
     <Flow direction="inline" wrap="wrap" gap="sm">
-      <Button type="button" variant="secondary" onClick={reset}>Reset configuration</Button>
+      <Button type="button" variant="ghost" onClick={reset}>Reset configuration</Button>
       <Button type="button" variant="secondary" onClick={copySource}>Copy React usage</Button>
     </Flow>
     <Text role="status">{copyStatus}</Text>
     <Flow as="label" gap="xs">
       <Text as="span">Generated React usage</Text>
-      <Textarea ref={sourceRef} readOnly value={source} rows={12} />
+      <Textarea ref={sourceRef} readOnly value={source} rows={Math.min(10, source.split('\n').length + 1)} style={{ fontFamily: 'var(--vf-font-family-mono)', fontSize: 'var(--vf-font-size-sm)' }} />
     </Flow>
     <Text id="chip-playground-destination" variant="body-sm">Link example destination</Text>
   </Flow>;

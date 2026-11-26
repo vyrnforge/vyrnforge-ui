@@ -1,7 +1,7 @@
 {
   "id": "chip/artwork",
-  "title": "Icons and avatars",
-  "description": "Compose the existing Icon and Avatar rather than duplicating identity or artwork.",
+  "title": "Avatar chips",
+  "description": "Compose identity with the public Avatar component.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {
@@ -9,5 +9,6 @@
       "language": "tsx",
       "source": "react.tsx"
     }
-  }
+  },
+  "documentationSection": "Adornment"
 }

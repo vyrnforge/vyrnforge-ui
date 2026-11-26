@@ -115,7 +115,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     frameworkSourcePath: 'product/components/composition-primitives/chip/react/docs/index.md',
   });
   expect(manifest.chip.examples.map(example => example.id)).toEqual([
-    'chip/action-removal', 'chip/appearance', 'chip/array', 'chip/artwork', 'chip/basic', 'chip/links', 'chip/playground', 'chip/removal', 'chip/selection',
+    'chip/action-removal', 'chip/appearance', 'chip/array', 'chip/artwork', 'chip/basic', 'chip/clickable', 'chip/custom-delete', 'chip/deletable', 'chip/icon', 'chip/links', 'chip/multiline', 'chip/playground', 'chip/removal', 'chip/selection', 'chip/sizes',
   ]);
   for (const example of manifest.chip.examples) {
     const slug = example.id.slice('chip/'.length);
@@ -2939,11 +2939,11 @@ test('React Chip playground matches configuration and generated public source', 
   const label = page.getByRole('textbox', { name: 'Label', exact: true });
   const source = page.getByRole('textbox', { name: 'Generated React usage' });
   await label.fill('Frontend');
-  await page.getByRole('combobox', { name: 'Mode' }).selectOption('link');
-  await page.getByRole('combobox', { name: 'Variant' }).selectOption('outlined');
-  await page.getByRole('combobox', { name: 'Tone' }).selectOption('danger');
-  await page.getByRole('combobox', { name: 'Size' }).selectOption('lg');
-  await page.getByRole('combobox', { name: 'Artwork' }).selectOption('avatar');
+  await page.getByRole('group', { name: 'Mode', exact: true }).getByRole('radio', { name: 'link', exact: true }).check();
+  await page.getByRole('group', { name: 'Variant', exact: true }).getByRole('radio', { name: 'outlined', exact: true }).check();
+  await page.getByRole('group', { name: 'Tone', exact: true }).getByRole('radio', { name: 'danger', exact: true }).check();
+  await page.getByRole('group', { name: 'Size', exact: true }).getByRole('radio', { name: 'lg', exact: true }).check();
+  await page.getByRole('group', { name: 'Artwork', exact: true }).getByRole('radio', { name: 'avatar', exact: true }).check();
   await page.getByRole('checkbox', { name: 'Deletable' }).check();
   await page.getByRole('checkbox', { name: 'Custom delete icon' }).check();
   await page.getByRole('checkbox', { name: 'Multiline' }).check();
@@ -2958,7 +2958,7 @@ test('React Chip playground matches configuration and generated public source', 
   await page.getByRole('checkbox', { name: 'Disabled' }).check();
   await expect(page.getByRole('link', { name: 'Frontend' })).toHaveAttribute('aria-disabled', 'true');
   await page.getByRole('checkbox', { name: 'Disabled' }).uncheck();
-  await page.getByRole('combobox', { name: 'Mode' }).selectOption('selectable');
+  await page.getByRole('group', { name: 'Mode', exact: true }).getByRole('radio', { name: 'selectable', exact: true }).check();
   await page.getByRole('checkbox', { name: 'Selected' }).check();
   await expect(page.getByRole('button', { name: 'Frontend', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'Remove Frontend' }).click();
@@ -2971,4 +2971,27 @@ test('React Chip playground matches configuration and generated public source', 
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
   await page.screenshot({ path: testInfo.outputPath('chip-playground-mobile.png'), fullPage: true });
+});
+
+
+test('Chip guide teaches capabilities in contextual sections and renders intrinsic-size comparisons', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/next/react/components/chip/');
+  const guide = page.locator('[data-vf-docs-react-chip]');
+  for (const title of ['Basic chip', 'Actions', 'Adornment', 'Colors', 'Sizes', 'Multiline', 'Chip arrays', 'Playground']) {
+    await expect(guide.getByRole('heading', { level: 2, name: title, exact: true })).toBeVisible();
+  }
+  const basic = guide.locator('[data-vf-docs-react-chip-example="chip/basic"] iframe');
+  await basic.scrollIntoViewIfNeeded();
+  const chips = basic.contentFrame().locator('[data-vf-chip]');
+  await expect(chips).toHaveCount(2);
+  await expect(chips.nth(0)).toHaveAttribute('data-vf-chip-variant', 'filled');
+  await expect(chips.nth(1)).toHaveAttribute('data-vf-chip-variant', 'outlined');
+  expect(await chips.nth(0).evaluate(el => el.getBoundingClientRect().width)).toBeLessThan(160);
+  await page.screenshot({ path: testInfo.outputPath('chip-guide-desktop.png') });
+  await page.goto('/next/react/examples/chip/multiline/');
+  const multiline = page.locator('[data-vf-chip-wrap]');
+  const single = page.locator('[data-vf-chip]').first();
+  expect(await multiline.evaluate(el => el.getBoundingClientRect().height)).toBeGreaterThan(await single.evaluate(el => el.getBoundingClientRect().height));
+  await page.screenshot({ path: testInfo.outputPath('chip-multiline-desktop.png') });
 });

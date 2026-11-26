@@ -694,7 +694,8 @@ function iconExample(example, links) {
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' example',
       src: links.icon.exampleBase + slug + '/',
-      sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy' }),
+      sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy',
+      ...(component === 'chip' ? { 'data-vf-docs-example-id': example.id } : {}) }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
       h(CodeBlock, { tabIndex: 0 }, example.source)));
@@ -874,29 +875,33 @@ function compactExample(example, links, component = 'badge') {
 }
 function chipUsage(chip, links) {
   if (!chip?.sharedContent || !chip?.frameworkContent || !chip.examples?.length) return null;
-  const exampleOrder = ['basic', 'appearance', 'artwork', 'array', 'selection', 'action-removal', 'links', 'removal', 'playground'];
+  const exampleOrder = ['basic', 'clickable', 'deletable', 'action-removal', 'links', 'custom-delete',
+    'selection', 'artwork', 'icon', 'appearance', 'sizes', 'multiline', 'array', 'removal', 'playground'];
   const examples = [...chip.examples].sort((a, b) => exampleOrder.indexOf(a.id.split('/')[1]) - exampleOrder.indexOf(b.id.split('/')[1]));
+  const topics = chip.sharedContent.sections.filter(section =>
+    examples.some(example => example.documentationSection === section.heading));
   const sections = [
     { id: 'react-chip-setup', heading: 'Get started' },
-    { id: 'react-chip-examples', heading: 'Examples' },
-    { id: 'react-chip-guidelines', heading: 'Behavior and usage' },
+    ...topics.map(section => ({ id: 'react-chip-' + slug(section.heading), heading: section.heading })),
     { id: 'react-chip-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, {
-      label: 'Chip', examples, getId: example => 'react-chip-example-' + example.id.slice('chip/'.length),
-    }),
+    guideToc(sections),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-chip': '' },
       guideHeader(chip.sharedContent, 'React · Metadata and interaction', chip.standardReferences),
       guidePart(sections[0], [...guideBlocks(chip.frameworkContent, 'React setup')]),
-      guidePart(sections[1], examples.map(example => compactExample(example, links, 'chip'))),
-      guidePart(sections[2], [
-        ...guideSubsections(chip.sharedContent, ['When to use', 'Appearance and content', 'Selection and dismissal', 'Boundaries'], 'react-chip-guidance'),
-        ...guideSubsections(chip.frameworkContent, ['Composition with existing VyrnForge components', 'React state and server rendering'], 'react-chip-integration'),
+      ...sections.slice(1, -1).map(section => guidePart(section, [
+        ...guideBlocks(chip.sharedContent, section.heading),
+        ...examples.filter(example => example.documentationSection === section.heading)
+          .map(example => compactExample(example, links, 'chip')),
+      ])),
+      guidePart(sections.at(-1), [
+        ...guideBlocks(chip.sharedContent, 'When to use'),
         ...guideBlocks(chip.sharedContent, 'Accessibility'),
-      ]),
-      guidePart(sections[3], [h(Link, { href: links.chip.api }, 'View Chip public React API')])));
+        ...guideBlocks(chip.sharedContent, 'Boundaries'),
+        h(Link, { href: links.chip.api }, 'View Chip public React API'),
+      ])));
 }
 function chipApi(chip, links) {
   if (!chip?.publicChipTypes || !chip?.publicEntrypoints?.length) return null;

@@ -1,7 +1,7 @@
 {
   "id": "chip/basic",
-  "title": "Basic labels",
-  "description": "Use readable noninteractive chips for compact categories and statuses.",
+  "title": "Basic chip",
+  "description": "Compare the default filled surface and the outlined variant.",
   "defaultFramework": "react",
   "frameworks": {
     "native-web": {
@@ -14,5 +14,6 @@
       "language": "tsx",
       "source": "react.tsx"
     }
-  }
+  },
+  "documentationSection": "Basic chip"
 }

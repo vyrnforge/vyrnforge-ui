@@ -1,8 +1,8 @@
 {
   "id": "chip/action-removal",
-  "title": "Clickable and removable",
-  "description": "Activate an item or remove it independently; a custom icon does not change the removal name.",
-  "documentationSection": "Selection and dismissal",
+  "title": "Clickable and deletable",
+  "description": "The primary action and dismissal are independent native buttons.",
+  "documentationSection": "Actions",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

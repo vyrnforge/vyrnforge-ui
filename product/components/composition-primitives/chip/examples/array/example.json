@@ -1,8 +1,8 @@
 {
   "id": "chip/array",
   "title": "Chip arrays",
-  "description": "Use Flow for responsive category arrays. For removal and collection focus use TagGroup (see the removal example).",
-  "documentationSection": "Appearance and content",
+  "description": "Wrap a collection of labels with Flow; use TagGroup for managed removal.",
+  "documentationSection": "Chip arrays",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

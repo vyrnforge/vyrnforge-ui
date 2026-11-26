@@ -1,7 +1,7 @@
 {
   "id": "chip/playground",
-  "title": "Interactive playground",
-  "description": "Configure every supported Chip option, try live interaction and copy matching React usage. Reset restores the defaults.",
+  "title": "Chip playground",
+  "description": "Configure the real Chip, try interactions, and copy the resulting React usage.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {
@@ -9,5 +9,6 @@
       "language": "tsx",
       "source": "react.tsx"
     }
-  }
+  },
+  "documentationSection": "Playground"
 }
