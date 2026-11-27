@@ -124,9 +124,9 @@ function SampleSurface({ children, large = false }) {
     style: { padding: tokens.space.md, boxShadow: large ? tokens.shadow.lg : tokens.shadow.md, borderRadius: tokens.radius.surface } }, children);
 }
 function SampleTooltip() {
-  return h(TooltipRoot, { placement: 'bottom', openDelay: 0, arrow: true },
+  return h(TooltipRoot, { placement: 'bottom', openDelay: 0 },
     h(TooltipTrigger, null, h(Button, { type: 'button', variant: 'secondary' }, 'Focus or hover for help')),
-    h(TooltipContent, null, 'Live themed tooltip'));
+    h(TooltipContent, { arrow: true }, 'Live themed tooltip'));
 }
 function ComponentSamples({ component }) {
   const id = useId();

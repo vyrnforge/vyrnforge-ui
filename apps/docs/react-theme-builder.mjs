@@ -16,7 +16,7 @@ import { Segment, Picker, PreviewScene } from './react-theme-studio.mjs';
 import { presets, modes, defaultDraft, validSlug, validHex, permittedValue, permittedHint, historyReducer, importLegacyDraft, parseDraft, serializeDraft, draftSchema } from './theme-studio-model.mjs';
 
 const categories = [['colors','Colors'],['typography','Typography'],['spacing','Spacing'],['sizing','Sizing & density'],['shape','Shape & borders'],['elevation','Elevation'],['motion','Motion'],['components','Components']];
-const componentGroups = { Button: ['control','radius','fontWeight','fontSize','motion'], Checkbox: ['control','radius'], Radio: ['control','radius'], Input: ['input','editor','control'], Textarea: ['textarea','editor','control'], TextField: ['textField','editor','control'], NumberField: ['textField','editor','control'], Slider: ['slider','control'], Tooltip: ['tooltip','shadow'], Progress: ['progress'], Skeleton: ['skeleton'], Loading: ['loading','motion'] };
+const componentGroups = { Button: ['control','radius','fontWeight','fontSize','motion'], Checkbox: ['space','motion'], Radio: ['space','motion'], Input: ['input','editor','control'], Textarea: ['textarea','editor','control'], TextField: ['textField','editor','control'], NumberField: ['textField','editor','control'], Slider: ['slider','control'], Tooltip: ['tooltip','shadow'], Progress: ['progress'], Skeleton: ['skeleton'], Loading: ['loading','motion'] };
 const groups = ['All', 'Accent', 'Surfaces', 'Text', 'Borders', 'Feedback', 'Danger', 'Focus', 'Disabled'];
 const groupFor = (role) => (role.startsWith('accent') || role === 'onAccent') ? 'Accent' :
   role.startsWith('surface') ? 'Surfaces' : ['text', 'muted', 'subtle'].includes(role) ? 'Text' :
@@ -116,11 +116,17 @@ export function ThemeBuilder({ links }) {
     (id + ' ' + entry.description).toLowerCase().includes(foundationQuery.trim().toLowerCase()));
   const existingFoundation = draft.overrides[appearance][foundationId];
   const currentFoundation = effectiveTokenValue(current, foundationId);
-  const componentEntries = foundationEntries.filter(([, entry]) => componentGroups[component].includes(entry.group));
+  const componentEntries = foundationEntries.filter(([id, entry]) => {
+    if (!componentGroups[component].includes(entry.group)) return false;
+    if (component === 'Checkbox' || component === 'Radio') return ['space-xs','space-lg','control-motion-duration','motion-easing-standard'].includes(id);
+    if (component === 'Tooltip' && entry.group === 'shadow') return id === 'shadow-sm';
+    if (component === 'Slider' && entry.group === 'control') return ['control-height-sm','control-height-md','control-height-lg','control-font-family'].includes(id);
+    return true;
+  });
   const [selectedComponentToken, componentEntry] = componentEntries.find(([id]) => id === componentToken) ?? componentEntries[0];
   const componentCurrent = effectiveTokenValue(current, selectedComponentToken);
   const componentOverride = draft.overrides[appearance][selectedComponentToken];
-  const sharedComponentToken = ['control','radius','fontWeight','fontSize','motion','shadow','editor'].includes(componentEntry.group);
+  const sharedComponentToken = ['control','radius','fontWeight','fontSize','motion','shadow','editor','space'].includes(componentEntry.group);
   const visible = themeableColorRoles.filter((item) =>
     (group === 'All' || groupFor(item) === group) &&
     friendly(item).includes(query.trim().toLowerCase()) &&
@@ -139,7 +145,7 @@ export function ThemeBuilder({ links }) {
   const simpleChoice = (id, label, choices) => {
     const selected = draft.overrides[appearance][id] ?? '';
     const effective = effectiveTokenValue(current, id);
-    const inherited = effectiveTokenValue(themeDefinitions({ ...draft, overrides: { ...draft.overrides,
+    const inherited = !selected ? effective : effectiveTokenValue(themeDefinitions({ ...draft, overrides: { ...draft.overrides,
       [appearance]: Object.fromEntries(Object.entries(draft.overrides[appearance]).filter(([key]) => key !== id)) } })[appearance].theme, id);
     return h('div', { key: id, className: 'vf-docs-studio-setting' },
       h('label', { className: 'vf-docs-studio-field' }, h(Text, { as: 'span' }, label),
@@ -278,7 +284,8 @@ export function ThemeBuilder({ links }) {
         category === 'typography' ? h(Flow, { gap: 'sm' },
           simpleChoice('font-family-sans', 'Interface font', [['system-ui, sans-serif','System sans'],['Arial, sans-serif','Arial'],['Georgia, serif','Georgia']]),
           simpleChoice('font-size-md', 'Base text size', [['0.875rem','Small'],['1rem','Standard'],['1.125rem','Large']]),
-          simpleChoice('font-size-xl', 'Large heading size', [['1.25rem','Compact'],['1.5rem','Standard'],['2rem','Large']]),
+          simpleChoice('font-size-3xl', 'Large heading size', [['1.75rem','Compact'],['2.25rem','Standard'],['2.75rem','Large']]),
+          simpleChoice('control-font-family', 'Control font', [['system-ui, sans-serif','System sans'],['Arial, sans-serif','Arial'],['Georgia, serif','Georgia']]),
           simpleChoice('control-font-size', 'Control text size', [['0.875rem','Small'],['0.9375rem','Standard'],['1.125rem','Large']]),
           simpleChoice('control-font-weight', 'Control text weight', [['400','Regular'],['500','Medium'],['600','Semibold'],['700','Bold']])) : null,
         category === 'spacing' ? h(Flow, { gap: 'sm' },

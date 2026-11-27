@@ -128,7 +128,11 @@ export function effectiveTokenValue(theme, id, seen = new Set()) {
   if (seen.has(id)) return undefined;
   seen.add(id);
   const name = '--vf-' + id;
-  if (Object.hasOwn(theme.variables, name)) return theme.variables[name];
+  if (Object.hasOwn(theme.variables, name)) {
+    const value = theme.variables[name];
+    const reference = /^var\(--vf-([a-z0-9-]+)\)$/.exec(value);
+    return reference ? effectiveTokenValue(theme, reference[1], seen) : value;
+  }
   const definition = runtimeTokenDefinitions[name];
   if (definition?.reference?.startsWith('runtime.') && definition.emit === 'css-var') {
     return effectiveTokenValue(theme, definition.reference.slice('runtime.--vf-'.length), seen);

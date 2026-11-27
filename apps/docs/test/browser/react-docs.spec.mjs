@@ -3333,6 +3333,9 @@ test('Studio contextual categories show inherited values, relevant specimens and
   await studio.getByLabel('Base text size').selectOption('1.125rem');
   await expect.poll(() => preview.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-font-size-md').trim())).toBe('1.125rem');
   await expect(preview.getByText('The quick brown fox jumps over the lazy dog.')).toHaveCSS('font-size','18px');
+  await studio.getByLabel('Interface font').selectOption('Georgia, serif');
+  await expect(preview.getByText('The quick brown fox jumps over the lazy dog.')).toHaveCSS('font-family', /Georgia/);
+  await expect(preview.getByRole('button', { name: 'primary', exact: true })).toHaveCSS('font-family', /Georgia/);
   await nav.getByRole('button', { name: 'Sizing & density', exact: true }).click();
   await expect(preview.locator('[data-vf-docs-context-preview="sizing"]')).toBeVisible();
   await studio.getByLabel('Medium control height').selectOption('3rem');
