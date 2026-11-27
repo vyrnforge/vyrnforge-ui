@@ -259,8 +259,11 @@ function tokenVariables(overrides?: ThemeTokenOverrides): Record<string, string>
     }
     const roles = tokens[group as Exclude<keyof typeof tokens, 'color'>] as Readonly<Record<string, CssReference>>;
     for (const [role, value] of Object.entries(values ?? {})) {
-      if (!Object.hasOwn(roles, role)) throw new TypeError('Unknown React token: ' + group + '.' + role);
-      if (value !== undefined) result[roles[role]!.slice(4, -1)] = value;
+      const token = roles[role];
+      if (!Object.hasOwn(roles, role) || token === undefined) {
+        throw new TypeError('Unknown React token: ' + group + '.' + role);
+      }
+      if (value !== undefined) result[token.slice(4, -1)] = value;
     }
   }
   return result;
