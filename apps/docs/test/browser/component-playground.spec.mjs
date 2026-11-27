@@ -423,3 +423,75 @@ test('Radio playground uses centered shared artwork and composed public label so
   await expect(source).toContainText('direction="inline"');
   await playground.screenshot({ path: testInfo.outputPath('radio-centered-playground.png') });
 });
+
+
+for (const name of ['Input', 'Textarea']) {
+  test(name + ' playground preserves native editing across distinct appearances', async ({ page }, testInfo) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/next/react/components/' + name.toLowerCase() + '/');
+    const playground = page.locator('[data-vf-docs-component-playground="' + name + '"]');
+    const preview = playground.getByRole('region', { name: name + ' preview' });
+    const source = playground.getByRole('region', { name: 'Generated React usage' });
+    const editor = preview.getByRole('textbox');
+    await editor.fill('Native value');
+    await playground.getByRole('radio', { name: 'filled', exact: true }).check();
+    await expect(editor).toHaveAttribute('data-vf-editor-variant', 'filled');
+    await expect(editor).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await editor.fill('');
+    for (const theme of ['light', 'dark']) {
+      await page.locator('html').evaluate((el, value) => { el.dataset.vfTheme = value; }, theme);
+      const contrast = await editor.evaluate(el => {
+        const style = getComputedStyle(el);
+        const canvas = document.createElement('canvas');
+        canvas.width = canvas.height = 1;
+        const ctx = canvas.getContext('2d');
+        const luminance = color => {
+          ctx.clearRect(0, 0, 1, 1);
+          ctx.fillStyle = color;
+          ctx.fillRect(0, 0, 1, 1);
+          return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3)
+            .map(c => c / 255).map(c => c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
+            .reduce((sum, c, index) => sum + c * [0.2126, 0.7152, 0.0722][index], 0);
+        };
+        const a = luminance(style.backgroundColor);
+        const b = luminance(getComputedStyle(el, '::placeholder').color);
+        return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+      });
+      expect(contrast).toBeGreaterThanOrEqual(4.5);
+      await preview.screenshot({ path: testInfo.outputPath(name.toLowerCase() + '-filled-' + theme + '.png') });
+    }
+    await editor.fill('Native value');
+    await playground.getByRole('radio', { name: 'underlined', exact: true }).check();
+    await expect(editor).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await playground.getByRole('radio', { name: 'unstyled', exact: true }).check();
+    await expect(editor).toHaveCSS('border-top-width', '0px');
+    await expect(editor).toHaveCSS('padding-left', '0px');
+    await expect(editor).toHaveValue('Native value');
+    await expect(source).toContainText('variant="unstyled"');
+    await expect(source).toContainText('@vyrnforge/react/' + name.toLowerCase());
+    await expect(source).not.toContainText(/styles\//);
+    if (name === 'Textarea') {
+      await playground.getByRole('checkbox', { name: 'Autosize', exact: true }).check();
+      await expect(editor).toHaveAttribute('data-vf-textarea-autosize', '');
+      if (await editor.evaluate(() => CSS.supports('field-sizing', 'content'))) {
+        await editor.fill('Short');
+        const short = await editor.evaluate(el => el.clientHeight);
+        const shortWidth = await editor.evaluate(el => el.getBoundingClientRect().width);
+        expect(shortWidth).toBeGreaterThan(100);
+        await editor.fill(Array(14).fill('A line').join('\n'));
+        await expect.poll(() => editor.evaluate(el => el.clientHeight)).toBeGreaterThan(short);
+        expect(await editor.evaluate(el => el.getBoundingClientRect().width)).toBeCloseTo(shortWidth, 0);
+        expect(await editor.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
+        await editor.fill('Short');
+        await expect.poll(() => editor.evaluate(el => el.clientHeight)).toBe(short);
+      }
+    }
+    await playground.getByRole('radio', { name: 'outlined', exact: true }).check();
+    await playground.screenshot({ path: testInfo.outputPath(name.toLowerCase() + '-desktop.png') });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator('html').evaluate(el => el.setAttribute('dir', 'rtl'));
+    await page.emulateMedia({ forcedColors: 'active' });
+    await editor.focus();
+    await playground.screenshot({ path: testInfo.outputPath(name.toLowerCase() + '-mobile-rtl-forced-colors.png') });
+  });
+}

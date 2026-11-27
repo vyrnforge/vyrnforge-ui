@@ -2,9 +2,42 @@
 @import "../../styles/form-controls.css";
 
 @layer vyrnforge.components {
-  :where(textarea[data-vf-textarea]:not([data-vf-text-field-value])) {
-    min-block-size: var(--vf-control-height-md);
-    padding-block: var(--vf-space-sm);
+  :where(textarea[data-vf-textarea]) {
+    --_vf-editor-value-font: var(--vf-textarea-value-font, var(--vf-editor-value-font, var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal) var(--vf-control-font-family)));
+    --_vf-editor-placeholder-font: var(--vf-textarea-placeholder-font, var(--vf-editor-placeholder-font, inherit));
+  }
+  :where(textarea[data-vf-textarea]:not([data-vf-editor-variant="unstyled"])) {
+    min-block-size: var(--_vf-editor-height);
+    padding-block: var(--_vf-editor-block-padding);
     padding-inline: var(--_vf-field-inline-padding);
+  }
+  :where(textarea[data-vf-textarea][data-vf-textarea-resize="none"]) { resize: none; }
+  :where(textarea[data-vf-textarea][data-vf-textarea-resize="vertical"]) { resize: vertical; }
+  :where(textarea[data-vf-textarea][data-vf-textarea-resize="horizontal"]) { resize: horizontal; }
+  :where(textarea[data-vf-textarea][data-vf-textarea-resize="both"]) { resize: both; }
+
+  /* Native sizing tracks editing, font, layout, reset and composition without JS.
+     In browsers without field-sizing, rows, cols and native resizing remain available. */
+  @supports (field-sizing: content) {
+    :where(textarea[data-vf-textarea][data-vf-textarea-autosize]) {
+      field-sizing: content;
+      inline-size: calc(var(--vf-textarea-cols, 20) * 1ch + 2 * var(--_vf-field-inline-padding, 0px) + var(--_vf-editor-border-block, 2px));
+      --_vf-textarea-block-insets: calc(2 * var(--_vf-editor-block-padding, 0px) + var(--_vf-editor-border-block, 2px));
+      --_vf-textarea-autosize-min: max(var(--_vf-editor-height, 0px), calc(var(--vf-textarea-min-rows, 1) * 1lh + var(--_vf-textarea-block-insets)));
+      min-block-size: var(--_vf-textarea-autosize-min);
+      max-block-size: calc(var(--vf-textarea-max-rows, none) * 1lh + var(--_vf-textarea-block-insets));
+      overflow: auto;
+      resize: none;
+    }
+    :where(textarea[data-vf-textarea][data-vf-textarea-autosize][data-vf-editor-variant="unstyled"]) {
+      --_vf-editor-height: 0px;
+    }
+    :where(textarea[data-vf-textarea][data-vf-textarea-autosize][data-vf-editor-full-width]) {
+      inline-size: 100%;
+    }
+    :where(textarea[data-vf-textarea][data-vf-textarea-autosize][data-vf-textarea-resize="horizontal"]),
+    :where(textarea[data-vf-textarea][data-vf-textarea-autosize][data-vf-textarea-resize="both"]) {
+      resize: horizontal;
+    }
   }
 }

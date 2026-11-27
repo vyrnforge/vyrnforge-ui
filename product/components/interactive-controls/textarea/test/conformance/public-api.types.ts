@@ -11,3 +11,6 @@ const vueTextarea: VueTextarea | undefined = undefined;
 // @ts-expect-error textarea has no native type attribute.
 const invalidReact: ReactTextareaProps = { type: 'text' };
 void [reactProps, reactTextarea, angularTextarea, vueTextarea, invalidReact];
+
+const multiline: ReactTextareaProps = { variant: 'unstyled', fieldSize: 'lg', fullWidth: true, autosize: true, minRows: 2, maxRows: 8, resize: 'none' };
+void multiline;
