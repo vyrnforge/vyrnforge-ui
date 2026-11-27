@@ -248,17 +248,17 @@ test('React composed NumberField preserves native behavior and shared relationsh
   await input.press('ArrowUp');
   await expect(input).toHaveValue('3');
   await input.fill('101');
-  expect(await input.evaluate(el => el.validity.rangeOverflow)).toBe(true);
+  expect(await input.evaluate((el) => el.validity.rangeOverflow)).toBe(true);
   await input.fill('');
   await expect(page.locator('body')).toHaveAttribute('data-order', 'null');
   await input.fill('7');
-  expect(await page.locator('#number-form').evaluate(form => new FormData(form).get('order'))).toBe('7');
+  expect(await page.locator('#number-form').evaluate((form) => new FormData(form).get('order'))).toBe('7');
   const accepted = page.getByRole('spinbutton', { name: 'Accepted adjustment' });
   await page.getByRole('button', { name: 'Increase adjustment' }).click();
   await expect(accepted).toHaveValue('-2.4');
   await accepted.fill('3.25');
   await expect(accepted).toHaveValue('3.25');
-  await page.locator('#number-form').evaluate(form => form.reset());
+  await page.locator('#number-form').evaluate((form) => form.reset());
   await expect(input).toHaveValue('1');
   await expect(accepted).toHaveValue('3.25');
   const empty = page.getByRole('spinbutton', { name: 'Empty amount' });
@@ -267,7 +267,9 @@ test('React composed NumberField preserves native behavior and shared relationsh
   await expect(empty).toHaveAccessibleDescription('Enter amount');
 });
 
-test('React composed NumberField renders responsive native, stacked and horizontal fields', async ({ page }, testInfo) => {
+test('React composed NumberField renders responsive native, stacked and horizontal fields', async ({
+  page,
+}, testInfo) => {
   test.skip(port !== 'react', 'High-level composition is React-first.');
   await page.goto('/components/number-field/react.html');
   await expect(page.locator('body')).toHaveAttribute('data-number-field-ready', 'true');
