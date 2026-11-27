@@ -34,3 +34,11 @@ it('authored React examples use typed public tokens instead of literal Web varia
   const violations = files.filter(name => /--vf-[a-z0-9-]+/.test(readFileSync(path.join(root, name), 'utf8')));
   expect(violations).toEqual([]);
 });
+
+it('React-specific component and pattern guides use named tokens instead of literal Web variable names', () => {
+  const root = fileURLToPath(new URL('../../../../product/', import.meta.url));
+  const files = readdirSync(root, { recursive: true }).filter(name => /(?:^|[\\/])react[\\/]docs[\\/].*\.md$/.test(name));
+  expect(files.length).toBeGreaterThan(20);
+  const violations = files.filter(name => /--vf-[a-z0-9-]+/.test(readFileSync(path.join(root, name), 'utf8')));
+  expect(violations).toEqual([]);
+});
