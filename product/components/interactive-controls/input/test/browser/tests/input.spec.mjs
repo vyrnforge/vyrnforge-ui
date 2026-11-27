@@ -170,7 +170,7 @@ test('typed React editor tokens reach every native Input mode and specialized ed
     }
     for (const name of [...modes.map(type => 'field-' + type), 'auto']) {
       const input = root.locator('[data-token-audit="' + name + '"]');
-      const shell = root.locator('[data-vf-text-field-control]').filter({ has: input });
+      const shell = root.locator('[data-vf-text-field-control]').filter({ has: page.locator('[data-token-audit="' + name + '"]') });
       await expect(shell, name).toHaveCSS('border-top-left-radius', '11px');
       await expect(shell, name).toHaveCSS('background-color', 'rgb(242, 243, 244)');
       await expect(input, name).toHaveCSS('font-size', '18px');
