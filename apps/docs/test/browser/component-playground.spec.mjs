@@ -142,7 +142,7 @@ test('Generated playground examples typecheck and bundle against installed publi
   const root = fileURLToPath(new URL('../../../../', import.meta.url));
   const scenarios = [
     [buttonPlayground, {}], [buttonPlayground, { variant: 'secondary', size: 'lg', loading: true, disabled: true, label: '<Save>{x}' }],
-    [checkboxPlayground, { selection: 'mixed', required: true }], [checkboxPlayground, { presentation: 'standalone' }], [checkboxPlayground, { presentation: 'icon label' }], [checkboxPlayground, { presentation: 'label and description', selection: 'mixed' }], [radioPlayground, { selection: 'express' }],
+    [checkboxPlayground, { selection: 'mixed', required: true }], [checkboxPlayground, { presentation: 'standalone' }], [checkboxPlayground, { presentation: 'icon label' }], [checkboxPlayground, { presentation: 'label and description', selection: 'mixed' }], [radioPlayground, { selection: 'express' }], [radioPlayground, { size: 'lg', selection: 'none', orientation: 'horizontal', invalid: true, required: true }], [radioPlayground, { presentation: 'label and description', size: 'sm' }], [radioPlayground, { presentation: 'icon label' }],
     [avatarPlayground, { appearance: 'icon', decorative: true, size: 'lg', shape: 'square' }],
     [avatarPlayground, { initials: 'VF' }], [badgePlayground, { variant: 'dot', tone: 'danger' }],
     [badgePlayground, { count: 127, max: 50, horizontal: 'start', showZero: true }],
@@ -401,11 +401,25 @@ test('Radio playground uses centered shared artwork and composed public label so
   await expect(standard).toHaveCSS('align-items', 'center');
   await expect(standard).toHaveCSS('justify-items', 'center');
   const dimensions = await standard.evaluate(element => ({ target: element.getBoundingClientRect().width,
-    dot: parseFloat(getComputedStyle(element, '::before').width) }));
+    dot: parseFloat(getComputedStyle(element, '::after').width) }));
   expect(dimensions.dot).toBeCloseTo(dimensions.target / 2, 1);
   await expect(source).toContainText('<Flow as="label"');
   await expect(source).toContainText('<Text>Standard</Text>');
   await preview.getByText('Express', { exact: true }).click();
   await expect(preview.getByRole('radio', { name: 'Express', exact: true })).toBeChecked();
+  await playground.getByRole('radio', { name: 'sm', exact: true }).check();
+  await expect(standard).toHaveAttribute('data-vf-size', 'sm');
+  await expect(standard).toHaveCSS('width', '24px');
+  await expect(source).toContainText('size="sm"');
+  await playground.getByRole('radio', { name: 'lg', exact: true }).check();
+  await expect(standard).toHaveCSS('width', '28px');
+  await playground.getByRole('radio', { name: 'none', exact: true }).check();
+  await expect(preview.getByRole('radio', { name: 'Express', exact: true })).not.toBeChecked();
+  await playground.getByRole('radio', { name: 'label and description', exact: true }).check();
+  await expect(standard).toHaveAccessibleDescription('Arrives in 3–5 days.');
+  await playground.getByRole('checkbox', { name: 'Invalid', exact: true }).check();
+  await expect(standard).toHaveAttribute('aria-invalid', 'true');
+  await playground.getByRole('radio', { name: 'horizontal', exact: true }).check();
+  await expect(source).toContainText('direction="inline"');
   await playground.screenshot({ path: testInfo.outputPath('radio-centered-playground.png') });
 });

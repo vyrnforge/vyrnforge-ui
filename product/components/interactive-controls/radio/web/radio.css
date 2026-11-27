@@ -3,89 +3,101 @@
 @layer vyrnforge.components {
   :where(input[data-vf-radio]) {
     --_vf-radio-indicator: var(--vf-space-lg);
+    --_vf-radio-target: max(24px, var(--_vf-radio-indicator));
+    --_vf-radio-fill: var(--vf-color-surface);
+    --_vf-radio-border: var(--vf-color-border-required);
+    --_vf-radio-ring: 1px;
     appearance: none;
-    background: var(--vf-color-surface);
-    border: 1px solid var(--vf-color-border-required);
+    background: transparent;
+    border: 0;
     border-radius: 50%;
-    block-size: var(--_vf-radio-indicator);
-    min-block-size: var(--_vf-radio-indicator);
+    block-size: var(--_vf-radio-target);
+    min-block-size: var(--_vf-radio-target);
     box-sizing: border-box;
-    color: var(--vf-color-accent-foreground);
+    color: var(--vf-color-accent-background);
     cursor: pointer;
     display: inline-grid;
     flex-shrink: 0;
-    inline-size: var(--_vf-radio-indicator);
-    min-inline-size: var(--_vf-radio-indicator);
+    inline-size: var(--_vf-radio-target);
+    min-inline-size: var(--_vf-radio-target);
     margin: 0;
     padding: 0;
     place-items: center;
     vertical-align: middle;
+  }
+
+  :where(input[data-vf-radio][data-vf-size="sm"]) {
+    --_vf-radio-indicator: calc(var(--vf-space-lg) - var(--vf-space-xs));
+  }
+  :where(input[data-vf-radio][data-vf-size="lg"]) {
+    --_vf-radio-indicator: calc(var(--vf-space-lg) + var(--vf-space-xs));
+  }
+
+  /* Keep the visual circle independent of the native pointer and focus target. */
+  :where(input[data-vf-radio])::before {
+    content: "";
+    grid-area: 1 / 1;
+    box-sizing: border-box;
+    inline-size: var(--_vf-radio-indicator);
+    block-size: var(--_vf-radio-indicator);
+    border: var(--_vf-radio-ring) solid var(--_vf-radio-border);
+    border-radius: 50%;
+    background: var(--_vf-radio-fill);
+    pointer-events: none;
     transition:
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
-
-  :where(input[data-vf-radio])::before {
-    background: currentColor;
-    /* The dot shares the indicator's center, not the text baseline. */
+  :where(input[data-vf-radio])::after {
+    content: "";
     grid-area: 1 / 1;
     box-sizing: border-box;
+    inline-size: calc(var(--_vf-radio-indicator) / 2);
     block-size: calc(var(--_vf-radio-indicator) / 2);
     border-radius: 50%;
-    content: "";
-    inline-size: calc(var(--_vf-radio-indicator) / 2);
-    pointer-events: none;
+    background: currentColor;
     transform: scale(0);
     transform-origin: center;
+    pointer-events: none;
     transition: transform var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
   :where(input[data-vf-radio]:hover:not(:disabled):not(:checked)) {
-    background: var(--vf-color-surface-hover);
-    border-color: var(--vf-color-text-subtle);
+    --_vf-radio-fill: var(--vf-color-surface-hover);
+    --_vf-radio-border: var(--vf-color-text-subtle);
   }
-
   :where(input[data-vf-radio]:checked) {
-    background: var(--vf-color-accent-background);
-    border-color: var(--vf-color-accent-background);
+    --_vf-radio-ring: 2px;
+    --_vf-radio-border: var(--vf-color-accent-background);
   }
-
   :where(input[data-vf-radio]:checked:hover:not(:disabled)) {
-    background: var(--vf-color-accent-background-hover);
-    border-color: var(--vf-color-accent-background-hover);
+    --_vf-radio-border: var(--vf-color-accent-background-hover);
+    color: var(--vf-color-accent-background-hover);
   }
-
-  :where(input[data-vf-radio]:checked)::before {
+  :where(input[data-vf-radio]:checked)::after {
     transform: scale(1);
   }
-
   :where(input[data-vf-radio]:focus-visible) {
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
   }
-
   :where(input[data-vf-radio]:disabled) {
-    background: var(--vf-color-disabled-background);
-    border-color: var(--vf-color-disabled-border);
+    --_vf-radio-fill: var(--vf-color-disabled-background);
+    --_vf-radio-border: var(--vf-color-disabled-border);
     color: var(--vf-color-disabled-foreground);
     cursor: not-allowed;
   }
-
   :where(input[data-vf-radio]:disabled:checked) {
-    background: var(--vf-color-disabled-foreground);
-    border-color: var(--vf-color-disabled-foreground);
-    color: var(--vf-color-surface);
+    --_vf-radio-border: var(--vf-color-disabled-foreground);
   }
-
   :where(input[data-vf-radio]:not(:disabled):user-invalid, input[data-vf-radio]:not(:disabled)[aria-invalid="true"]) {
-    border-color: var(--vf-color-danger-border);
+    --_vf-radio-border: var(--vf-color-danger-border);
   }
-
   @media (prefers-reduced-motion: reduce) {
     :where(input[data-vf-radio]),
-    :where(input[data-vf-radio])::before { transition: none; }
+    :where(input[data-vf-radio])::before,
+    :where(input[data-vf-radio])::after { transition: none; }
   }
-
   @media (forced-colors: active) {
     :where(input[data-vf-radio]) {
       appearance: auto;
@@ -96,8 +108,8 @@
       color: CanvasText;
       forced-color-adjust: auto;
     }
-
-    :where(input[data-vf-radio])::before { display: none; }
+    :where(input[data-vf-radio])::before,
+    :where(input[data-vf-radio])::after { display: none; }
     :where(input[data-vf-radio]:focus-visible) { outline-color: Highlight; }
     :where(input[data-vf-radio]:disabled) { border-color: GrayText; color: GrayText; }
   }
