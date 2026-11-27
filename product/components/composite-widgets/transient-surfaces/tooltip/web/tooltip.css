@@ -11,7 +11,8 @@
     --_vf-tooltip-offset: var(--vf-tooltip-offset, var(--vf-space-xs));
     --_vf-tooltip-font: var(
       --vf-tooltip-font,
-      var(--vf-font-weight-regular) var(--_vf-tooltip-size-font) / var(--vf-line-height-normal) var(--vf-control-font-family)
+      var(--vf-font-weight-regular) var(--_vf-tooltip-size-font) / var(--vf-line-height-normal)
+        var(--vf-control-font-family)
     );
     background: var(--vf-tooltip-background, var(--vf-color-text));
     border-radius: var(--vf-tooltip-radius, var(--vf-control-radius));
@@ -66,11 +67,7 @@
     pointer-events: none;
     width: calc(2 * var(--_vf-tooltip-arrow));
     height: var(--_vf-tooltip-arrow);
-    left: clamp(
-      var(--_vf-tooltip-arrow),
-      var(--_vf-tooltip-arrow-position),
-      calc(100% - var(--_vf-tooltip-arrow))
-    );
+    left: clamp(var(--_vf-tooltip-arrow), var(--_vf-tooltip-arrow-position), calc(100% - var(--_vf-tooltip-arrow)));
     translate: -50% 0;
   }
   :where([data-vf-tooltip-content][data-vf-arrow][data-vf-tooltip-side='top'])::after {
@@ -88,11 +85,7 @@
     width: var(--_vf-tooltip-arrow);
     height: calc(2 * var(--_vf-tooltip-arrow));
     left: auto;
-    top: clamp(
-      var(--_vf-tooltip-arrow),
-      var(--_vf-tooltip-arrow-position),
-      calc(100% - var(--_vf-tooltip-arrow))
-    );
+    top: clamp(var(--_vf-tooltip-arrow), var(--_vf-tooltip-arrow-position), calc(100% - var(--_vf-tooltip-arrow)));
     translate: 0 -50%;
   }
   :where([data-vf-tooltip-content][data-vf-arrow][data-vf-tooltip-side='left'])::after {

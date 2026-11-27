@@ -5,7 +5,7 @@
  */
 export function connectTooltipArrow(surface: HTMLElement, trigger: HTMLElement): () => void {
   const view = surface.ownerDocument.defaultView;
-  if (!view) return () => {};
+  if (!view) return () => undefined;
   let frame = 0;
   let active = true;
   const clear = () => {
@@ -57,7 +57,10 @@ export function connectTooltipArrow(surface: HTMLElement, trigger: HTMLElement):
     update();
   };
   const observer = new view.MutationObserver(restart);
-  observer.observe(surface, { attributes: true, attributeFilter: ['data-vf-arrow', 'data-vf-size', 'data-vf-placement'] });
+  observer.observe(surface, {
+    attributes: true,
+    attributeFilter: ['data-vf-arrow', 'data-vf-size', 'data-vf-placement'],
+  });
   update();
   return () => {
     active = false;

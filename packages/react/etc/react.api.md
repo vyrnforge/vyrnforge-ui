@@ -5718,7 +5718,7 @@ key?: Key | null | undefined;
 }, HTMLElement>;
 
 // @public (undocumented)
-export function TooltipContent(props: TooltipContentProps): ReactNode;
+export function TooltipContent(input: TooltipContentProps): ReactNode;
 
 // @public (undocumented)
 export type TooltipContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'> & {
