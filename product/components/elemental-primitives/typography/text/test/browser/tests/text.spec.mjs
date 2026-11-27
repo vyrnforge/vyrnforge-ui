@@ -135,3 +135,18 @@ test('React Code/Kbd reuse native component CSS and optional Text typography rol
     await page.screenshot({ path: test.info().outputPath('text-react-code-kbd-parity.png'), fullPage: false });
   }
 });
+
+test('Text resolves scoped typography at its consumer without changing sibling scopes', async ({ page }) => {
+  await page.goto(`/components/text/${port}.html`);
+  await page.locator('#body').evaluate(node => {
+    const scope = document.createElement('section');
+    scope.setAttribute('data-vf-theme', 'local-type');
+    scope.style.setProperty('--vf-font-size-md', '1.125rem');
+    scope.style.setProperty('--vf-font-family-sans', 'Georgia, serif');
+    node.before(scope);
+    scope.append(node);
+  });
+  await expect(page.locator('#body')).toHaveCSS('font-size', '18px');
+  await expect(page.locator('#body')).toHaveCSS('font-family', /Georgia/);
+  await expect(page.locator('#label')).toHaveCSS('font-size', '14px');
+});

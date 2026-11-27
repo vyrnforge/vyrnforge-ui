@@ -2,8 +2,8 @@ import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Code, CodeBlock } from '@vyrnforge/react/code';
 import { Link } from '@vyrnforge/react/link';
 import { createElement as h, useEffect, useReducer, useState } from 'react';
-import { renderThemeCss, colors, tokens } from '@vyrnforge/react';
-import { catalog, themeableColorRoles, foundationEntries, tokenId, friendly, themeDefinitions, themeValue, contrast, savedTheme, savedThemes, storeTheme } from './react-theme-authoring.mjs';
+import { renderThemeCss, colors } from '@vyrnforge/react';
+import { catalog, themeableColorRoles, foundationEntries, tokenId, friendly, themeDefinitions, themeValue, contrast, effectiveTokenValue, savedTheme, savedThemes, storeTheme } from './react-theme-authoring.mjs';
 import { Textarea } from '@vyrnforge/react/textarea';
 import { Button } from '@vyrnforge/react/button';
 import { Input } from '@vyrnforge/react/input';
@@ -11,9 +11,12 @@ import { Checkbox } from '@vyrnforge/react/checkbox';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { Slider } from '@vyrnforge/react/slider';
 import { Text } from '@vyrnforge/react/text';
+import { Flow } from '@vyrnforge/react/layout';
 import { Segment, Picker, PreviewScene } from './react-theme-studio.mjs';
 import { presets, modes, defaultDraft, validSlug, validHex, permittedValue, permittedHint, historyReducer, importLegacyDraft, parseDraft, serializeDraft, draftSchema } from './theme-studio-model.mjs';
 
+const categories = [['colors','Colors'],['typography','Typography'],['spacing','Spacing'],['sizing','Sizing & density'],['shape','Shape & borders'],['elevation','Elevation'],['motion','Motion'],['components','Components']];
+const componentGroups = { Button: ['control','radius','fontWeight','fontSize','motion'], Checkbox: ['space','motion'], Radio: ['space','motion'], Input: ['input','editor','control'], Textarea: ['textarea','editor','control'], TextField: ['textField','editor','control'], NumberField: ['textField','editor','control'], Slider: ['slider','control'], Rating: ['rating'], Tooltip: ['tooltip','shadow'], Progress: ['progress'], Skeleton: ['skeleton'], Loading: ['loading','motion'] };
 const groups = ['All', 'Accent', 'Surfaces', 'Text', 'Borders', 'Feedback', 'Danger', 'Focus', 'Disabled'];
 const groupFor = (role) => (role.startsWith('accent') || role === 'onAccent') ? 'Accent' :
   role.startsWith('surface') ? 'Surfaces' : ['text', 'muted', 'subtle'].includes(role) ? 'Text' :
@@ -70,7 +73,12 @@ export function ThemeBuilder({ links }) {
   const [group, setGroup] = useState('All');
   const [query, setQuery] = useState('');
   const [changedOnly, setChangedOnly] = useState(false);
-  const [scene, setScene] = useState('dashboard');
+  const [category, setCategory] = useState('colors');
+  const [component, setComponent] = useState('Button');
+  const [componentQuery, setComponentQuery] = useState('');
+  const [componentToken, setComponentToken] = useState('control-height-md');
+  const [componentValue, setComponentValue] = useState('');
+  const [scene, setScene] = useState('context');
   const [format, setFormat] = useState('function');
   const [status, setStatus] = useState('');
   const [exportStatus, setExportStatus] = useState('');
@@ -107,7 +115,18 @@ export function ThemeBuilder({ links }) {
     (!changedOnly || Object.hasOwn(draft.overrides[appearance], id)) &&
     (id + ' ' + entry.description).toLowerCase().includes(foundationQuery.trim().toLowerCase()));
   const existingFoundation = draft.overrides[appearance][foundationId];
-  const currentFoundation = current.variables[tokens[foundFoundation.group][foundFoundation.key].slice(4, -1)] ?? foundFoundation.baseline;
+  const currentFoundation = effectiveTokenValue(current, foundationId);
+  const componentEntries = foundationEntries.filter(([id, entry]) => {
+    if (!componentGroups[component].includes(entry.group)) return false;
+    if (component === 'Checkbox' || component === 'Radio') return ['space-xs','space-lg','control-motion-duration','motion-easing-standard'].includes(id);
+    if (component === 'Tooltip' && entry.group === 'shadow') return id === 'shadow-sm';
+    if (component === 'Slider' && entry.group === 'control') return ['control-height-sm','control-height-md','control-height-lg','control-font-family'].includes(id);
+    return true;
+  });
+  const [selectedComponentToken, componentEntry] = componentEntries.find(([id]) => id === componentToken) ?? componentEntries[0];
+  const componentCurrent = effectiveTokenValue(current, selectedComponentToken);
+  const componentOverride = draft.overrides[appearance][selectedComponentToken];
+  const sharedComponentToken = ['control','radius','fontWeight','fontSize','motion','shadow','editor','space'].includes(componentEntry.group);
   const visible = themeableColorRoles.filter((item) =>
     (group === 'All' || groupFor(item) === group) &&
     friendly(item).includes(query.trim().toLowerCase()) &&
@@ -125,11 +144,35 @@ export function ThemeBuilder({ links }) {
   const source = { function: ts, css, json, schema, ai }[format];
   const simpleChoice = (id, label, choices) => {
     const selected = draft.overrides[appearance][id] ?? '';
-    return h('label', { className: 'vf-docs-studio-field' }, h(Text, { as: 'span' }, label),
-      h(NativeSelect, { value: !selected || choices.some(([value]) => value === selected) ? selected : 'custom', onChange: e => setOverride(id, e.target.value || undefined) },
-        h('option', { value: '' }, 'Default'), ...choices.map(([value, title]) => h('option', { key: value, value }, title)),
-        selected && !choices.some(([value]) => value === selected) ? h('option', { value: 'custom', disabled: true }, 'Custom') : null));
+    const effective = effectiveTokenValue(current, id);
+    const inherited = !selected ? effective : effectiveTokenValue(themeDefinitions({ ...draft, overrides: { ...draft.overrides,
+      [appearance]: Object.fromEntries(Object.entries(draft.overrides[appearance]).filter(([key]) => key !== id)) } })[appearance].theme, id);
+    return h('div', { key: id, className: 'vf-docs-studio-setting' },
+      h('label', { className: 'vf-docs-studio-field' }, h(Text, { as: 'span' }, label),
+        h(NativeSelect, { 'aria-label': label, value: !selected || choices.some(([value]) => value === selected) ? selected : 'custom', onChange: e => setOverride(id, e.target.value || undefined) },
+          h('option', { value: '' }, 'Inherited · ' + (choices.find(([value]) => value === inherited)?.[1] ?? inherited ?? 'CSS fallback')),
+          ...choices.map(([value, title]) => h('option', { key: value, value }, title + ' · ' + value)),
+          selected && !choices.some(([value]) => value === selected) ? h('option', { value: 'custom', disabled: true }, 'Custom · ' + selected) : null)),
+      h(Text, { as: 'p', variant: 'body-sm', tone: 'secondary' }, (selected ? 'Theme override' : 'Inherited') + ' · ' + (effective ?? 'Component CSS fallback')));
   };
+  const chooseCategory = next => { setCategory(next); setScene('context'); };
+  const componentEditor = () => h(Flow, { gap: 'sm' },
+    h('label', { className: 'vf-docs-studio-field' }, h(Text, { as: 'span' }, 'Find component'),
+      h(Input, { type: 'search', 'aria-label': 'Find component', value: componentQuery, onChange: e => setComponentQuery(e.target.value) })),
+    h('label', { className: 'vf-docs-studio-field' }, h(Text, { as: 'span' }, 'Component'),
+      h(NativeSelect, { 'aria-label': 'Component', value: component, onChange: e => { setComponent(e.target.value); setComponentToken(''); setComponentValue(''); setScene('context'); } },
+        ...Object.keys(componentGroups).filter(name => name === component || name.toLowerCase().includes(componentQuery.trim().toLowerCase())).map(name => h('option', { key: name, value: name }, name)))),
+    h('label', { className: 'vf-docs-studio-field' }, h(Text, { as: 'span' }, 'Component theme property'),
+      h(NativeSelect, { 'aria-label': 'Component theme property', value: selectedComponentToken, onChange: e => { setComponentToken(e.target.value); setComponentValue(''); } },
+        ...componentEntries.map(([id, entry]) => h('option', { key: id, value: id }, friendly(entry.group) + ' / ' + friendly(entry.key))))),
+    h(Text, { as: 'p', variant: 'body-sm', tone: 'secondary' }, sharedComponentToken ? 'Shared token · changing this can affect other components.' : 'Component token · applies to this component family.'),
+    h(Text, { as: 'p', variant: 'body-sm' }, (componentOverride === undefined ? 'Inherited' : 'Theme override') + ' · ' + (componentCurrent ?? 'Component CSS fallback')),
+    h('label', { className: 'vf-docs-studio-field' }, h(Text, { as: 'span' }, 'Component property value'),
+      h(Input, { 'aria-label': 'Component property value', value: componentValue, placeholder: permittedHint(componentEntry), 'aria-invalid': !!componentValue && !permittedValue(componentEntry, componentValue), onChange: e => setComponentValue(e.target.value) })),
+    h(Text, { as: 'p', variant: 'body-sm', tone: 'secondary' }, permittedHint(componentEntry)),
+    h('div', { className: 'vf-docs-studio-inline-actions' },
+      h(Button, { type: 'button', disabled: !permittedValue(componentEntry, componentValue), onClick: () => { setOverride(selectedComponentToken, componentValue); setComponentValue(''); setStatus('Component theme property updated'); } }, 'Apply property'),
+      h(Button, { type: 'button', variant: 'secondary', disabled: componentOverride === undefined, onClick: () => setOverride(selectedComponentToken, undefined) }, 'Restore property')));
   const editRole = color => {
     if (validHex(color)) setOverride(key, color);
     setStatus(friendly(role) + ' overridden for ' + appearance);
@@ -141,7 +184,7 @@ export function ThemeBuilder({ links }) {
   const reset = () => {
     edit(() => defaultDraft());
     setAppearance('light'); setRole('accent'); setGroup('All'); setQuery('');
-    setChangedOnly(false); setScene('dashboard'); setFormat('function'); setFoundationValue(''); setImportError('');
+    setChangedOnly(false); setCategory('colors'); setScene('context'); setComponent('Button'); setComponentToken('control-height-md'); setComponentQuery(''); setComponentValue(''); setFormat('function'); setFoundationValue(''); setImportError('');
     setExportStatus(''); setStatus('Theme Studio restored to defaults; Undo restores your draft');
   };
   const importDraft = text => {
@@ -205,10 +248,11 @@ export function ThemeBuilder({ links }) {
           onClick: reset, 'data-vf-docs-builder-reset': '' }, 'Reset theme'))),
     h(Segment, { label: 'Customization mode', value: advanced ? 'advanced' : 'simple', onChange: next => setAdvanced(next === 'advanced'), items: [['simple', 'Simple'], ['advanced', 'Advanced']], testId: 'studio-mode' }),
     h(Segment, { label: 'Builder editing appearance', value: appearance, testId: 'builder-appearance', onChange: setAppearance, items: [['light','Light'],['dark','Dark']] }),
+    h('nav', { className: 'vf-docs-studio-categories', 'aria-label': 'Customize theme' }, ...categories.map(([id, label]) => h(ToggleButton, { key: id, type: 'button', pressed: category === id, onClick: () => chooseCategory(id) }, label))),
     h('div', { className: 'vf-docs-builder-workspace', 'data-advanced': advanced ? 'true' : 'false' },
       h('section', { className: 'vf-docs-studio-section', id: 'vf-builder-design',
         'aria-labelledby': 'vf-builder-design-title' },
-        h(Text, { as: 'h2', variant: 'heading-md', id: 'vf-builder-design-title' }, '1 · Theme identity'),
+        h(Text, { as: 'h2', variant: 'heading-md', id: 'vf-builder-design-title' }, 'Customize · ' + categories.find(([id]) => id === category)[1]),
         h('label', { className: 'vf-docs-studio-field', htmlFor: 'vf-builder-name' },
           h(Text, { as: 'span' }, 'Theme name'),
           h(Input, { id: 'vf-builder-name', value: name, onChange: (e) => setName(e.target.value),
@@ -216,6 +260,7 @@ export function ThemeBuilder({ links }) {
             'data-vf-docs-builder-name': '' })),
         !valid ? h(Text, { as: 'p', id: 'vf-builder-name-error', role: 'alert' },
           'Use a lowercase slug starting with a letter; light, dark and system are reserved.') : null,
+        category === 'colors' ? h(Flow, { gap: 'sm' },
         h('label', { className: 'vf-docs-studio-field', htmlFor: 'vf-builder-palette' },
           h(Text, { as: 'span' }, 'Palette family'),
           h(NativeSelect, { id: 'vf-builder-palette', value: palette,
@@ -235,20 +280,39 @@ export function ThemeBuilder({ links }) {
             ...Object.keys(shades).map((v) => h('option', { key: v, value: v }, v)))),
         h(Picker, { value: shades[shade], onValueChange: (color) => {
           if (validHex(color)) edit(previous => ({ ...previous, paletteOverrides: { ...previous.paletteOverrides, [shade]: color } })); setStatus('Shade updated');
-        }, label: 'Builder shade hex', testId: 'builder-shade' }),
+        }, label: 'Builder shade hex', testId: 'builder-shade' })) : null,
+        category === 'typography' ? h(Flow, { gap: 'sm' },
+          simpleChoice('font-family-sans', 'Interface font', [['system-ui, sans-serif','System sans'],['Arial, sans-serif','Arial'],['Georgia, serif','Georgia']]),
+          simpleChoice('font-size-md', 'Base text size', [['0.875rem','Small'],['1rem','Standard'],['1.125rem','Large']]),
+          simpleChoice('font-size-3xl', 'Large heading size', [['1.75rem','Compact'],['2.25rem','Standard'],['2.75rem','Large']]),
+          simpleChoice('control-font-family', 'Control font', [['system-ui, sans-serif','System sans'],['Arial, sans-serif','Arial'],['Georgia, serif','Georgia']]),
+          simpleChoice('control-font-size', 'Control text size', [['0.875rem','Small'],['0.9375rem','Standard'],['1.125rem','Large']]),
+          simpleChoice('control-font-weight', 'Control text weight', [['400','Regular'],['500','Medium'],['600','Semibold'],['700','Bold']])) : null,
+        category === 'spacing' ? h(Flow, { gap: 'sm' },
+          simpleChoice('space-sm', 'Small spacing', [['0.25rem','Tight'],['0.5rem','Standard'],['0.75rem','Relaxed']]),
+          simpleChoice('space-md', 'Base spacing', [['0.75rem','Tight'],['1rem','Standard'],['1.25rem','Relaxed']]),
+          simpleChoice('space-lg', 'Large spacing', [['1rem','Tight'],['1.5rem','Standard'],['2rem','Relaxed']])) : null,
+        category === 'sizing' ? h(Flow, { gap: 'sm' },
+          simpleChoice('control-height-sm', 'Small control height', [['1.75rem','Compact'],['2rem','Standard'],['2.5rem','Large']]),
+          simpleChoice('control-height-md', 'Medium control height', [['2rem','Small'],['2.5rem','Standard'],['3rem','Large']]),
+          simpleChoice('control-height-lg', 'Large control height', [['2.5rem','Compact'],['3rem','Standard'],['3.5rem','Large']]),
+          h(Text, { as: 'p', variant: 'body-sm' }, 'Density is a preview setting, not a saved theme property.')) : null,
+        category === 'shape' ? h(Flow, { gap: 'sm' },
         h('label', { className: 'vf-docs-studio-field-label', htmlFor: 'vf-builder-radius' },
           'Surface radius · ' + radius + 'px'),
         h(Slider, { id: 'vf-builder-radius', min: 0, max: 24, step: 2, value: radius,
           onChange: (e) => setRadius(Number(e.target.value)) }),
-        h(Text, { as: 'h3', variant: 'heading-sm' }, 'Typography and layout'),
-        simpleChoice('font-family-sans', 'Interface font', [['system-ui, sans-serif','System sans'],['Arial, sans-serif','Arial'],['Georgia, serif','Georgia']]),
-        simpleChoice('font-size-md', 'Base text size', [['0.875rem','Small'],['1rem','Standard'],['1.125rem','Large']]),
-        simpleChoice('control-font-weight', 'Control text weight', [['400','Regular'],['500','Medium'],['600','Semibold'],['700','Bold']]),
-        simpleChoice('space-md', 'Base spacing', [['0.75rem','Tight'],['1rem','Standard'],['1.25rem','Relaxed']]),
-        simpleChoice('control-height-md', 'Medium control height', [['2rem','Small'],['2.5rem','Standard'],['3rem','Large']]),
-        simpleChoice('shadow-md', 'Surface elevation', [['none','Flat'],['0 4px 12px #0000001f','Subtle'],['0 12px 24px #00000033','Elevated']]),
-        simpleChoice('control-motion-duration', 'Control transitions', [['0ms','None'],['120ms','Quick'],['240ms','Relaxed']]),
-        h(Text, { as: 'p', variant: 'body-sm' }, 'These choices edit the selected appearance. Advanced mode exposes every admitted token.')),
+          simpleChoice('control-radius', 'Control radius', [['0','Square'],['4px','Subtle'],['8px','Rounded'],['16px','Soft']]),
+          h(Text, { as: 'p', variant: 'body-sm' }, 'The shared radius recipe applies to both appearances unless explicitly overridden. Borders use semantic colors in Advanced mode.')) : null,
+        category === 'elevation' ? h(Flow, { gap: 'sm' },
+          simpleChoice('shadow-md', 'Surface elevation', [['none','Flat'],['0 4px 12px #0000001f','Subtle'],['0 12px 24px #00000033','Elevated']]),
+          simpleChoice('shadow-lg', 'Large surface elevation', [['none','Flat'],['0 12px 24px #00000033','Subtle'],['0 24px 48px #00000044','Elevated']])) : null,
+        category === 'motion' ? h(Flow, { gap: 'sm' },
+          simpleChoice('control-motion-duration', 'Control transitions', [['0ms','None'],['120ms','Quick'],['240ms','Relaxed']]),
+          simpleChoice('motion-duration-loading-spin', 'Spinner duration', [['350ms','Quick'],['700ms','Standard'],['1400ms','Slow']]),
+          h(Text, { as: 'p', variant: 'body-sm' }, 'System reduced-motion preferences continue to take precedence.')) : null,
+        category === 'components' ? componentEditor() : null,
+        h(Text, { as: 'p', variant: 'body-sm', tone: 'secondary' }, 'Editing ' + appearance + ' appearance. Preview controls do not change theme identity.')),
 
       h('section', { className: 'vf-docs-studio-section', id: 'vf-builder-roles', hidden: !advanced,
         'aria-labelledby': 'vf-builder-roles-title' },
@@ -305,15 +369,15 @@ export function ThemeBuilder({ links }) {
       'aria-labelledby': 'vf-builder-preview-title' },
       h('div', { className: 'vf-docs-studio-panel-head' },
         h('div', null, h(Text, { as: 'h2', variant: 'heading-md', id: 'vf-builder-preview-title' }, '3 · Live preview'),
-          h(Text, { as: 'p' }, 'Preview one or both appearances with real VyrnForge controls. Preview settings are not saved in your theme.')),
+          h(Text, { as: 'p' }, scene === 'context' ? 'Relevant components for ' + categories.find(([id]) => id === category)[1] + '. Changes appear here immediately.' : 'Full application scene. Preview settings are not saved in your theme.')),
         h(Segment, { label: 'Builder preview scene', value: scene, onChange: setScene,
-          testId: 'builder-preview', items: [['dashboard', 'Dashboard'], ['form', 'Form'], ['feedback', 'Feedback']] })),
+          testId: 'builder-preview', items: [['context', 'Contextual'], ['dashboard', 'Dashboard'], ['form', 'Form'], ['feedback', 'Feedback']] })),
       h(Segment, { label: 'Preview appearance', value: previewAppearance, onChange: setPreviewAppearance, items: [['compare','Compare'],['light','Light'],['dark','Dark']], testId: 'preview-appearance' }),
       h(Segment, { label: 'Preview direction', value: direction, onChange: setDirection, items: [['ltr','LTR'],['rtl','RTL']], testId: 'preview-direction' }),
       h(Segment, { label: 'Preview density', value: density, onChange: setDensity, items: [['comfortable','Comfortable'],['compact','Compact']], testId: 'preview-density' }),
       h(Segment, { label: 'Preview viewport', value: viewport, onChange: setViewport, items: [['auto','Flexible'],['mobile','320px']], testId: 'preview-viewport' }),
       h('div', { className: 'vf-docs-studio-scene-grid vf-docs-builder-preview-grid', 'data-preview-appearance': previewAppearance },
-        ...modes.filter(mode => previewAppearance === 'compare' || mode === previewAppearance).map(mode => h(PreviewScene, { key: mode, theme: definitions[mode].theme, view: scene, direction, density, viewport }))),
+        ...modes.filter(mode => previewAppearance === 'compare' || mode === previewAppearance).map(mode => h(PreviewScene, { key: mode, theme: definitions[mode].theme, view: scene === 'context' ? category : scene, component, direction, density, viewport }))),
       h('div', { className: 'vf-docs-builder-contrasts' },
         h(AccentContrast, { theme: definitions.light.theme }),
         h(AccentContrast, { theme: definitions.dark.theme })))),

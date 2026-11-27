@@ -21,11 +21,17 @@ export function renderThemeAuthoringData() {
   const roles = Object.keys(darkThemeOverrides);
   const light = Object.fromEntries(roles.map((name) => [name, runtimeTokenDefaults[name]]));
   const names = roles.map((name) => name.slice('--vf-color-'.length));
+  const aliases = Object.fromEntries(Object.entries(runtimeTokenDefaults).flatMap(([name, value]) => {
+    const match = /^var\((--vf-[a-z0-9-]+)\)$/.exec(value);
+    return match ? [[name, match[1]]] : [];
+  }));
   return `/* Generated from tooling/tokens/source.mjs. Do not edit directly. */
 export const themeDefaults = ${JSON.stringify({ light, dark: darkThemeOverrides }, null, 2)} as const;
 
 export const themeableColorRoles = ${JSON.stringify(names, null, 2)} as const;
 
 export const publicRuntimeTokens = ${JSON.stringify([...Object.keys(runtimeTokenDefaults), ...componentThemeTokens], null, 2)} as const;
+
+export const runtimeTokenAliases = ${JSON.stringify(aliases, null, 2)} as const;
 `;
 }

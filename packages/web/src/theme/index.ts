@@ -1,4 +1,4 @@
-import { themeDefaults, themeableColorRoles, publicRuntimeTokens } from './defaults.generated.js';
+import { themeDefaults, themeableColorRoles, publicRuntimeTokens, runtimeTokenAliases } from './defaults.generated.js';
 
 export { themeableColorRoles } from './defaults.generated.js';
 
@@ -106,6 +106,15 @@ export function createTheme(options: CreateThemeOptions): ThemeDefinition {
   for (const [name, value] of Object.entries(options.tokens ?? {})) {
     if (!publicVariablePattern.test(name) || !publicTokenSet.has(name)) throw new TypeError('Not a public CSS token: ' + name);
     if (value !== undefined) variables[name] = resolveColor(value, palette, name);
+  }
+
+  // CSS aliases otherwise resolve at the ancestor where they were declared.
+  // Rebind only when this definition overrides the target, preserving explicit
+  // aliases and unrelated inherited values. Metadata is generated from tokens.
+  for (const [alias, target] of Object.entries(runtimeTokenAliases)) {
+    if (!Object.hasOwn(variables, alias) && Object.hasOwn(variables, target)) {
+      variables[alias] = `var(${target})`;
+    }
   }
 
   return Object.freeze({

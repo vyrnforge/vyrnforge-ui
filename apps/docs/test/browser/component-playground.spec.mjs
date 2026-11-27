@@ -5,7 +5,7 @@ import ts from 'typescript';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeConfiguration, defaultsFor } from '../../playground-config.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, tooltipPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from '../../react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, ratingPlayground, tooltipPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from '../../react-playground-adapters.mjs';
 
 test('Button playground keeps configuration, interaction and generated usage synchronized', async ({ page }) => {
   await page.goto('/next/react/components/button/');
@@ -141,6 +141,7 @@ test('Generated playground examples typecheck and bundle against installed publi
   test.setTimeout(90_000);
   const root = fileURLToPath(new URL('../../../../', import.meta.url));
   const scenarios = [
+    [ratingPlayground, {}], [ratingPlayground, { precision: '0.5', value: 3.5, artwork: 'heart', clearable: true, controlled: true }], [ratingPlayground, { readOnly: true, value: 4.5 }],
     [tooltipPlayground, {}], [tooltipPlayground, { placement: 'bottom-start', openDelay: '0' }], [sliderPlayground, {}], [sliderPlayground, { size: 'lg', orientation: 'vertical', marks: 'labels', tooltipDisplay: 'always', tooltipArrow: true, tooltipPlacement: 'bottom', tooltipSize: 'lg', percent: true, controlled: true }],
     [buttonPlayground, {}], [buttonPlayground, { variant: 'secondary', size: 'lg', loading: true, disabled: true, label: '<Save>{x}' }],
     [checkboxPlayground, { selection: 'mixed', required: true }], [checkboxPlayground, { presentation: 'standalone' }], [checkboxPlayground, { presentation: 'icon label' }], [checkboxPlayground, { presentation: 'label and description', selection: 'mixed' }], [radioPlayground, { selection: 'express' }], [radioPlayground, { size: 'lg', selection: 'none', orientation: 'horizontal', invalid: true, required: true }], [radioPlayground, { presentation: 'label and description', size: 'sm' }], [radioPlayground, { presentation: 'icon label' }],
@@ -673,4 +674,25 @@ test('Component playground reuses a saved Studio draft', async ({ page }) => {
   await playground.getByLabel('Playground theme').selectOption('dark');
   await expect.poll(() => canvas.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-color-accent-background').trim())).toBe('#5eead4');
   await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('Save changes');
+});
+
+test('Rating playground renders native choices, synchronized source and read-only score', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/rating/');
+  const playground = page.locator('[data-vf-docs-component-playground="Rating"]');
+  const preview = playground.getByRole('region', { name: 'Rating preview' });
+  const source = playground.getByRole('region', { name: 'Generated React usage' });
+  await expect(preview.getByRole('radio')).toHaveCount(5);
+  await playground.getByRole('button', { name: 'Half stars' }).click();
+  await expect(preview.getByRole('radio')).toHaveCount(10);
+  await expect(preview.getByRole('radio', { name: '3.5', exact: true })).toBeChecked();
+  await preview.getByRole('radio', { name: '4', exact: true }).check();
+  await expect(source).toContainText('defaultValue={4}');
+  await playground.screenshot({ path: testInfo.outputPath('rating-playground-half.png') });
+  await playground.getByRole('button', { name: 'Review score' }).click();
+  await expect(preview.getByRole('img')).toHaveCount(1);
+  await expect(source).toContainText('readOnly');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator('html').evaluate(el => el.setAttribute('dir', 'rtl'));
+  await page.emulateMedia({ forcedColors: 'active' });
+  await playground.screenshot({ path: testInfo.outputPath('rating-playground-mobile-rtl-forced-colors.png') });
 });

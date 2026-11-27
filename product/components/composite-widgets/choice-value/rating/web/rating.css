@@ -123,26 +123,26 @@
     --_vf-rating-fill: 50%;
   }
   @media (forced-colors: none) and (hover: hover) and (pointer: fine) {
-    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(input[data-vf-rating-choice]:hover:enabled):not(
-        :has(input:focus-visible)
-      ) {
+    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(
+        input[data-vf-rating-choice]:hover:enabled
+      ):not(:has(input:focus-visible)) {
       --_vf-rating-paint: var(--vf-rating-hover-color, var(--vf-color-accent-background-hover));
     }
-    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(input[data-vf-rating-choice]:hover:enabled):not(
-        :has(input:focus-visible)
-      )
+    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(
+        input[data-vf-rating-choice]:hover:enabled
+      ):not(:has(input:focus-visible))
       [data-vf-rating-star]
       [data-vf-rating-artwork] {
       --_vf-rating-fill: 0%;
     }
-    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(input[data-vf-rating-choice]:hover:enabled):not(
-        :has(input:focus-visible)
-      )
+    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(
+        input[data-vf-rating-choice]:hover:enabled
+      ):not(:has(input:focus-visible))
       [data-vf-rating-star]:has(~ [data-vf-rating-star] input[data-vf-rating-choice]:hover:enabled)
       [data-vf-rating-artwork],
-    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(input[data-vf-rating-choice]:hover:enabled):not(
-        :has(input:focus-visible)
-      )
+    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(
+        input[data-vf-rating-choice]:hover:enabled
+      ):not(:has(input:focus-visible))
       [data-vf-rating-star]:has([data-vf-rating-option]:last-child input:hover:enabled)
       [data-vf-rating-artwork] {
       --_vf-rating-fill: 100%;

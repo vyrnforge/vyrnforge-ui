@@ -3293,7 +3293,9 @@ test('Inventory native authoring hosts across every product-owned React example'
 test('Studio typed overrides, reduced motion and draft reuse', async ({ page }, testInfo) => {
   await page.goto('/next/react/foundations/theme-builder/');
   const studio = page.locator('[data-vf-docs-theme-builder]');
+  await studio.getByRole('navigation', { name: 'Customize theme' }).getByRole('button', { name: 'Typography', exact: true }).click();
   await studio.getByLabel('Interface font').selectOption('Georgia, serif');
+  await studio.getByRole('navigation', { name: 'Customize theme' }).getByRole('button', { name: 'Motion', exact: true }).click();
   await studio.getByLabel('Control transitions').selectOption('240ms');
   await studio.getByRole('radiogroup', { name: 'Customization mode' }).getByRole('radio', { name: 'Advanced' }).check();
   await studio.getByLabel('Search foundation and component tokens').fill('space-md');
@@ -3318,4 +3320,44 @@ test('Studio typed overrides, reduced motion and draft reuse', async ({ page }, 
   await studio.getByRole('radiogroup', { name: 'Builder preview scene' }).getByRole('radio', { name: 'Feedback' }).check();
   await expect(preview.getByText('Changes saved', { exact: true })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('theme-studio-desktop.png'), fullPage: true });
+});
+
+test('Studio contextual categories show inherited values, relevant specimens and component overrides', async ({ page }, testInfo) => {
+  await page.goto('/next/react/foundations/theme-builder/');
+  const studio = page.locator('[data-vf-docs-theme-builder]');
+  const nav = studio.getByRole('navigation', { name: 'Customize theme' });
+  const preview = studio.locator('[data-vf-docs-theme-preview="light"]');
+  await nav.getByRole('button', { name: 'Typography', exact: true }).click();
+  await expect(preview.locator('[data-vf-docs-context-preview="typography"]')).toBeVisible();
+  await expect(studio.getByLabel('Base text size').locator('option[value=""]')).toContainText('Inherited');
+  await studio.getByLabel('Base text size').selectOption('1.125rem');
+  await expect.poll(() => preview.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-font-size-md').trim())).toBe('1.125rem');
+  await expect(preview.getByText('The quick brown fox jumps over the lazy dog.')).toHaveCSS('font-size','18px');
+  await studio.getByLabel('Interface font').selectOption('Georgia, serif');
+  await expect(preview.getByText('The quick brown fox jumps over the lazy dog.')).toHaveCSS('font-family', /Georgia/);
+  await expect(preview.getByRole('button', { name: 'primary', exact: true })).toHaveCSS('font-family', /Georgia/);
+  await nav.getByRole('button', { name: 'Sizing & density', exact: true }).click();
+  await expect(preview.locator('[data-vf-docs-context-preview="sizing"]')).toBeVisible();
+  await studio.getByLabel('Medium control height').selectOption('3rem');
+  await expect.poll(() => preview.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-control-height-md').trim())).toBe('3rem');
+  await nav.getByRole('button', { name: 'Components', exact: true }).click();
+  await studio.getByLabel('Component', { exact: true }).selectOption('Slider');
+  await expect(preview.getByRole('heading', { name: 'Slider showcase' })).toBeVisible();
+  await studio.getByLabel('Component theme property').selectOption('slider-track-size');
+  await studio.getByLabel('Component property value').fill('12px');
+  await studio.getByRole('button', { name: 'Apply property' }).click();
+  await expect.poll(() => preview.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-slider-track-size').trim())).toBe('12px');
+  await studio.getByRole('button', { name: 'Restore property' }).click();
+  await expect.poll(() => preview.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-slider-track-size').trim())).not.toBe('12px');
+  await studio.getByRole('radiogroup', { name: 'Builder preview scene' }).getByRole('radio', { name: 'Dashboard' }).check();
+  await expect(preview.getByRole('heading', { name: 'Design with confidence' })).toBeVisible();
+  await nav.getByRole('button', { name: 'Typography', exact: true }).click();
+  await expect(studio.getByLabel('Base text size')).toHaveValue('1.125rem');
+  await page.screenshot({ path: testInfo.outputPath('theme-studio-contextual-desktop.png'), fullPage: false });
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await studio.getByRole('radiogroup', { name: 'Preview direction' }).getByRole('radio', { name: 'RTL' }).check();
+  await expect(preview).toHaveAttribute('dir', 'rtl');
+  expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  await page.screenshot({ path: testInfo.outputPath('theme-studio-contextual-mobile.png'), fullPage: false });
 });

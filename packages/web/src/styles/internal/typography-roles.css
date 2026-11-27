@@ -6,7 +6,10 @@
  */
 
 @layer vyrnforge.foundation {
-  :root {
+  /* Resolve role variables at their actual consumer so scoped token changes
+     are not frozen at the document root. Keep the root baseline for prose. */
+  :root,
+  :where([data-vf-text], [data-vf-prose] :is(h1, h2, h3, h4, h5, h6)) {
     --_vf-type-display-lg-font-family: var(--vf-font-family-display);
     --_vf-type-display-lg-font-size: clamp(var(--vf-font-size-4xl), 2rem + 4vw, var(--vf-font-size-6xl));
     --_vf-type-display-lg-font-weight: var(--vf-font-weight-bold);
