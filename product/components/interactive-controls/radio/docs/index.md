@@ -20,7 +20,11 @@ The browser owns arrow-key selection, focus and native form interaction. Use a f
 
 ## Accessibility and styling
 
-Use the shared Radio CSS and accessible labels. Keep the 24 CSS-pixel minimum indicator target, visible focus, forced-color treatment, reduced motion and label association. The circular selected dot is centered and occupies half the indicator diameter; it uses the existing accent foreground, without changing the native target or selection behavior. See Radio Group for form composition and validation.
+Use the shared Radio CSS and accessible labels. Keep a 24 CSS-pixel minimum native target, visible focus, forced-color treatment, reduced motion and label association. A selected radio uses an accent-colored ring and centered dot separated by a theme surface gap. The dot is half the indicator diameter. Disabled and invalid states use semantic colors, not custom per-option skins. See Radio Group for form composition and validation.
+
+## Sizes
+
+Use `sm`, `md` (default), or `lg` with visual diameters 20, 24, and 28 CSS pixels at the default token scale. The native target stays at least 24 CSS pixels; label typography is independent. Native Web uses `data-vf-size`; React, Angular and Vue expose `size`. Use native fieldset/legend and public layout and text primitives for grouped, horizontal, icon or descriptive labels. Selection remains a native same-name radio group.
 
 ## Related controls
 
