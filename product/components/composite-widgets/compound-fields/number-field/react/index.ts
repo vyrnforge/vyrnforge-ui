@@ -13,7 +13,7 @@ import {
   type ForwardedRef,
   type ReactNode,
 } from 'react';
-import { Input } from '../input/index.js';
+import { Input, type InputProps } from '../input/index.js';
 import { Button } from '../button/index.js';
 import { SvgIcon } from '../icon/index.js';
 import { TextField, type TextFieldInputProps } from '../text-field/index.js';
@@ -108,7 +108,7 @@ export const NumberFieldRoot = forwardRef<HTMLDivElement, NumberFieldRootProps>(
   );
 });
 export type NumberFieldInputProps = Omit<
-  ComponentPropsWithoutRef<'input'>,
+  InputProps,
   'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'
 >;
 function useNumberFieldEditor(
@@ -121,6 +121,7 @@ function useNumberFieldEditor(
   const input = useRef<HTMLInputElement>(null);
   const initial = useRef(n.value);
   const reset = useRef(n.reset);
+  const latestValue = useRef(n.value);
   useLayoutEffect(() => {
     reset.current = n.reset;
   });
@@ -130,14 +131,14 @@ function useNumberFieldEditor(
     const document = element.ownerDocument;
     let active = true;
     const onReset = (event: Event) => {
-    if (!element.form || element.form !== event.target) return;
+      if (!element.form || element.form !== event.target) return;
       setTimeout(() => {
         if (!active || event.defaultPrevented || element.form !== event.target) return;
         const next = reset.current();
         // Native reset bypasses the value setter observed by React. Write even when
         // the DOM already matches, so re-entering the previous value is a new edit.
         element.value = next === null ? '' : String(next);
-    }, 0);
+      }, 0);
     };
     document.addEventListener('reset', onReset, true);
     return () => {
@@ -147,6 +148,7 @@ function useNumberFieldEditor(
   }, []);
   useImperativeHandle(ref, () => input.current as HTMLInputElement, []);
   useLayoutEffect(() => {
+    latestValue.current = n.value;
     if (input.current) syncValue(input.current, n.value);
   }, [n.value]);
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -157,10 +159,19 @@ function useNumberFieldEditor(
       return;
     }
     if (element.validity.badInput) return;
-      const next = element.value === '' ? null : element.valueAsNumber;
+    const next = element.value === '' ? null : element.valueAsNumber;
     if (next !== null && !Number.isFinite(next)) return;
     n.set(next);
-    if (n.controlled) syncValue(element, n.value);
+    // Give synchronous React owner updates a chance to commit before restoring a
+    // rejected edit. Accepted equivalent native text (for example 1.00) stays intact.
+    if (n.controlled) {
+      const editedText = element.value;
+      queueMicrotask(() => {
+        if (input.current === element && element.value === editedText && !element.validity.badInput) {
+          syncValue(element, latestValue.current);
+        }
+      });
+    }
   };
   return {
     ref: input,
@@ -233,8 +244,8 @@ type NumberFieldEditorProps = Omit<NumberFieldProps, 'value' | 'defaultValue' | 
 
 function stepIcon(direction: 1 | -1, stacked: boolean) {
   const d = stacked
-    ? direction === 1 ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6'
-    : direction === 1 ? 'M5 12h14M12 5v14' : 'M5 12h14';
+    ? (direction === 1 ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6')
+    : (direction === 1 ? 'M5 12h14M12 5v14' : 'M5 12h14');
   return createElement(SvgIcon, { size: 'sm' }, createElement('path', {
     d, fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round',
   }));
@@ -277,9 +288,11 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
       ...(onValueChange === undefined ? {} : { onValueChange }),
       ...(disabled === undefined ? {} : { disabled }),
       ...(readOnly === undefined ? {} : { readOnly }),
-      'data-vf-number-field-layout': props.stepControls ?? 'native',
-      'data-vf-number-field-full-width': fullWidth ? '' : undefined,
+      ...{
+        'data-vf-number-field-layout': props.stepControls ?? 'native',
+        'data-vf-number-field-full-width': fullWidth ? '' : undefined,
+      },
     },
-    createElement(NumberFieldEditor, { ...props, fullWidth, ref }),
+    createElement(NumberFieldEditor, { ...props, ...(fullWidth === undefined ? {} : { fullWidth }), ref }),
   );
 });
