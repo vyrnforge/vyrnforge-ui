@@ -419,6 +419,11 @@ const playgroundStyleAsset = '/assets/react-playground.css';
 // pay for unrelated component styles or invent docs-specific component skins.
 const themeStudioStyles = [
   '@vyrnforge/web/styles/color-picker.css',
+  '@vyrnforge/web/styles/textarea.css',
+  '@vyrnforge/web/styles/radio.css',
+  '@vyrnforge/web/styles/alert.css',
+  '@vyrnforge/web/styles/progress.css',
+  '@vyrnforge/web/styles/tooltip.css',
   '@vyrnforge/web/styles/segmented-control.css',
   '@vyrnforge/web/styles/checkbox.css',
   '@vyrnforge/web/styles/slider.css',

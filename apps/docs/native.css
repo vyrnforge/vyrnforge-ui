@@ -1561,6 +1561,8 @@
     grid-template-columns: minmax(14rem, 1fr) minmax(0, 1.65fr);
     min-inline-size: 0;
   }
+  .vf-docs-theme-builder .vf-docs-studio-section[hidden] { display: none; }
+  .vf-docs-builder-preview-grid:not([data-preview-appearance='compare']) { grid-template-columns: minmax(0, 1fr); }
   .vf-docs-theme-builder .vf-docs-studio-section {
     align-content: start;
     min-inline-size: 0;

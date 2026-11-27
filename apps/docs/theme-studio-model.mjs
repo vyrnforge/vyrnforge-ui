@@ -1,4 +1,5 @@
 // Documentation presets: palette shades are authoring inputs, never public UI tokens.
+// The v1 recipes are compatibility inputs: change them only with a schema migration.
 export const presets = [
   { id: 'blue', label: 'Blue', shades: {
     50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd',
@@ -52,7 +53,7 @@ const fail = message => { throw new TypeError(message); };
 // excluded from imported previews. Semantic colors use six-digit hex.
 export const safeTokenValue = value => typeof value === 'string' && value.length <= 256 &&
   !!value.trim() && /^[a-z0-9#.,%() +*/'"-]+$/i.test(value) &&
-  !/\/\*|\*\/|(?:url|image|attr|env|var)\s*\(/i.test(value) &&
+  !/\/\*|\*\/|(?:url|image|image-set|cross-fade|element|paint|attr|env|var)\s*\(/i.test(value) &&
   !/[\r\n]/.test(value);
 export function validateDraft(input, catalog) {
   ownKeys(input, ['schemaVersion','name','preset','shades','paletteOverrides','radius','overrides'], 'theme');

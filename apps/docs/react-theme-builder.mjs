@@ -66,8 +66,9 @@ function AccentContrast({ theme }) {
     h('span', { className: 'vf-docs-studio-contrast-dot',
       style: { backgroundColor: background }, 'aria-hidden': 'true' }),
     h('div', null, h(Text, { as: 'strong', variant: 'label-md' }, theme.appearance + ' accent · ' + ratio.toFixed(2) + ':1'),
-      h(Text, { as: 'p' }, ratio >= 4.5 ? 'Contrast ratio meets 4.5:1 for this pair' :
-        'Below 4.5:1 for normal text; review the foreground and background')),
+      h(Text, { as: 'p' }, ratio >= 4.5 ? 'Accent meets 4.5:1 for normal text' :
+        'Accent below 4.5:1 for normal text'),
+      ...[['Text on surface','text','surface'],['Muted text on surface','muted','surface'],['Focus on surface','focus','surface'],['Accent hover','onAccent','accentHover'],['Accent pressed','onAccent','accentPressed']].map(([label,fg,bg]) => { const threshold = fg === 'focus' ? 3 : 4.5; const value = contrast(themeValue(theme,fg),themeValue(theme,bg)); return h(Text,{key:label,as:'p',variant:'body-sm'},label + ': ' + value.toFixed(2) + ':1 · ' + (value >= threshold ? 'Pass' : 'Review')); })),
     h(Text, { as: 'span', className: 'vf-docs-studio-contrast-state' }, ratio >= 4.5 ? 'Pass' : 'Review'));
 }
 export function ThemeBuilder({ links }) {
@@ -77,6 +78,7 @@ export function ThemeBuilder({ links }) {
   const [appearance, setAppearance] = useState('light');
   const [advanced, setAdvanced] = useState(false);
   const [direction, setDirection] = useState('ltr');
+  const [previewAppearance, setPreviewAppearance] = useState('compare');
   const [density, setDensity] = useState('comfortable');
   const [viewport, setViewport] = useState('auto');
   const [foundationQuery, setFoundationQuery] = useState('');
@@ -167,12 +169,12 @@ export function ThemeBuilder({ links }) {
     } catch (error) { setImportError(error.message); }
   };
   const saveDraft = () => {
-    try { localStorage.setItem(storageKey, serializeDraft(draft, catalog)); setStatus('Draft saved on this browser'); }
+    try { window.localStorage.setItem(storageKey, serializeDraft(draft, catalog)); setStatus('Draft saved on this browser'); }
     catch (error) { setStatus('Draft could not be saved: ' + error.message); }
   };
   const loadDraft = () => {
     try {
-      const text = localStorage.getItem(storageKey);
+      const text = window.localStorage.getItem(storageKey);
       if (!text) { setStatus('No local draft saved'); return; }
       importDraft(text);
     } catch (error) { setImportError(error.message); }
@@ -205,7 +207,7 @@ export function ThemeBuilder({ links }) {
       h('nav', { 'aria-label': 'Theme Studio sections', className: 'vf-docs-studio-jump' },
         ...[['vf-builder-design', 'Design'], ['vf-builder-roles', 'Tokens'],
           ['vf-builder-preview', 'Preview'], ['vf-builder-export', 'Export']].map(([id, label]) =>
-          h(Link, { key: id, href: '#' + id }, label)))),
+          h(Link, { key: id, href: '#' + id, onClick: id === 'vf-builder-roles' ? () => setAdvanced(true) : undefined }, label)))),
     h('div', { className: 'vf-docs-studio-bar' },
       h('div', { className: 'vf-docs-studio-bar-group' },
         h(Text, { as: 'strong', variant: 'label-md' }, 'Build your theme'),
@@ -307,15 +309,15 @@ export function ThemeBuilder({ links }) {
       'aria-labelledby': 'vf-builder-preview-title' },
       h('div', { className: 'vf-docs-studio-panel-head' },
         h('div', null, h(Text, { as: 'h2', variant: 'heading-md', id: 'vf-builder-preview-title' }, '3 · Live preview'),
-          h(Text, { as: 'p' }, 'Both appearances are rendered with real VyrnForge controls.')),
+          h(Text, { as: 'p' }, 'Preview one or both appearances with real VyrnForge controls. Preview settings are not saved in your theme.')),
         h(Segment, { label: 'Builder preview scene', value: scene, onChange: setScene,
-          testId: 'builder-preview', items: [['dashboard', 'Dashboard'], ['form', 'Form']] })),
+          testId: 'builder-preview', items: [['dashboard', 'Dashboard'], ['form', 'Form'], ['feedback', 'Feedback']] })),
+      h(Segment, { label: 'Preview appearance', value: previewAppearance, onChange: setPreviewAppearance, items: [['compare','Compare'],['light','Light'],['dark','Dark']], testId: 'preview-appearance' }),
       h(Segment, { label: 'Preview direction', value: direction, onChange: setDirection, items: [['ltr','LTR'],['rtl','RTL']], testId: 'preview-direction' }),
       h(Segment, { label: 'Preview density', value: density, onChange: setDensity, items: [['comfortable','Comfortable'],['compact','Compact']], testId: 'preview-density' }),
       h(Segment, { label: 'Preview viewport', value: viewport, onChange: setViewport, items: [['auto','Flexible'],['mobile','320px']], testId: 'preview-viewport' }),
-      h('div', { className: 'vf-docs-studio-scene-grid vf-docs-builder-preview-grid' },
-        h(PreviewScene, { key: 'light', theme: definitions.light.theme, view: scene, direction, density, viewport }),
-        h(PreviewScene, { key: 'dark', theme: definitions.dark.theme, view: scene, direction, density, viewport })),
+      h('div', { className: 'vf-docs-studio-scene-grid vf-docs-builder-preview-grid', 'data-preview-appearance': previewAppearance },
+        ...modes.filter(mode => previewAppearance === 'compare' || mode === previewAppearance).map(mode => h(PreviewScene, { key: mode, theme: definitions[mode].theme, view: scene, direction, density, viewport }))),
       h('div', { className: 'vf-docs-builder-contrasts' },
         h(AccentContrast, { theme: definitions.light.theme }),
         h(AccentContrast, { theme: definitions.dark.theme }))),

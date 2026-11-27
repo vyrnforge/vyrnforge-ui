@@ -1,4 +1,8 @@
-import { createElement as h, useState } from 'react';
+import { createElement as h, useId, useState } from 'react';
+import { Radio } from '@vyrnforge/react/radio';
+import { Alert } from '@vyrnforge/react/alert';
+import { Progress } from '@vyrnforge/react/progress';
+import { TooltipRoot, TooltipTrigger, TooltipContent } from '@vyrnforge/react/tooltip';
 import { ThemeScope, createTheme, colors } from '@vyrnforge/react';
 import { Button } from '@vyrnforge/react/button';
 import { ColorPickerRoot, ColorPickerInput, ColorPickerTextInput, ColorPickerSwatch } from '@vyrnforge/react/color-picker';
@@ -76,6 +80,8 @@ export function PreviewScene({ theme, view, direction = 'ltr', density = 'comfor
   const [email, setEmail] = useState('hello@example.com');
   const [optedIn, setOptedIn] = useState(true);
   const [amount, setAmount] = useState(72);
+  const radioGroup = useId();
+  const [delivery, setDelivery] = useState('email');
   return h(ThemeScope, { as: 'section', theme: theme.appearance, style: { ...theme.variables, ...(viewport === 'mobile' ? { maxInlineSize: '320px', inlineSize: '100%', justifySelf: 'center' } : {}) },
     dir: direction, 'data-vf-density': density,
     className: 'vf-docs-studio-scene', 'aria-label': theme.appearance + ' theme preview',
@@ -106,6 +112,13 @@ export function PreviewScene({ theme, view, direction = 'ltr', density = 'comfor
               onClick: () => setFeedback('Secondary preview action activated') }, 'Secondary action'),
             h(Button, { type: 'button', variant: 'ghost',
               onClick: () => setFeedback('Ghost preview action activated') }, 'More')))
+      : view === 'feedback' ? h('div', { className: 'vf-docs-studio-scene-body' },
+          h(Text, { as: 'h3', variant: 'heading-md' }, 'Activity and status'),
+          h(Alert, { severity: 'success', heading: 'Changes saved' }, 'Your workspace is up to date.'),
+          h(Alert, { severity: 'error', heading: 'Could not save' }, 'Check your connection and try again.'),
+          h(Progress, { 'aria-label': 'Upload progress', value: amount, max: 100 }),
+          h(TooltipRoot, { placement: 'bottom' }, h(TooltipTrigger, null, h(Button, { type: 'button', variant: 'secondary' }, 'More information')), h(TooltipContent, null, 'A themed overlay.')),
+          h(Button, { type: 'button', disabled: true }, 'Unavailable action'))
       : h('div', { className: 'vf-docs-studio-scene-body' },
           h(Text, { as: 'h3', variant: 'heading-md' }, 'Account preferences'),
           h(Text, { as: 'p', tone: 'secondary' },
@@ -116,6 +129,7 @@ export function PreviewScene({ theme, view, direction = 'ltr', density = 'comfor
           h('label', { className: 'vf-docs-studio-check' },
             h(Checkbox, { checked: optedIn, onChange: (e) => setOptedIn(e.target.checked) }),
             h(Text, { as: 'span' }, 'Send product updates')),
+          h('fieldset', null, h('legend', null, 'Delivery method'), ...['email','sms'].map(method => h('label', { key: method, className: 'vf-docs-studio-check' }, h(Radio, { name: radioGroup, value: method, checked: delivery === method, onChange: () => setDelivery(method) }), method === 'email' ? 'Email' : 'SMS'))),
           h('label', { className: 'vf-docs-studio-field' },
             h(Text, { as: 'span' }, 'Preview amount: ' + amount + '%'),
             h(Slider, { min: 0, max: 100, step: 1, value: amount,
@@ -124,7 +138,7 @@ export function PreviewScene({ theme, view, direction = 'ltr', density = 'comfor
             h(Button, { type: 'button', variant: 'primary',
               onClick: () => setFeedback('Preferences saved in preview') }, 'Save changes'),
             h(Button, { type: 'button', variant: 'secondary',
-              onClick: () => { setEmail('hello@example.com'); setOptedIn(true); setAmount(72);
+              onClick: () => { setEmail('hello@example.com'); setOptedIn(true); setAmount(72); setDelivery('email');
                 setFeedback('Preview fields reset'); } }, 'Reset fields'))),
     h(Text, { as: 'p', role: 'status', 'aria-live': 'polite',
       'data-vf-docs-preview-feedback': '', className: 'vf-docs-studio-scene-status' }, feedback));
