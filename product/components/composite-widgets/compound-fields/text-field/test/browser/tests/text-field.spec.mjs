@@ -147,3 +147,29 @@ test('filled and underlined variants have distinct surfaces and insets', async (
     });
   }
 });
+
+
+test('autosize alone keeps the same native editor, selection and form behavior', async ({ page }) => {
+  test.skip(port !== 'react', 'React convenience API');
+  await page.goto('/components/text-field/react.html');
+  const editor = page.getByRole('textbox', { name: 'Auto message' });
+  await expect(editor).toHaveJSProperty('tagName', 'TEXTAREA');
+  await expect(editor).toHaveAttribute('rows', '1');
+  await editor.evaluate((el) => { el.dataset.testIdentity = 'original'; });
+  await editor.fill('abc');
+  const short = await editor.evaluate((el) => el.clientHeight);
+  await editor.evaluate((el) => el.setSelectionRange(1, 1));
+  await editor.press('Enter');
+  await expect(editor).toHaveValue('a\nbc');
+  await expect(editor).toBeFocused();
+  await expect(editor).toHaveAttribute('data-test-identity', 'original');
+  await editor.fill(Array(12).fill('A line').join('\n'));
+  if (await editor.evaluate((el) => CSS.supports('field-sizing', 'content'))) {
+    await expect.poll(() => editor.evaluate((el) => el.clientHeight)).toBeGreaterThan(short);
+    expect(await editor.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(true);
+  }
+  expect(await editor.evaluate((el) => new FormData(el.form).get('message'))).toContain('A line');
+  await page.getByRole('button', { name: 'Reset' }).click();
+  await expect(editor).toHaveValue('Original message');
+  await expect(editor).toHaveAttribute('data-test-identity', 'original');
+});

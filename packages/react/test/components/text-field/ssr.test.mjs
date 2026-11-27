@@ -21,3 +21,15 @@ test('TextField keeps native controls and authored relationships', () => {
   assert.match(multi, />alpha<\/textarea>/);
   assert.doesNotMatch(multi, /multiline=|autosize=/);
 });
+
+
+test('autosize alone selects native textarea before hydration; false keeps input', () => {
+  const html = renderToStaticMarkup(h(TextField, { label: 'Message', id: 'message', name: 'message', autosize: true, minRows: 1, maxRows: 6, labelPlacement: 'floating', defaultValue: 'First\nSecond' }));
+  assert.match(html, /<textarea[^>]*rows="1"/);
+  assert.match(html, /data-vf-textarea-autosize/);
+  assert.match(html, /data-vf-text-field-always-raised/);
+  assert.match(html, /<label for="message"/);
+  assert.match(html, /First\nSecond<\/textarea>/);
+  assert.doesNotMatch(html, /<input|multiline=|autosize="/);
+  assert.match(renderToStaticMarkup(h(TextField, { label: 'Name', autosize: false })), /<input/);
+});

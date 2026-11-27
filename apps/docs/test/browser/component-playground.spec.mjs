@@ -495,3 +495,31 @@ for (const name of ['Input', 'Textarea']) {
     await playground.screenshot({ path: testInfo.outputPath(name.toLowerCase() + '-mobile-rtl-forced-colors.png') });
   });
 }
+
+
+test('TextField autosize alone selects Textarea and emits concise matching usage', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/text-field/');
+  const playground = page.locator('[data-vf-docs-component-playground="TextField"]');
+  const preview = playground.getByRole('region', { name: 'TextField preview' });
+  const source = playground.getByRole('region', { name: 'Generated React usage' });
+  await expect(preview.locator('input[data-vf-input]')).toBeVisible();
+  await preview.getByRole('textbox').fill('Keep this');
+  await playground.getByRole('checkbox', { name: 'Autosize', exact: true }).check();
+  const editor = preview.locator('textarea[data-vf-textarea]');
+  await expect(editor).toHaveValue('Keep this');
+  await expect(editor).toHaveAttribute('rows', '1');
+  await expect(playground.getByRole('checkbox', { name: 'Multiline', exact: true })).not.toBeChecked();
+  await expect(source).toContainText('autosize');
+  await expect(source).toContainText('minRows={1}');
+  await expect(source).not.toContainText(/multiline|rows=|styles\\/|useState/);
+  await editor.fill(Array(10).fill('A line').join('\n'));
+  for (const theme of ['light', 'dark']) {
+    await page.locator('#vf-react-theme').selectOption(theme);
+    await preview.screenshot({ path: testInfo.outputPath('auto-field-' + theme + '.png') });
+  }
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.locator('html').evaluate(el => { el.dir = 'rtl'; });
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await preview.screenshot({ path: testInfo.outputPath('auto-field-mobile-rtl-forced.png') });
+  expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+});

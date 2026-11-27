@@ -59,7 +59,7 @@
     --_vf-editor-border-default: var(--vf-editor-border-color, var(--vf-color-border-required));
     --_vf-field-border-default: var(--vf-text-field-border-color, var(--_vf-editor-border-default));
     --_vf-field-surface-default: var(--vf-text-field-background, var(--_vf-text-field-background));
-    --_vf-field-hover-surface: var(--_vf-field-surface-default);
+    --_vf-field-hover-surface: var(--vf-color-surface-hover);
   }
   :where([data-vf-text-field-control] > [data-vf-text-field-value]) {
     flex: 1 1 auto;
@@ -78,7 +78,7 @@
     font: var(
       --vf-text-field-value-font,
       var(
-        --vf-editor-value-font,
+        --_vf-editor-value-font,
         var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal)
           var(--vf-control-font-family)
       )
@@ -89,7 +89,7 @@
     color: var(--vf-color-text-muted);
   }
   :where([data-vf-text-field-value])::placeholder {
-    font: var(--vf-text-field-placeholder-font, var(--vf-editor-placeholder-font, inherit));
+    font: var(--vf-text-field-placeholder-font, var(--_vf-editor-placeholder-font, inherit));
     --_vf-placeholder-spacing: var(--vf-editor-placeholder-letter-spacing, inherit);
     letter-spacing: var(--vf-text-field-placeholder-letter-spacing, var(--_vf-placeholder-spacing));
   }
@@ -181,6 +181,7 @@
     [data-vf-text-field-variant='filled'] > [data-vf-text-field-control],
     [data-vf-text-field-variant='underlined'] > [data-vf-text-field-control]
   ) {
+    --_vf-field-hover-surface: var(--_vf-field-surface-default);
     border-color: transparent;
     border-block-end: 2px solid var(--_vf-field-border);
     border-end-start-radius: 0;

@@ -22,15 +22,13 @@ export type TextFieldInputProps = TextFieldAppearanceProps &
   Omit<InputProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'type' | 'variant'> & {
     multiline?: false;
     type?: 'text' | 'email' | 'url' | 'tel' | 'search' | 'password' | 'number';
-    autosize?: never;
+    autosize?: false;
   };
 
 export type TextFieldTextareaProps = TextFieldAppearanceProps &
   Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'variant'> & {
-    multiline: true;
     type?: never;
-    autosize?: boolean;
-  };
+  } & ({ multiline: true; autosize?: boolean } | { multiline?: true; autosize: true });
 
 export type TextFieldProps = TextFieldInputProps | TextFieldTextareaProps;
 
@@ -68,7 +66,7 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
         ]),
       ].join(' ') || undefined;
     const floating = labelPlacement === 'floating';
-    const alwaysRaised = Boolean(rest.multiline || rest.type === 'number' || leading || trailing || prefix || suffix);
+    const alwaysRaised = Boolean(rest.multiline || rest.autosize || rest.type === 'number' || leading || trailing || prefix || suffix);
     const relationships = {
       id,
       'aria-describedby': describedBy,
@@ -77,7 +75,7 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
       placeholder: floating ? rest.placeholder || ' ' : rest.placeholder,
     };
     let control: ReactNode;
-    if (rest.multiline) {
+    if (rest.multiline || rest.autosize) {
       const { multiline, autosize, type, ...native } = rest;
       void multiline;
       void type;

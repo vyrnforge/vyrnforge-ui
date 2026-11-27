@@ -41,6 +41,7 @@ function App(){
     h('p',{id:'external'},'External instruction.'),
     h(TextField,{id:'email',label:'Email',name:'email',type:'email',required:true,defaultValue:'original@example.com',description:'Use your work address.',error:'Choose another address.','aria-describedby':'external external',fullWidth:true}),
     h(TextField,{label:'Notes',name:'notes',multiline:true,rows:3,defaultValue:'Original notes',variant:'filled',fullWidth:true}),
+    h(TextField,{label:'Auto message',name:'message',autosize:true,minRows:1,maxRows:4,defaultValue:'Original message',fullWidth:true}),
     h(TextField,{label:'Controlled',name:'controlled',ref,value,onChange:e=>setValue(e.currentTarget.value),fullWidth:true,trailing:h(Button,{type:'button',size:'sm',variant:'ghost',onClick:()=>{setValue('');ref.current.focus();}},'Clear')}),
     h(TextField,{label:'Disabled',disabled:true,error:'Not available',defaultValue:'disabled',name:'disabled'}),
     h(TextField,{label:'Read only',readOnly:true,name:'readonly',defaultValue:'kept'}),

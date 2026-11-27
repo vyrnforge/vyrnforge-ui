@@ -9,3 +9,12 @@ void createElement(TextField, { label: 'Notes', multiline: true, type: 'email' }
 void createElement(TextField, { label: 'Email', size: 'sm' });
 // @ts-expect-error a visible label is required
 void createElement(TextField, { name: 'email' });
+
+void createElement(TextField, { label: 'Message', autosize: true, minRows: 1, maxRows: 6, ref: createRef<HTMLTextAreaElement>() });
+void createElement(TextField, { label: 'Email', type: 'email', autosize: false });
+// @ts-expect-error auto-expansion cannot use an input-only type
+void createElement(TextField, { label: 'Password', type: 'password', autosize: true });
+// @ts-expect-error explicit single-line mode contradicts autosize
+void createElement(TextField, { label: 'Message', multiline: false, autosize: true });
+// @ts-expect-error fixed multiline must be intentional
+void createElement(TextField, { label: 'Message', rows: 4 });

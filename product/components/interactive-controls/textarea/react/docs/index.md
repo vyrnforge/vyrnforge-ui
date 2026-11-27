@@ -16,7 +16,7 @@ For a composite field with associated label, description, error and optional art
 
 ## Choosing a field component
 
-For ordinary labeled forms, start with TextField. This primitive is for custom compositions and native editing semantics, not a second high-level field API.
+For ordinary labeled forms, start with TextField, including `<TextField label="Message" autosize />` when the field should grow. No separate multiline flag is required. Standalone Textarea uses the same editor appearance and typography without label or adornment chrome. This primitive is for custom compositions and native editing semantics, not a second high-level field API.
 
 
 ### Multiline editing and custom composition
@@ -45,3 +45,5 @@ import { Button } from '@vyrnforge/react/button';
 ```
 
 The form handler is application-owned. Autosizing does not intercept submission, IME or keyboard editing; no separate composition runtime is required.
+
+A one-row expanding standalone editor can be written as `<Textarea aria-label="Message" autosize minRows={1} maxRows={6} />`. The matching labeled composition is `<TextField label="Message" autosize minRows={1} maxRows={6} />`. Both use the native textarea from initial render.

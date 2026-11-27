@@ -4489,7 +4489,7 @@ export interface TextFieldAppearanceProps {
 export type TextFieldInputProps = TextFieldAppearanceProps & Omit<InputProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'type' | 'variant'> & {
     multiline?: false;
     type?: 'text' | 'email' | 'url' | 'tel' | 'search' | 'password' | 'number';
-    autosize?: never;
+    autosize?: false;
 };
 
 // @public (undocumented)
@@ -4497,10 +4497,14 @@ export type TextFieldProps = TextFieldInputProps | TextFieldTextareaProps;
 
 // @public (undocumented)
 export type TextFieldTextareaProps = TextFieldAppearanceProps & Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'variant'> & {
-    multiline: true;
     type?: never;
+} & ({
+    multiline: true;
     autosize?: boolean;
-};
+} | {
+    multiline?: true;
+    autosize: true;
+});
 
 // @public (undocumented)
 export type TextProps<Element extends TextElement = TextElement> = Element extends TextElement ? {
