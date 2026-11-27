@@ -5286,6 +5286,7 @@ export const tokens: Readonly<{
         sm: `var(--vf-${string})`;
         md: `var(--vf-${string})`;
         lg: `var(--vf-${string})`;
+        popover: `var(--vf-${string})`;
     }>;
     control: Readonly<{
         heightSm: `var(--vf-${string})`;

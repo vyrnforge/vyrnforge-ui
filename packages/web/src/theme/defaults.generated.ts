@@ -239,6 +239,7 @@ export const publicRuntimeTokens = [
   "--vf-progress-size",
   "--vf-progress-radius",
   "--vf-backdrop-color",
+  "--vf-shadow-popover",
   "--vf-loading-color",
   "--vf-loading-track-color",
   "--vf-loading-indicator-size",

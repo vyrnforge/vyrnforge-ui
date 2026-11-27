@@ -125,6 +125,7 @@ export const tokens = Object.freeze({
     sm: reference('--vf-shadow-sm'),
     md: reference('--vf-shadow-md'),
     lg: reference('--vf-shadow-lg'),
+    popover: reference('--vf-shadow-popover'),
   }),
   control: Object.freeze({
     heightSm: reference('--vf-control-height-sm'),

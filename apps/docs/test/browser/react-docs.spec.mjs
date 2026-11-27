@@ -2477,6 +2477,7 @@ test('Overlay utility exercises native popover, tooltip, preview, Dialog and Dra
     return [css.getPropertyValue('--vf-shadow-popover').trim(), css.getPropertyValue('--vf-shadow-lg').trim()];
   });
   expect(shadows[0]).toBe(shadows[1]);
+  await expect(page.locator('[data-vf-docs-react-overlay-utility] .vf-docs-source-disclosure')).toContainText('tokens={{ shadow: { popover: tokens.shadow.lg } }}');
   await stage.scrollIntoViewIfNeeded();
   await stage.getByRole('button', { name: 'Open Popover' }).click();
   const popover = page.locator('[data-vf-popover-content]');
@@ -2488,6 +2489,7 @@ test('Overlay utility exercises native popover, tooltip, preview, Dialog and Dra
   await expect(popover).not.toBeVisible();
 
   await kind.selectOption('tooltip');
+  await expect(page.locator('#overlay-elevation')).toBeDisabled();
   await stage.getByRole('button', { name: 'Explain this control' }).focus();
   await expect(page.locator('[data-vf-tooltip-content]')).toBeVisible();
   await stage.getByRole('button', { name: 'Explain this control' }).evaluate((element) => element.blur());
