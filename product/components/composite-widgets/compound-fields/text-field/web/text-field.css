@@ -63,7 +63,8 @@
     flex: 1 1 auto;
     min-inline-size: 0;
     max-inline-size: 100%;
-    min-block-size: calc(var(--_vf-text-field-height) - 2px);
+    --_vf-editor-height: calc(var(--_vf-text-field-height) - 2px);
+    min-block-size: var(--_vf-textarea-autosize-min, var(--_vf-editor-height));
     --_vf-editor-block-padding: var(--_vf-text-field-padding);
     --_vf-field-inline-padding: var(--_vf-text-field-inline-padding);
     padding-block: var(--_vf-text-field-padding);
@@ -282,7 +283,9 @@
       )
       [data-vf-text-field-value]
   ) {
-    min-block-size: 0;
+    --_vf-editor-height: 0px;
+    --_vf-textarea-block-insets: calc(var(--vf-space-2xs) + var(--_vf-text-field-padding));
+    min-block-size: var(--_vf-textarea-autosize-min, 0px);
     padding-block-start: var(--vf-space-2xs);
   }
   @supports selector(:has(*)) {

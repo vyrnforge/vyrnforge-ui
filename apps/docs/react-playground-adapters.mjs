@@ -625,7 +625,7 @@ function nativeFieldAdapter(multiline) {
       bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'), bool('required', 'Required'), bool('invalid', 'Invalid')],
     Preview({ config }) {
       const id = useId();
-      return h(Flow, { gap: 'xs' },
+      return h(Flow, { gap: 'xs', style: { maxInlineSize: '100%', inlineSize: config.fullWidth ? '100%' : undefined } },
         h('label', { htmlFor: id }, label(config, name)),
         h(Component, { ...fieldProps(config), id, key: JSON.stringify([config.type, config.initial]) }));
     },

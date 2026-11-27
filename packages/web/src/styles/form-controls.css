@@ -126,6 +126,8 @@
   }
   :where([data-vf-editor-variant="unstyled"]) {
     --_vf-editor-block-padding: 0px;
+    --_vf-editor-border-block: 0px;
+    --_vf-editor-height: 0px;
     --_vf-field-inline-padding: 0px;
     background: transparent;
     border: 0;
@@ -141,6 +143,11 @@
   :where([data-vf-editor-variant="unstyled"]:disabled) {
     color: var(--vf-color-disabled-foreground);
     cursor: not-allowed;
+  }
+  @supports selector(:has(*)) {
+    :where([data-vf-editor-surface] > [data-vf-editor-variant="unstyled"]:focus-visible) {
+      outline: none;
+    }
   }
   @media (forced-colors: active) {
     :where([data-vf-editor-variant="unstyled"]:focus-visible) { outline-color: Highlight; }

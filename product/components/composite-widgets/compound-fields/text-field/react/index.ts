@@ -93,7 +93,12 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
       const { multiline, autosize, ...native } = rest;
       void multiline;
       void autosize;
-      control = createElement(Input, { ...native, ...relationships, variant: 'unstyled', ref: ref as Ref<HTMLInputElement> });
+      control = createElement(Input, {
+        ...native,
+        ...relationships,
+        variant: 'unstyled',
+        ref: ref as Ref<HTMLInputElement>,
+      });
     }
     const fieldLabel = createElement('label', { htmlFor: id, 'data-vf-text-field-label': '' }, label);
     return createElement(
