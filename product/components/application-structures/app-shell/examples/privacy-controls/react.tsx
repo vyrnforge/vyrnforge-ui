@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { AppShell, AppShellBody, AppShellHeader, AppShellMain } from '@vyrnforge/react/app-shell';
@@ -95,27 +96,27 @@ function App() {
   return (
     <AppShell>
       <AppShellHeader className="privacy-shell-header">
-        <strong>Privacy controls</strong>
-        <span>STD-17 fake consumer services</span>
+        <Text as="strong" variant="label-md">Privacy controls</Text>
+        <Text as="span">STD-17 fake consumer services</Text>
       </AppShellHeader>
       <AppShellBody>
         <AppShellMain className="privacy-example-main">
           <header>
-            <h1>Privacy and account choices</h1>
-            <p className="privacy-note">
+            <Text as="h1" variant="heading-lg">Privacy and account choices</Text>
+            <Text as="p" className="privacy-note">
               This representative uses application-local fake preference, permission, export, and deletion services. VyrnForge does not decide legal basis, run analytics or cookies, invoke real device permissions, generate exports, delete production data, or certify compliance.
-            </p>
+            </Text>
           </header>
 
           <section className="privacy-status" aria-labelledby="privacy-status-heading">
-            <h2 id="privacy-status-heading">Privacy status</h2>
-            <p role="status">{message}</p>
+            <Text as="h2" variant="heading-md" id="privacy-status-heading">Privacy status</Text>
+            <Text as="p" role="status">{message}</Text>
           </section>
 
           <section className="privacy-card" aria-labelledby="analytics-heading">
-            <h2 id="analytics-heading">Optional product analytics</h2>
-            <p>Purpose: measure how this demo account surface is used so a consuming product could improve it. This optional demo choice does not affect core account access.</p>
-            <p>Current committed choice: <strong>{analytics === 'not-set' ? 'Not chosen — analytics remains off' : analytics === 'allowed' ? 'Allowed' : 'Declined'}</strong>.</p>
+            <Text as="h2" variant="heading-md" id="analytics-heading">Optional product analytics</Text>
+            <Text as="p">Purpose: measure how this demo account surface is used so a consuming product could improve it. This optional demo choice does not affect core account access.</Text>
+            <Text as="p">Current committed choice: <Text as="strong" variant="label-md">{analytics === 'not-set' ? 'Not chosen — analytics remains off' : analytics === 'allowed' ? 'Allowed' : 'Declined'}</Text>.</Text>
             {analytics === 'allowed' ? (
               <div className="privacy-choice-actions">
                 <Button type="button" variant="secondary" onClick={revokeAnalytics}>Turn off optional analytics</Button>
@@ -129,10 +130,10 @@ function App() {
           </section>
 
           <section className="privacy-card" aria-labelledby="camera-heading">
-            <h2 id="camera-heading">Profile photo camera</h2>
-            <p>Use camera to add a profile photo. The real browser or device would own its permission prompt, grant lifetime, indicators, and settings.</p>
+            <Text as="h2" variant="heading-md" id="camera-heading">Profile photo camera</Text>
+            <Text as="p">Use camera to add a profile photo. The real browser or device would own its permission prompt, grant lifetime, indicators, and settings.</Text>
             {camera === 'granted' ? (
-              <p>Fake camera state: granted. No real device access occurred.</p>
+              <Text as="p">Fake camera state: granted. No real device access occurred.</Text>
             ) : (
               <Button type="button" variant="secondary" onClick={requestCamera}>
                 {camera === 'denied' ? 'Try camera again' : 'Use camera'}
@@ -141,22 +142,22 @@ function App() {
           </section>
 
           <section className="privacy-card" aria-labelledby="export-heading">
-            <h2 id="export-heading">Personal data export</h2>
-            <p>Demo scope: profile and account settings. A real product would own authorization, identity checks, format, snapshot, artifact generation, delivery, and retention.</p>
+            <Text as="h2" variant="heading-md" id="export-heading">Personal data export</Text>
+            <Text as="p">Demo scope: profile and account settings. A real product would own authorization, identity checks, format, snapshot, artifact generation, delivery, and retention.</Text>
             {exportState === 'ready' ? (
-              <p><strong>Export state:</strong> ready. No download is simulated.</p>
+              <Text as="p"><Text as="strong" variant="label-md">Export state:</Text> ready. No download is simulated.</Text>
             ) : (
               <Button type="button" variant="secondary" onClick={requestExport}>Request data export</Button>
             )}
           </section>
 
           <section className="privacy-card" aria-labelledby="deletion-heading">
-            <h2 id="deletion-heading">Account deletion</h2>
+            <Text as="h2" variant="heading-md" id="deletion-heading">Account deletion</Text>
             {account === 'deleted' ? (
-              <p><strong>Fake account state:</strong> deleted. This UI evidence does not prove backend erasure or retention compliance.</p>
+              <Text as="p"><Text as="strong" variant="label-md">Fake account state:</Text> deleted. This UI evidence does not prove backend erasure or retention compliance.</Text>
             ) : (
               <>
-                <p>Deleting the account is account-wide and ends access when the fake service commits the deletion.</p>
+                <Text as="p">Deleting the account is account-wide and ends access when the fake service commits the deletion.</Text>
                 <Button type="button" onClick={() => setDeleteOpen(true)}>Delete account</Button>
                 <AlertDialogRoot open={deleteOpen} onOpenChange={setDeleteOpen} descriptionId="privacy-delete-description">
                   <AlertDialogTitle>Delete account?</AlertDialogTitle>

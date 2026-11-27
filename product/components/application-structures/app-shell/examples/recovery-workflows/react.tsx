@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from '@vyrnforge/react/button';
@@ -146,17 +147,17 @@ function ProfileEditor() {
   if (loading) {
     return (
       <section aria-labelledby="editor-heading">
-        <h2 id="editor-heading">Profile editor</h2>
-        <p role="status">Loading profile. No empty or error state is committed yet.</p>
+        <Text as="h2" variant="heading-md" id="editor-heading">Profile editor</Text>
+        <Text as="p" role="status">Loading profile. No empty or error state is committed yet.</Text>
       </section>
     );
   }
 
   return (
     <section aria-labelledby="editor-heading">
-      <h2 id="editor-heading">Profile editor</h2>
-      <p>Committed value: <strong data-committed-value>{committed}</strong></p>
-      <p>Visible preview: <strong data-preview-value>{preview}</strong>{pendingValue ? ' (pending)' : ''}</p>
+      <Text as="h2" variant="heading-md" id="editor-heading">Profile editor</Text>
+      <Text as="p">Committed value: <Text as="strong" variant="label-md" data-committed-value>{committed}</Text></Text>
+      <Text as="p">Visible preview: <Text as="strong" variant="label-md" data-preview-value>{preview}</Text>{pendingValue ? ' (pending)' : ''}</Text>
       <label htmlFor="recovery-display-name">Display name</label>
       <Input
         id="recovery-display-name"
@@ -168,9 +169,9 @@ function ProfileEditor() {
       <div>
         <Button type="button" loading={pendingValue !== ''} onClick={save}>Save changes</Button>
       </div>
-      <p role="status" data-editor-status>{status}</p>
-      {error ? <p id="recovery-editor-error" role="alert">{error}</p> : null}
-      {reconciliation ? <p data-reconciliation>{reconciliation}</p> : null}
+      <Text as="p" role="status" data-editor-status>{status}</Text>
+      {error ? <Text as="p" id="recovery-editor-error" role="alert">{error}</Text> : null}
+      {reconciliation ? <Text as="p" data-reconciliation>{reconciliation}</Text> : null}
     </section>
   );
 }
@@ -198,10 +199,10 @@ function StaleRead() {
 
   return (
     <section aria-labelledby="stale-heading">
-      <h2 id="stale-heading">Revenue report</h2>
-      <p data-report-value>{value}</p>
-      <p role="status">{message}</p>
-      {stale ? <p data-stale-state>Stale — last updated 10:00.</p> : null}
+      <Text as="h2" variant="heading-md" id="stale-heading">Revenue report</Text>
+      <Text as="p" data-report-value>{value}</Text>
+      <Text as="p" role="status">{message}</Text>
+      {stale ? <Text as="p" data-stale-state>Stale — last updated 10:00.</Text> : null}
       <Button type="button" variant="secondary" onClick={refresh}>{stale ? 'Try again' : 'Refresh report'}</Button>
     </section>
   );
@@ -214,16 +215,16 @@ function ListStates() {
 
   return (
     <section aria-labelledby="list-heading">
-      <h2 id="list-heading">Projects</h2>
+      <Text as="h2" variant="heading-md" id="list-heading">Projects</Text>
       <label htmlFor="project-query">Search projects</label>
       <Input id="project-query" value={query} onChange={(event) => setQuery(event.currentTarget.value)} />
       <div aria-live="polite" aria-atomic="true">
-        {state === 'loading' ? <p>Loading projects. Results are not known yet.</p> : null}
+        {state === 'loading' ? <Text as="p">Loading projects. Results are not known yet.</Text> : null}
         {state === 'ready' ? <ul><li>Atlas</li><li>Beacon</li></ul> : null}
-        {state === 'empty' ? <p>No projects yet. Create a project to get started.</p> : null}
-        {state === 'no-results' ? <p>No results for “{query}”. Change or clear the current search.</p> : null}
-        {state === 'error' ? <p>Projects could not be loaded. Try again when the service is available.</p> : null}
-        {state === 'permission' ? <p>You do not have permission to view these projects. Request access if your organization supports it.</p> : null}
+        {state === 'empty' ? <Text as="p">No projects yet. Create a project to get started.</Text> : null}
+        {state === 'no-results' ? <Text as="p">No results for “{query}”. Change or clear the current search.</Text> : null}
+        {state === 'error' ? <Text as="p">Projects could not be loaded. Try again when the service is available.</Text> : null}
+        {state === 'permission' ? <Text as="p">You do not have permission to view these projects. Request access if your organization supports it.</Text> : null}
       </div>
       {state === 'no-results' ? <Button type="button" variant="secondary" onClick={() => setQuery('')}>Clear search</Button> : null}
       {state === 'error' ? <Button type="button" variant="secondary">Try again</Button> : null}
@@ -235,8 +236,8 @@ function ListStates() {
 function App() {
   return (
     <main>
-      <h1>Recovery workflows</h1>
-      <p>This fixture uses deterministic application-owned services. VyrnForge public components provide control semantics; domain state, persistence, retry policy, permissions, and reconciliation remain application-owned.</p>
+      <Text as="h1" variant="heading-lg">Recovery workflows</Text>
+      <Text as="p">This fixture uses deterministic application-owned services. VyrnForge public components provide control semantics; domain state, persistence, retry policy, permissions, and reconciliation remain application-owned.</Text>
       <ProfileEditor />
       <StaleRead />
       <ListStates />

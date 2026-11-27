@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { AppShell, AppShellBody, AppShellHeader, AppShellMain, AppShellNavigation } from '@vyrnforge/react/app-shell';
@@ -203,7 +204,7 @@ function App() {
   return (
     <AppShell>
       <AppShellHeader className="settings-shell-header">
-        <strong>Account settings</strong>
+        <Text as="strong" variant="label-md">Account settings</Text>
         <Button
           className="settings-nav-trigger"
           ref={triggerRef}
@@ -224,14 +225,14 @@ function App() {
         <AppShellMain ref={mainRef} tabIndex={-1}>
           {route === '/settings/profile' ? (
             <>
-              <h1>Profile settings</h1>
+              <Text as="h1" variant="heading-lg">Profile settings</Text>
               <TabsRoot value={profileTab} onValueChange={changeProfileTab}>
                 <TabsList aria-label="Profile settings sections">
                   <TabsTab value="details">Details</TabsTab>
                   <TabsTab value="preferences">Preferences</TabsTab>
                 </TabsList>
                 <TabsPanel value="details">
-                  <p>Update the public details shown on your profile.</p>
+                  <Text as="p">Update the public details shown on your profile.</Text>
                   <form className="settings-profile-form" onSubmit={saveProfile}>
                     <label htmlFor="settings-display-name">Display name</label>
                     <Input
@@ -247,23 +248,23 @@ function App() {
                       <Button type="submit">Save profile</Button>
                       <Button type="button" variant="secondary" onClick={cancelProfileEdit}>Cancel edits</Button>
                     </div>
-                    <p role="status">{profileMessage}</p>
+                    <Text as="p" role="status">{profileMessage}</Text>
                   </form>
-                  <p><SideNavLink href={hrefFor('/settings/profile/edit', profileTab)} onClick={navigate('/settings/profile/edit')}>Edit profile</SideNavLink></p>
+                  <Text as="p"><SideNavLink href={hrefFor('/settings/profile/edit', profileTab)} onClick={navigate('/settings/profile/edit')}>Edit profile</SideNavLink></Text>
                 </TabsPanel>
-                <TabsPanel value="preferences"><p>Choose profile display preferences.</p></TabsPanel>
+                <TabsPanel value="preferences"><Text as="p">Choose profile display preferences.</Text></TabsPanel>
               </TabsRoot>
             </>
           ) : route === '/settings/profile/edit' ? (
             <>
-              <h1>Edit profile</h1>
-              <p>Edit is a nested route owned by the example application.</p>
-              <p><SideNavLink href={hrefFor('/settings/profile', returnTab)} onClick={navigate('/settings/profile')}>Return to profile settings</SideNavLink></p>
+              <Text as="h1" variant="heading-lg">Edit profile</Text>
+              <Text as="p">Edit is a nested route owned by the example application.</Text>
+              <Text as="p"><SideNavLink href={hrefFor('/settings/profile', returnTab)} onClick={navigate('/settings/profile')}>Return to profile settings</SideNavLink></Text>
             </>
           ) : route === '/settings/security' ? (
-            <><h1>Security settings</h1><p>Review password and sign-in protections.</p></>
+            <><Text as="h1" variant="heading-lg">Security settings</Text><Text as="p">Review password and sign-in protections.</Text></>
           ) : (
-            <><h1>Settings page not found</h1><p><SideNavLink href={hrefFor('/settings/profile')} onClick={navigate('/settings/profile')}>Return to profile settings</SideNavLink></p></>
+            <><Text as="h1" variant="heading-lg">Settings page not found</Text><Text as="p"><SideNavLink href={hrefFor('/settings/profile')} onClick={navigate('/settings/profile')}>Return to profile settings</SideNavLink></Text></>
           )}
         </AppShellMain>
       </AppShellBody>

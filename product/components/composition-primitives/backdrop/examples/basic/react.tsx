@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Backdrop } from '@vyrnforge/react/backdrop';
@@ -10,11 +11,11 @@ function Example() {
   return <Flow gap="md">
     <Button type="button" onClick={() => setBusy(value => !value)}>{busy ? 'Finish refreshing' : 'Refresh account'}</Button>
     <section aria-label="Account summary" aria-busy={busy} style={{ position: 'relative', isolation: 'isolate', minBlockSize: '8rem', padding: 'var(--vf-space-md)', border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)' }}>
-      <div inert={busy}><p>Account details</p><Button type="button" variant="secondary">View statement</Button></div>
+      <Flow inert={busy} gap="sm"><Text as="p">Account details</Text><Button type="button" variant="secondary">View statement</Button></Flow>
       <Backdrop hidden={!busy} />
       {busy && <Loading style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none' }}><LoadingIndicator /></Loading>}
     </section>
-    <p role="status">{busy ? 'Refreshing account summary' : 'Account summary ready'}</p>
+    <Text as="p" role="status">{busy ? 'Refreshing account summary' : 'Account summary ready'}</Text>
   </Flow>;
 }
 createRoot(document.querySelector('#root')!).render(<Example />);

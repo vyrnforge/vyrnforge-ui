@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
@@ -33,7 +34,7 @@ function Example() {
           </AlertDialogAction>
         </Flow>
       </AlertDialogRoot>
-      <div role="status">{confirmed ? 'Example report archived.' : ''}</div>
+      <Text as="p" role="status">{confirmed ? 'Example report archived.' : ''}</Text>
       {confirmed && (
         <Alert severity="success" heading="Archive complete">
           The example report is available in the archive.

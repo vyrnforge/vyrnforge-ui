@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Alert } from '@vyrnforge/react/alert';
@@ -13,7 +14,7 @@ function Example() {
       >
         Transfers will be unavailable during maintenance.
       </Alert>
-      <p id="maintenance">Maintenance details remain available in the service information section.</p>
+      <Text as="p" id="maintenance">Maintenance details remain available in the service information section.</Text>
     </section>
   );
 }

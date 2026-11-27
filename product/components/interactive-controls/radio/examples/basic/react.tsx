@@ -3,9 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { Radio } from '@vyrnforge/react/radio';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
-import '@vyrnforge/web/styles/radio.css';
-import '@vyrnforge/web/styles/layout.css';
-import '@vyrnforge/web/styles/text.css';
 
 function App() {
   const [method, setMethod] = useState('email');

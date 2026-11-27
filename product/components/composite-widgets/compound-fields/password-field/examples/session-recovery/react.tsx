@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from '@vyrnforge/react/button';
@@ -87,10 +88,10 @@ export function Example() {
     <section className="vf-identity-example" aria-labelledby="identity-heading">
       {step === 'task' && (
         <>
-          <h2 id="identity-heading" ref={headingRef} tabIndex={-1}>
+          <Text as="h2" variant="heading-md" id="identity-heading" ref={headingRef} tabIndex={-1}>
             Edit profile note
-          </h2>
-          <p>Your session is active. Changes remain local until you choose Save changes.</p>
+          </Text>
+          <Text as="p">Your session is active. Changes remain local until you choose Save changes.</Text>
           <label htmlFor="identity-note">Profile note</label>
           <Input
             id="identity-note"
@@ -109,7 +110,11 @@ export function Example() {
               Sign out of this app
             </Button>
           </div>
-          {saved && <p role="status">Profile note saved by the example service.</p>}
+          {saved && (
+            <Text as="p" role="status">
+              Profile note saved by the example service.
+            </Text>
+          )}
           <div className="vf-identity-test-controls" aria-label="Example provider controls">
             <Button type="button" variant="ghost" onClick={expireSession}>
               Simulate session expiry
@@ -120,10 +125,10 @@ export function Example() {
 
       {step === 'reauth' && (
         <>
-          <h2 id="identity-heading" ref={headingRef} tabIndex={-1}>
+          <Text as="h2" variant="heading-md" id="identity-heading" ref={headingRef} tabIndex={-1}>
             Sign in again to continue editing
-          </h2>
-          <p>Your profile note is still available in this page. Nothing was saved automatically.</p>
+          </Text>
+          <Text as="p">Your profile note is still available in this page. Nothing was saved automatically.</Text>
           <div className="vf-identity-actions">
             <Button type="button" onClick={() => failProvider('passkey-failed')}>
               Continue with passkey
@@ -145,18 +150,21 @@ export function Example() {
           <Button type="button" variant="secondary" onClick={usePasswordFallback}>
             Use password instead
           </Button>
-          <p className="vf-identity-draft">
-            Unsaved note: <span data-testid="draft-value">{note}</span>
-          </p>
+          <Text as="p" className="vf-identity-draft">
+            Unsaved note:{' '}
+            <Text as="span" data-testid="draft-value">
+              {note}
+            </Text>
+          </Text>
         </>
       )}
 
       {step === 'password' && (
         <>
-          <h2 id="identity-heading" ref={headingRef} tabIndex={-1}>
+          <Text as="h2" variant="heading-md" id="identity-heading" ref={headingRef} tabIndex={-1}>
             Sign in with your password
-          </h2>
-          <p>Your unsaved profile note remains available while you sign in again.</p>
+          </Text>
+          <Text as="p">Your unsaved profile note remains available while you sign in again.</Text>
           <form onSubmit={submitPassword} noValidate>
             <label htmlFor="identity-username">Email address</label>
             <Input
@@ -185,9 +193,9 @@ export function Example() {
               <PasswordFieldToggle showLabel="Show password" hideLabel="Hide password" />
             </PasswordFieldRoot>
             {providerResult === 'credentials-failed' && (
-              <p role="alert">
+              <Text as="p" role="alert">
                 We could not sign you in with those credentials. Check them or use another allowed method.
-              </p>
+              </Text>
             )}
             <Button type="submit">Continue</Button>
           </form>
@@ -207,13 +215,15 @@ export function Example() {
 
       {step === 'otp' && (
         <>
-          <h2 id="identity-heading" ref={headingRef} tabIndex={-1}>
+          <Text as="h2" variant="heading-md" id="identity-heading" ref={headingRef} tabIndex={-1}>
             Enter your verification code
-          </h2>
-          <p>The example provider requires a second factor before returning to your edit.</p>
+          </Text>
+          <Text as="p">The example provider requires a second factor before returning to your edit.</Text>
           <form onSubmit={submitOtp} noValidate>
             <label htmlFor="identity-otp">Verification code</label>
-            <p id="identity-otp-hint">Enter or paste the four-digit code.</p>
+            <Text as="p" id="identity-otp-hint">
+              Enter or paste the four-digit code.
+            </Text>
             <OTPFieldRoot
               value={otp}
               onValueChange={(value) => {
@@ -225,13 +235,18 @@ export function Example() {
               <OTPFieldInput id="identity-otp" name="code" aria-describedby="identity-otp-hint" />
             </OTPFieldRoot>
             {providerResult === 'otp-failed' && (
-              <p role="alert">That verification code is incorrect or expired. Enter the current code and try again.</p>
+              <Text as="p" role="alert">
+                That verification code is incorrect or expired. Enter the current code and try again.
+              </Text>
             )}
             <Button type="submit">Verify and return to edit</Button>
           </form>
-          <p className="vf-identity-draft">
-            Unsaved note: <span data-testid="draft-value">{note}</span>
-          </p>
+          <Text as="p" className="vf-identity-draft">
+            Unsaved note:{' '}
+            <Text as="span" data-testid="draft-value">
+              {note}
+            </Text>
+          </Text>
         </>
       )}
     </section>

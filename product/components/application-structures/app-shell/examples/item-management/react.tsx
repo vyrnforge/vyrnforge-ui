@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { AppShell, AppShellBody, AppShellHeader, AppShellMain } from '@vyrnforge/react/app-shell';
@@ -181,23 +182,23 @@ function App() {
   return (
     <AppShell>
       <AppShellHeader className="crud-shell-header">
-        <strong>Operations workspace</strong>
-        <span>STD-10 fake consumer service</span>
+        <Text as="strong" variant="label-md">Operations workspace</Text>
+        <Text as="span">STD-10 fake consumer service</Text>
       </AppShellHeader>
       <AppShellBody>
         <AppShellMain className="crud-example-main">
           <header>
-            <h1>Item management</h1>
-            <p>This representative uses application-local fake data. VyrnForge does not own persistence, routing, authorization, or transaction policy.</p>
+            <Text as="h1" variant="heading-lg">Item management</Text>
+            <Text as="p">This representative uses application-local fake data. VyrnForge does not own persistence, routing, authorization, or transaction policy.</Text>
           </header>
 
           <section className="crud-status" aria-labelledby="crud-status-heading">
-            <h2 id="crud-status-heading">Operation status</h2>
-            <p role="status">{message}</p>
+            <Text as="h2" variant="heading-md" id="crud-status-heading">Operation status</Text>
+            <Text as="p" role="status">{message}</Text>
           </section>
 
           <section aria-labelledby="crud-create-heading">
-            <h2 id="crud-create-heading">Create item</h2>
+            <Text as="h2" variant="heading-md" id="crud-create-heading">Create item</Text>
             <form className="crud-form" onSubmit={createItem}>
               <label htmlFor="crud-create-name">Item name</label>
               <Input id="crud-create-name" name="itemName" required value={createDraft} onChange={(event) => setCreateDraft(event.currentTarget.value)} />
@@ -207,7 +208,7 @@ function App() {
 
           {editing ? (
             <section aria-labelledby="crud-edit-heading">
-              <h2 id="crud-edit-heading">Edit item</h2>
+              <Text as="h2" variant="heading-md" id="crud-edit-heading">Edit item</Text>
               <form className="crud-form" onSubmit={saveEdit}>
                 <label htmlFor="crud-edit-name">Item name</label>
                 <Input id="crud-edit-name" required value={editing.draft} onChange={(event) => setEditing({ ...editing, draft: event.currentTarget.value })} />
@@ -222,8 +223,8 @@ function App() {
           <section aria-labelledby="crud-active-heading">
             <div className="crud-section-heading">
               <div>
-                <h2 id="crud-active-heading">Active items</h2>
-                <p>{selected.size} selected. Selection applies only to the explicitly checked active items.</p>
+                <Text as="h2" variant="heading-md" id="crud-active-heading">Active items</Text>
+                <Text as="p">{selected.size} selected. Selection applies only to the explicitly checked active items.</Text>
               </div>
               <div className="crud-actions">
                 <Button type="button" disabled={selected.size === 0} onClick={archiveSelected}>Archive selected</Button>
@@ -235,7 +236,7 @@ function App() {
                 <li key={item.id} data-item-id={item.id}>
                   <label className="crud-select-label">
                     <Checkbox checked={selected.has(item.id)} onChange={(event) => toggleSelected(item.id, event.currentTarget.checked)} aria-label={`Select ${item.name}`} />
-                    <strong>{item.name}</strong>
+                    <Text as="strong" variant="label-md">{item.name}</Text>
                   </label>
                   <div className="crud-actions">
                     <Button type="button" variant="secondary" onClick={() => beginEdit(item)}>Edit {item.name}</Button>
@@ -248,13 +249,13 @@ function App() {
 
           {bulkResults.length > 0 ? (
             <section className="crud-results" aria-labelledby="crud-results-heading">
-              <h2 id="crud-results-heading">Bulk result</h2>
-              <p>Last bulk request: {lastBulkIds.map(nameFor).join(', ')}.</p>
-              {lastRetryIds.length > 0 ? <p>Last retry request: {lastRetryIds.map(nameFor).join(', ')}.</p> : null}
+              <Text as="h2" variant="heading-md" id="crud-results-heading">Bulk result</Text>
+              <Text as="p">Last bulk request: {lastBulkIds.map(nameFor).join(', ')}.</Text>
+              {lastRetryIds.length > 0 ? <Text as="p">Last retry request: {lastRetryIds.map(nameFor).join(', ')}.</Text> : null}
               <ul>
                 {bulkResults.map((result) => (
                   <li key={result.id}>
-                    <strong>{nameFor(result.id)}</strong>: {result.state === 'committed' ? 'archived' : result.state === 'failed' ? result.reason : 'outcome unknown; reconcile before retrying.'}
+                    <Text as="strong" variant="label-md">{nameFor(result.id)}</Text>: {result.state === 'committed' ? 'archived' : result.state === 'failed' ? result.reason : 'outcome unknown; reconcile before retrying.'}
                   </li>
                 ))}
               </ul>
@@ -263,11 +264,11 @@ function App() {
           ) : null}
 
           <section aria-labelledby="crud-archived-heading">
-            <h2 id="crud-archived-heading">Archived items</h2>
+            <Text as="h2" variant="heading-md" id="crud-archived-heading">Archived items</Text>
             <ul className="crud-item-list">
               {archivedItems.map((item) => (
                 <li key={item.id} data-item-id={item.id}>
-                  <strong>{item.name}</strong>
+                  <Text as="strong" variant="label-md">{item.name}</Text>
                   <Button type="button" variant="secondary" onClick={() => restoreItem(item)}>Restore {item.name}</Button>
                 </li>
               ))}

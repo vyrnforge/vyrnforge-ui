@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ToastClose, ToastDescription, ToastRoot, ToastTitle, ToastViewport } from '@vyrnforge/react/toast';
@@ -7,7 +8,7 @@ function Example() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <p>Saved preferences are available in your account.</p>
+      <Text as="p">Saved preferences are available in your account.</Text>
       <Button type="button" onClick={() => setOpen(true)}>
         Show notification
       </Button>

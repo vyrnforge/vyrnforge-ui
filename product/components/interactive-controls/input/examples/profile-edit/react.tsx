@@ -1,3 +1,8 @@
+import { Text } from '@vyrnforge/react/text';
+import { Flow } from '@vyrnforge/react/layout';
+import { Link } from '@vyrnforge/react/link';
+import { Checkbox } from '@vyrnforge/react/checkbox';
+import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Button } from '@vyrnforge/react/button';
@@ -168,27 +173,27 @@ export function Example() {
   const describedBy = (help: string, error?: string) => error ? `${help} ${error}` : help;
 
   return (
-    <section lang={locale}>
-      <div>
-        <Button type="button" variant="ghost" aria-pressed={locale === 'en'} onClick={() => setLocale('en')}>English</Button>
-        <Button type="button" variant="ghost" aria-pressed={locale === 'id'} onClick={() => setLocale('id')}>Bahasa Indonesia</Button>
-      </div>
-      <h2>{t.heading}</h2>
-      <form noValidate onSubmit={submit} onReset={resetWorkflow}>
+    <Flow as="section" lang={locale}>
+      <Flow direction="inline" wrap="wrap">
+        <ToggleButton pressed={locale === 'en'} onClick={() => setLocale('en')}>English</ToggleButton>
+        <ToggleButton pressed={locale === 'id'} onClick={() => setLocale('id')}>Bahasa Indonesia</ToggleButton>
+      </Flow>
+      <Text as="h2" variant="heading-md">{t.heading}</Text>
+      <Flow as="form" noValidate onSubmit={submit} onReset={resetWorkflow}>
         {Object.keys(errors).length > 0 && (
-          <div ref={summaryRef} tabIndex={-1} aria-labelledby="profile-error-heading">
-            <h3 id="profile-error-heading">{t.summary}</h3>
-            <ul>
-              {errors.displayName && <li><a href="#profile-display-name">{errors.displayName}</a></li>}
-              {errors.email && <li><a href="#profile-email">{errors.email}</a></li>}
-              {errors.workPhone && <li><a href="#profile-work-phone">{errors.workPhone}</a></li>}
-            </ul>
-          </div>
+          <Flow ref={summaryRef} tabIndex={-1} aria-labelledby="profile-error-heading">
+            <Text as="h3" variant="heading-sm" id="profile-error-heading">{t.summary}</Text>
+            <Flow as="ul" gap="xs">
+              {errors.displayName && <li><Link href="#profile-display-name">{errors.displayName}</Link></li>}
+              {errors.email && <li><Link href="#profile-email">{errors.email}</Link></li>}
+              {errors.workPhone && <li><Link href="#profile-work-phone">{errors.workPhone}</Link></li>}
+            </Flow>
+          </Flow>
         )}
 
-        <div>
+        <Flow>
           <label htmlFor="profile-display-name">{t.displayName}</label>
-          <p id="profile-display-help">{t.displayHelp}</p>
+          <Text as="p" id="profile-display-help">{t.displayHelp}</Text>
           <Input
             id="profile-display-name"
             name="displayName"
@@ -199,12 +204,12 @@ export function Example() {
             aria-describedby={describedBy('profile-display-help', errors.displayName ? 'profile-display-error' : undefined)}
             onChange={(event) => change('displayName', event.currentTarget.value)}
           />
-          {errors.displayName && <p id="profile-display-error">{errors.displayName}</p>}
-        </div>
+          {errors.displayName && <Text as="p" id="profile-display-error">{errors.displayName}</Text>}
+        </Flow>
 
-        <div>
+        <Flow>
           <label htmlFor="profile-email">{t.email}</label>
-          <p id="profile-email-help">{t.emailHelp}</p>
+          <Text as="p" id="profile-email-help">{t.emailHelp}</Text>
           <Input
             id="profile-email"
             type="email"
@@ -216,10 +221,10 @@ export function Example() {
             aria-describedby={describedBy('profile-email-help', errors.email ? 'profile-email-error' : undefined)}
             onChange={(event) => change('email', event.currentTarget.value)}
           />
-          {errors.email && <p id="profile-email-error">{errors.email}</p>}
-        </div>
+          {errors.email && <Text as="p" id="profile-email-error">{errors.email}</Text>}
+        </Flow>
 
-        <div>
+        <Flow>
           <label htmlFor="profile-biography">{t.biography}</label>
           <Textarea
             id="profile-biography"
@@ -227,20 +232,19 @@ export function Example() {
             value={profile.biography}
             onChange={(event) => change('biography', event.currentTarget.value)}
           />
-        </div>
+        </Flow>
 
-        <label>
-          <input
-            type="checkbox"
+        <Flow as="label" direction="inline" align="center" gap="sm">
+          <Checkbox
             checked={profile.hasWorkPhone}
             onChange={(event) => change('hasWorkPhone', event.currentTarget.checked)}
           />
-          {t.phoneToggle}
-        </label>
+          <Text>{t.phoneToggle}</Text>
+        </Flow>
         {profile.hasWorkPhone && (
-          <div>
+          <Flow>
             <label htmlFor="profile-work-phone">{t.phone}</label>
-            <p id="profile-phone-help">{t.phoneHelp}</p>
+            <Text as="p" id="profile-phone-help">{t.phoneHelp}</Text>
             <Input
               id="profile-work-phone"
               type="tel"
@@ -252,27 +256,27 @@ export function Example() {
               aria-describedby={describedBy('profile-phone-help', errors.workPhone ? 'profile-phone-error' : undefined)}
               onChange={(event) => change('workPhone', event.currentTarget.value)}
             />
-            {errors.workPhone && <p id="profile-phone-error">{errors.workPhone}</p>}
-          </div>
+            {errors.workPhone && <Text as="p" id="profile-phone-error">{errors.workPhone}</Text>}
+          </Flow>
         )}
 
-        <div>
+        <Flow direction="inline" wrap="wrap">
           <Button type="submit" loading={pending}>{t.save}</Button>
           <Button type="button" variant="secondary" onClick={saveDraft}>{t.saveDraft}</Button>
           <Button type="button" variant="secondary" onClick={restoreDraft}>{t.restoreDraft}</Button>
           <Button type="reset" variant="ghost">{t.reset}</Button>
           <Button type="button" variant="ghost" onClick={() => setConfirmCancel(true)}>{t.cancel}</Button>
-        </div>
+        </Flow>
 
         {confirmCancel && (
-          <div role="group" aria-labelledby="profile-cancel-question">
-            <p id="profile-cancel-question">{t.cancelQuestion}</p>
+          <Flow role="group" aria-labelledby="profile-cancel-question">
+            <Text as="p" id="profile-cancel-question">{t.cancelQuestion}</Text>
             <Button type="button" variant="secondary" onClick={() => { resetWorkflow(); setStatus(t.discarded); }}>{t.discard}</Button>
             <Button type="button" variant="ghost" onClick={() => setConfirmCancel(false)}>{t.keepEditing}</Button>
-          </div>
+          </Flow>
         )}
-        <p role="status">{status}</p>
-      </form>
-    </section>
+        <Text as="p" role="status">{status}</Text>
+      </Flow>
+    </Flow>
   );
 }

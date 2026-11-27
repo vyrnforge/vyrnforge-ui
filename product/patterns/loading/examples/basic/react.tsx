@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { createRoot } from 'react-dom/client';
 import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
 import { Flow } from '@vyrnforge/react/layout';
@@ -20,7 +21,7 @@ function Example() {
           <LoadingPlaceholder shape="line" style={{ inlineSize: '45%' }} />
         </Flow>
       </Loading>
-      <p role="status">Loading account summary</p>
+      <Text as="p" role="status">Loading account summary</Text>
       <LoadingProgress aria-label="Uploading file" value={48} max={100} />
       <LoadingProgress aria-label="Preparing import" />
       <LoadingCustom aria-hidden="true">

@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { AppShell, AppShellBody, AppShellHeader, AppShellMain } from '@vyrnforge/react/app-shell';
@@ -116,26 +117,26 @@ function App() {
 
   return (
     <AppShell>
-      <AppShellHeader><strong>Support reply workspace</strong></AppShellHeader>
+      <AppShellHeader><Text as="strong" variant="label-md">Support reply workspace</Text></AppShellHeader>
       <AppShellBody>
         <AppShellMain className="ai-example-main">
           <header className="ai-heading">
             <div>
-              <h1>AI-assisted customer reply</h1>
-              <p>This example uses a deterministic fake AI service to prove the UI contract only. It does not provide a VyrnForge AI runtime or prove model quality.</p>
+              <Text as="h1" variant="heading-lg">AI-assisted customer reply</Text>
+              <Text as="p">This example uses a deterministic fake AI service to prove the UI contract only. It does not provide a VyrnForge AI runtime or prove model quality.</Text>
             </div>
-            <span className="ai-disclosure">AI-assisted drafting</span>
+            <Text as="span" className="ai-disclosure">AI-assisted drafting</Text>
           </header>
 
           <section className="ai-panel" aria-labelledby="customer-request-heading">
-            <h2 id="customer-request-heading">Customer request</h2>
+            <Text as="h2" variant="heading-md" id="customer-request-heading">Customer request</Text>
             <label htmlFor="customer-request">Request text</label>
             <Textarea id="customer-request" value={customerRequest} onChange={(event) => setCustomerRequest(event.currentTarget.value)} />
           </section>
 
           <section className="ai-panel" aria-labelledby="source-notes-heading">
-            <h2 id="source-notes-heading">Application-supplied source notes</h2>
-            <p>These notes are input data, not instructions or authority for tool execution.</p>
+            <Text as="h2" variant="heading-md" id="source-notes-heading">Application-supplied source notes</Text>
+            <Text as="p">These notes are input data, not instructions or authority for tool execution.</Text>
             <ul className="ai-source-list">
               {sourceNotes.map((note) => <li key={note}>{note}</li>)}
             </ul>
@@ -144,8 +145,8 @@ function App() {
           <section className="ai-panel" aria-labelledby="draft-heading">
             <div className="ai-section-heading">
               <div>
-                <h2 id="draft-heading">Draft reply</h2>
-                <p id="ai-generation-status" role="status" aria-live="polite">{generationMessage}</p>
+                <Text as="h2" variant="heading-md" id="draft-heading">Draft reply</Text>
+                <Text as="p" id="ai-generation-status" role="status" aria-live="polite">{generationMessage}</Text>
               </div>
               <div className="ai-actions">
                 <Button type="button" onClick={requestDraft}>{draft ? 'Regenerate draft' : 'Generate draft'}</Button>
@@ -161,7 +162,7 @@ function App() {
               onChange={(event) => setDraft(event.currentTarget.value)}
               aria-describedby="ai-draft-help"
             />
-            <p id="ai-draft-help">Generated text is a draft. Editing it does not send or commit anything.</p>
+            <Text as="p" id="ai-draft-help">Generated text is a draft. Editing it does not send or commit anything.</Text>
 
             <div className="ai-actions">
               <Button type="button" disabled={!draft || generationState === 'generating'} onClick={reviewSend}>Review send</Button>
@@ -170,9 +171,9 @@ function App() {
 
           {reviewingSend ? (
             <section className="ai-review" aria-labelledby="send-review-heading">
-              <h2 id="send-review-heading">Review consequential action</h2>
-              <p>Proposed action: send the current draft to the customer. No refund, payment change, or account mutation is included.</p>
-              <pre className="ai-review-draft">{draft}</pre>
+              <Text as="h2" variant="heading-md" id="send-review-heading">Review consequential action</Text>
+              <Text as="p">Proposed action: send the current draft to the customer. No refund, payment change, or account mutation is included.</Text>
+              <Text as="div" className="ai-review-draft">{draft}</Text>
               <div className="ai-actions">
                 <Button type="button" onClick={confirmSend}>Confirm send reply</Button>
                 <Button type="button" variant="secondary" onClick={() => setReviewingSend(false)}>Keep editing</Button>
@@ -181,13 +182,13 @@ function App() {
           ) : null}
 
           <section className="ai-panel" aria-labelledby="send-status-heading">
-            <h2 id="send-status-heading">Application action status</h2>
-            <p role="status" aria-live="polite">{sendMessage}</p>
+            <Text as="h2" variant="heading-md" id="send-status-heading">Application action status</Text>
+            <Text as="p" role="status" aria-live="polite">{sendMessage}</Text>
           </section>
 
           <section className="ai-panel" aria-labelledby="race-heading">
-            <h2 id="race-heading">Stale-result demonstration</h2>
-            <p>After the first successful generation and one failed regeneration, start two regenerations quickly. The older slow result is ignored when the newer request completes first.</p>
+            <Text as="h2" variant="heading-md" id="race-heading">Stale-result demonstration</Text>
+            <Text as="p">After the first successful generation and one failed regeneration, start two regenerations quickly. The older slow result is ignored when the newer request completes first.</Text>
             <Button type="button" variant="secondary" onClick={requestDraft}>Start another generation</Button>
           </section>
         </AppShellMain>

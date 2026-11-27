@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { TextField } from '@vyrnforge/react/text-field';
 import { Button } from '@vyrnforge/react/button';
+import { Text } from '@vyrnforge/react/text';
 import { Flow } from '@vyrnforge/react/layout';
 
 function Example() {
@@ -63,7 +64,9 @@ function Example() {
           Reset
         </Button>
       </Flow>
-      <p role="status">{message}</p>
+      <Text as="p" role="status">
+        {message}
+      </Text>
     </Flow>
   );
 }

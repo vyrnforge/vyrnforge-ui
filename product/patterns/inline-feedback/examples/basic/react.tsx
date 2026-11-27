@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Input } from '@vyrnforge/react/input';
@@ -32,7 +33,7 @@ function Example() {
           if (event.currentTarget.validity.valid) setInvalid(false);
         }}
       />
-      <p id="email-help">{invalid ? 'Enter a complete email address.' : 'Use your work email address.'}</p>
+      <Text as="p" id="email-help">{invalid ? 'Enter a complete email address.' : 'Use your work email address.'}</Text>
       <Button type="submit">Save</Button>
     </Flow>
   );

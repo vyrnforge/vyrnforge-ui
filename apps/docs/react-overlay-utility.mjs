@@ -198,11 +198,11 @@ export function OverlayUtility({ guide, links }) {
           h(Link, { href: links.overlayComponentSource[id] }, label + ' React source')))))),
   h('aside', { className: 'vf-docs-toc-region' },
     h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
-      h('p', null, 'On this page'),
+      h(Text, { as: 'p' }, 'On this page'),
       h('ol', null,
-        h('li', null, h('a', { href: '#overlay-playground-title' }, 'Live playground')),
+        h('li', null, h(Link, { href: '#overlay-playground-title' }, 'Live playground')),
         ...reactConsumerSections(guide).map((section) => h('li', { key: section.heading },
-          h('a', { href: '#overlay-' + section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
+          h(Link, { href: '#overlay-' + section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
             section.heading))),
-        h('li', null, h('a', { href: '#overlay-component-links' }, 'Component references'))))));
+        h('li', null, h(Link, { href: '#overlay-component-links' }, 'Component references'))))));
 }

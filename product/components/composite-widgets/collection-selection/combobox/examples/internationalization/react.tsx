@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import { ComboboxContent, ComboboxInput, ComboboxOption, ComboboxRoot } from '@vyrnforge/react/combobox';
 
 const instant = new Date('2026-10-27T04:00:00Z');
@@ -45,15 +46,17 @@ export function Example() {
 
         return (
           <section key={region.locale} lang={region.lang} dir={region.dir}>
-            <h3>{region.title}</h3>
-            <p>
+            <Text as="h3" variant="heading-sm">
+              {region.title}
+            </Text>
+            <Text as="p">
               Account <bdi>ACME-42</bdi>
-            </p>
-            <p>
+            </Text>
+            <Text as="p">
               <time dateTime={instant.toISOString()}>{dateTime}</time>
               {' · '}
               <data value={`${currency} ${amount}`}>{money}</data>
-            </p>
+            </Text>
             <ComboboxRoot>
               <ComboboxInput aria-label={region.label} />
               <ComboboxContent>

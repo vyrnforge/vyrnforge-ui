@@ -1,3 +1,5 @@
+import { CodeBlock } from '@vyrnforge/react/code';
+import { Link } from '@vyrnforge/react/link';
 import { createElement as h, useEffect, useState } from 'react';
 import { ThemeScope } from '@vyrnforge/react';
 import { Button } from '@vyrnforge/react/button';
@@ -10,9 +12,9 @@ function GuideLayout({ children, sections }) {
     children,
     h('aside', { className: 'vf-docs-toc-region' },
       h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
-        h('p', null, 'On this page'),
+        h(Text, { as: 'p' }, 'On this page'),
         h('ol', null, ...sections.map((entry) => h('li', { key: entry.id },
-          h('a', { href: '#' + entry.id }, entry.title)))))));
+          h(Link, { href: '#' + entry.id }, entry.title)))))));
 }
 
 function GuideHeader({ title, description }) {
@@ -28,7 +30,7 @@ function GuideSection({ id, title, children }) {
 }
 
 function GuideLink({ href, children }) {
-  return h('a', { href, 'data-vf-link': '' }, children);
+  return h(Link, { href }, children);
 }
 
 function CodeExample({ source, label = 'Example source' }) {
@@ -46,8 +48,8 @@ function CodeExample({ source, label = 'Example source' }) {
     h(Flow, { direction: 'inline', wrap: 'wrap', justify: 'space-between', align: 'center', gap: 'sm' },
       h(Text, { as: 'span', variant: 'body-sm' }, label),
       h(Button, { type: 'button', size: 'sm', variant: 'ghost', onClick: copy }, copied ? 'Copied' : 'Copy code')),
-    h('pre', { tabIndex: 0, 'data-vf-code-block': '' }, h('code', null, source)),
-    h('span', { role: 'status', className: 'vf-docs-customization-copy-status', 'aria-live': 'polite' },
+    h(CodeBlock, { tabIndex: 0 }, source),
+    h(Text, { as: 'span', role: 'status', className: 'vf-docs-customization-copy-status', 'aria-live': 'polite' },
       copied ? 'Code copied to clipboard' : ''));
 }
 
@@ -68,7 +70,7 @@ function DemoContent({ heading, action = 'Save changes' }) {
         onClick: () => setStatus('Primary preview action activated') }, action),
       h(Button, { type: 'button', variant: 'secondary',
         onClick: () => setStatus('Secondary preview action activated') }, 'Secondary action')),
-    h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-preview-feedback': '' }, status));
+    h(Text, { as: 'p', role: 'status', 'aria-live': 'polite', 'data-vf-docs-preview-feedback': '' }, status));
 }
 
 export function ColorGuide({ links }) {
@@ -150,7 +152,7 @@ export function RtlGuide({ links }) {
             h('bdi', { dir: 'ltr' }, 'VF-2048')),
           h(Button, { type: 'button', variant: 'primary',
             onClick: () => setSaved(true) }, rtl ? 'حفظ' : 'Save'),
-          h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-rtl-feedback': '' },
+          h(Text, { as: 'p', role: 'status', 'aria-live': 'polite', 'data-vf-docs-rtl-feedback': '' },
             saved ? (rtl ? 'تم الحفظ' : 'Saved') : ''))),
       h(CodeExample, { source, label: 'Native language and direction semantics' })),
     h(GuideSection, { id: 'vf-docs-rtl-integration', title: 'Global and local direction' },

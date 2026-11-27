@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from '@vyrnforge/react/button';
@@ -115,7 +116,9 @@ function App() {
 
   return (
     <main className="vf-data-explorer" lang={locale}>
-      <h1>Project explorer</h1>
+      <Text as="h1" variant="heading-lg">
+        Project explorer
+      </Text>
       <form className="vf-data-explorer__search" onSubmit={submitQuery}>
         <SearchFieldRoot className="vf-data-explorer__search-field" value={draftQuery} onValueChange={setDraftQuery}>
           <label htmlFor="project-query">Search projects</label>
@@ -166,14 +169,16 @@ function App() {
         </Button>
       </div>
 
-      <p className="vf-data-explorer__status" role="status" aria-live="polite">
+      <Text as="p" className="vf-data-explorer__status" role="status" aria-live="polite">
         {loading ? 'Updating results…' : `${results.length} project${results.length === 1 ? '' : 's'}`}
-      </p>
+      </Text>
 
       {!loading && results.length === 0 ? (
         <section className="vf-data-explorer__zero" aria-labelledby="zero-results-heading">
-          <h2 id="zero-results-heading">No matching projects</h2>
-          <p>Try another search or reset the active filters.</p>
+          <Text as="h2" variant="heading-md" id="zero-results-heading">
+            No matching projects
+          </Text>
+          <Text as="p">Try another search or reset the active filters.</Text>
           <Button type="button" onClick={reset}>
             Reset search and filters
           </Button>
@@ -182,10 +187,12 @@ function App() {
         <ul className="vf-data-explorer__results" aria-label="Project results">
           {results.map((project) => (
             <li className="vf-data-explorer__result" key={project.id}>
-              <strong>{project.name}</strong>
-              <p className="vf-data-explorer__meta">
+              <Text as="strong" variant="label-md">
+                {project.name}
+              </Text>
+              <Text as="p" className="vf-data-explorer__meta">
                 {project.active ? 'Active' : 'Archived'} · {project.mine ? 'Owned by me' : 'Team-owned'}
-              </p>
+              </Text>
             </li>
           ))}
         </ul>

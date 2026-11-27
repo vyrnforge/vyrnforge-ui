@@ -1,3 +1,4 @@
+import { Text } from '@vyrnforge/react/text';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { AppShell, AppShellBody, AppShellHeader, AppShellMain } from '@vyrnforge/react/app-shell';
@@ -88,12 +89,12 @@ function App() {
 
   return (
     <AppShell>
-      <AppShellHeader><strong>Record review</strong></AppShellHeader>
+      <AppShellHeader><Text as="strong" variant="label-md">Record review</Text></AppShellHeader>
       <AppShellBody>
         <AppShellMain className="table-example-main">
           <header>
-            <h1>Native table management</h1>
-            <p>This bounded example keeps native table semantics. Sorting, filtering, pagination, and selection do not create an ARIA grid.</p>
+            <Text as="h1" variant="heading-lg">Native table management</Text>
+            <Text as="p">This bounded example keeps native table semantics. Sorting, filtering, pagination, and selection do not create an ARIA grid.</Text>
           </header>
 
           <div className="table-toolbar">
@@ -102,7 +103,7 @@ function App() {
             <Button type="button" variant="secondary" onClick={() => { setQuery(''); setPage(1); }}>Clear filter</Button>
           </div>
 
-          <p id="page-selection-status" role="status" aria-live="polite">{pageSelectionMessage}</p>
+          <Text as="p" id="page-selection-status" role="status" aria-live="polite">{pageSelectionMessage}</Text>
 
           <div className="table-scroll" role="region" aria-label="Record table" tabIndex={0}>
             <table>
@@ -144,18 +145,18 @@ function App() {
 
           <div className="table-actions">
             <Button type="button" disabled={pageSelected.length === 0} onClick={runBulkAction}>Mark selected on this page reviewed</Button>
-            <span role="status" aria-live="polite">{actionStatus}</span>
+            <Text as="span" role="status" aria-live="polite">{actionStatus}</Text>
           </div>
 
           <PaginationRoot aria-label="Record pages">
             <PaginationPrevious href="#previous" aria-label="Previous page" aria-disabled={safePage === 1 || undefined} onClick={(event) => { event.preventDefault(); if (safePage > 1) setPage(safePage - 1); }}>Previous</PaginationPrevious>
-            <span aria-live="polite">Page {safePage} of {pageCount}</span>
+            <Text as="span" aria-live="polite">Page {safePage} of {pageCount}</Text>
             <PaginationNext href="#next" aria-label="Next page" aria-disabled={safePage === pageCount || undefined} onClick={(event) => { event.preventDefault(); if (safePage < pageCount) setPage(safePage + 1); }}>Next</PaginationNext>
           </PaginationRoot>
 
           <aside className="grid-decision-note">
-            <h2>Why this is not a data grid</h2>
-            <p>The task uses ordinary controls inside a semantic table. It does not require spreadsheet-style two-dimensional focus, cell editing, range selection, or author-managed arrow-key navigation.</p>
+            <Text as="h2" variant="heading-md">Why this is not a data grid</Text>
+            <Text as="p">The task uses ordinary controls inside a semantic table. It does not require spreadsheet-style two-dimensional focus, cell editing, range selection, or author-managed arrow-key navigation.</Text>
           </aside>
         </AppShellMain>
       </AppShellBody>
