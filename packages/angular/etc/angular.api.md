@@ -3067,10 +3067,20 @@ export class VfSideNavListDirective {
 
 // @public (undocumented)
 export class VfSliderDirective {
+    constructor();
+    // (undocumented)
+    readonly formatValue: InputSignal<((value: number) => string) | undefined>;
+    // (undocumented)
+    readonly marks: InputSignal<boolean | readonly {
+        value: number;
+        label?: string;
+    }[]>;
     // (undocumented)
     readonly orientation: InputSignal<"horizontal" | "vertical">;
     // (undocumented)
     readonly size: InputSignal<"sm" | "md" | "lg">;
+    // (undocumented)
+    readonly valueLabelDisplay: InputSignal<"off" | "auto" | "always">;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSliderDirective, "input[vfSlider]", never, {
         "size": {
@@ -3080,6 +3090,21 @@ export class VfSliderDirective {
         };
         "orientation": {
             "alias": "orientation";
+            "required": false;
+            "isSignal": true;
+        };
+        "marks": {
+            "alias": "marks";
+            "required": false;
+            "isSignal": true;
+        };
+        "valueLabelDisplay": {
+            "alias": "valueLabelDisplay";
+            "required": false;
+            "isSignal": true;
+        };
+        "formatValue": {
+            "alias": "formatValue";
             "required": false;
             "isSignal": true;
         };

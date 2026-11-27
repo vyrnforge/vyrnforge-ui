@@ -766,7 +766,7 @@ function SliderPreview({ config, update }) {
     marks: sliderMarks(config, values), valueLabelDisplay: config.valueLabelDisplay,
     formatValue: config.percent ? value => value + '%' : undefined,
     onChange: event => update('value', event.currentTarget.valueAsNumber) });
-  return h(Flow, { gap: 'sm', style: { inlineSize: '100%', maxInlineSize: '24rem', minInlineSize: 0 } },
+  return h(Flow, { gap: 'sm', className: 'vf-docs-slider-preview' },
     h(Flow, { direction: 'inline', align: 'center', gap: 'sm' },
       h('label', { htmlFor: id }, h(Text, null, name)),
       config.description ? h(TooltipRoot, null,

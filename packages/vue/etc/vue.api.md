@@ -1865,6 +1865,18 @@ orientation: {
 type: PropType<"horizontal" | "vertical">;
 default: string;
 };
+marks: {
+type: PropType<boolean | readonly {
+value: number;
+label?: string;
+}[]>;
+default: boolean;
+};
+valueLabelDisplay: {
+type: PropType<"off" | "auto" | "always">;
+default: string;
+};
+formatValue: PropType<(value: number) => string>;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
@@ -1876,9 +1888,26 @@ orientation: {
 type: PropType<"horizontal" | "vertical">;
 default: string;
 };
+marks: {
+type: PropType<boolean | readonly {
+value: number;
+label?: string;
+}[]>;
+default: boolean;
+};
+valueLabelDisplay: {
+type: PropType<"off" | "auto" | "always">;
+default: string;
+};
+formatValue: PropType<(value: number) => string>;
 }>> & Readonly<{}>, {
 size: "sm" | "md" | "lg";
 orientation: "horizontal" | "vertical";
+marks: boolean | readonly {
+value: number;
+label?: string;
+}[];
+valueLabelDisplay: "off" | "auto" | "always";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)

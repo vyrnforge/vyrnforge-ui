@@ -15,7 +15,7 @@ function numericAttribute(raw: string, fallback: number): number {
 function fraction(value: number, min: number, max: number): number {
   return max > min ? Math.min(1, Math.max(0, (value - min) / (max - min))) : 0;
 }
-function marksFor(options: SliderPresentationOptions, min: number, max: number, step: string) {
+function marksFor(options: SliderPresentationOptions, min: number, max: number, step: string): readonly { value: number; label?: string }[] {
   if (options.marks === true && step !== 'any') {
     const increment = Number(step || 1);
     const count = Math.floor((max - min) / increment + 1e-9) + 1;

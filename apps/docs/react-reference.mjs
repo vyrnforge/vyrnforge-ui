@@ -1623,7 +1623,7 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
     { title: 'ToggleGroup API', href: links.toggleGroup.api, keywords: 'root item type value onValueChange' },
     ...Object.entries(links.selection).flatMap(([id, entry]) => {
       const title = id.split('-').map(part => part[0].toUpperCase() + part.slice(1)).join(' ');
-      return [{ title, href: entry.guide, keywords: 'native selection form checked required reset' },
+      return [{ title, href: entry.guide, keywords: id === 'slider' ? 'range numeric volume marks tooltip vertical step value' : 'native selection form checked required reset' },
         ...(entry.api ? [{ title: title + ' API', href: entry.api, keywords: 'React props native input ref' }] : [])];
     }),
     { title: 'ToggleButton API', href: links.toggle.api, keywords: 'togglebutton props aria-pressed controlled size' },
