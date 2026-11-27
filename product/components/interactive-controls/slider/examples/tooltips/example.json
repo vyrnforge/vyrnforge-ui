@@ -1,7 +1,7 @@
 {
   "id": "slider/tooltips",
-  "title": "Value labels and supplemental help",
-  "description": "Format the moving value label and compose a separate public Tooltip for supplemental instructions. A numeric Input supports exact entry.",
+  "title": "Thumb-anchored value tooltips",
+  "description": "Enable numeric feedback directly on Slider, then customize visibility, placement, sizing, arrow and format.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

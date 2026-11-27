@@ -8,12 +8,12 @@ function App() {
   const [value, setValue] = useState(40);
   return <Flow gap="lg">
     <Flow as="form" gap="sm">
-      <Flow as="label" gap="xs"><Text>Uncontrolled</Text><Slider defaultValue={20} name="volume" valueLabelDisplay="always" /></Flow>
+      <Flow as="label" gap="xs"><Text>Uncontrolled</Text><Slider defaultValue={20} name="volume" tooltip={{ display: 'always' }} /></Flow>
       <Button type="reset" variant="secondary">Reset native value</Button>
     </Flow>
     <Flow as="label" gap="xs">
       <Text>Controlled ({value}%)</Text>
-      <Slider value={value} onChange={event => setValue(event.currentTarget.valueAsNumber)} valueLabelDisplay="auto" />
+      <Slider value={value} onChange={event => setValue(event.currentTarget.valueAsNumber)} tooltip />
     </Flow>
   </Flow>;
 }

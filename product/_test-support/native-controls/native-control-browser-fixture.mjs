@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'esbuild';
 import { loadNativeControlContract } from './native-control-contract.mjs';
@@ -14,15 +14,18 @@ async function writeClient(outDir, fileName, source, root) {
 }
 
 async function writeSharedStyles({ componentId, contract, outDir, root }) {
-  const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
-  let componentCss = await readFile(path.join(root, `packages/web/dist/components/${componentId}/${componentId}.css`), 'utf8');
-  componentCss = componentCss.replace('@import "../../styles/tokens.css";\n', '');
-  let dependencyCss = '';
-  for (const dependency of contract.styleDependencies ?? []) {
-    dependencyCss += `${(await readFile(path.join(root, `packages/web/dist/components/${dependency}/${dependency}.css`), 'utf8')).replace('@import "../../styles/tokens.css";\n', '')}\n`;
-    componentCss = componentCss.replace(`@import "../${dependency}/${dependency}.css";\n`, '');
-  }
-  await writeFile(path.join(outDir, `${componentId}.css`), `${tokensCss}\n${dependencyCss}\n${componentCss}`);
+  // Bundle the actual projected CSS dependency graph instead of concatenating
+  // component files whose nested imports resolve relative to a different path.
+  const styles = ['styles/tokens.css', ...(contract.styleDependencies ?? []).map(id => 'components/' + id + '/' + id + '.css'), 'components/' + componentId + '/' + componentId + '.css'];
+  await build({
+    stdin: {
+      contents: styles.map(file => '@import "./' + file + '";').join('\n'),
+      resolveDir: path.join(root, 'packages/web/dist'),
+      loader: 'css',
+    },
+    bundle: true,
+    outfile: path.join(outDir, componentId + '.css'),
+  });
 }
 
 export async function buildNativeControlBrowserFixture(componentId, port) {

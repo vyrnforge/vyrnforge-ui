@@ -18,6 +18,7 @@ import { PropType } from 'vue';
 import { PublicProps } from 'vue';
 import { RendererElement } from 'vue';
 import { RendererNode } from 'vue';
+import type { SliderTooltipOptions } from '@vyrnforge/web/slider';
 import { TextVariant } from '@vyrnforge/web/text';
 import { VNode } from 'vue';
 
@@ -1872,6 +1873,10 @@ label?: string;
 }[]>;
 default: boolean;
 };
+tooltip: {
+type: PropType<boolean | SliderTooltipOptions>;
+default: undefined;
+};
 valueLabelDisplay: {
 type: PropType<"off" | "auto" | "always">;
 default: string;
@@ -1895,6 +1900,10 @@ label?: string;
 }[]>;
 default: boolean;
 };
+tooltip: {
+type: PropType<boolean | SliderTooltipOptions>;
+default: undefined;
+};
 valueLabelDisplay: {
 type: PropType<"off" | "auto" | "always">;
 default: string;
@@ -1907,6 +1916,7 @@ marks: boolean | readonly {
 value: number;
 label?: string;
 }[];
+tooltip: boolean | SliderTooltipOptions;
 valueLabelDisplay: "off" | "auto" | "always";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 

@@ -767,6 +767,16 @@ function sliderMarks(config, values) {
     .map(value => ({ value, label: String(value) }));
   return false;
 }
+function sliderTooltip(config) {
+  if (config.tooltipDisplay === 'off') return false;
+  return {
+    display: config.tooltipDisplay,
+    placement: config.tooltipPlacement === 'auto' ? undefined : config.tooltipPlacement,
+    size: config.tooltipSize,
+    arrow: config.tooltipArrow,
+    format: config.percent ? value => value + '%' : undefined,
+  };
+}
 function SliderPreview({ config, update }) {
   const values = sliderValues(config);
   const name = label(config, 'Volume');
@@ -774,15 +784,10 @@ function SliderPreview({ config, update }) {
   const control = h(Slider, { ...values, id, size: config.size, orientation: config.orientation,
     disabled: config.disabled, 'aria-invalid': config.invalid || undefined,
     'aria-describedby': config.invalid ? id + '-error' : undefined,
-    marks: sliderMarks(config, values), valueLabelDisplay: config.valueLabelDisplay,
-    formatValue: config.percent ? value => value + '%' : undefined,
+    marks: sliderMarks(config, values), tooltip: sliderTooltip(config),
     onChange: event => update('value', event.currentTarget.valueAsNumber) });
   return h(Flow, { gap: 'sm', className: 'vf-docs-slider-preview' },
-    h(Flow, { direction: 'inline', align: 'center', gap: 'sm' },
-      h('label', { htmlFor: id }, h(Text, null, name)),
-      config.description ? h(TooltipRoot, { placement: 'right' },
-        h(TooltipTrigger, null, h(Button, { type: 'button', 'aria-label': 'About ' + name, size: 'sm', variant: 'ghost', iconOnly: true }, h(Icon, { icon: infoIcon, size: 'sm' }))),
-        h(TooltipContent, null, 'Adjust the selected numeric value.')) : null),
+    h('label', { htmlFor: id }, h(Text, null, name)),
     control,
     config.invalid ? h(Text, { id: id + '-error', as: 'p', variant: 'body-sm', tone: 'danger' }, 'Choose a permitted value.') : null);
 }
@@ -795,16 +800,27 @@ export const sliderPlayground = {
     { kind: 'number', key: 'value', label: 'Value', default: 50, min: -100, max: 200 },
     choice('step', 'Step', '1', ['any', '1', '5', '25']),
     choice('marks', 'Marks', 'none', ['none', 'ticks', 'labels']),
-    choice('valueLabelDisplay', 'Value label', 'off', ['off', 'auto', 'always']),
-    bool('percent', 'Percent format'), bool('description', 'Descriptive tooltip'), bool('controlled', 'Controlled usage'),
+    choice('tooltipDisplay', 'Value tooltip', 'off', ['off', 'auto', 'always']),
+    choice('tooltipPlacement', 'Tooltip placement', 'auto', ['auto', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end']),
+    choice('tooltipSize', 'Tooltip size', 'sm', ['sm', 'md', 'lg']),
+    bool('tooltipArrow', 'Tooltip arrow'), bool('percent', 'Percent format'), bool('controlled', 'Controlled usage'),
     bool('disabled', 'Disabled'), bool('invalid', 'Invalid')],
-  presets: [{ label: 'Stepped with labels', values: { step: '25', marks: 'labels', valueLabelDisplay: 'always' } },
-    { label: 'Vertical volume', values: { orientation: 'vertical', valueLabelDisplay: 'auto', percent: true } }],
+  presets: [{ label: 'Stepped with labels', values: { step: '25', marks: 'labels', tooltipDisplay: 'always', tooltipArrow: true } },
+    { label: 'Vertical volume', values: { orientation: 'vertical', tooltipDisplay: 'auto', tooltipArrow: true, percent: true } },
+    { label: 'Simple tooltip', values: { tooltipDisplay: 'auto' } }],
   Preview: SliderPreview,
   source(config) {
     const { min, max, step, value } = sliderValues(config);
     const imports = [importLine('Slider', 'slider')];
     const name = label(config, 'Volume');
+    const tooltipOptions = [];
+    if (config.tooltipDisplay === 'always') tooltipOptions.push("display: 'always'");
+    if (config.tooltipPlacement && config.tooltipPlacement !== 'auto') tooltipOptions.push('placement: ' + JSON.stringify(config.tooltipPlacement));
+    if (config.tooltipSize && config.tooltipSize !== 'sm') tooltipOptions.push('size: ' + JSON.stringify(config.tooltipSize));
+    if (config.tooltipArrow) tooltipOptions.push('arrow: true');
+    if (config.percent) tooltipOptions.push('format: value => value + "%"');
+    const tooltipProp = !config.tooltipDisplay || config.tooltipDisplay === 'off' ? '' :
+      tooltipOptions.length ? 'tooltip={{ ' + tooltipOptions.join(', ') + ' }}' : 'tooltip';
     const props = [
       attribute('aria-label', name), config.controlled ? 'value={value}' : 'defaultValue={' + value + '}',
       config.controlled ? 'onChange={event => setValue(event.currentTarget.valueAsNumber)}' : '',
@@ -812,20 +828,12 @@ export const sliderPlayground = {
       step === 1 ? '' : step === 'any' ? 'step="any"' : 'step={' + step + '}',
       attribute('size', config.size, 'md'), attribute('orientation', config.orientation, 'horizontal'),
       config.marks === 'ticks' ? 'marks' : config.marks === 'labels' ? 'marks={' + JSON.stringify(sliderMarks(config, { min, max })) + '}' : '',
-      attribute('valueLabelDisplay', config.valueLabelDisplay, 'off'),
-      config.percent ? 'formatValue={value => value + "%"}' : '',
-      flag('disabled', config.disabled), config.invalid ? 'aria-invalid="true"' : '',
+      tooltipProp, flag('disabled', config.disabled), config.invalid ? 'aria-invalid="true"' : '',
     ];
     const control = markup('Slider', props);
     const setup = config.controlled ? ['const [value, setValue] = useState(' + value + ');'] : [];
     if (config.controlled) imports.push("import { useState } from 'react';");
-    if (!config.description) return snippet(imports, control, { setup });
-    imports.push(importLine('Flow', 'layout'), importLine('Button', 'button'),
-      importLine('TooltipRoot, TooltipTrigger, TooltipContent', 'tooltip'), ...iconImports('infoIcon', 'info'));
-    const help = markup('TooltipRoot', ['placement="right"'], markup('TooltipTrigger', [],
-      markup('Button', ['type="button"', attribute('aria-label', 'About ' + name), 'size="sm"', 'variant="ghost"', 'iconOnly'], '<Icon icon={infoIcon} size="sm" />')) + '\n' +
-      markup('TooltipContent', [], 'Adjust the selected numeric value.'));
-    return snippet(imports, markup('Flow', ['gap="sm"'], help + '\n' + control), { setup });
+    return snippet(imports, control, { setup });
   },
 };
 
