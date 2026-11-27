@@ -55,7 +55,10 @@
     min-inline-size: 0;
     position: relative;
     --_vf-field-radius: var(--vf-text-field-radius, var(--vf-editor-radius, var(--vf-control-radius)));
-    --_vf-field-border-default: var(--vf-text-field-border-color, var(--vf-editor-border-color, var(--vf-color-border-required)));
+    --_vf-field-border-default: var(
+      --vf-text-field-border-color,
+      var(--vf-editor-border-color, var(--vf-color-border-required))
+    );
     --_vf-field-surface-default: var(--vf-text-field-background, var(--_vf-text-field-background));
     --_vf-field-hover-surface: var(--_vf-field-surface-default);
   }

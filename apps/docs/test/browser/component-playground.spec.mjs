@@ -423,6 +423,30 @@ for (const name of ['Input', 'Textarea']) {
     await playground.getByRole('radio', { name: 'filled', exact: true }).check();
     await expect(editor).toHaveAttribute('data-vf-editor-variant', 'filled');
     await expect(editor).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await editor.fill('');
+    for (const theme of ['light', 'dark']) {
+      await page.locator('html').evaluate((el, value) => { el.dataset.vfTheme = value; }, theme);
+      const contrast = await editor.evaluate(el => {
+        const style = getComputedStyle(el);
+        const canvas = document.createElement('canvas');
+        canvas.width = canvas.height = 1;
+        const ctx = canvas.getContext('2d');
+        const luminance = color => {
+          ctx.clearRect(0, 0, 1, 1);
+          ctx.fillStyle = color;
+          ctx.fillRect(0, 0, 1, 1);
+          return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3)
+            .map(c => c / 255).map(c => c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
+            .reduce((sum, c, index) => sum + c * [0.2126, 0.7152, 0.0722][index], 0);
+        };
+        const a = luminance(style.backgroundColor);
+        const b = luminance(getComputedStyle(el, '::placeholder').color);
+        return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+      });
+      expect(contrast).toBeGreaterThanOrEqual(4.5);
+      await preview.screenshot({ path: testInfo.outputPath(name.toLowerCase() + '-filled-' + theme + '.png') });
+    }
+    await editor.fill('Native value');
     await playground.getByRole('radio', { name: 'underlined', exact: true }).check();
     await expect(editor).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     await playground.getByRole('radio', { name: 'unstyled', exact: true }).check();

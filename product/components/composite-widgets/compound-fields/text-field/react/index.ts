@@ -85,7 +85,7 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
         ...native,
         ...relationships,
         variant: 'unstyled',
-        autosize,
+        autosize: autosize ?? false,
         resize: native.resize ?? 'vertical',
         ref: ref as Ref<HTMLTextAreaElement>,
       });

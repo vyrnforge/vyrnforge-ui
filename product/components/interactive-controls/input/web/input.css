@@ -16,9 +16,12 @@
     --_vf-input-color-inline-size: 3.5rem;
 
     block-size: var(--_vf-editor-height);
-    cursor: pointer;
     inline-size: var(--_vf-input-color-inline-size);
     padding: var(--vf-space-xs);
+  }
+
+  :where(input[data-vf-input][type="color"]:not([data-vf-editor-variant="unstyled"]):not(:disabled)) {
+    cursor: pointer;
   }
 
   :where(input[data-vf-input][type="color"]:not([data-vf-editor-variant="unstyled"]):hover:not(:disabled)) {

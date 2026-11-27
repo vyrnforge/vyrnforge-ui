@@ -13,7 +13,7 @@
   }
 
   :where(input[data-vf-input], textarea[data-vf-textarea])::placeholder {
-    color: var(--vf-color-text-subtle);
+    color: var(--vf-color-text-muted);
     opacity: 1;
     font: var(--_vf-editor-placeholder-font, var(--vf-editor-placeholder-font, inherit));
     letter-spacing: var(--vf-editor-placeholder-letter-spacing, inherit);
@@ -88,7 +88,7 @@
   /* Independent appearance axes. Unstyled editors keep native semantics and a focus ring. */
   :where(input[data-vf-input], textarea[data-vf-textarea]) {
     --_vf-editor-height: var(--_vf-density-control-height-md, var(--vf-control-height-md));
-    --_vf-editor-block-padding: var(--_vf-density-input-padding-block, var(--vf-space-xs));
+    --_vf-editor-block-padding: var(--_vf-density-input-padding-block, 0.4375rem);
   }
   :where([data-vf-editor-size="sm"]) {
     --_vf-editor-height: var(--vf-control-height-sm);
