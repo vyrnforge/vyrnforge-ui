@@ -27,6 +27,7 @@ function record(key, value) {
 }
 export async function createReactStory({ client }) {
   const { createElement: h, useEffect, useState } = await import('react');
+  const { ThemeScope, tokens } = await import('@vyrnforge/react');
   const { NumberField, NumberFieldRoot, NumberFieldInput, NumberFieldIncrement, NumberFieldDecrement } =
     await import('@vyrnforge/react/number-field');
   function App() {
@@ -88,7 +89,7 @@ export async function createReactStory({ client }) {
       h(NumberField, {
         id: 'nf-accepted',
         name: 'accepted',
-        label: 'Accepted adjustment',
+        label: 'Adjustment',
         value: accepted,
         onValueChange: setAccepted,
         min: -10,
@@ -113,6 +114,11 @@ export async function createReactStory({ client }) {
         error: 'Enter amount',
         required: true,
       }),
+      h(
+        ThemeScope,
+        { tokens: { textField: { valueFont: '600 1.25rem/1.5 ' + tokens.fontFamily.sans, radius: '8px' } } },
+        h(NumberField, { label: 'Custom typography', defaultValue: 3.5, step: 0.1, fullWidth: true }),
+      ),
       h(
         'button',
         { type: 'button', id: 'set-controlled', onClick: () => setControlled(7) },
