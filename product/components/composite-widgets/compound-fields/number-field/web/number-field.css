@@ -24,8 +24,12 @@
     appearance: textfield;
   }
 
-  :where([data-vf-number-field-layout]:not([data-vf-number-field-layout='native']) [data-vf-number-field-input])::-webkit-inner-spin-button,
-  :where([data-vf-number-field-layout]:not([data-vf-number-field-layout='native']) [data-vf-number-field-input])::-webkit-outer-spin-button,
+  :where(
+    [data-vf-number-field-layout]:not([data-vf-number-field-layout='native']) [data-vf-number-field-input]
+  )::-webkit-inner-spin-button,
+  :where(
+    [data-vf-number-field-layout]:not([data-vf-number-field-layout='native']) [data-vf-number-field-input]
+  )::-webkit-outer-spin-button,
   :where([data-vf-number-field-layout] [data-vf-number-field-input][step='any'])::-webkit-inner-spin-button,
   :where([data-vf-number-field-layout] [data-vf-number-field-input][step='any'])::-webkit-outer-spin-button {
     appearance: none;
@@ -50,8 +54,10 @@
     padding-inline-start: 0;
   }
 
-  :where([data-vf-number-field-layout='horizontal'] [data-vf-text-field-trailing],
-         [data-vf-number-field-layout='stacked'] [data-vf-text-field-trailing]) {
+  :where(
+    [data-vf-number-field-layout='horizontal'] [data-vf-text-field-trailing],
+    [data-vf-number-field-layout='stacked'] [data-vf-text-field-trailing]
+  ) {
     padding-inline-end: 0;
   }
 
@@ -69,8 +75,8 @@
     min-block-size: max(24px, calc(var(--_vf-text-field-height) / 2));
   }
 
-  :where([data-vf-number-field-layout]) :is([data-vf-number-field-increment], [data-vf-number-field-decrement]):focus-visible {
+  :where([data-vf-number-field-layout])
+    :is([data-vf-number-field-increment], [data-vf-number-field-decrement]):focus-visible {
     outline-offset: -2px;
   }
-
 }
