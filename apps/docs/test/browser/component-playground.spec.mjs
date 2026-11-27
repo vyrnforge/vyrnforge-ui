@@ -574,6 +574,11 @@ test('NumberField playground uses native numeric editing and concise public usag
   await preview.getByRole('button', { name: 'Increase Quantity' }).click();
   await expect(preview.getByRole('spinbutton')).toHaveValue('2');
   await expect(source).toContainText('stepControls="horizontal"');
+  await playground.getByRole('checkbox', { name: 'Controlled usage', exact: true }).check();
+  await preview.getByRole('spinbutton').fill('3');
+  await expect(preview.getByRole('spinbutton')).toHaveValue('3');
+  await expect(source).toContainText('value={value}');
+  await expect(source).toContainText('onValueChange={setValue}');
   await expect(source).toContainText('@vyrnforge/react/number-field');
   await expect(source).not.toContainText(/styles\/|--vf-/);
   await playground.getByRole('button', { name: 'Decimal temperature', exact: true }).click();
