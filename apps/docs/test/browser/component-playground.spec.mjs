@@ -650,6 +650,10 @@ test('NumberField playground uses native numeric editing and concise public usag
   }
   await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
   await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+  const affix = preview.locator('[data-vf-text-field-suffix]');
+  await expect(affix).toHaveCSS('direction', 'rtl');
+  await expect(affix.locator('bdi')).toHaveCSS('direction', 'ltr');
+  await expect(affix.locator('bdi')).toHaveText('°C');
   await preview.screenshot({ path: testInfo.outputPath('number-field-rtl-forced.png') });
   expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
 });
