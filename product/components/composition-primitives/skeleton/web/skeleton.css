@@ -20,7 +20,7 @@
     min-block-size: 1rem;
   }
 
-  :where([data-vf-skeleton][data-vf-skeleton-shape="line"], [data-vf-loading-placeholder][data-vf-loading-placeholder-shape="line"]) {
+  :where([data-vf-skeleton]:not([data-vf-skeleton-shape]), [data-vf-skeleton][data-vf-skeleton-shape="line"], [data-vf-loading-placeholder][data-vf-loading-placeholder-shape="line"]) {
     border-radius: var(--vf-loading-placeholder-line-radius, 999px);
     min-block-size: 0.75rem;
   }
@@ -41,7 +41,7 @@
     inline-size: 100%;
   }
 
-  :where([data-vf-skeleton][data-vf-skeleton-shape="line"]) {
+  :where([data-vf-skeleton]:not([data-vf-skeleton-shape]), [data-vf-skeleton][data-vf-skeleton-shape="line"]) {
     block-size: 0.75em;
     min-block-size: 0;
   }

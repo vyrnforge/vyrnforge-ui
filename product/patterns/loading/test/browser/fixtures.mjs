@@ -1,11 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const stripImports = (css) => css
-  .replace('@import "../../styles/tokens.css";\n', '')
-  .replace('@import "../../styles/loading-motion.css";\n', '')
-  .replace('@import "./tokens.css";\n', '');
-
 export const browserFixture = {
   component: 'loading',
   prepare: async ({ port }) => {
@@ -33,10 +28,9 @@ export const browserFixture = {
     const outDir = path.join(root, 'dist/browser-fixtures/components/loading');
     await mkdir(outDir, { recursive: true });
 
-    const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
-    const motionCss = stripImports(await readFile(path.join(root, 'packages/web/dist/styles/loading-motion.css'), 'utf8'));
-    const loadingCss = stripImports(await readFile(path.join(root, 'packages/web/dist/components/loading/loading.css'), 'utf8'));
-    const layoutCss = stripImports(await readFile(path.join(root, 'packages/web/dist/components/layout/layout.css'), 'utf8'));
+    const { build } = await import('esbuild');
+    await build({ stdin: { contents: '@import "@vyrnforge/web/styles/loading.css";\n@import "@vyrnforge/web/styles/layout.css";', loader: 'css', resolveDir: root }, bundle: true, outfile: path.join(outDir, 'loading-bundle.css') });
+    const loadingBundle = await readFile(path.join(outDir, 'loading-bundle.css'), 'utf8');
     const fixtureCss = `
       body { margin: 0; padding: 24px; background: var(--vf-color-surface); color: var(--vf-color-text); }
       #examples { max-inline-size: 44rem; }
@@ -49,7 +43,7 @@ export const browserFixture = {
 
     await writeFile(
       path.join(outDir, 'loading.css'),
-      `${tokensCss}\n${motionCss}\n${layoutCss}\n${loadingCss}\n${fixtureCss}`,
+      `${loadingBundle}\n${fixtureCss}`,
     );
 
     const body = `
