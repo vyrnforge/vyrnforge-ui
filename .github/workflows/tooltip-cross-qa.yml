@@ -1,0 +1,17 @@
+name: Tooltip Cross-Engine QA
+on:
+  pull_request:
+    branches: [fix/tooltip-compact-surface]
+    paths: ['.github/workflows/tooltip-cross-qa.yml']
+permissions:
+  contents: read
+jobs:
+  tooltip-cross:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"tooltip"},{"port":"react","components":"tooltip"},{"port":"angular","components":"tooltip"},{"port":"vue","components":"tooltip"},{"port":"elements","components":"tooltip"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: tooltip-cross-qa
+      retention_days: 7
