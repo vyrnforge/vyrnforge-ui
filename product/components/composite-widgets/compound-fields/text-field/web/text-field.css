@@ -240,6 +240,13 @@
   ) {
     outline: none;
   }
+  /* Keep scrolling multiline content below the floating label, including at the row cap. */
+  :where(
+    [data-vf-text-field-label-placement='floating'][data-vf-text-field-variant='outlined']
+      > [data-vf-text-field-control]:has(> textarea)
+  ) {
+    padding-block-start: max(var(--vf-space-sm), 0.5lh);
+  }
   :where([data-vf-text-field-outline]) {
     position: absolute;
     inset: -1px;

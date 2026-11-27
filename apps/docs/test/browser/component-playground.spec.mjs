@@ -513,6 +513,11 @@ test('TextField autosize alone selects Textarea and emits concise matching usage
   await expect(source).toContainText('minRows={1}');
   await expect(source).not.toContainText(/multiline|rows=|styles\/|useState/);
   await editor.fill(Array(10).fill('A line').join('\n'));
+  await editor.evaluate(el => { el.scrollTop = el.scrollHeight; });
+  const label = preview.locator('[data-vf-text-field-label]');
+  const bounds = await label.boundingBox();
+  const editorBounds = await editor.boundingBox();
+  expect(editorBounds.y).toBeGreaterThanOrEqual(bounds.y + bounds.height - 1);
   for (const theme of ['light', 'dark']) {
     await page.locator('#vf-react-theme').selectOption(theme);
     await preview.screenshot({ path: testInfo.outputPath('auto-field-' + theme + '.png') });

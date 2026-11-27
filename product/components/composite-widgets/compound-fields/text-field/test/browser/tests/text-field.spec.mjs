@@ -198,7 +198,8 @@ test('standalone and composed editors share their outside-label visual language'
           const expected = await standalone.evaluate((el, key) => getComputedStyle(el).getPropertyValue(key), property);
           await expect(shell).toHaveCSS(property, expected);
         }
-        if (kind === 'input' || (await standalone.evaluate((el) => CSS.supports('field-sizing', 'content')))) {
+        const supportsAutosize = await standalone.evaluate((el) => CSS.supports('field-sizing', 'content'));
+        if (kind === 'input' || supportsAutosize) {
           const a = await standalone.evaluate((el) => el.getBoundingClientRect().height);
           const b = await shell.evaluate((el) => el.getBoundingClientRect().height);
           expect(Math.abs(a - b)).toBeLessThanOrEqual(2);
