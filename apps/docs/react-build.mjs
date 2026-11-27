@@ -274,7 +274,7 @@ if (badgeTypeStart < 0 || badgeTypeEnd < 0 ||
 const publicBadgeTypes = badgePublicSource.slice(badgeTypeStart, badgeTypeEnd).trim();
 
 const feedbackIds = ['status-indicator', 'alert', 'dialog', 'alert-dialog', 'drawer', 'toast', 'skeleton', 'progress'];
-const fieldIds = ['input', 'textarea', 'text-field'];
+const fieldIds = ['input', 'textarea', 'text-field', 'number-field'];
 const fieldUnits = await Promise.all(fieldIds.map(async id => {
   const unit = reactModel.componentCatalog.find(entry => entry.id === id);
   if (!unit?.apiAvailable || !unit.showcaseAvailable || !unit.frameworkContent || !unit.examples.length ||
