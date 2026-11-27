@@ -304,7 +304,7 @@ function layoutGuide(layout, links) {
           'Migration from older layout names',
         ], 'react-layout'),
         ...guideSubsections(layout.frameworkContent,
-          ['Native separators in JSX'], 'react-layout-native'),
+          ['React tokens', 'Native separators in JSX'], 'react-layout-native'),
       ]),
       guidePart(sections[3], [
         h(Flow, { as: 'ul', gap: 'sm', key: 'related', className: 'vf-docs-related-links' },
@@ -854,7 +854,7 @@ function listUsage(list, links) {
         ...guideSubsections(list.frameworkContent,
           ['Composition with existing VyrnForge components',
            'React state and server rendering',
-           'Extended React List examples'], 'react-list-integration'),
+           'Extended React List examples', 'React tokens'], 'react-list-integration'),
       ]),
       guidePart(sections[3], [
         h(Link, { href: links.list.api },

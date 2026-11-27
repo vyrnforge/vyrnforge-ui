@@ -1306,6 +1306,8 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   await expect(nav.getByText('Layout & Structure', { exact: true })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Layout', exact: true })).toHaveAttribute('aria-current', 'page');
   const layoutGuide = page.locator('[data-vf-docs-react-layout]');
+  await expect(layoutGuide.getByRole('heading', { name: 'React tokens' })).toBeVisible();
+  await expect(layoutGuide).toContainText("autoGrid: { minItemSize: '18rem' }");
   await layoutGuide.getByText('Accessibility standards', { exact: true }).click();
   const accessibility = layoutGuide.locator('[data-vf-docs-accessibility]');
   await expect(accessibility).toContainText('Accessibility still needs review.');
@@ -2358,6 +2360,8 @@ test('React Image guide uses shared native CSS, source-backed examples and a dis
 test('React List guide exposes rich semantic examples and a separate source-backed API', async ({ page }) => {
   await page.goto('/next/react/components/list/');
   await expect(page.locator('[data-vf-docs-react-list]')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'React tokens' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-list]')).toContainText('tokenStyle({ list: { stickyOffset:');
   await expect(page.locator('[data-vf-docs-react-list-example]')).toHaveCount(8);
 
   await page.locator('iframe[title="React Rich team directory List example"]').scrollIntoViewIfNeeded();
