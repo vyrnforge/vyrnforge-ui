@@ -148,7 +148,6 @@ test('native radio reset restores independent defaults, empty selection and comm
 });
 
 test('generated Rating preserves native fractional selection, clear and read-only semantics', async ({ page }) => {
-  test.skip(port !== 'react', 'Generated React surface.');
   await open(page);
   const group = page.getByRole('radiogroup', { name: 'Fractional rating' });
   await expect(group.getByRole('radio')).toHaveCount(10);
@@ -159,16 +158,39 @@ test('generated Rating preserves native fractional selection, clear and read-onl
   await page.keyboard.press('ArrowRight');
   await expect(group.getByRole('radio', { name: '4', exact: true })).toBeChecked();
   expect(await page.locator('#form').evaluate(form => new FormData(form).get('fraction'))).toBe('4');
-  await page.getByRole('button', { name: 'Clear fractional rating' }).click();
-  await expect(group.locator('input:checked')).toHaveCount(0);
-  expect(await page.locator('#form').evaluate(form => new FormData(form).has('fraction'))).toBe(false);
+  const generated = port !== 'web' && port !== 'elements';
+  if (generated) {
+    await page.getByRole('button', { name: 'Clear fractional rating' }).click();
+    await expect(group.locator('input:checked')).toHaveCount(0);
+    expect(await page.locator('#form').evaluate(form => new FormData(form).has('fraction'))).toBe(false);
+  }
   await page.locator('#form').evaluate(form => form.reset());
   await expect(selected).toBeChecked();
   const average = page.getByRole('img', { name: 'Average 4.7 out of 5' });
   await expect(average.locator('input')).toHaveCount(0);
-  const required = page.getByRole('radiogroup', { name: 'Required rating' });
-  expect(await required.locator('input').first().evaluate(input => input.validity.valueMissing)).toBe(true);
-  await required.getByRole('radio', { name: '2', exact: true }).check();
-  expect(await required.locator('input').first().evaluate(input => input.validity.valueMissing)).toBe(false);
+  if (generated) {
+    const required = page.getByRole('radiogroup', { name: 'Required rating' });
+    expect(await required.locator('input').first().evaluate(input => input.validity.valueMissing)).toBe(true);
+    await required.getByRole('radio', { name: '2', exact: true }).check();
+    expect(await required.locator('input').first().evaluate(input => input.validity.valueMissing)).toBe(false);
+  }
   await expectNoAxeViolations(page);
+});
+
+test('enhanced native paint follows checked choice, hover and logical direction', async ({ page }) => {
+  await open(page);
+  const group = page.getByRole('radiogroup', { name: 'Fractional rating' });
+  const artwork = group.locator('[data-vf-rating-artwork]');
+  const fill = index => artwork.nth(index).evaluate(el => getComputedStyle(el).getPropertyValue('--_vf-rating-fill').trim());
+  await expect.poll(() => fill(3)).toBe('50%');
+  await group.getByRole('radio', { name: '2.5', exact: true }).hover();
+  await expect.poll(() => fill(2)).toBe('50%');
+  await expect.poll(() => fill(3)).toBe('0%');
+  await page.locator('body').hover({ position: { x: 1, y: 1 } });
+  await expect.poll(() => fill(3)).toBe('50%');
+  await group.evaluate(el => el.setAttribute('dir', 'rtl'));
+  await expect(group.locator('[data-vf-rating-fill]').nth(3)).toHaveCSS('clip-path', 'inset(0px 0px 0px 50%)');
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await group.getByRole('radio', { name: '3.5', exact: true }).focus();
+  await expect(group.getByRole('radio', { name: '3.5', exact: true }).locator('..')).toHaveCSS('outline-style', 'solid');
 });

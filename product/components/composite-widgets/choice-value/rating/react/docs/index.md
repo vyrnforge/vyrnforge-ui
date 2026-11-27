@@ -26,4 +26,4 @@ Pass readOnly and a complete accessible score label, with value representing the
 
 ## Migration
 
-RatingRoot and RatingItem retain their existing whole-value native composition behavior. Prefer Rating for new usage. Existing authored Native Web, Angular, Vue and Elements composition remains available; enhanced generated presentation is not yet established on every surface.
+RatingRoot and RatingItem retain their existing whole-value native composition behavior. Prefer Rating for new usage. Existing authored Native Web and Elements composition remains available. Vue and Angular expose idiomatic generated Rating counterparts.

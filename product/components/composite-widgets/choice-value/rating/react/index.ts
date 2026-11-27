@@ -1,6 +1,6 @@
 import { Icon } from '../icon/index.js';
 import type { IconDefinition, IconSize } from '@vyrnforge/web/icon';
-import { ratingStar, ratingMaximum, ratingValue } from '@vyrnforge/web/rating';
+import { ratingStar, ratingMaximum, ratingValue, connectRatingReset } from '@vyrnforge/web/rating';
 import type { CSSProperties, HTMLAttributes } from 'react';
 import {
   createContext,
@@ -54,35 +54,11 @@ function useRatingState({
     committed.current = value;
     normalizer.current = normalize;
   }, [value, normalize]);
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const document = root.ownerDocument;
-    let active = true;
-    const radios = () => {
-      const current = rootRef.current;
-      return Array.from(current?.querySelectorAll<HTMLInputElement>('input[type="radio"]') ?? []).filter(
-        (radio) => radio.closest('[data-vf-rating-root]') === current,
-      );
-    };
-    const onReset = (event: Event) => {
-      const group = radios();
-      if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
-      setTimeout(() => {
-        if (!active || event.defaultPrevented) return;
-        const group = radios();
-        if (!group.length || !group.every((radio) => radio.form === event.target)) return;
-        const next = normalizer.current(committed.current ?? initial.current);
-        if (committed.current === undefined) setIv(next);
-        for (const radio of group) radio.checked = Number(radio.value) === next;
-      }, 0);
-    };
-    document.addEventListener('reset', onReset, true);
-    return () => {
-      active = false;
-      document.removeEventListener('reset', onReset, true);
-    };
-  }, []);
+  useEffect(() => connectRatingReset(() => rootRef.current, () => {
+    const next = normalizer.current(committed.current ?? initial.current);
+    if (committed.current === undefined) setIv(next);
+    return next;
+  }), []);
   const ctx = useMemo(
     () => ({
       value: selected,

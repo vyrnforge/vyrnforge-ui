@@ -18,3 +18,36 @@ export function ratingValue(value: number, max: number, precision: 1 | 0.5 = 1, 
   const bounded = Number.isFinite(value) ? Math.max(0, Math.min(max, value)) : 0;
   return readOnly ? bounded : Math.round(bounded / precision) * precision;
 }
+
+/** Reconcile only native radios owned by this Rating group after an uncanceled reset. */
+export function ratingRadios(root: HTMLElement | null): HTMLInputElement[] {
+  return Array.from(root?.querySelectorAll<HTMLInputElement>('input[type="radio"]') ?? []).filter(
+    radio => radio.closest('[data-vf-rating-root]') === root,
+  );
+}
+
+export function reconcileRating(root: HTMLElement | null, value: number): void {
+  for (const radio of ratingRadios(root)) radio.checked = Number(radio.value) === value;
+}
+
+/** Browser-only opt-in used by state-owning adapters; native authored markup needs no connection. */
+export function connectRatingReset(root: () => HTMLElement | null, restore: () => number): () => void {
+  const document = root()?.ownerDocument;
+  let active = true;
+  const onReset = (event: Event) => {
+    const group = ratingRadios(root());
+    if (!group.length || !group.every(radio => radio.form && radio.form === event.target)) return;
+    setTimeout(() => {
+      if (!active || event.defaultPrevented) return;
+      const current = root();
+      const group = ratingRadios(current);
+      if (!group.length || !group.every(radio => radio.form && radio.form === event.target)) return;
+      reconcileRating(current, restore());
+    }, 0);
+  };
+  document?.addEventListener('reset', onReset, true);
+  return () => {
+    active = false;
+    document?.removeEventListener('reset', onReset, true);
+  };
+}

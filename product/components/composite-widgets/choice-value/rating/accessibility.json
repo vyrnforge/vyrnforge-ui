@@ -9,7 +9,16 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": ["1.3.1", "1.4.1", "1.4.11", "2.1.1", "2.4.7", "2.5.8", "3.3.2", "4.1.2"]
+    "criteria": [
+      "1.3.1",
+      "1.4.1",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "3.3.2",
+      "4.1.2"
+    ]
   },
   "aria": {
     "status": "mapped",
@@ -25,7 +34,9 @@
       "Maintain a distinct group name, one selected value, native radio semantics and non-color selected indicators.",
       "A non-canceled native same-form reset restores initial uncontrolled selection (including no selection) or retains the latest controlled selection without a synthetic change intent."
     ],
-    "consumer": ["Author the group name, item names and meaningful rating scale."]
+    "consumer": [
+      "Author the group name, item names and meaningful rating scale."
+    ]
   },
   "forms": {
     "status": "review-required"
@@ -45,6 +56,7 @@
     "React and Vue generate independent native radio names unless a form name is authored. Angular requires a root name; Web and Elements use authored native names.",
     "Group labels are authored; explicit or generated numeric item labels support localization. Filled and empty glyphs distinguish state without color.",
     "Audit mapping is provisional; not a conformance claim.",
-    "Native same-form reset browser regressions cover canceled reset, independent groups, no selection and controlled value preservation; wider form, visual and manual acceptance remain open."
+    "Native same-form reset browser regressions cover canceled reset, independent groups, no selection and controlled value preservation; wider form, visual and manual acceptance remain open.",
+    "Enhanced rating: native whole/half choices with 24px minimum half target at default scale, CSS checked/hover artwork, authored clear label, disabled/required and noninteractive role=img display. Manual AT review remains required."
   ]
 }
