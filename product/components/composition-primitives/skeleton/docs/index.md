@@ -14,7 +14,7 @@ Line is typography-relative, block has a default 3rem height, circle has a defau
 
 ## Customization
 
-Set `--vf-skeleton-color`, `--vf-skeleton-highlight`, `--vf-skeleton-radius`, and `--vf-skeleton-duration` through the shared cascade. Use CSS logical width/height for geometry. Reduced motion stops wave and pulse; forced colors keep placeholders visible.
+Set `--vf-skeleton-color`, `--vf-skeleton-highlight`, `--vf-skeleton-radius`, and `--vf-skeleton-duration` through the shared cascade. Use CSS logical width/height for geometry. Wave uses a single non-repeating, softly graded highlight moving across a solid base. The default highlight follows the active light or dark theme; custom paint and timing remain overridable. Reduced motion stops wave and pulse; forced colors keep placeholders visible.
 
 ## Accessibility
 
