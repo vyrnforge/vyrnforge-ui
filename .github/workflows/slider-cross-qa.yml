@@ -1,0 +1,20 @@
+name: Slider Cross-Engine QA
+
+on:
+  pull_request:
+    branches: [feat/slider-native-redesign]
+    paths: ['.github/workflows/slider-cross-qa.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  slider-cross:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"slider"},{"port":"react","components":"slider"},{"port":"angular","components":"slider"},{"port":"vue","components":"slider"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: slider-cross-qa
+      retention_days: 7
