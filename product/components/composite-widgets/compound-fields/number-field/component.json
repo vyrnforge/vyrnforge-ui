@@ -3,11 +3,6 @@
     "group": "specialized-fields"
   },
   "styling": {
-    "dependencies": [
-      "input",
-      "text-field",
-      "button",
-      "icon"
-    ]
+    "dependencies": ["input", "text-field", "button", "icon"]
   }
 }
