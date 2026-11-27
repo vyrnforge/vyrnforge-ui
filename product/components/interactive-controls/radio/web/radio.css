@@ -2,19 +2,24 @@
 
 @layer vyrnforge.components {
   :where(input[data-vf-radio]) {
+    --_vf-radio-indicator: var(--vf-space-lg);
     appearance: none;
     background: var(--vf-color-surface);
     border: 1px solid var(--vf-color-border-required);
     border-radius: 50%;
-    block-size: 1.5rem;
+    block-size: var(--_vf-radio-indicator);
+    min-block-size: var(--_vf-radio-indicator);
     box-sizing: border-box;
     color: var(--vf-color-accent-foreground);
     cursor: pointer;
-    display: grid;
+    display: inline-grid;
     flex-shrink: 0;
-    inline-size: 1.5rem;
+    inline-size: var(--_vf-radio-indicator);
+    min-inline-size: var(--_vf-radio-indicator);
     margin: 0;
-    place-content: center;
+    padding: 0;
+    place-items: center;
+    vertical-align: middle;
     transition:
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
@@ -22,11 +27,16 @@
 
   :where(input[data-vf-radio])::before {
     background: currentColor;
-    block-size: 0.4375rem;
+    /* The dot shares the indicator's center, not the text baseline. */
+    grid-area: 1 / 1;
+    box-sizing: border-box;
+    block-size: calc(var(--_vf-radio-indicator) / 2);
     border-radius: 50%;
     content: "";
-    inline-size: 0.4375rem;
+    inline-size: calc(var(--_vf-radio-indicator) / 2);
+    pointer-events: none;
     transform: scale(0);
+    transform-origin: center;
     transition: transform var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
@@ -79,6 +89,7 @@
   @media (forced-colors: active) {
     :where(input[data-vf-radio]) {
       appearance: auto;
+      display: inline-block;
       accent-color: Highlight;
       background: Canvas;
       border-color: CanvasText;
