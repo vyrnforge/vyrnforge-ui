@@ -9,6 +9,7 @@
     --_vf-tooltip-arrow: var(--vf-tooltip-arrow-size, calc(var(--vf-space-xs) + var(--vf-space-2xs) / 2));
     --_vf-tooltip-max-width: var(--vf-tooltip-max-width, 16rem);
     --_vf-tooltip-offset: var(--vf-tooltip-offset, var(--vf-space-xs));
+    --_vf-tooltip-clearance: var(--_vf-tooltip-offset);
     --_vf-tooltip-font: var(
       --vf-tooltip-font,
       var(--vf-font-weight-regular) var(--_vf-tooltip-size-font) / var(--vf-line-height-normal)
@@ -39,7 +40,7 @@
   :where([data-vf-tooltip-content][popover]) {
     position: fixed;
     inset: auto;
-    margin: var(--_vf-tooltip-offset);
+    margin: var(--_vf-tooltip-clearance);
     border: 0;
     position-try-fallbacks:
       flip-block,
@@ -50,12 +51,12 @@
     inline-size: max-content;
     box-sizing: border-box;
     overflow-wrap: anywhere;
-    max-block-size: calc(100dvh - 2 * var(--_vf-tooltip-offset) - 1rem);
+    max-block-size: calc(100dvh - 2 * var(--_vf-tooltip-clearance) - 1rem);
     overflow: auto;
-    max-inline-size: min(var(--_vf-tooltip-max-width), calc(100vw - 2 * var(--_vf-tooltip-offset) - 1rem));
+    max-inline-size: min(var(--_vf-tooltip-max-width), calc(100vw - 2 * var(--_vf-tooltip-clearance) - 1rem));
   }
   :where([data-vf-tooltip-content][popover][data-vf-arrow]) {
-    margin: calc(var(--_vf-tooltip-offset) + var(--_vf-tooltip-arrow));
+    --_vf-tooltip-clearance: calc(var(--_vf-tooltip-offset) + var(--_vf-tooltip-arrow));
   }
   :where([data-vf-tooltip-content][popover][data-vf-arrow][data-vf-tooltip-side]) {
     overflow: visible;
@@ -101,8 +102,8 @@
   }
   @position-try --vf-tooltip-fit {
     position-area: top span-all;
-    max-block-size: min(100%, calc(100dvh - 2 * var(--_vf-tooltip-offset) - 1rem));
-    max-inline-size: min(var(--_vf-tooltip-max-width), calc(100vw - 2 * var(--_vf-tooltip-offset) - 1rem), 100%);
+    max-block-size: min(100%, calc(100dvh - 2 * var(--_vf-tooltip-clearance) - 1rem));
+    max-inline-size: min(var(--_vf-tooltip-max-width), calc(100vw - 2 * var(--_vf-tooltip-clearance) - 1rem), 100%);
   }
   @media (forced-colors: active) {
     :where([data-vf-tooltip-content]) {
