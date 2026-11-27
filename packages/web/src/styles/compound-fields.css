@@ -11,7 +11,7 @@
   }
 
   :where(
-    [data-vf-number-field-input],
+    [data-vf-number-field-input]:not([data-vf-input]),
     [data-vf-password-field-input],
     [data-vf-search-field-input],
     [data-vf-color-picker-text]
@@ -26,14 +26,14 @@
     letter-spacing: var(--vf-editor-value-letter-spacing, normal);
   }
 
-  :where([data-vf-number-field-input], [data-vf-password-field-input], [data-vf-search-field-input], [data-vf-color-picker-text])::placeholder {
+  :where([data-vf-number-field-input]:not([data-vf-input]), [data-vf-password-field-input], [data-vf-search-field-input], [data-vf-color-picker-text])::placeholder {
     font: var(--vf-input-placeholder-font, var(--vf-editor-placeholder-font, inherit));
     letter-spacing: var(--vf-editor-placeholder-letter-spacing, inherit);
   }
 
   :where(
-    [data-vf-number-field-increment],
-    [data-vf-number-field-decrement],
+    [data-vf-number-field-increment]:not(:where([data-vf-number-field-layout] *)),
+    [data-vf-number-field-decrement]:not(:where([data-vf-number-field-layout] *)),
     [data-vf-password-field-toggle],
     [data-vf-search-field-clear]
   ) {

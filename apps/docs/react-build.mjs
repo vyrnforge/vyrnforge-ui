@@ -274,7 +274,7 @@ if (badgeTypeStart < 0 || badgeTypeEnd < 0 ||
 const publicBadgeTypes = badgePublicSource.slice(badgeTypeStart, badgeTypeEnd).trim();
 
 const feedbackIds = ['status-indicator', 'alert', 'dialog', 'alert-dialog', 'drawer', 'toast', 'tooltip', 'skeleton', 'progress'];
-const fieldIds = ['input', 'textarea', 'text-field'];
+const fieldIds = ['input', 'textarea', 'text-field', 'number-field'];
 const fieldUnits = await Promise.all(fieldIds.map(async id => {
   const unit = reactModel.componentCatalog.find(entry => entry.id === id);
   if (!unit?.apiAvailable || !unit.showcaseAvailable || !unit.frameworkContent || !unit.examples.length ||
@@ -420,6 +420,9 @@ const playgroundStyleAsset = '/assets/react-playground.css';
 const themeStudioStyles = [
   '@vyrnforge/web/styles/color-picker.css',
   '@vyrnforge/web/styles/textarea.css',
+  '@vyrnforge/web/styles/text-field.css',
+  '@vyrnforge/web/styles/number-field.css',
+  '@vyrnforge/web/styles/skeleton.css',
   '@vyrnforge/web/styles/radio.css',
   '@vyrnforge/web/styles/alert.css',
   '@vyrnforge/web/styles/progress.css',
@@ -587,7 +590,7 @@ async function writePage(route, page) {
     throw new Error('Standalone React component examples must not depend on documentation CSS');
   }
   await verifyStyles(dir, docsChrome && route === 'icons/' ? iconExplorerStyles :
-    docsChrome && route === 'foundations/color/' ? themeStudioStyles : [], { docsChrome });
+    docsChrome && route === 'foundations/theme-builder/' ? themeStudioStyles : [], { docsChrome });
   const pageRoot = path.join(outRoot, dir);
   await mkdir(pageRoot, { recursive: true });
   await writeFile(path.join(pageRoot, 'index.html'), page);

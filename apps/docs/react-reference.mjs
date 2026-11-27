@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, tooltipPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, tooltipPlayground, inputPlayground, textareaPlayground, textFieldPlayground, numberFieldPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -167,6 +167,7 @@ function navigation(view, links, topic) {
       { id: 'toggle', title: 'ToggleButton', href: links.toggle.guide },
       { id: 'toggle-group', title: 'ToggleGroup', href: links.toggleGroup.guide },
       { id: 'text-field', title: 'TextField', href: links['text-field'].guide },
+      { id: 'number-field', title: 'NumberField', href: links['number-field'].guide },
       { id: 'selection-checkbox', title: 'Checkbox', href: links.selection.checkbox.guide },
       { id: 'selection-radio', title: 'Radio', href: links.selection.radio.guide },
       { id: 'selection-slider', title: 'Slider', href: links.selection.slider.guide },
@@ -212,6 +213,7 @@ function navigation(view, links, topic) {
       { id: 'input-api', title: 'Input API', href: links.input.api },
       { id: 'textarea-api', title: 'Textarea API', href: links.textarea.api },
       { id: 'text-field-api', title: 'TextField API', href: links['text-field'].api },
+      { id: 'number-field-api', title: 'NumberField API', href: links['number-field'].api },
       { id: 'selection-checkbox-api', title: 'Checkbox API', href: links.selection.checkbox.api },
       { id: 'selection-radio-api', title: 'Radio API', href: links.selection.radio.api },
       { id: 'selection-slider-api', title: 'Slider API', href: links.selection.slider.api },
@@ -894,7 +896,7 @@ function compactExample(example, links, component = 'badge', topicHeading = '') 
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' ' + componentTitle + ' example',
       src: links[component].exampleBase + slug + '/',
-      sandbox: ['input', 'textarea', 'text-field'].includes(component) ? 'allow-scripts allow-forms' : 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy',
+      sandbox: ['input', 'textarea', 'text-field', 'number-field'].includes(component) ? 'allow-scripts allow-forms' : 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy',
       ...(component === 'chip' ? { 'data-vf-docs-example-id': example.id } : {}) }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
@@ -915,11 +917,11 @@ function feedbackUsage(unit, links, adapter) {
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections),
     h('article', { className: 'vf-docs-article', ['data-vf-docs-react-' + unit.id]: '' },
-      guideHeader(unit.sharedContent, ['input', 'textarea', 'text-field'].includes(unit.id) ? 'React · Components · Forms' : 'React · Feedback', unit.standardReferences),
+      guideHeader(unit.sharedContent, ['input', 'textarea', 'text-field', 'number-field'].includes(unit.id) ? 'React · Components · Forms' : 'React · Feedback', unit.standardReferences),
       guidePart(sections.find(section => section.id === prefix + '-setup'),
         unit.frameworkContent ? [...renderBlocks(unit.frameworkContent.intro), ...guideBlocks(unit.frameworkContent, 'React setup')] :
           guideBlocks(unit.sharedContent, 'React composition')),
-      adapter ? guidePart(sections.find(section => section.id === prefix + '-playground'), [h(ComponentPlayground, { adapter, title: unit.title })]) : null,
+      adapter ? guidePart(sections.find(section => section.id === prefix + '-playground'), [h(ComponentPlayground, { adapter, title: unit.id === 'number-field' ? 'NumberField' : unit.title })]) : null,
       guidePart(sections.find(section => section.id === prefix + '-examples'), unit.examples.map(example => compactExample(example, links, unit.id))),
       hasReactTokens ? guidePart(sections.find(section => section.id === prefix + '-tokens'), guideBlocks(unit.frameworkContent, 'React tokens')) : null,
       guidePart(sections.find(section => section.id === prefix + '-guidelines'), guideSubsections(unit.sharedContent, unit.sharedContent.sections
@@ -1536,7 +1538,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   if (view === 'divider-api') return dividerApi(divider, links);
   if (view === 'list') return listUsage(list, links);
   if (view === 'list-api') return listApi(list, links);
-  if (feedback) return view.endsWith('-api') ? feedbackApi(feedback, links) : feedbackUsage(feedback, links, ({ skeleton: skeletonPlayground, progress: progressPlayground, alert: alertPlayground, 'status-indicator': statusIndicatorPlayground, dialog: dialogPlayground, 'alert-dialog': alertDialogPlayground, drawer: drawerPlayground, toast: toastPlayground, tooltip: tooltipPlayground, input: inputPlayground, textarea: textareaPlayground, 'text-field': textFieldPlayground })[feedback.id]);
+  if (feedback) return view.endsWith('-api') ? feedbackApi(feedback, links) : feedbackUsage(feedback, links, ({ skeleton: skeletonPlayground, progress: progressPlayground, alert: alertPlayground, 'status-indicator': statusIndicatorPlayground, dialog: dialogPlayground, 'alert-dialog': alertDialogPlayground, drawer: drawerPlayground, toast: toastPlayground, tooltip: tooltipPlayground, input: inputPlayground, textarea: textareaPlayground, 'text-field': textFieldPlayground, 'number-field': numberFieldPlayground })[feedback.id]);
   if (view === 'backdrop') return feedbackUsage(backdrop, links, backdropPlayground);
   if (view === 'backdrop-api') return feedbackApi(backdrop, links);
   if (view === 'loading') return feedbackUsage(loading, links, loadingPlayground);
@@ -1641,9 +1643,9 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
     { title: 'Image API', href: links.image.api, keywords: 'imageprops img loading decoding srcset sizes ref types' },
     { title: 'Status Indicator', href: links['status-indicator'].guide, keywords: 'status dot label semantic success warning error' },
     { title: 'Status Indicator API', href: links['status-indicator'].api, keywords: 'StatusIndicatorProps' },
-    ...['input', 'textarea', 'text-field'].flatMap(id => [
-      { title: id === 'text-field' ? 'TextField' : id[0].toUpperCase() + id.slice(1), href: links[id].guide, keywords: 'forms native input textarea labels help validation theme typography adornments' },
-      { title: (id === 'text-field' ? 'TextField' : id[0].toUpperCase() + id.slice(1)) + ' API', href: links[id].api, keywords: 'public React field props' },
+    ...['input', 'textarea', 'text-field', 'number-field'].flatMap(id => [
+      { title: id === 'number-field' ? 'NumberField' : id === 'text-field' ? 'TextField' : id[0].toUpperCase() + id.slice(1), href: links[id].guide, keywords: 'forms native input textarea labels help validation theme typography adornments' },
+      { title: (id === 'number-field' ? 'NumberField' : id === 'text-field' ? 'TextField' : id[0].toUpperCase() + id.slice(1)) + ' API', href: links[id].api, keywords: 'public React field props' },
     ]),
     { title: 'Alert', href: links.alert.guide, keywords: 'persistent feedback message severity announcement action dismiss' },
     { title: 'Alert API', href: links.alert.api, keywords: 'AlertProps FeedbackSeverity AlertAnnouncement' },

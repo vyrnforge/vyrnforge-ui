@@ -135,9 +135,13 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
             )
           : null,
         leading == null ? null : createElement('span', { 'data-vf-text-field-leading': '' }, leading),
-        prefix == null ? null : createElement('span', { 'data-vf-text-field-prefix': '' }, prefix),
+        prefix == null
+          ? null
+          : createElement('span', { 'data-vf-text-field-prefix': '' }, createElement('bdi', null, prefix)),
         control,
-        suffix == null ? null : createElement('span', { 'data-vf-text-field-suffix': '' }, suffix),
+        suffix == null
+          ? null
+          : createElement('span', { 'data-vf-text-field-suffix': '' }, createElement('bdi', null, suffix)),
         trailing == null ? null : createElement('span', { 'data-vf-text-field-trailing': '' }, trailing),
       ),
       hasDescription
