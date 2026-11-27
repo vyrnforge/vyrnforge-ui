@@ -107,10 +107,7 @@ export const NumberFieldRoot = forwardRef<HTMLDivElement, NumberFieldRootProps>(
     createElement('div', { ...props, ref, 'data-vf-number-field-root': '' }, children),
   );
 });
-export type NumberFieldInputProps = Omit<
-  InputProps,
-  'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'
->;
+export type NumberFieldInputProps = Omit<InputProps, 'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'>;
 function useNumberFieldEditor(
   disabled: boolean | undefined,
   readOnly: boolean | undefined,
@@ -240,32 +237,70 @@ export type NumberFieldProps = Omit<
     | { stepControls: 'stacked' | 'horizontal'; incrementLabel: string; decrementLabel: string }
   );
 
-type NumberFieldEditorProps = Omit<NumberFieldProps, 'value' | 'defaultValue' | 'min' | 'max' | 'step' | 'onValueChange'>;
+type NumberFieldEditorProps = Omit<
+  NumberFieldProps,
+  'value' | 'defaultValue' | 'min' | 'max' | 'step' | 'onValueChange'
+>;
 
 function stepIcon(direction: 1 | -1, stacked: boolean) {
   const d = stacked
-    ? (direction === 1 ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6')
-    : (direction === 1 ? 'M5 12h14M12 5v14' : 'M5 12h14');
-  return createElement(SvgIcon, { size: 'sm' }, createElement('path', {
-    d, fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round',
-  }));
+    ? direction === 1
+      ? 'M6 15l6-6 6 6'
+      : 'M6 9l6 6 6-6'
+    : direction === 1
+      ? 'M5 12h14M12 5v14'
+      : 'M5 12h14';
+  return createElement(
+    SvgIcon,
+    { size: 'sm' },
+    createElement('path', {
+      d,
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+    }),
+  );
 }
 
 const NumberFieldEditor = forwardRef<HTMLInputElement, NumberFieldEditorProps>(function NumberFieldEditor(
-  { stepControls = 'native', incrementLabel, decrementLabel, leading, trailing, disabled, readOnly, onChange, ...props },
+  {
+    stepControls = 'native',
+    incrementLabel,
+    decrementLabel,
+    leading,
+    trailing,
+    disabled,
+    readOnly,
+    onChange,
+    ...props
+  },
   ref,
 ) {
   const editor = useNumberFieldEditor(disabled, readOnly, onChange, ref);
   const custom = stepControls === 'stacked' || stepControls === 'horizontal';
   const stacked = stepControls === 'stacked';
-  const increment = custom ? createElement(NumberFieldIncrement, { 'aria-label': incrementLabel }, stepIcon(1, stacked)) : null;
-  const decrement = custom ? createElement(NumberFieldDecrement, { 'aria-label': decrementLabel }, stepIcon(-1, stacked)) : null;
+  const increment = custom
+    ? createElement(NumberFieldIncrement, { 'aria-label': incrementLabel }, stepIcon(1, stacked))
+    : null;
+  const decrement = custom
+    ? createElement(NumberFieldDecrement, { 'aria-label': decrementLabel }, stepIcon(-1, stacked))
+    : null;
   return createElement(TextField, {
     ...props,
     ...editor,
-    leading: stepControls === 'horizontal' ? createElement('span', { 'data-vf-number-field-actions': '' }, decrement, leading) : leading,
+    leading:
+      stepControls === 'horizontal'
+        ? createElement('span', { 'data-vf-number-field-actions': '' }, decrement, leading)
+        : leading,
     trailing: stacked
-      ? createElement('span', { 'data-vf-number-field-actions': '' }, trailing, createElement('span', { 'data-vf-number-field-stack': '' }, increment, decrement))
+      ? createElement(
+          'span',
+          { 'data-vf-number-field-actions': '' },
+          trailing,
+          createElement('span', { 'data-vf-number-field-stack': '' }, increment, decrement),
+        )
       : stepControls === 'horizontal'
         ? createElement('span', { 'data-vf-number-field-actions': '' }, trailing, increment)
         : trailing,
