@@ -901,10 +901,12 @@ function compactExample(example, links, component = 'badge', topicHeading = '') 
 // Feedback guides share the same preview/source renderer and native-first content.
 function feedbackUsage(unit, links, adapter) {
   const prefix = 'react-' + unit.id;
+  const hasReactTokens = unit.frameworkContent?.sections.some(section => section.heading === 'React tokens');
   const sections = [
     { id: prefix + '-setup', heading: 'Get started' },
     ...(adapter ? [{ id: prefix + '-playground', heading: 'Playground' }] : []),
     { id: prefix + '-examples', heading: 'Examples' },
+    ...(hasReactTokens ? [{ id: prefix + '-tokens', heading: 'React tokens' }] : []),
     { id: prefix + '-guidelines', heading: 'Usage and accessibility' },
     ...(unit.apiAvailable ? [{ id: prefix + '-reference', heading: 'Related API' }] : []),
   ];
@@ -917,8 +919,9 @@ function feedbackUsage(unit, links, adapter) {
           guideBlocks(unit.sharedContent, 'React composition')),
       adapter ? guidePart(sections.find(section => section.id === prefix + '-playground'), [h(ComponentPlayground, { adapter, title: unit.title })]) : null,
       guidePart(sections.find(section => section.id === prefix + '-examples'), unit.examples.map(example => compactExample(example, links, unit.id))),
+      hasReactTokens ? guidePart(sections.find(section => section.id === prefix + '-tokens'), guideBlocks(unit.frameworkContent, 'React tokens')) : null,
       guidePart(sections.find(section => section.id === prefix + '-guidelines'), guideSubsections(unit.sharedContent, unit.sharedContent.sections
-        .filter(section => !['Native Web', 'Framework boundary', 'React composition'].includes(section.heading))
+        .filter(section => !['Native Web', 'Framework boundary', 'React composition', ...(hasReactTokens ? ['Customization'] : [])].includes(section.heading))
         .map(section => section.heading), prefix + '-guidance')),
       unit.apiAvailable ? guidePart(sections.find(section => section.id === prefix + '-reference'),
         [h(Link, { href: links[unit.id].api }, 'View ' + unit.title + ' public React API')]) : null));

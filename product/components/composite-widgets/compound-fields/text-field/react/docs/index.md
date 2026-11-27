@@ -27,3 +27,18 @@ Use existing Button and Icon for interactive adornments with authored accessible
 ## Floating label and variants
 
 Use `labelPlacement="floating"` independently of `variant="outlined"`, `"filled"` or `"underlined"`. The default outside label remains supported. TextField owns the label and its relationship; use Input and Textarea only when composing a custom field or native mode. The native placeholder is a hint, not a substitute for a label.
+
+## React tokens
+
+Use the typed `textField` token group. For app-wide configuration, pass the same group to `createTheme({ name: 'brand', tokens: ... })` from `@vyrnforge/react` and emit the stylesheet with `renderThemeCss`. For a local scope:
+
+```tsx
+import { ThemeScope, tokens } from '@vyrnforge/react';
+import { TextField } from '@vyrnforge/react/text-field';
+
+<ThemeScope tokens={{ textField: { labelFont: '600 0.875rem/1.5 ' + tokens.fontFamily.sans, radius: '8px' } }}>
+  <TextField label="Email" />
+</ThemeScope>
+```
+
+Use ordinary CSS layout properties for geometry that belongs to the application. The canonical stylesheet provides the defaults; token overrides are optional. The Native Web guide documents CSS-level equivalents.

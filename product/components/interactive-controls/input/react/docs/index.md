@@ -42,3 +42,18 @@ import { Input } from '@vyrnforge/react/input';
 ```
 
 The surrounding surface owns visual layout and focus paint; the native editor owns selection, editing, accessibility name and native events. Search execution belongs to the consuming application.
+
+## React tokens
+
+Use the typed `input` token group. For app-wide configuration, pass the same group to `createTheme({ name: 'brand', tokens: ... })` from `@vyrnforge/react` and emit the stylesheet with `renderThemeCss`. For a local scope:
+
+```tsx
+import { ThemeScope, tokens } from '@vyrnforge/react';
+import { Input } from '@vyrnforge/react/input';
+
+<ThemeScope tokens={{ editor: { radius: '8px' }, input: { valueFont: '400 1rem/1.5 ' + tokens.fontFamily.sans } }}>
+  <Input aria-label="Email" />
+</ThemeScope>
+```
+
+Use ordinary CSS layout properties for geometry that belongs to the application. The canonical stylesheet provides the defaults; token overrides are optional. The Native Web guide documents CSS-level equivalents.

@@ -9,6 +9,10 @@ export const browserFixture = {
       const React = await import('react');
       const { renderToString } = await import('react-dom/server');
       const { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } = await import('@vyrnforge/react/loading');
+      const { ThemeScope, createTheme, renderThemeCss } = await import('@vyrnforge/react');
+      const { Skeleton } = await import('@vyrnforge/react/skeleton');
+      const { Progress } = await import('@vyrnforge/react/progress');
+      const brand = createTheme({ name: 'feedback-brand', appearance: 'dark', tokens: { loading: { spinnerColor: '#123456', indicatorSize: '30px' }, skeleton: { color: '#334455', duration: '2s' }, progress: { size: '8px' } } });
       const outDir = path.join(process.cwd(), 'dist/browser-fixtures/components/loading');
       await mkdir(outDir, { recursive: true });
       const h = React.createElement;
@@ -19,7 +23,15 @@ export const browserFixture = {
         h(LoadingProgress, { id: 'react-indeterminate', 'aria-label': 'Preparing import' }),
         h(LoadingCustom, { id: 'react-custom', 'aria-hidden': true }, h('svg', { width: 16, height: 16 }))));
       await build({ stdin: { contents: '@import "@vyrnforge/web/styles/loading.css";', loader: 'css', resolveDir: process.cwd() }, bundle: true, outfile: path.join(outDir, 'react-loading.css') });
-      await writeFile(path.join(outDir, 'react.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>React Loading fixture</title><link rel="stylesheet" href="./react-loading.css"></head><body><main><h1>Loading</h1>' + markup + '<p role="status">Loading account summary</p></main></body></html>');
+      const themed = renderToString(h(ThemeScope, { theme: brand.name },
+        h(Loading, { size: 'sm' }, h(LoadingIndicator, { id: 'brand-spinner' })),
+        h(Skeleton, { id: 'brand-skeleton', animation: 'none' }),
+        h(Progress, { id: 'brand-progress', 'aria-label': 'Brand progress', value: 50, max: 100 }),
+        h(ThemeScope, { tokens: { loading: { spinnerColor: '#654321' }, progress: { size: '16px' } } },
+          h(Loading, null, h(LoadingIndicator, { id: 'nested-spinner' })),
+          h(Progress, { id: 'nested-progress', 'aria-label': 'Nested progress', value: 50, max: 100 }))));
+      await writeFile(path.join(outDir, 'brand.css'), renderThemeCss(brand));
+      await writeFile(path.join(outDir, 'react.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>React Loading fixture</title><link rel="stylesheet" href="./react-loading.css"><link rel="stylesheet" href="./brand.css"></head><body><main><h1>Loading</h1>' + markup + themed + '<p role="status">Loading account summary</p></main></body></html>');
       return true;
     }
     if (port !== 'web') return false;

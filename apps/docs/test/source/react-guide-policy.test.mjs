@@ -23,3 +23,4 @@ describe('React framework-locked consumer guidance', () => {
       .toEqual(['Reusable entrance effects', 'Accessibility']);
   });
 });
+

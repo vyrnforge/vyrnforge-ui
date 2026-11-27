@@ -120,3 +120,10 @@ test('React theme authoring maps named token groups to shared CSS and validates 
   assert.match(scoped, /--vf-space-md:12px/);
   assert.deepEqual(tokenStyle({ progress: { size: '8px' } }), { '--vf-progress-size': '8px' });
 });
+
+test('React token references cover the entire admitted public Web theme-authoring catalog', () => {
+  const source = readFileSync(new URL('../../../../web/src/theme/defaults.generated.ts', import.meta.url), 'utf8');
+  const canonical = JSON.parse(source.split('export const publicRuntimeTokens = ')[1].split(' as const;')[0]);
+  const mapped = [...new Set(Object.values(tokens).flatMap(group => Object.values(group).map(value => value.slice(4, -1))))];
+  assert.deepEqual(mapped.sort(), canonical.slice().sort());
+});
