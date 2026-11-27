@@ -1,1 +1,12 @@
-<label>Volume <input data-vf-slider type="range" name="volume" min="0" max="100" value="50"></label>
+<label for="volume">Volume</label>
+<span data-vf-slider-presentation>
+  <input id="volume" data-vf-slider type="range" name="volume" min="0" max="100" step="5" value="50">
+</span>
+<script type="module">
+  import { connectSlider } from '@vyrnforge/web/slider';
+  connectSlider(document.querySelector('#volume'), {
+    marks: [{ value: 0, label: '0%' }, { value: 50, label: '50%' }, { value: 100, label: '100%' }],
+    valueLabelDisplay: 'auto',
+    formatValue: value => value + '%'
+  });
+</script>

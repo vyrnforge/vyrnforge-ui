@@ -10,7 +10,7 @@ Pass size="sm", "md" or "lg" and orientation="horizontal" or "vertical".
 
 ## Values and marks
 
-Pass marks to show a bounded set of step ticks, or pass an array of { value, label } definitions. Marks do not change the native step. The enhanced track reads the actual DOM value after rendering and native input events; direct script writes to input.value need an input event or React render to refresh decoration.
+Pass marks to show a bounded set of step ticks, or pass an array of { value, label } definitions. Marks do not change the native step. The enhanced track reads the actual DOM value after rendering and native input events; direct script writes to input.value need an input event or React render to refresh decoration. The stable presentation wrapper keeps the same native input when decorations are toggled.
 
 ## Value labels and descriptive tooltips
 

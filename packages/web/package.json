@@ -38,6 +38,11 @@
       "import": "./dist/components/text/index.js",
       "default": "./dist/components/text/index.js"
     },
+    "./slider": {
+      "types": "./dist/components/slider/index.d.ts",
+      "import": "./dist/components/slider/index.js",
+      "default": "./dist/components/slider/index.js"
+    },
     "./toggle-button": {
       "types": "./dist/components/toggle-button/index.d.ts",
       "import": "./dist/components/toggle-button/index.js",

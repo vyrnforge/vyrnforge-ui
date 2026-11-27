@@ -16,7 +16,7 @@ Use min, max and step; step="any" allows continuous adjustment. Native list/data
 
 ## Value labels and descriptive tooltips
 
-A value label follows the thumb and may be hidden, automatic during interaction, or persistent. Use the format of the displayed quantity in accessible value text when necessary. A descriptive Tooltip is separate and may explain the control, but essential instructions belong in visible text. React supplies enhanced marks and value labels; Native Web, Angular and Vue retain the native baseline.
+A value label follows the thumb and may be hidden, automatic during interaction, or persistent. Use the format of the displayed quantity in accessible value text when necessary. A descriptive Tooltip is separate and may explain the control, but essential instructions belong in visible text. Native Web and the Angular directive use an authored direct parent with data-vf-slider-presentation for optional marks and labels. React and Vue provide that presentation host automatically. Use the opt-in connectSlider function from @vyrnforge/web/slider for native enhanced paint and refresh after direct script value writes; disconnect on teardown. Plain CSS-only markup remains a usable native range input.
 
 ## Controlled and uncontrolled state
 
