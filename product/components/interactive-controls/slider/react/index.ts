@@ -1,13 +1,5 @@
 import { createElement, forwardRef, useEffect, useRef, useState } from 'react';
-import type { CSSProperties, InputHTMLAttributes } from 'react';
-
-export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'required' | 'readOnly'> {
-  size?: 'sm' | 'md' | 'lg';
-  orientation?: 'horizontal' | 'vertical';
-  marks?: boolean | readonly { value: number; label?: string }[];
-  valueLabelDisplay?: 'off' | 'auto' | 'always';
-  formatValue?: (value: number) => string;
-}
+import type { CSSProperties, InputHTMLAttributes, FormEvent, ChangeEvent } from 'react';
 
 type Snapshot = { value: number; min: number; max: number; step: string };
 
@@ -19,6 +11,14 @@ function read(input: HTMLInputElement): Snapshot {
 
 function fraction(value: number, min: number, max: number) {
   return max > min ? Math.min(1, Math.max(0, (value - min) / (max - min))) : 0;
+}
+
+export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'required' | 'readOnly'> {
+  size?: 'sm' | 'md' | 'lg';
+  orientation?: 'horizontal' | 'vertical';
+  marks?: boolean | readonly { value: number; label?: string }[];
+  valueLabelDisplay?: 'off' | 'auto' | 'always';
+  formatValue?: (value: number) => string;
 }
 
 export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider({
@@ -63,8 +63,8 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
       if (typeof ref === 'function') ref(node);
       else if (ref) ref.current = node;
     },
-    onInput: (event) => { onInput?.(event); sync(); },
-    onChange: (event) => { onChange?.(event); sync(); },
+    onInput: (event: FormEvent<HTMLInputElement>) => { onInput?.(event); sync(); },
+    onChange: (event: ChangeEvent<HTMLInputElement>) => { onChange?.(event); sync(); },
   });
   if (!marks && valueLabelDisplay === 'off') return input;
   let ticks: readonly { value: number; label?: string }[] = [];

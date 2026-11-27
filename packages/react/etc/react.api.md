@@ -3401,7 +3401,21 @@ export type SkeletonShape = 'line' | 'block' | 'circle';
 export const Slider: ForwardRefExoticComponent<SliderProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export type SliderProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;
+export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'required' | 'readOnly'> {
+    // (undocumented)
+    formatValue?: (value: number) => string;
+    // (undocumented)
+    marks?: boolean | readonly {
+        value: number;
+        label?: string;
+    }[];
+    // (undocumented)
+    orientation?: 'horizontal' | 'vertical';
+    // (undocumented)
+    size?: 'sm' | 'md' | 'lg';
+    // (undocumented)
+    valueLabelDisplay?: 'off' | 'auto' | 'always';
+}
 
 // @public (undocumented)
 export const SplitButtonAction: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;

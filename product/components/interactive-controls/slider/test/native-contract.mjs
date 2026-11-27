@@ -8,7 +8,7 @@ export default {
     await control.press('ArrowRight');
     expect(Number(await control.inputValue())).toBeGreaterThan(before);
     const isFirefox = await control.evaluate(() => navigator.userAgent.includes('Firefox/'));
-    if (isFirefox) {
+    if (isFirefox && await control.getAttribute('data-vf-slider-enhanced') !== null) {
       const geometry = await control.evaluate((element) => {
         const thumb = getComputedStyle(element, '::-moz-range-thumb');
         const track = getComputedStyle(element, '::-moz-range-track');

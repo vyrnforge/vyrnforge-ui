@@ -1856,9 +1856,30 @@ export const SideNavList: DefineComponent<    {}, () => VNode<RendererNode, Rend
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const Slider: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const Slider: DefineComponent<ExtractPropTypes<    {
+size: {
+type: PropType<"sm" | "md" | "lg">;
+default: string;
+};
+orientation: {
+type: PropType<"horizontal" | "vertical">;
+default: string;
+};
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+size: {
+type: PropType<"sm" | "md" | "lg">;
+default: string;
+};
+orientation: {
+type: PropType<"horizontal" | "vertical">;
+default: string;
+};
+}>> & Readonly<{}>, {
+size: "sm" | "md" | "lg";
+orientation: "horizontal" | "vertical";
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const SplitButtonAction: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {

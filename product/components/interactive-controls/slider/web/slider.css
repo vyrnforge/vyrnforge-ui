@@ -141,9 +141,9 @@
     pointer-events: none;
     position: absolute;
     inset-block-start: 0;
-    inset-inline-start: clamp(0px, calc(var(--_vf-slider-thumb) / 2 + (100% - var(--_vf-slider-thumb)) * var(--_vf-slider-progress) - 2rem), calc(100% - 4rem));
-    inline-size: max-content;
-    max-inline-size: min(100%, 8rem);
+    inset-inline-start: clamp(0px, calc(var(--_vf-slider-thumb) / 2 + (100% - var(--_vf-slider-thumb)) * var(--_vf-slider-progress) - 2rem), max(0px, calc(100% - 4rem)));
+    inline-size: 4rem;
+    max-inline-size: 100%;
     box-sizing: border-box;
     overflow-wrap: anywhere;
     background: var(--vf-color-text);

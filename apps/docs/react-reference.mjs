@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -170,6 +170,7 @@ function navigation(view, links, topic) {
       { id: 'text-field', title: 'TextField', href: links['text-field'].guide },
       { id: 'selection-checkbox', title: 'Checkbox', href: links.selection.checkbox.guide },
       { id: 'selection-radio', title: 'Radio', href: links.selection.radio.guide },
+      { id: 'selection-slider', title: 'Slider', href: links.selection.slider.guide },
     ] },
     { label: 'Text entry primitives', items: [
       { id: 'input', title: 'Input', href: links.input.guide },
@@ -214,6 +215,7 @@ function navigation(view, links, topic) {
       { id: 'text-field-api', title: 'TextField API', href: links['text-field'].api },
       { id: 'selection-checkbox-api', title: 'Checkbox API', href: links.selection.checkbox.api },
       { id: 'selection-radio-api', title: 'Radio API', href: links.selection.radio.api },
+      { id: 'selection-slider-api', title: 'Slider API', href: links.selection.slider.api },
       { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
       { id: 'divider-api', title: 'Divider API', href: links.divider.api },
       { id: 'list-api', title: 'List API', href: links.list.api },
@@ -628,7 +630,7 @@ function selectionGuide(unit, links) {
   const routeLinks = links.selection[unit.id];
   const topics = visibleGuideSections(unit.sharedContent.sections, unit.examples).map(section => ({ ...section, id: prefix + slug(section.heading) }));
   const sections = [...(unit.frameworkContent ? [{ id: prefix + 'setup', heading: 'Get started' }] : []), ...topics];
-  const adapter = unit.id === 'checkbox' ? checkboxPlayground : unit.id === 'radio' ? radioPlayground : null;
+  const adapter = unit.id === 'checkbox' ? checkboxPlayground : unit.id === 'radio' ? radioPlayground : unit.id === 'slider' ? sliderPlayground : null;
   const playgroundSection = { id: prefix + 'playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(adapter ? [sections[0], playgroundSection, ...sections.slice(1)] : sections),
@@ -656,7 +658,7 @@ function selectionGuide(unit, links) {
         ...(section.heading === 'Related controls' ? [
           h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
             ...(routeLinks.api ? [h('li', { key: 'api' }, h(Link, { href: routeLinks.api }, unit.title + ' API'))] : []),
-            ...['checkbox', 'radio', 'checkbox-group', 'radio-group'].filter(id => id !== unit.id).map(id =>
+            ...(unit.id === 'slider' ? [] : ['checkbox', 'radio', 'checkbox-group', 'radio-group']).filter(id => id !== unit.id).map(id =>
               h('li', { key: id }, h(Link, { href: links.selection[id].guide },
                 id.split('-').map(part => part[0].toUpperCase() + part.slice(1)).join(' ')))))
         ] : []),

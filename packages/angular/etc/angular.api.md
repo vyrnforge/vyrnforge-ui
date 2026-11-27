@@ -3068,7 +3068,22 @@ export class VfSideNavListDirective {
 // @public (undocumented)
 export class VfSliderDirective {
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSliderDirective, "input[vfSlider]", never, {}, {}, never, never, true, never>;
+    readonly orientation: InputSignal<"horizontal" | "vertical">;
+    // (undocumented)
+    readonly size: InputSignal<"sm" | "md" | "lg">;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSliderDirective, "input[vfSlider]", never, {
+        "size": {
+            "alias": "size";
+            "required": false;
+            "isSignal": true;
+        };
+        "orientation": {
+            "alias": "orientation";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfSliderDirective, never>;
 }

@@ -5,6 +5,8 @@ import { createElement as h, useId, useState, useEffect, useRef } from 'react';
 import { Button } from '@vyrnforge/react/button';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Radio } from '@vyrnforge/react/radio';
+import { Slider } from '@vyrnforge/react/slider';
+import { TooltipRoot, TooltipTrigger, TooltipContent } from '@vyrnforge/react/tooltip';
 import { Avatar } from '@vyrnforge/react/avatar';
 import { Badge } from '@vyrnforge/react/badge';
 import { Chip } from '@vyrnforge/react/chip';
@@ -736,5 +738,79 @@ export const textFieldPlayground = {
         attribute('status', config.status, 'none'), attribute('prefix', config.prefix, ''), attribute('suffix', config.suffix, ''),
         config.leadingIcon ? 'leading={<Icon icon={userIcon} />}' : '',
         flag('fullWidth', config.fullWidth), flag('required', config.required), flag('disabled', config.disabled), flag('readOnly', config.readOnly)]));
+  },
+};
+
+function sliderValues(config) {
+  const min = config.min;
+  const max = Math.max(min + 1, config.max);
+  const step = config.step === 'any' ? 'any' : Number(config.step);
+  const raw = Math.min(max, Math.max(min, config.value));
+  const value = step === 'any' ? raw : Math.min(min + Math.floor((max - min) / step) * step,
+    min + Math.round((raw - min) / step) * step);
+  return { min, max, step, value };
+}
+function sliderMarks(config, values) {
+  if (config.marks === 'ticks') return true;
+  if (config.marks === 'labels') return [values.min, (values.min + values.max) / 2, values.max]
+    .map(value => ({ value, label: String(value) }));
+  return false;
+}
+function SliderPreview({ config, update }) {
+  const values = sliderValues(config);
+  const name = label(config, 'Volume');
+  const id = useId();
+  const control = h(Slider, { ...values, id, size: config.size, orientation: config.orientation,
+    disabled: config.disabled, 'aria-invalid': config.invalid || undefined,
+    'aria-describedby': config.invalid ? id + '-error' : undefined,
+    marks: sliderMarks(config, values), valueLabelDisplay: config.valueLabelDisplay,
+    formatValue: config.percent ? value => value + '%' : undefined,
+    onChange: event => update('value', event.currentTarget.valueAsNumber) });
+  return h(Flow, { gap: 'sm', style: { inlineSize: '100%', maxInlineSize: '24rem', minInlineSize: 0 } },
+    h(Flow, { direction: 'inline', align: 'center', gap: 'sm' },
+      h('label', { htmlFor: id }, h(Text, null, name)),
+      config.description ? h(TooltipRoot, null,
+        h(TooltipTrigger, null, h(Button, { type: 'button', 'aria-label': 'About ' + name, size: 'sm', variant: 'ghost' }, 'Info')),
+        h(TooltipContent, null, 'Adjust the selected numeric value.')) : null),
+    control,
+    config.invalid ? h(Text, { id: id + '-error', as: 'p', variant: 'body-sm', tone: 'danger' }, 'Choose a permitted value.') : null);
+}
+export const sliderPlayground = {
+  fields: [text('label', 'Label', 'Volume'),
+    choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
+    choice('orientation', 'Orientation', 'horizontal', ['horizontal', 'vertical']),
+    { kind: 'number', key: 'min', label: 'Minimum', default: 0, min: -100, max: 100 },
+    { kind: 'number', key: 'max', label: 'Maximum', default: 100, min: -99, max: 200 },
+    { kind: 'number', key: 'value', label: 'Value', default: 50, min: -100, max: 200 },
+    choice('step', 'Step', '1', ['any', '1', '5', '25']),
+    choice('marks', 'Marks', 'none', ['none', 'ticks', 'labels']),
+    choice('valueLabelDisplay', 'Value label', 'off', ['off', 'auto', 'always']),
+    bool('percent', 'Percent format'), bool('description', 'Descriptive tooltip'),
+    bool('disabled', 'Disabled'), bool('invalid', 'Invalid')],
+  presets: [{ label: 'Stepped with labels', values: { step: '25', marks: 'labels', valueLabelDisplay: 'always' } },
+    { label: 'Vertical volume', values: { orientation: 'vertical', valueLabelDisplay: 'auto', percent: true } }],
+  Preview: SliderPreview,
+  source(config) {
+    const { min, max, step, value } = sliderValues(config);
+    const imports = [importLine('Slider', 'slider')];
+    const name = label(config, 'Volume');
+    const props = [
+      attribute('aria-label', name), 'defaultValue={' + value + '}',
+      min === 0 ? '' : 'min={' + min + '}', max === 100 ? '' : 'max={' + max + '}',
+      step === 1 ? '' : step === 'any' ? 'step="any"' : 'step={' + step + '}',
+      attribute('size', config.size, 'md'), attribute('orientation', config.orientation, 'horizontal'),
+      config.marks === 'ticks' ? 'marks' : config.marks === 'labels' ? 'marks={' + JSON.stringify(sliderMarks(config, { min, max })) + '}' : '',
+      attribute('valueLabelDisplay', config.valueLabelDisplay, 'off'),
+      config.percent ? 'formatValue={value => value + "%"}' : '',
+      flag('disabled', config.disabled), config.invalid ? 'aria-invalid="true"' : '',
+    ];
+    const control = markup('Slider', props);
+    if (!config.description) return snippet(imports, control);
+    imports.push(importLine('Flow', 'layout'), importLine('Button', 'button'),
+      importLine('TooltipRoot, TooltipTrigger, TooltipContent', 'tooltip'));
+    const help = markup('TooltipRoot', [], markup('TooltipTrigger', [],
+      markup('Button', ['type="button"', attribute('aria-label', 'About ' + name), 'size="sm"', 'variant="ghost"'], 'Info')) + '\n' +
+      markup('TooltipContent', [], 'Adjust the selected numeric value.'));
+    return snippet(imports, markup('Flow', ['gap="sm"'], help + '\n' + control));
   },
 };
