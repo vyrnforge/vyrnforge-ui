@@ -50,6 +50,8 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
   let generatedValueText: string | undefined;
   let authoredValueText = input.getAttribute('aria-valuetext');
   let observer: ResizeObserver | undefined;
+  let markObserver: ResizeObserver | undefined;
+  let geometryKey = '';
   const span = (attribute: string) => {
     const node = doc.createElement('span');
     node.setAttribute(attribute, '');
@@ -61,6 +63,37 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
     const height = bubble.getBoundingClientRect().height;
     if (width > 0) host.style.setProperty('--_vf-slider-label-width', width + 'px');
     if (height > 0) host.style.setProperty('--_vf-slider-label-height', height + 'px');
+  };
+  // Keep ticks at their authored values. At constrained widths, retain endpoint
+  // labels first, clamp them into the available bounds and suppress collisions.
+  const fitMarks = () => {
+    if (!host || !ticks || !active) return;
+    const vertical = host.getAttribute('data-vf-orientation') === 'vertical';
+    const bounds = host.getBoundingClientRect();
+    const labels = Array.from(ticks.querySelectorAll<HTMLElement>('[data-vf-slider-mark-label]'));
+    if (!labels.length || bounds.width <= 0 || bounds.height <= 0) return;
+    for (const label of labels) {
+      label.style.removeProperty('visibility');
+      label.style.removeProperty('--_vf-slider-mark-shift');
+    }
+    const entries = labels.map(label => {
+      const rect = label.getBoundingClientRect();
+      const delta = vertical ? 0 : Math.max(bounds.left - rect.left,
+        Math.min(0, bounds.right - rect.right));
+      const shift = !vertical && rect.left + delta < bounds.left ? bounds.left - rect.left : delta;
+      if (!vertical && shift) label.style.setProperty('--_vf-slider-mark-shift', shift + 'px');
+      return { label, start: vertical ? rect.top : rect.left + shift, end: vertical ? rect.bottom : rect.right + shift };
+    }).sort((a, b) => a.start - b.start);
+    const ordered = entries.length > 1 ? [entries[0]!, entries[entries.length - 1]!, ...entries.slice(1, -1)] : entries;
+    const retained: { start: number; end: number }[] = [];
+    for (const entry of ordered) {
+      const lower = vertical ? bounds.top : bounds.left;
+      const upper = vertical ? bounds.bottom : bounds.right;
+      if (entry.start < lower - 0.5 || entry.end > upper + 0.5 ||
+          retained.some(other => entry.start < other.end + 4 && entry.end > other.start - 4)) {
+        entry.label.style.visibility = 'hidden';
+      } else retained.push(entry);
+    }
   };
   const refresh = (next?: SliderPresentationOptions) => {
     if (!active) return;
@@ -96,6 +129,8 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
     host.toggleAttribute('data-vf-slider-marks', marks.length > 0);
     const key = JSON.stringify([min, max, marks]);
     if (key !== markKey) {
+      markObserver?.disconnect();
+      markObserver = undefined;
       ticks?.remove();
       ticks = undefined;
       markKey = key;
@@ -114,8 +149,16 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
           ticks.append(tick);
         }
         host.append(ticks);
+        if (doc.defaultView?.ResizeObserver) {
+          markObserver = new doc.defaultView.ResizeObserver(fitMarks);
+          markObserver.observe(host);
+          for (const label of ticks.querySelectorAll('[data-vf-slider-mark-label]')) markObserver.observe(label);
+        }
+        fitMarks();
       }
     }
+    const nextGeometry = [host.getAttribute('data-vf-orientation'), host.getAttribute('data-vf-size'), key].join('|');
+    if (geometryKey !== nextGeometry) { geometryKey = nextGeometry; fitMarks(); }
     if (display === 'off') {
       observer?.disconnect();
       observer = undefined;
@@ -162,6 +205,7 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
       clearTimeout(timer);
       mutation?.disconnect();
       observer?.disconnect();
+      markObserver?.disconnect();
       input.removeEventListener('input', onInput);
       input.removeEventListener('change', onInput);
       doc.removeEventListener('reset', onReset, true);

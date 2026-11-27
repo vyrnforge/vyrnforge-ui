@@ -26,3 +26,20 @@ test('Slider preserves geometry and environment states', async ({ page }, testIn
   await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
   await expect(control).toHaveCSS('appearance', 'auto');
 });
+
+test('Slider labels fit a narrow native presentation without changing ticks', async ({ page }) => {
+  await page.goto('/components/slider/' + port + '.html');
+  const control = page.locator('#control');
+  await expect(control).toHaveAttribute('data-vf-slider-enhanced', '');
+  const host = control.locator('..');
+  await host.evaluate(element => { element.style.inlineSize = '90px'; });
+  await expect.poll(() => host.evaluate(element => {
+    const bounds = element.getBoundingClientRect();
+    const rects = Array.from(element.querySelectorAll('[data-vf-slider-mark-label]'))
+      .filter(label => getComputedStyle(label).visibility !== 'hidden')
+      .map(label => label.getBoundingClientRect()).sort((a, b) => a.left - b.left);
+    return rects.every((rect, index) => rect.left >= bounds.left - 0.5 && rect.right <= bounds.right + 0.5 &&
+      (!index || rect.left >= rects[index - 1].right));
+  })).toBe(true);
+  await expect(host.locator('[data-vf-slider-mark]')).toHaveCount(3);
+});

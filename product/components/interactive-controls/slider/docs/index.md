@@ -12,7 +12,7 @@ Use sm, md (default), or lg. Native Web uses data-vf-size and data-vf-orientatio
 
 ## Values and marks
 
-Use min, max and step; step="any" allows continuous adjustment. Native list/datalist is supported. Marks identify positions, not additional selection constraints. Use sparse labeled marks and avoid relying on labels alone for accessible value meaning.
+Use min, max and step; step="any" allows continuous adjustment. Native list/datalist is supported. Marks identify positions, not additional selection constraints. Use sparse labeled marks and avoid relying on labels alone for accessible value meaning. When space is insufficient, visual labels are clamped or suppressed to prevent collisions; the tick positions remain unchanged.
 
 ## Value labels and descriptive tooltips
 

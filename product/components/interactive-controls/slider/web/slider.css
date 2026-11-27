@@ -147,6 +147,7 @@
     font: var(--vf-slider-mark-label-font, var(--vf-font-size-xs)/var(--vf-line-height-normal) var(--vf-control-font-family));
     color: var(--vf-color-text-muted);
     text-align: center;
+    transform: translateX(var(--_vf-slider-mark-shift, 0px));
   }
   :where([data-vf-slider-value]) {
     pointer-events: none;
