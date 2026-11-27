@@ -57,6 +57,6 @@
   "notes": [
     "Loading is feedback presentation, not an async orchestration runtime.",
     "Built-in visual variants do not imply different async lifecycle states.",
-    "The former standalone Skeleton product unit is superseded by Loading structured-placeholder presentation."
+    "Skeleton and Progress are independent public primitives; legacy Loading parts are migration surfaces."
   ]
 }

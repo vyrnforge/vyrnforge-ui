@@ -391,6 +391,18 @@
       "browser": "./dist/components/text-field/browser.js",
       "import": "./dist/components/text-field/index.js",
       "default": "./dist/components/text-field/index.js"
+    },
+    "./skeleton": {
+      "types": "./dist/components/skeleton/index.d.ts",
+      "browser": "./dist/components/skeleton/browser.js",
+      "import": "./dist/components/skeleton/index.js",
+      "default": "./dist/components/skeleton/index.js"
+    },
+    "./progress": {
+      "types": "./dist/components/progress/index.d.ts",
+      "browser": "./dist/components/progress/browser.js",
+      "import": "./dist/components/progress/index.js",
+      "default": "./dist/components/progress/index.js"
     }
   },
   "dependencies": {

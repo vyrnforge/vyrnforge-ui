@@ -90,3 +90,5 @@ export * from './components/status-indicator/index.js';
 export * from './components/alert/index.js';
 
 export * from './components/text-field/index.js';
+export * from './components/skeleton/index.js';
+export * from './components/progress/index.js';

@@ -3131,6 +3131,18 @@ export interface PreviewCardTriggerProps {
 }
 
 // @public (undocumented)
+export const Progress: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ProgressHTMLAttributes<HTMLProgressElement>, HTMLProgressElement>, "ref">, "role" | "value" | "max"> & {
+value?: number;
+max?: number;
+} & RefAttributes<HTMLProgressElement>>;
+
+// @public (undocumented)
+export type ProgressProps = Omit<ComponentPropsWithoutRef<'progress'>, 'value' | 'max' | 'role'> & {
+    value?: number;
+    max?: number;
+};
+
+// @public (undocumented)
 export const Radio: ForwardRefExoticComponent<RadioProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
@@ -3356,6 +3368,21 @@ export type SideNavListProps = ComponentPropsWithoutRef<'ul'>;
 
 // @public (undocumented)
 export type SideNavProps = ComponentPropsWithoutRef<'nav'>;
+
+// @public (undocumented)
+export const Skeleton: ForwardRefExoticComponent<SkeletonProps & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export type SkeletonAnimation = 'wave' | 'pulse' | 'none';
+
+// @public (undocumented)
+export interface SkeletonProps extends Omit<ComponentPropsWithoutRef<'div'>, 'children' | 'role' | 'aria-hidden' | 'tabIndex' | 'dangerouslySetInnerHTML'> {
+    animation?: SkeletonAnimation;
+    shape?: SkeletonShape;
+}
+
+// @public (undocumented)
+export type SkeletonShape = 'line' | 'block' | 'circle';
 
 // @public (undocumented)
 export const Slider: ForwardRefExoticComponent<SliderProps & RefAttributes<HTMLInputElement>>;

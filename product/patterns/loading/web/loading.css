@@ -1,5 +1,7 @@
 @import "../../styles/tokens.css";
 @import "../../styles/loading-motion.css";
+@import "../skeleton/skeleton.css";
+@import "../progress/progress.css";
 
 @layer vyrnforge.components {
   :where([data-vf-loading]) {
@@ -108,55 +110,6 @@
     color: var(--vf-loading-pulse-color, var(--vf-loading-color, var(--vf-color-accent-background)));
   }
 
-  :where([data-vf-loading-placeholder]) {
-    animation:
-      vf-loading-shimmer
-      var(--vf-loading-placeholder-duration, var(--vf-motion-duration-loading-shimmer))
-      var(--vf-motion-easing-loading)
-      infinite;
-    background: linear-gradient(
-      90deg,
-      var(--vf-loading-placeholder-color, var(--vf-color-disabled-background)) 0%,
-      var(--vf-loading-placeholder-highlight, var(--vf-color-surface-hover)) 45%,
-      var(--vf-loading-placeholder-color, var(--vf-color-disabled-background)) 90%
-    );
-    background-size: 220% 100%;
-    border-radius: var(--vf-loading-placeholder-radius, var(--vf-radius-surface));
-    display: block;
-    min-block-size: 1rem;
-  }
-
-  :where([data-vf-loading-placeholder][data-vf-loading-placeholder-shape="line"]) {
-    border-radius: var(--vf-loading-placeholder-line-radius, 999px);
-    min-block-size: 0.75rem;
-  }
-
-  :where([data-vf-loading-placeholder][data-vf-loading-placeholder-shape="circle"]) {
-    border-radius: 50%;
-  }
-
-  :where(progress[data-vf-loading-progress]) {
-    accent-color: var(--vf-loading-progress-color, var(--vf-loading-color, var(--vf-color-accent-background)));
-    block-size: var(--vf-loading-progress-size, 0.75rem);
-    border-radius: var(--vf-loading-progress-radius, 999px);
-    inline-size: 100%;
-  }
-
-  :where(progress[data-vf-loading-progress])::-webkit-progress-bar {
-    background: var(--vf-loading-progress-track-color, var(--vf-loading-track-color, var(--vf-color-border)));
-    border-radius: var(--vf-loading-progress-radius, 999px);
-  }
-
-  :where(progress[data-vf-loading-progress])::-webkit-progress-value {
-    background: var(--vf-loading-progress-color, var(--vf-loading-color, var(--vf-color-accent-background)));
-    border-radius: var(--vf-loading-progress-radius, 999px);
-  }
-
-  :where(progress[data-vf-loading-progress])::-moz-progress-bar {
-    background: var(--vf-loading-progress-color, var(--vf-loading-color, var(--vf-color-accent-background)));
-    border-radius: var(--vf-loading-progress-radius, 999px);
-  }
-
   :where([data-vf-loading-custom]) {
     color: var(--vf-loading-custom-color, var(--vf-loading-color, currentColor));
   }
@@ -177,13 +130,9 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :where([data-vf-loading-indicator], [data-vf-loading-placeholder]) {
+    :where([data-vf-loading-indicator]) {
       animation: none;
       transform: none;
-    }
-
-    :where([data-vf-loading-placeholder]) {
-      background: var(--vf-loading-placeholder-color, var(--vf-color-disabled-background));
     }
   }
 
@@ -199,15 +148,6 @@
       [data-vf-loading-indicator][data-vf-loading-variant="pulse"]) {
       color: CanvasText;
       forced-color-adjust: none;
-    }
-
-    :where([data-vf-loading-placeholder]) {
-      background: CanvasText;
-      opacity: 0.25;
-    }
-
-    :where(progress[data-vf-loading-progress]) {
-      forced-color-adjust: auto;
     }
   }
 }
