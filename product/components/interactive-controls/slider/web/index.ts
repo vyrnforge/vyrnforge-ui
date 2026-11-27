@@ -2,7 +2,7 @@
 export interface SliderPresentationOptions {
   marks?: boolean | readonly { value: number; label?: string }[];
   valueLabelDisplay?: 'off' | 'auto' | 'always';
-  formatValue?: (value: number) => string;
+  formatValue?: ((value: number) => string) | undefined;
 }
 export interface SliderConnection {
   /** Read the actual native value; call after direct programmatic value writes. */
@@ -20,7 +20,7 @@ function marksFor(options: SliderPresentationOptions, min: number, max: number, 
     const increment = Number(step || 1);
     const count = Math.floor((max - min) / increment + 1e-9) + 1;
     if (increment > 0 && count > 0 && count <= 50) {
-      return Array.from({ length: count }, (_, i) => ({ value: Number((min + i * increment).toPrecision(15)), label: undefined }));
+      return Array.from({ length: count }, (_, i) => ({ value: Number((min + i * increment).toPrecision(15)) }));
     }
   }
   if (Array.isArray(options.marks)) {
