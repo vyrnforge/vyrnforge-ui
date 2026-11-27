@@ -15,7 +15,7 @@ import { ComponentProps } from 'react';
 import { ComponentPropsWithoutRef } from 'react';
 import type { ComponentPropsWithRef } from 'react';
 import { CompositionEventHandler } from 'react';
-import { CreateThemeOptions as WebCreateThemeOptions } from '@vyrnforge/web/theme';
+import type { CreateThemeOptions as CreateThemeOptions_2 } from '@vyrnforge/web/theme';
 import { CSSProperties } from 'react';
 import { DetailedHTMLProps } from 'react';
 import { DetailedReactHTMLElement } from 'react';
@@ -539,7 +539,7 @@ export const colors: Readonly<Record<ColorRole, CssReference>>;
 export const ComboboxContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export const ComboboxInput: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "defaultValue" | "id" | "aria-controls" | "value"> & RefAttributes<HTMLInputElement>>;
+export const ComboboxInput: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "value" | "defaultValue" | "id" | "aria-controls"> & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
 export const ComboboxOption: ForwardRefExoticComponent<ComboboxOptionProps & RefAttributes<HTMLButtonElement>>;
@@ -611,10 +611,10 @@ export const ContextMenuTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProp
 export function createSvgIcon(content: ReactNode): ForwardRefExoticComponent<Omit<SvgIconProps, 'children'> & RefAttributes<SVGSVGElement>>;
 
 // @public
-export function createTheme({ colors: overrides, tokens: groups, ...options }: CreateThemeOptions): ThemeDefinition;
+export function createTheme(input: CreateThemeOptions): ThemeDefinition;
 
 // @public (undocumented)
-export interface CreateThemeOptions extends Omit<WebCreateThemeOptions, 'colors' | 'tokens'> {
+export interface CreateThemeOptions extends Omit<CreateThemeOptions_2, 'colors' | 'tokens'> {
     // (undocumented)
     colors?: ThemeColorOverrides;
     // (undocumented)
@@ -1964,6 +1964,7 @@ color?: string | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
+role?: AriaRole | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -1986,7 +1987,6 @@ tabIndex?: number | undefined | undefined;
 title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
-role?: AriaRole | undefined;
 about?: string | undefined | undefined;
 datatype?: string | undefined | undefined;
 inlist?: any;
@@ -2579,6 +2579,7 @@ color?: string | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
+role?: AriaRole | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4131,6 +4132,7 @@ color?: string | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
+role?: AriaRole | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4469,7 +4471,7 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 export type TextElement = 'span' | 'p' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote' | 'q' | 'cite' | 'strong' | 'em' | 'small' | 'mark' | 'abbr' | 'sub' | 'sup' | 'del' | 'ins' | 'time' | 'figcaption';
 
 // @public
-export const TextField: ForwardRefExoticComponent<TextFieldProps & RefAttributes<HTMLTextAreaElement | HTMLInputElement>>;
+export const TextField: ForwardRefExoticComponent<TextFieldProps & RefAttributes<HTMLInputElement | HTMLTextAreaElement>>;
 
 // @public (undocumented)
 export interface TextFieldAppearanceProps {
@@ -4596,7 +4598,6 @@ tabIndex?: number | undefined | undefined;
 title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
-role?: AriaRole | undefined;
 about?: string | undefined | undefined;
 datatype?: string | undefined | undefined;
 inlist?: any;
@@ -4899,7 +4900,6 @@ tabIndex?: number | undefined | undefined;
 title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
-role?: AriaRole | undefined;
 about?: string | undefined | undefined;
 datatype?: string | undefined | undefined;
 inlist?: any;
