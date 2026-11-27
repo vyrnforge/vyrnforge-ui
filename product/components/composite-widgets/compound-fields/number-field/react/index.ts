@@ -203,7 +203,7 @@ export const NumberFieldIncrement = forwardRef<HTMLButtonElement, ComponentProps
       ref,
       type: 'button',
       disabled: n.disabled || n.readOnly || n.step === 'any' || disabled,
-      'data-vf-number-field-increment': '',
+      ...{ 'data-vf-number-field-increment': '' },
       onClick: (event) => {
         onClick?.(event);
         if (!event.defaultPrevented) stepInput(event.currentTarget, 1);
@@ -220,7 +220,7 @@ export const NumberFieldDecrement = forwardRef<HTMLButtonElement, ComponentProps
       ref,
       type: 'button',
       disabled: n.disabled || n.readOnly || n.step === 'any' || disabled,
-      'data-vf-number-field-decrement': '',
+      ...{ 'data-vf-number-field-decrement': '' },
       onClick: (event) => {
         onClick?.(event);
         if (!event.defaultPrevented) stepInput(event.currentTarget, -1);
