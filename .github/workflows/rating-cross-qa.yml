@@ -1,0 +1,17 @@
+name: Rating Cross-Engine QA
+on:
+  pull_request:
+    branches: [feat/rating-redesign-1590]
+    paths: ['.github/workflows/rating-cross-qa.yml']
+permissions:
+  contents: read
+jobs:
+  rating-cross:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"rating"},{"port":"react","components":"rating"},{"port":"angular","components":"rating"},{"port":"vue","components":"rating"},{"port":"elements","components":"rating"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: rating-cross-qa
+      retention_days: 7
