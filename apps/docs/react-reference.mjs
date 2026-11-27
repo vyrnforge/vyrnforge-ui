@@ -640,7 +640,7 @@ function selectionGuide(unit, links) {
       'data-vf-docs-react-selection': unit.id },
       guideHeader(unit.sharedContent, unit.guideOnly ? 'React · Patterns · Forms' : 'React · Components · Forms', unit.standardReferences),
       ...(unit.frameworkContent ? [guidePart(sections[0], guideBlocks(unit.frameworkContent, 'React setup'))] : []),
-      ...(adapter ? [guidePart(playgroundSection, [h(ComponentPlayground, { adapter, title: unit.title })])] : []),
+      ...(adapter ? [guidePart(playgroundSection, [h(ComponentPlayground, { adapter, title: unit.id === 'number-field' ? 'NumberField' : unit.title })])] : []),
       ...topics.map(section => guidePart(section, [
         ...renderBlocks(section.blocks),
         ...guideBlocks(unit.frameworkContent, section.heading),
