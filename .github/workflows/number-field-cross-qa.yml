@@ -1,0 +1,20 @@
+name: NumberField Cross-Engine QA
+
+on:
+  pull_request:
+    branches: [foundation/number-field-editor-composition]
+    paths: ['.github/workflows/number-field-cross-qa.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  number-field-cross:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"number-field"},{"port":"react","components":"number-field"},{"port":"angular","components":"number-field"},{"port":"vue","components":"number-field"},{"port":"elements","components":"number-field"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: number-field-cross-qa
+      retention_days: 7
