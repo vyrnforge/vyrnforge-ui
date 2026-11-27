@@ -2579,7 +2579,6 @@ color?: string | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
-role?: AriaRole | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -3418,7 +3417,21 @@ export type SkeletonShape = 'line' | 'block' | 'circle';
 export const Slider: ForwardRefExoticComponent<SliderProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export type SliderProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;
+export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'required' | 'readOnly'> {
+    // (undocumented)
+    formatValue?: (value: number) => string;
+    // (undocumented)
+    marks?: boolean | readonly {
+        value: number;
+        label?: string;
+    }[];
+    // (undocumented)
+    orientation?: 'horizontal' | 'vertical';
+    // (undocumented)
+    size?: 'sm' | 'md' | 'lg';
+    // (undocumented)
+    valueLabelDisplay?: 'off' | 'auto' | 'always';
+}
 
 // @public (undocumented)
 export const SplitButtonAction: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
@@ -4132,7 +4145,6 @@ color?: string | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
-role?: AriaRole | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4576,6 +4588,7 @@ color?: string | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
+role?: AriaRole | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4878,6 +4891,7 @@ color?: string | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
+role?: AriaRole | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -5282,6 +5296,15 @@ export const tokens: Readonly<{
         loadingShimmerDuration: `var(--vf-${string})`;
         loadingEasing: `var(--vf-${string})`;
         standardEasing: `var(--vf-${string})`;
+    }>;
+    slider: Readonly<{
+        trackSize: `var(--vf-${string})`;
+        trackColor: `var(--vf-${string})`;
+        fillColor: `var(--vf-${string})`;
+        thumbSize: `var(--vf-${string})`;
+        thumbColor: `var(--vf-${string})`;
+        valueLabelFont: `var(--vf-${string})`;
+        markLabelFont: `var(--vf-${string})`;
     }>;
     editor: Readonly<{
         valueFont: `var(--vf-${string})`;

@@ -36,7 +36,9 @@ Use the typed `textField` token group. For app-wide configuration, pass the same
 import { ThemeScope, tokens } from '@vyrnforge/react';
 import { TextField } from '@vyrnforge/react/text-field';
 
-<ThemeScope tokens={{ textField: { labelFont: '600 0.875rem/1.5 ' + tokens.fontFamily.sans, radius: '8px' } }}>
+<ThemeScope
+  tokens={{ textField: { labelFont: '600 0.875rem/1.5 ' + tokens.fontFamily.sans, radius: '8px' } }}
+>
   <TextField label="Email" />
 </ThemeScope>
 ```

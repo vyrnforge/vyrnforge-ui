@@ -142,6 +142,15 @@ export const tokens = Object.freeze({
     loadingEasing: reference('--vf-motion-easing-loading'),
     standardEasing: reference('--vf-motion-easing-standard'),
   }),
+  slider: Object.freeze({
+    trackSize: reference('--vf-slider-track-size'),
+    trackColor: reference('--vf-slider-track-color'),
+    fillColor: reference('--vf-slider-fill-color'),
+    thumbSize: reference('--vf-slider-thumb-size'),
+    thumbColor: reference('--vf-slider-thumb-color'),
+    valueLabelFont: reference('--vf-slider-value-label-font'),
+    markLabelFont: reference('--vf-slider-mark-label-font'),
+  }),
   editor: Object.freeze({
     valueFont: reference('--vf-editor-value-font'),
     valueLetterSpacing: reference('--vf-editor-value-letter-spacing'),

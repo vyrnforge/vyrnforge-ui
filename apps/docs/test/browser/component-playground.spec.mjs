@@ -5,7 +5,7 @@ import ts from 'typescript';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeConfiguration, defaultsFor } from '../../playground-config.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from '../../react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from '../../react-playground-adapters.mjs';
 
 test('Button playground keeps configuration, interaction and generated usage synchronized', async ({ page }) => {
   await page.goto('/next/react/components/button/');
@@ -141,6 +141,7 @@ test('Generated playground examples typecheck and bundle against installed publi
   test.setTimeout(90_000);
   const root = fileURLToPath(new URL('../../../../', import.meta.url));
   const scenarios = [
+    [sliderPlayground, {}], [sliderPlayground, { size: 'lg', orientation: 'vertical', marks: 'labels', valueLabelDisplay: 'always', percent: true, description: true, controlled: true }],
     [buttonPlayground, {}], [buttonPlayground, { variant: 'secondary', size: 'lg', loading: true, disabled: true, label: '<Save>{x}' }],
     [checkboxPlayground, { selection: 'mixed', required: true }], [checkboxPlayground, { presentation: 'standalone' }], [checkboxPlayground, { presentation: 'icon label' }], [checkboxPlayground, { presentation: 'label and description', selection: 'mixed' }], [radioPlayground, { selection: 'express' }], [radioPlayground, { size: 'lg', selection: 'none', orientation: 'horizontal', invalid: true, required: true }], [radioPlayground, { presentation: 'label and description', size: 'sm' }], [radioPlayground, { presentation: 'icon label' }],
     [avatarPlayground, { appearance: 'icon', decorative: true, size: 'lg', shape: 'square' }],
@@ -495,3 +496,37 @@ for (const name of ['Input', 'Textarea']) {
     await playground.screenshot({ path: testInfo.outputPath(name.toLowerCase() + '-mobile-rtl-forced-colors.png') });
   });
 }
+
+test('Slider guide uses the native control and synchronizes value, marks, labels and source', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/slider/');
+  const playground = page.locator('[data-vf-docs-component-playground="Slider"]');
+  const preview = playground.getByRole('region', { name: 'Slider preview' });
+  const control = preview.getByRole('slider', { name: 'Volume' });
+  await expect(control).toHaveJSProperty('value', '50');
+  await playground.getByRole('radio', { name: 'lg', exact: true }).check();
+  await expect(control).toHaveAttribute('data-vf-size', 'lg');
+  await playground.getByRole('button', { name: 'Stepped with labels' }).click();
+  await expect(preview.locator('[data-vf-slider-value]')).toHaveText('50');
+  await control.press('ArrowRight');
+  await expect(control).toHaveJSProperty('value', '75');
+  await expect(preview.locator('[data-vf-slider-value]')).toHaveText('75');
+  await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('defaultValue={75}');
+  await expect(preview.locator('[data-vf-slider-mark]')).toHaveCount(3);
+  await playground.screenshot({ path: testInfo.outputPath('slider-playground-horizontal.png') });
+  await playground.getByRole('button', { name: 'Vertical volume' }).click();
+  await expect(control).toHaveAttribute('aria-orientation', 'vertical');
+  await control.hover();
+  await expect(preview.locator('[data-vf-slider-value]')).toBeVisible();
+  await playground.getByRole('region', { name: 'Generated React usage' }).hover();
+  await control.focus();
+  await control.press('ArrowUp');
+  await expect.poll(() => control.evaluate(element => element.matches(':focus-visible'))).toBe(true);
+  await expect(preview.locator('[data-vf-slider-value]')).toBeVisible();
+  await expect(control).toHaveJSProperty('value', '51');
+  await playground.getByRole('checkbox', { name: 'Controlled usage' }).check();
+  await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('value={value}');
+  await playground.getByRole('checkbox', { name: 'Descriptive tooltip' }).check();
+  await preview.getByRole('button', { name: 'About Volume' }).focus();
+  await expect(preview.getByRole('tooltip')).toContainText('Adjust the selected numeric value.');
+  await playground.screenshot({ path: testInfo.outputPath('slider-playground-vertical.png') });
+});
