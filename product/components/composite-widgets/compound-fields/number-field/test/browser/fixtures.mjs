@@ -27,10 +27,12 @@ function record(key, value) {
 }
 export async function createReactStory({ client }) {
   const { createElement: h, useEffect, useState } = await import('react');
-  const { NumberFieldRoot, NumberFieldInput, NumberFieldIncrement, NumberFieldDecrement } =
+  const { ThemeScope, tokens } = await import('@vyrnforge/react');
+  const { NumberField, NumberFieldRoot, NumberFieldInput, NumberFieldIncrement, NumberFieldDecrement } =
     await import('@vyrnforge/react/number-field');
   function App() {
     const [controlled, setControlled] = useState(2);
+    const [accepted, setAccepted] = useState(-2.5);
     useEffect(() => {
       document.body.dataset.numberFieldReady = 'true';
     }, []);
@@ -70,6 +72,53 @@ export async function createReactStory({ client }) {
       field('readonly', 'Read-only quantity', { defaultValue: 2, readOnly: true }),
       field('disabled', 'Disabled quantity', { defaultValue: 2, disabled: true }),
       field('any', 'Any quantity', { defaultValue: null, step: 'any', onValueChange: report('anyValue') }),
+      h(NumberField, {
+        id: 'nf-order',
+        name: 'order',
+        label: 'Order quantity',
+        description: 'Number of items',
+        defaultValue: 1,
+        min: 0,
+        max: 100,
+        stepControls: 'horizontal',
+        incrementLabel: 'Add order item',
+        decrementLabel: 'Remove order item',
+        fullWidth: true,
+        onValueChange: report('order'),
+      }),
+      h(NumberField, {
+        id: 'nf-accepted',
+        name: 'accepted',
+        label: 'Adjustment',
+        value: accepted,
+        onValueChange: setAccepted,
+        min: -10,
+        max: 10,
+        step: 0.1,
+        stepControls: 'stacked',
+        incrementLabel: 'Increase adjustment',
+        decrementLabel: 'Decrease adjustment',
+        variant: 'filled',
+        labelPlacement: 'floating',
+        suffix: 'kg',
+        fieldSize: 'sm',
+      }),
+      h(NumberField, {
+        id: 'nf-empty',
+        name: 'empty',
+        label: 'Empty amount',
+        step: 'any',
+        stepControls: 'none',
+        variant: 'underlined',
+        prefix: '$',
+        error: 'Enter amount',
+        required: true,
+      }),
+      h(
+        ThemeScope,
+        { tokens: { textField: { valueFont: '600 1.25rem/1.5 ' + tokens.fontFamily.sans, radius: '8px' } } },
+        h(NumberField, { label: 'Custom typography', defaultValue: 3.5, step: 0.1, fullWidth: true }),
+      ),
       h(
         'button',
         { type: 'button', id: 'set-controlled', onClick: () => setControlled(7) },

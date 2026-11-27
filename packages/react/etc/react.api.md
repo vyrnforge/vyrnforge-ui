@@ -2965,6 +2965,9 @@ export const NativeSelect: ForwardRefExoticComponent<NativeSelectProps & RefAttr
 // @public (undocumented)
 export type NativeSelectProps = SelectHTMLAttributes<HTMLSelectElement>;
 
+// @public
+export const NumberField: ForwardRefExoticComponent<NumberFieldProps & RefAttributes<HTMLInputElement>>;
+
 // @public (undocumented)
 export const NumberFieldDecrement: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
 
@@ -2975,7 +2978,18 @@ export const NumberFieldIncrement: ForwardRefExoticComponent<Omit<DetailedHTMLPr
 export const NumberFieldInput: ForwardRefExoticComponent<NumberFieldInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export type NumberFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'>;
+export type NumberFieldInputProps = Omit<InputProps, 'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'>;
+
+// @public
+export type NumberFieldProps = Omit<TextFieldInputProps, 'type' | 'value' | 'defaultValue' | 'min' | 'max' | 'step' | 'multiline' | 'autosize'> & Pick<NumberFieldRootProps, 'value' | 'defaultValue' | 'min' | 'max' | 'step' | 'onValueChange'> & ({
+    stepControls?: 'native' | 'none';
+    incrementLabel?: never;
+    decrementLabel?: never;
+} | {
+    stepControls: 'stacked' | 'horizontal';
+    incrementLabel: string;
+    decrementLabel: string;
+});
 
 // @public (undocumented)
 export const NumberFieldRoot: ForwardRefExoticComponent<NumberFieldRootProps & RefAttributes<HTMLDivElement>>;
