@@ -11,6 +11,10 @@
     max-inline-size: 100%;
   }
 
+  :where([data-vf-number-field-root][hidden]) {
+    display: none;
+  }
+
   :where([data-vf-number-field-full-width]) {
     inline-size: 100%;
   }
@@ -69,9 +73,4 @@
     outline-offset: -2px;
   }
 
-  /* The shared field shell remains responsible for value and placeholder fonts.
-     A number editor also honors the typed single-line Input overrides. */
-  :where([data-vf-number-field-layout] [data-vf-number-field-input][data-vf-text-field-value]) {
-    font: var(--vf-text-field-value-font, var(--_vf-editor-value-font));
-  }
 }
