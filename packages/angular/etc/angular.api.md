@@ -21,6 +21,7 @@ import { ModelSignal } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OutputEmitterRef } from '@angular/core';
 import { Signal } from '@angular/core';
+import { SliderTooltipOptions } from '@vyrnforge/web/slider';
 import { TextVariant } from '@vyrnforge/web/text';
 import { WritableSignal } from '@angular/core';
 
@@ -3080,6 +3081,8 @@ export class VfSliderDirective {
     // (undocumented)
     readonly size: InputSignal<"sm" | "md" | "lg">;
     // (undocumented)
+    readonly tooltip: InputSignal<boolean | SliderTooltipOptions | undefined>;
+    // (undocumented)
     readonly valueLabelDisplay: InputSignal<"off" | "auto" | "always">;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSliderDirective, "input[vfSlider]", never, {
@@ -3095,6 +3098,11 @@ export class VfSliderDirective {
         };
         "marks": {
             "alias": "marks";
+            "required": false;
+            "isSignal": true;
+        };
+        "tooltip": {
+            "alias": "tooltip";
             "required": false;
             "isSignal": true;
         };

@@ -1,6 +1,18 @@
+import type { AnchorPlacement } from '../../index.js';
+import { connectTooltipArrow } from '../tooltip/index.js';
+
+export interface SliderTooltipOptions {
+  display?: 'auto' | 'always';
+  placement?: AnchorPlacement;
+  size?: 'sm' | 'md' | 'lg';
+  arrow?: boolean;
+  format?: (value: number) => string;
+}
+
 /** Presentation only: native input owns value, focus, keyboard, pointer and forms. */
 export interface SliderPresentationOptions {
   marks?: boolean | readonly { value: number; label?: string }[];
+  tooltip?: boolean | SliderTooltipOptions | undefined;
   valueLabelDisplay?: 'off' | 'auto' | 'always';
   formatValue?: ((value: number) => string) | undefined;
 }
@@ -49,7 +61,11 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
   let markKey = '';
   let generatedValueText: string | undefined;
   let authoredValueText = input.getAttribute('aria-valuetext');
-  let observer: ResizeObserver | undefined;
+  let anchor: HTMLElement | undefined;
+  let disconnectArrow: (() => void) | undefined;
+  let pressed = false;
+  let display: 'off' | 'auto' | 'always' = 'off';
+  let arrowEnabled = false;
   let markObserver: ResizeObserver | undefined;
   let geometryKey = '';
   const span = (attribute: string) => {
@@ -57,12 +73,26 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
     node.setAttribute(attribute, '');
     return node;
   };
-  const measure = () => {
-    if (!host || !bubble) return;
-    const width = bubble.getBoundingClientRect().width;
-    const height = bubble.getBoundingClientRect().height;
-    if (width > 0) host.style.setProperty('--_vf-slider-label-width', width + 'px');
-    if (height > 0) host.style.setProperty('--_vf-slider-label-height', height + 'px');
+  const hide = () => {
+    disconnectArrow?.();
+    disconnectArrow = undefined;
+    if (bubble?.matches(':popover-open')) bubble.hidePopover();
+  };
+  const syncVisibility = () => {
+    if (!active || !bubble || !anchor || !input.isConnected) return;
+    const visible = display === 'always' ||
+      (display === 'auto' && !input.disabled && (pressed || input.matches(':hover, :active, :focus-visible')));
+    if (!visible) { hide(); return; }
+    if (!bubble.matches(':popover-open')) bubble.showPopover({ source: anchor });
+    if (arrowEnabled && !disconnectArrow) disconnectArrow = connectTooltipArrow(bubble, anchor);
+    if (!arrowEnabled && disconnectArrow) { disconnectArrow(); disconnectArrow = undefined; }
+  };
+  const removeBubble = () => {
+    hide();
+    bubble?.remove();
+    anchor?.remove();
+    bubble = undefined;
+    anchor = undefined;
   };
   // Keep ticks at their authored values. At constrained widths, retain endpoint
   // labels first, clamp them into the available bounds and suppress collisions.
@@ -106,7 +136,8 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
     const progress = String(fraction(value, min, max));
     input.style.setProperty('--_vf-slider-progress', progress);
     input.setAttribute('data-vf-slider-enhanced', '');
-    const formatted = options.formatValue?.(value);
+    const tooltip = typeof options.tooltip === 'object' ? options.tooltip : undefined;
+    const formatted = (tooltip?.format ?? options.formatValue)?.(value);
     // Preserve an explicitly authored accessible interpretation.
     const existing = input.getAttribute('aria-valuetext');
     if (existing !== (generatedValueText ?? authoredValueText)) authoredValueText = existing;
@@ -124,7 +155,7 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
     host.style.setProperty('--_vf-slider-progress', progress);
     host.setAttribute('data-vf-size', input.getAttribute('data-vf-size') || 'md');
     host.setAttribute('data-vf-orientation', input.getAttribute('data-vf-orientation') || 'horizontal');
-    const display = options.valueLabelDisplay ?? 'off';
+    display = options.tooltip === false ? 'off' : options.tooltip === true ? 'auto' : tooltip ? tooltip.display ?? 'auto' : options.valueLabelDisplay ?? 'off';
     host.setAttribute('data-vf-value-label', display);
     const marks = marksFor(options, min, max, input.step);
     host.toggleAttribute('data-vf-slider-marks', marks.length > 0);
@@ -161,23 +192,26 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
     const nextGeometry = [host.getAttribute('data-vf-orientation'), host.getAttribute('data-vf-size'), key].join('|');
     if (geometryKey !== nextGeometry) { geometryKey = nextGeometry; fitMarks(); }
     if (display === 'off') {
-      observer?.disconnect();
-      observer = undefined;
-      bubble?.remove();
-      bubble = undefined;
+      removeBubble();
     } else {
       if (!bubble) {
+        anchor = span('data-vf-slider-thumb-anchor');
+        anchor.setAttribute('aria-hidden', 'true');
         bubble = span('data-vf-slider-value');
+        bubble.setAttribute('data-vf-tooltip-content', '');
+        bubble.setAttribute('data-vf-motion', '');
         bubble.setAttribute('aria-hidden', 'true');
-        host.append(bubble);
-        if (doc.defaultView?.ResizeObserver) {
-          observer = new doc.defaultView.ResizeObserver(measure);
-          observer.observe(bubble);
-        }
+        bubble.setAttribute('popover', 'manual');
+        host.append(anchor, bubble);
       }
+      const vertical = input.getAttribute('data-vf-orientation') === 'vertical';
+      bubble.setAttribute('data-vf-placement', tooltip?.placement ?? (vertical ? 'left' : 'top'));
+      bubble.setAttribute('data-vf-size', tooltip?.size ?? 'sm');
+      arrowEnabled = tooltip?.arrow ?? false;
+      bubble.toggleAttribute('data-vf-arrow', arrowEnabled);
       const label = formatted ?? String(value);
       if (bubble.textContent !== label) bubble.textContent = label;
-      measure();
+      syncVisibility();
     }
   };
   const schedule = () => {
@@ -186,6 +220,9 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
     queueMicrotask(() => { scheduled = false; refresh(); });
   };
   const onInput = () => { refresh(); schedule(); };
+  const onPointerDown = () => { pressed = true; syncVisibility(); };
+  const onPointerEnd = () => { pressed = false; schedule(); };
+  const onActivity = () => { syncVisibility(); schedule(); };
   const onReset = (event: Event) => {
     if (event.target !== input.form) return;
     clearTimeout(timer);
@@ -197,6 +234,9 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
   input.addEventListener('input', onInput);
   input.addEventListener('change', onInput);
   doc.addEventListener('reset', onReset, true);
+  for (const event of ['pointerenter', 'pointerleave', 'focus', 'blur', 'keydown', 'keyup']) input.addEventListener(event, onActivity);
+  input.addEventListener('pointerdown', onPointerDown);
+  for (const event of ['pointerup', 'pointercancel']) doc.addEventListener(event, onPointerEnd, true);
   refresh();
   return {
     refresh,
@@ -205,11 +245,13 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
       active = false;
       clearTimeout(timer);
       mutation?.disconnect();
-      observer?.disconnect();
       markObserver?.disconnect();
       input.removeEventListener('input', onInput);
       input.removeEventListener('change', onInput);
       doc.removeEventListener('reset', onReset, true);
+      for (const event of ['pointerenter', 'pointerleave', 'focus', 'blur', 'keydown', 'keyup']) input.removeEventListener(event, onActivity);
+      input.removeEventListener('pointerdown', onPointerDown);
+      for (const event of ['pointerup', 'pointercancel']) doc.removeEventListener(event, onPointerEnd, true);
       input.removeAttribute('data-vf-slider-enhanced');
       input.style.removeProperty('--_vf-slider-progress');
       if (generatedValueText !== undefined && input.getAttribute('aria-valuetext') === generatedValueText) {
@@ -217,11 +259,11 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
         else input.setAttribute('aria-valuetext', authoredValueText);
       }
       ticks?.remove();
-      bubble?.remove();
+      removeBubble();
       if (host) {
         host.removeAttribute('data-vf-slider-marks');
         host.removeAttribute('data-vf-value-label');
-        for (const property of ['--_vf-slider-progress', '--_vf-slider-label-width', '--_vf-slider-label-height'])
+        for (const property of ['--_vf-slider-progress'])
           host.style.removeProperty(property);
       }
     },

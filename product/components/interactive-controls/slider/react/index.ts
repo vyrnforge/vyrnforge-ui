@@ -1,18 +1,19 @@
 import { createElement, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import type { InputHTMLAttributes } from 'react';
 import { connectSlider } from '@vyrnforge/web/slider';
-import type { SliderConnection } from '@vyrnforge/web/slider';
+import type { SliderConnection, SliderTooltipOptions } from '@vyrnforge/web/slider';
 
 export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'required' | 'readOnly'> {
   size?: 'sm' | 'md' | 'lg';
   orientation?: 'horizontal' | 'vertical';
   marks?: boolean | readonly { value: number; label?: string }[];
+  tooltip?: boolean | SliderTooltipOptions;
   valueLabelDisplay?: 'off' | 'auto' | 'always';
   formatValue?: (value: number) => string;
 }
 
 export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider({
-  size = 'md', orientation = 'horizontal', marks = false, valueLabelDisplay = 'off',
+  size = 'md', orientation = 'horizontal', marks = false, tooltip, valueLabelDisplay = 'off',
   formatValue, ...props
 }, ref) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -25,7 +26,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
     connection.current = current;
     return () => { current.disconnect(); connection.current = null; };
   }, []);
-  useEffect(() => { connection.current?.refresh({ marks, valueLabelDisplay, formatValue }); });
+  useEffect(() => { connection.current?.refresh({ marks, tooltip, valueLabelDisplay, formatValue }); });
   // Keep one stable native input when marks/labels are toggled. The plain wrapper
   // has no layout box until presentation is requested.
   return createElement('span', { 'data-vf-slider-presentation': '',

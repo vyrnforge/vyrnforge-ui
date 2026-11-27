@@ -54,6 +54,7 @@ import type { SelectHTMLAttributes } from 'react';
 import { SubmitEventHandler } from 'react';
 import type { SVGAttributes } from 'react';
 import type { TextareaHTMLAttributes } from 'react';
+import { SliderTooltipOptions } from '@vyrnforge/web/slider';
 import { TextVariant } from '@vyrnforge/web/text';
 import { ThemeDefinition } from '@vyrnforge/web/theme';
 import { ToggleEventHandler } from 'react';
@@ -3443,6 +3444,8 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
     orientation?: 'horizontal' | 'vertical';
     // (undocumented)
     size?: 'sm' | 'md' | 'lg';
+    // (undocumented)
+    tooltip?: boolean | SliderTooltipOptions;
     // (undocumented)
     valueLabelDisplay?: 'off' | 'auto' | 'always';
 }
