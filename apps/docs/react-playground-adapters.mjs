@@ -609,12 +609,19 @@ function nativeFieldAdapter(multiline) {
   const fieldProps = config => ({
     placeholder: config.placeholder, disabled: config.disabled, readOnly: config.readOnly, required: config.required,
     defaultValue: config.initial, 'aria-invalid': config.invalid || undefined,
-    ...(multiline ? { rows: Number(config.rows) } : { type: config.type }),
+    variant: config.variant, fieldSize: config.fieldSize === 'inherit' ? undefined : config.fieldSize,
+    fullWidth: config.fullWidth, textAlign: config.textAlign,
+    ...(multiline ? { rows: Number(config.rows), autosize: config.autosize, resize: config.resize === 'native' ? undefined : config.resize,
+      minRows: config.autosize ? Number(config.minRows) : undefined, maxRows: config.autosize ? Number(config.maxRows) : undefined } : { type: config.type }),
   });
   return {
     fields: [text('label', 'Label', multiline ? 'Notes' : 'Email address'),
       text('placeholder', 'Placeholder', multiline ? 'Add a note' : 'name@example.com'),
       text('initial', 'Initial value', ''), ...(multiline ? [choice('rows', 'Rows', '3', ['2','3','5'])] : [choice('type', 'Type', 'text', fieldModes)]),
+      choice('variant', 'Appearance', 'outlined', ['outlined', 'filled', 'underlined', 'unstyled']),
+      choice('fieldSize', 'Field size', 'inherit', ['inherit', 'sm', 'md', 'lg']),
+      choice('textAlign', 'Text alignment', 'start', ['start', 'center', 'end']), bool('fullWidth', 'Full width'),
+      ...(multiline ? [bool('autosize', 'Autosize'), choice('minRows', 'Minimum rows', '2', ['1','2','3']), choice('maxRows', 'Maximum rows', '8', ['4','6','8']), choice('resize', 'Resize', 'native', ['native','none','vertical','horizontal','both'])] : []),
       bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'), bool('required', 'Required'), bool('invalid', 'Invalid')],
     Preview({ config }) {
       const id = useId();
@@ -625,6 +632,8 @@ function nativeFieldAdapter(multiline) {
     source(config) {
       const control = markup(name, ['id="field"', attribute('placeholder', config.placeholder, ''), attribute('defaultValue', config.initial, ''),
         multiline ? 'rows={' + Number(config.rows) + '}' : attribute('type', config.type, 'text'),
+        attribute('variant', config.variant, 'outlined'), attribute('fieldSize', config.fieldSize, 'inherit'), attribute('textAlign', config.textAlign, 'start'), flag('fullWidth', config.fullWidth),
+        multiline ? flag('autosize', config.autosize) : '', multiline && config.autosize ? 'minRows={' + Number(config.minRows) + '}' : '', multiline && config.autosize ? 'maxRows={' + Number(config.maxRows) + '}' : '', multiline ? attribute('resize', config.resize, 'native') : '',
         flag('disabled', config.disabled), flag('readOnly', config.readOnly), flag('required', config.required),
         config.invalid ? 'aria-invalid="true"' : '']);
       return snippet([importLine(name, name.toLowerCase())],

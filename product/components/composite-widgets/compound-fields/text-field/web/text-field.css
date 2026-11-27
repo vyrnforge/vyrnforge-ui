@@ -64,6 +64,8 @@
     min-inline-size: 0;
     max-inline-size: 100%;
     min-block-size: calc(var(--_vf-text-field-height) - 2px);
+    --_vf-editor-block-padding: var(--_vf-text-field-padding);
+    --_vf-field-inline-padding: var(--_vf-text-field-inline-padding);
     padding-block: var(--_vf-text-field-padding);
     padding-inline: var(--_vf-text-field-inline-padding);
     background: transparent;
@@ -156,7 +158,7 @@
   :where([data-vf-text-field-control]:has(> textarea)) {
     align-items: flex-start;
   }
-  :where([data-vf-text-field-control] > textarea) {
+  :where([data-vf-text-field-control] > textarea:not([data-vf-textarea-resize]):not([data-vf-textarea-autosize])) {
     resize: vertical;
   }
   :where([data-vf-text-field-control] > [data-vf-text-field-value]:focus-visible) {
@@ -323,12 +325,6 @@
   }
   :where([data-vf-text-field-control]:has(> [data-vf-text-field-value]:disabled) > [data-vf-text-field-label]) {
     cursor: not-allowed;
-  }
-  @supports (field-sizing: content) {
-    :where(textarea[data-vf-text-field-autosize]) {
-      field-sizing: content;
-      min-inline-size: 6ch;
-    }
   }
   @media (prefers-reduced-motion: reduce) {
     :where([data-vf-text-field-label]) {

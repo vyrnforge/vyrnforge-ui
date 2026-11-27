@@ -2,9 +2,36 @@
 @import "../../styles/form-controls.css";
 
 @layer vyrnforge.components {
-  :where(textarea[data-vf-textarea]:not([data-vf-text-field-value])) {
-    min-block-size: var(--vf-control-height-md);
-    padding-block: var(--vf-space-sm);
+  :where(textarea[data-vf-textarea]:not([data-vf-editor-variant="unstyled"])) {
+    min-block-size: var(--_vf-editor-height);
+    padding-block: var(--_vf-editor-block-padding);
     padding-inline: var(--_vf-field-inline-padding);
+  }
+  :where(textarea[data-vf-textarea][data-vf-textarea-resize="none"]) { resize: none; }
+  :where(textarea[data-vf-textarea][data-vf-textarea-resize="vertical"]) { resize: vertical; }
+  :where(textarea[data-vf-textarea][data-vf-textarea-resize="horizontal"]) { resize: horizontal; }
+  :where(textarea[data-vf-textarea][data-vf-textarea-resize="both"]) { resize: both; }
+
+  /* Native sizing tracks editing, font, layout, reset and composition without JS.
+     In browsers without field-sizing, rows, cols and native resizing remain available. */
+  @supports (field-sizing: content) {
+    :where(textarea[data-vf-textarea][data-vf-textarea-autosize]) {
+      field-sizing: content;
+      inline-size: min(100%, calc(var(--vf-textarea-cols, 20) * 1ch + 2 * var(--_vf-field-inline-padding, 0px) + 2px));
+      min-block-size: max(var(--_vf-editor-height, 0px), calc(var(--vf-textarea-min-rows, 1) * 1lh + 2 * var(--_vf-editor-block-padding, 0px) + 2px));
+      max-block-size: calc(var(--vf-textarea-max-rows) * 1lh + 2 * var(--_vf-editor-block-padding, 0px) + 2px);
+      overflow: auto;
+      resize: none;
+    }
+    :where(textarea[data-vf-textarea][data-vf-textarea-autosize][data-vf-editor-variant="unstyled"]) {
+      --_vf-editor-height: 0px;
+    }
+    :where(textarea[data-vf-textarea][data-vf-textarea-autosize][data-vf-editor-full-width]) {
+      inline-size: 100%;
+    }
+    :where(textarea[data-vf-textarea][data-vf-textarea-autosize][data-vf-textarea-resize="horizontal"]),
+    :where(textarea[data-vf-textarea][data-vf-textarea-autosize][data-vf-textarea-resize="both"]) {
+      resize: horizontal;
+    }
   }
 }

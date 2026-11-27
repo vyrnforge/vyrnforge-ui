@@ -2,22 +2,25 @@
 @import "../../styles/form-controls.css";
 
 @layer vyrnforge.components {
-  :where(input[data-vf-input]:not([data-vf-text-field-value])) {
-    min-block-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
-    padding-block: var(--_vf-density-input-padding-block, 0.4375rem);
+  :where(input[data-vf-input]:not([data-vf-editor-variant="unstyled"])) {
+    min-block-size: var(--_vf-editor-height);
+    padding-block: var(--_vf-editor-block-padding);
     padding-inline: var(--_vf-field-inline-padding);
   }
 
-  :where(input[data-vf-input][type="color"]) {
+  :where(input[data-vf-input][type="color"]:not([data-vf-editor-variant="unstyled"])) {
     --_vf-input-color-inline-size: 3.5rem;
 
-    block-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
+    block-size: var(--_vf-editor-height);
     cursor: pointer;
     inline-size: var(--_vf-input-color-inline-size);
     padding: var(--vf-space-xs);
   }
 
-  :where(input[data-vf-input][type="color"]:hover:not(:disabled)) {
+  :where(input[data-vf-input][type="color"]:not([data-vf-editor-variant="unstyled"]):hover:not(:disabled)) {
     --_vf-field-surface: var(--vf-color-surface-hover);
+  }
+  :where(input[data-vf-input][data-vf-editor-full-width]) {
+    inline-size: 100%;
   }
 }

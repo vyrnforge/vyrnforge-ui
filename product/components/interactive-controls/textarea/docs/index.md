@@ -4,7 +4,7 @@ Textarea preserves the native multiline textarea with canonical shared styling.
 
 ## When to use
 
-Use native rows, cols, wrap, maxLength, required, autocomplete, disabled and readOnly attributes. The browser owns multiline editing, selection, IME, resize, form participation and constraint validation. Use TextField multiline for label/help/error relationships and optional progressive autosize.
+Use native rows, cols, wrap, maxLength, required, autocomplete, disabled and readOnly attributes. The browser owns multiline editing, selection, IME, resize, form participation and constraint validation. Use TextField multiline for label/help/error relationships ; Textarea itself owns progressive autosize.
 
 ## Native editing and relationships
 
@@ -13,3 +13,9 @@ Always provide an accessible name, preferably a persistent visible label. Author
 ## Native Web
 
 Load `@vyrnforge/web/styles/textarea.css` and use the native element with `data-vf-textarea`.
+
+## Presentation and multiline sizing
+
+Textarea shares the Input editor presentation: outlined, filled, underlined, unstyled; inherited density or explicit fieldSize; fullWidth and logical textAlign. Native Web uses the same data-vf-editor-* hooks. Unstyled keeps keyboard focus and native editing, without primitive border, background or padding.
+
+Opt into autosize with data-vf-textarea-autosize (React autosize). In supporting browsers CSS field-sizing grows with text and wraps at the available width. Set minRows/maxRows in React or author --vf-textarea-min-rows / --vf-textarea-max-rows on the native editor; these are instance sizing inputs, not global theme roles. Use rows/cols for the native fallback and --vf-textarea-cols for the autosizing width when not fullWidth. Without field-sizing, native rows/cols and resize remain available; automatic growth and row limits are not promised. In autosize mode vertical drag resizing is disabled in supporting browsers; horizontal or both requests retain horizontal resizing. Without autosize, data-vf-textarea-resize accepts none, vertical, horizontal or both. CSS min/max block size remain available for instance overrides.

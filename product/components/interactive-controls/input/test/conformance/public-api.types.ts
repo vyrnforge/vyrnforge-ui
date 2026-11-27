@@ -16,3 +16,6 @@ const invalidWeb: WebInputType = 'checkbox';
 // @ts-expect-error file selection has its own L2 primitive.
 const invalidReact: ReactInputType = 'file';
 void [types, reactInput, angularInput, vueInput, invalidWeb, invalidReact];
+
+const appearance: import('@vyrnforge/react/input').InputProps = { variant: 'filled', fieldSize: 'sm', size: 16, fullWidth: true, textAlign: 'end' };
+void appearance;

@@ -13,3 +13,7 @@ Always provide an accessible name, preferably a persistent visible label. Author
 ## Native Web
 
 Load `@vyrnforge/web/styles/input.css` and use the native element with `data-vf-input`.
+
+## Presentation
+
+Outlined is the default. Filled uses a tinted surface with an underline; underlined uses a transparent surface. Unstyled removes primitive border, background, and padding but retains visible keyboard focus, native semantics, and shared control typography. Native Web uses data-vf-editor-variant, data-vf-editor-size (sm/md/lg), data-vf-editor-full-width, and data-vf-editor-align (start/center/end). Omit size styling to inherit density; HTML size remains numeric. Use the shared control typography and semantic tokens through createTheme, or ordinary CSS for intentional instance customization. A composed surface may use data-vf-editor-surface around one unstyled native editor; the composition owns its padding, label relationships and surrounding layout.

@@ -19,14 +19,14 @@ export interface TextFieldAppearanceProps {
 }
 
 export type TextFieldInputProps = TextFieldAppearanceProps &
-  Omit<InputProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'type'> & {
+  Omit<InputProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'type' | 'variant'> & {
     multiline?: false;
     type?: 'text' | 'email' | 'url' | 'tel' | 'search' | 'password' | 'number';
     autosize?: never;
   };
 
 export type TextFieldTextareaProps = TextFieldAppearanceProps &
-  Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix'> & {
+  Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'variant'> & {
     multiline: true;
     type?: never;
     autosize?: boolean;
@@ -84,14 +84,16 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
       control = createElement(Textarea, {
         ...native,
         ...relationships,
-        ...{ 'data-vf-text-field-autosize': autosize ? '' : undefined },
+        variant: 'unstyled',
+        autosize,
+        resize: native.resize ?? 'vertical',
         ref: ref as Ref<HTMLTextAreaElement>,
       });
     } else {
       const { multiline, autosize, ...native } = rest;
       void multiline;
       void autosize;
-      control = createElement(Input, { ...native, ...relationships, ref: ref as Ref<HTMLInputElement> });
+      control = createElement(Input, { ...native, ...relationships, variant: 'unstyled', ref: ref as Ref<HTMLInputElement> });
     }
     const fieldLabel = createElement('label', { htmlFor: id, 'data-vf-text-field-label': '' }, label);
     return createElement(
@@ -111,7 +113,7 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
       floating ? null : fieldLabel,
       createElement(
         'div',
-        { 'data-vf-text-field-control': '' },
+        { 'data-vf-text-field-control': '', 'data-vf-editor-surface': '' },
         floating ? fieldLabel : null,
         floating && variant === 'outlined'
           ? createElement(

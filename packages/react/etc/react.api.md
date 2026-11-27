@@ -2307,7 +2307,15 @@ export const Input: ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInp
 // @public (undocumented)
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
     // (undocumented)
+    fieldSize?: 'sm' | 'md' | 'lg';
+    // (undocumented)
+    fullWidth?: boolean;
+    // (undocumented)
+    textAlign?: 'start' | 'center' | 'end';
+    // (undocumented)
     type?: InputType;
+    // (undocumented)
+    variant?: 'outlined' | 'filled' | 'underlined' | 'unstyled';
 }
 
 export { InputType }
@@ -4390,7 +4398,24 @@ export { Text_2 as Text }
 export const Textarea: ForwardRefExoticComponent<TextareaProps & RefAttributes<HTMLTextAreaElement>>;
 
 // @public (undocumented)
-export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
+export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+    // (undocumented)
+    autosize?: boolean;
+    // (undocumented)
+    fieldSize?: 'sm' | 'md' | 'lg';
+    // (undocumented)
+    fullWidth?: boolean;
+    // (undocumented)
+    maxRows?: number;
+    // (undocumented)
+    minRows?: number;
+    // (undocumented)
+    resize?: 'none' | 'vertical' | 'horizontal' | 'both';
+    // (undocumented)
+    textAlign?: 'start' | 'center' | 'end';
+    // (undocumented)
+    variant?: 'outlined' | 'filled' | 'underlined' | 'unstyled';
+}
 
 // @public (undocumented)
 export type TextElement = 'span' | 'p' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote' | 'q' | 'cite' | 'strong' | 'em' | 'small' | 'mark' | 'abbr' | 'sub' | 'sup' | 'del' | 'ins' | 'time' | 'figcaption';
@@ -4429,7 +4454,7 @@ export interface TextFieldAppearanceProps {
 }
 
 // @public (undocumented)
-export type TextFieldInputProps = TextFieldAppearanceProps & Omit<InputProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'type'> & {
+export type TextFieldInputProps = TextFieldAppearanceProps & Omit<InputProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'type' | 'variant'> & {
     multiline?: false;
     type?: 'text' | 'email' | 'url' | 'tel' | 'search' | 'password' | 'number';
     autosize?: never;
@@ -4439,7 +4464,7 @@ export type TextFieldInputProps = TextFieldAppearanceProps & Omit<InputProps, 'c
 export type TextFieldProps = TextFieldInputProps | TextFieldTextareaProps;
 
 // @public (undocumented)
-export type TextFieldTextareaProps = TextFieldAppearanceProps & Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix'> & {
+export type TextFieldTextareaProps = TextFieldAppearanceProps & Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'variant'> & {
     multiline: true;
     type?: never;
     autosize?: boolean;
