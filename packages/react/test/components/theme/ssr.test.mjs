@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { ThemeScope, Text, SvgIcon, colors, tokens, toneStyle } from '@vyrnforge/react';
+import { ThemeScope, Text, SvgIcon, colors, tokens, toneStyle, createTheme, renderThemeCss, tokenStyle } from '@vyrnforge/react';
 
 test('React theme references are canonical Web tokens, not hardcoded light/dark colors', () => {
   const css = readFileSync(new URL('../../../../web/src/styles/tokens.css', import.meta.url), 'utf8');
@@ -28,8 +28,9 @@ test('React theme references are canonical Web tokens, not hardcoded light/dark 
   for (const [category, roles] of Object.entries(tokens)) {
     for (const [role, value] of Object.entries(roles)) {
       assert.match(value, /^var\(--vf-[a-z0-9-]+\)$/);
-      assert.ok(publicVariables.has(value.slice(4, -1)),
-        'missing public Web token for ' + category + '.' + role);
+      if (category === 'color' || publicVariables.has(value.slice(4, -1))) continue;
+      const theme = createTheme({ name: 'alias-audit', tokens: { [category]: { [role]: 'initial' } } });
+      assert.equal(theme.variables[value.slice(4, -1)], 'initial');
     }
   }
   assert.deepEqual(toneStyle('danger', { fontWeight: 700 }),
@@ -100,4 +101,22 @@ test('feedback aliases map to shared Web tokens and permit a local SSR override'
   assert.match(html, /--vf-color-success-foreground:#166534/);
   assert.match(html, /--vf-color-warning-border:#b45309/);
   assert.match(html, /--vf-color-info-background:#f0f9ff/);
+});
+
+test('React theme authoring maps named token groups to shared CSS and validates unknown roles', () => {
+  const theme = createTheme({ name: 'brand', appearance: 'dark', palette: { brand: { 600: '#123456' } },
+    colors: { accent: '{brand.600}' }, tokens: { radius: { control: '12px' }, skeleton: { duration: '2s', color: '#555' }, progress: { size: '8px' }, textField: { labelFont: '600 1rem/1.5 sans-serif' }, loading: { spinnerColor: '#aaa' } } });
+  const css = renderThemeCss(theme);
+  for (const [variable, value] of [['--vf-color-accent-background', '#123456'], ['--vf-control-radius', '12px'], ['--vf-skeleton-duration', '2s'], ['--vf-progress-size', '8px'], ['--vf-text-field-label-font', '600 1rem/1.5 sans-serif'], ['--vf-loading-spinner-color', '#aaa']]) {
+    assert.ok(css.includes(variable + ': ' + value + ';'));
+  }
+  const derived = createTheme({ name: 'brand-derived', base: theme, tokens: { radius: { surface: '1rem' } } });
+  assert.equal(derived.variables['--vf-skeleton-duration'], '2s');
+  assert.throws(() => createTheme({ name: 'bad', tokens: { skeleton: { secret: 'red' } } }), /Unknown React token/);
+  assert.throws(() => createTheme({ name: 'bad', colors: { secret: 'red' } }), /Unknown React color/);
+  assert.throws(() => createTheme({ name: 'bad', tokens: { skeleton: { color: 'red; color: blue' } } }), /safe CSS value/);
+  const scoped = renderToStaticMarkup(createElement(ThemeScope, { tokens: { skeleton: { duration: '2s' }, space: { md: '12px' } } }, 'Scope'));
+  assert.match(scoped, /--vf-skeleton-duration:2s/);
+  assert.match(scoped, /--vf-space-md:12px/);
+  assert.deepEqual(tokenStyle({ progress: { size: '8px' } }), { '--vf-progress-size': '8px' });
 });

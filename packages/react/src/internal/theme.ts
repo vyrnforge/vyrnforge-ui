@@ -1,5 +1,8 @@
 import { createElement, forwardRef } from 'react';
 import type { CSSProperties, HTMLAttributes, ReactElement } from 'react';
+import { createTheme as createWebTheme, renderThemeCss as renderWebThemeCss } from '@vyrnforge/web/theme';
+import type { CreateThemeOptions as WebCreateThemeOptions, PublicRuntimeTokenName, ThemeDefinition } from '@vyrnforge/web/theme';
+export type { ThemeDefinition } from '@vyrnforge/web/theme';
 
 /**
  * React-friendly names for the existing public Web semantic color variables.
@@ -139,6 +142,70 @@ export const tokens = Object.freeze({
     loadingEasing: reference('--vf-motion-easing-loading'),
     standardEasing: reference('--vf-motion-easing-standard'),
   }),
+  editor: Object.freeze({
+    valueFont: reference('--vf-editor-value-font'),
+    valueLetterSpacing: reference('--vf-editor-value-letter-spacing'),
+    placeholderFont: reference('--vf-editor-placeholder-font'),
+    placeholderLetterSpacing: reference('--vf-editor-placeholder-letter-spacing'),
+    radius: reference('--vf-editor-radius'),
+    background: reference('--vf-editor-background'),
+    borderColor: reference('--vf-editor-border-color'),
+  }),
+  input: Object.freeze({
+    valueFont: reference('--vf-input-value-font'),
+    placeholderFont: reference('--vf-input-placeholder-font'),
+  }),
+  textarea: Object.freeze({
+    valueFont: reference('--vf-textarea-value-font'),
+    placeholderFont: reference('--vf-textarea-placeholder-font'),
+  }),
+  textField: Object.freeze({
+    valueFont: reference('--vf-text-field-value-font'),
+    valueLetterSpacing: reference('--vf-text-field-value-letter-spacing'),
+    placeholderFont: reference('--vf-text-field-placeholder-font'),
+    placeholderLetterSpacing: reference('--vf-text-field-placeholder-letter-spacing'),
+    labelFont: reference('--vf-text-field-label-font'),
+    labelLetterSpacing: reference('--vf-text-field-label-letter-spacing'),
+    messageFont: reference('--vf-text-field-message-font'),
+    messageLetterSpacing: reference('--vf-text-field-message-letter-spacing'),
+    affixFont: reference('--vf-text-field-affix-font'),
+    affixLetterSpacing: reference('--vf-text-field-affix-letter-spacing'),
+    radius: reference('--vf-text-field-radius'),
+    background: reference('--vf-text-field-background'),
+    borderColor: reference('--vf-text-field-border-color'),
+  }),
+  skeleton: Object.freeze({
+    color: reference('--vf-skeleton-color'),
+    highlight: reference('--vf-skeleton-highlight'),
+    radius: reference('--vf-skeleton-radius'),
+    duration: reference('--vf-skeleton-duration'),
+  }),
+  progress: Object.freeze({
+    color: reference('--vf-progress-color'),
+    trackColor: reference('--vf-progress-track-color'),
+    size: reference('--vf-progress-size'),
+    radius: reference('--vf-progress-radius'),
+  }),
+  backdrop: Object.freeze({
+    color: reference('--vf-backdrop-color'),
+  }),
+  loading: Object.freeze({
+    color: reference('--vf-loading-color'),
+    trackColor: reference('--vf-loading-track-color'),
+    indicatorSize: reference('--vf-loading-indicator-size'),
+    indicatorThickness: reference('--vf-loading-indicator-thickness'),
+    indicatorDuration: reference('--vf-loading-indicator-duration'),
+    spinnerColor: reference('--vf-loading-spinner-color'),
+    spinnerTrackColor: reference('--vf-loading-spinner-track-color'),
+    spinnerDuration: reference('--vf-loading-spinner-duration'),
+    dotsColor: reference('--vf-loading-dots-color'),
+    dotsDuration: reference('--vf-loading-dots-duration'),
+    barsColor: reference('--vf-loading-bars-color'),
+    barsDuration: reference('--vf-loading-bars-duration'),
+    pulseColor: reference('--vf-loading-pulse-color'),
+    pulseDuration: reference('--vf-loading-pulse-duration'),
+    customColor: reference('--vf-loading-custom-color'),
+  }),
 });
 
 /** One typed token-backed color declaration; explicit consumer CSS can override it. */
@@ -152,6 +219,51 @@ export type ThemeColorOverrides = Partial<Record<ColorRole, string>>;
 /** Scoped overrides of the existing public React motion token roles. */
 export type ThemeMotionOverrides = Partial<Record<keyof typeof tokens.motion, string>>;
 
+/** Public React token groups, using the same names as tokens. */
+export type ThemeTokenOverrides = {
+  [Group in Exclude<keyof typeof tokens, 'color'>]?: Partial<Record<keyof (typeof tokens)[Group], string>>;
+};
+
+export interface CreateThemeOptions extends Omit<WebCreateThemeOptions, 'colors' | 'tokens'> {
+  colors?: ThemeColorOverrides;
+  tokens?: ThemeTokenOverrides;
+}
+
+function tokenVariables(overrides?: ThemeTokenOverrides): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const [group, values] of Object.entries(overrides ?? {})) {
+    if (group === 'color' || !Object.hasOwn(tokens, group)) {
+      throw new TypeError('Unknown React token group: ' + group);
+    }
+    const roles = tokens[group as Exclude<keyof typeof tokens, 'color'>] as Readonly<Record<string, CssReference>>;
+    for (const [role, value] of Object.entries(values ?? {})) {
+      if (!Object.hasOwn(roles, role)) throw new TypeError('Unknown React token: ' + group + '.' + role);
+      if (value !== undefined) result[roles[role]!.slice(4, -1)] = value;
+    }
+  }
+  return result;
+}
+
+/** Build a shared theme using React-facing typed names, without CSS variable keys. */
+export function createTheme({ colors: overrides, tokens: groups, ...options }: CreateThemeOptions): ThemeDefinition {
+  const variables = tokenVariables(groups);
+  for (const [role, value] of Object.entries(overrides ?? {})) {
+    if (!Object.hasOwn(semanticColorVariables, role)) throw new TypeError('Unknown React color role: ' + role);
+    if (value !== undefined) variables[semanticColorVariables[role as ColorRole]] = value;
+  }
+  return createWebTheme({ ...options, tokens: variables as Partial<Record<PublicRuntimeTokenName, string>> });
+}
+
+/** Emit the canonical portable stylesheet; never inject styles or require context. */
+export function renderThemeCss(theme: ThemeDefinition): string {
+  return renderWebThemeCss(theme);
+}
+
+/** Scoped token overrides for a native React style prop. */
+export function tokenStyle(overrides: ThemeTokenOverrides): CSSProperties {
+  return tokenVariables(overrides) as CSSProperties;
+}
+
 export type ThemeName = 'light' | 'dark' | 'system' | (string & {});
 
 export type ThemeElement = 'div' | 'span' | 'section' | 'article' | 'main' |
@@ -163,6 +275,8 @@ export interface ThemeScopeProps extends Omit<HTMLAttributes<HTMLElement>, 'colo
   theme?: ThemeName;
   colors?: ThemeColorOverrides;
   motion?: ThemeMotionOverrides;
+  /** Named foundation/component token overrides, inherited by descendants. */
+  tokens?: ThemeTokenOverrides;
 }
 
 const makeElement = createElement as (host: ThemeElement, props: object) => ReactElement;
@@ -172,10 +286,10 @@ const makeElement = createElement as (host: ThemeElement, props: object) => Reac
  * CSS (including custom [data-vf-theme] rules) remains the source of truth.
  */
 export const ThemeScope = forwardRef<HTMLElement, ThemeScopeProps>(function ThemeScope(
-  { as = 'div', theme, colors: overrides, motion, style, ...nativeProps },
+  { as = 'div', theme, colors: overrides, motion, tokens: groups, style, ...nativeProps },
   ref
 ) {
-  const resolvedStyle: CSSProperties = {};
+  const resolvedStyle: CSSProperties = tokenStyle(groups ?? {});
   for (const [role, value] of Object.entries(overrides ?? {})) {
     if (value !== undefined) {
       (resolvedStyle as Record<string, string>)[semanticColorVariables[role as ColorRole]] = value;

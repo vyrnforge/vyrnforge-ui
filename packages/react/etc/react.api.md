@@ -15,6 +15,7 @@ import { ComponentProps } from 'react';
 import { ComponentPropsWithoutRef } from 'react';
 import type { ComponentPropsWithRef } from 'react';
 import { CompositionEventHandler } from 'react';
+import { CreateThemeOptions as WebCreateThemeOptions } from '@vyrnforge/web/theme';
 import { CSSProperties } from 'react';
 import { DetailedHTMLProps } from 'react';
 import { DetailedReactHTMLElement } from 'react';
@@ -54,6 +55,7 @@ import { SubmitEventHandler } from 'react';
 import type { SVGAttributes } from 'react';
 import type { TextareaHTMLAttributes } from 'react';
 import { TextVariant } from '@vyrnforge/web/text';
+import { ThemeDefinition } from '@vyrnforge/web/theme';
 import { ToggleEventHandler } from 'react';
 import { TouchEventHandler } from 'react';
 import { TransitionEventHandler } from 'react';
@@ -607,6 +609,17 @@ export const ContextMenuTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProp
 
 // @public
 export function createSvgIcon(content: ReactNode): ForwardRefExoticComponent<Omit<SvgIconProps, 'children'> & RefAttributes<SVGSVGElement>>;
+
+// @public
+export function createTheme({ colors: overrides, tokens: groups, ...options }: CreateThemeOptions): ThemeDefinition;
+
+// @public (undocumented)
+export interface CreateThemeOptions extends Omit<WebCreateThemeOptions, 'colors' | 'tokens'> {
+    // (undocumented)
+    colors?: ThemeColorOverrides;
+    // (undocumented)
+    tokens?: ThemeTokenOverrides;
+}
 
 // @public (undocumented)
 export function DialogBody(props: DialogBodyProps): DetailedReactHTMLElement<    {
@@ -3228,6 +3241,9 @@ export interface RatingRootProps {
     value?: number;
 }
 
+// @public
+export function renderThemeCss(theme: ThemeDefinition): string;
+
 // @public (undocumented)
 export const SearchFieldClear: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
 
@@ -4517,6 +4533,8 @@ export { TextVariant }
 // @public
 export type ThemeColorOverrides = Partial<Record<ColorRole, string>>;
 
+export { ThemeDefinition }
+
 // @public (undocumented)
 export type ThemeElement = 'div' | 'span' | 'section' | 'article' | 'main' | 'aside' | 'header' | 'footer' | 'nav';
 
@@ -4538,7 +4556,13 @@ export interface ThemeScopeProps extends Omit<HTMLAttributes<HTMLElement>, 'colo
     motion?: ThemeMotionOverrides;
     // (undocumented)
     theme?: ThemeName;
+    tokens?: ThemeTokenOverrides;
 }
+
+// @public
+export type ThemeTokenOverrides = {
+    [Group in Exclude<keyof typeof tokens, 'color'>]?: Partial<Record<keyof (typeof tokens)[Group], string>>;
+};
 
 // @public (undocumented)
 export const ToastClose: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
@@ -5259,7 +5283,74 @@ export const tokens: Readonly<{
         loadingEasing: `var(--vf-${string})`;
         standardEasing: `var(--vf-${string})`;
     }>;
+    editor: Readonly<{
+        valueFont: `var(--vf-${string})`;
+        valueLetterSpacing: `var(--vf-${string})`;
+        placeholderFont: `var(--vf-${string})`;
+        placeholderLetterSpacing: `var(--vf-${string})`;
+        radius: `var(--vf-${string})`;
+        background: `var(--vf-${string})`;
+        borderColor: `var(--vf-${string})`;
+    }>;
+    input: Readonly<{
+        valueFont: `var(--vf-${string})`;
+        placeholderFont: `var(--vf-${string})`;
+    }>;
+    textarea: Readonly<{
+        valueFont: `var(--vf-${string})`;
+        placeholderFont: `var(--vf-${string})`;
+    }>;
+    textField: Readonly<{
+        valueFont: `var(--vf-${string})`;
+        valueLetterSpacing: `var(--vf-${string})`;
+        placeholderFont: `var(--vf-${string})`;
+        placeholderLetterSpacing: `var(--vf-${string})`;
+        labelFont: `var(--vf-${string})`;
+        labelLetterSpacing: `var(--vf-${string})`;
+        messageFont: `var(--vf-${string})`;
+        messageLetterSpacing: `var(--vf-${string})`;
+        affixFont: `var(--vf-${string})`;
+        affixLetterSpacing: `var(--vf-${string})`;
+        radius: `var(--vf-${string})`;
+        background: `var(--vf-${string})`;
+        borderColor: `var(--vf-${string})`;
+    }>;
+    skeleton: Readonly<{
+        color: `var(--vf-${string})`;
+        highlight: `var(--vf-${string})`;
+        radius: `var(--vf-${string})`;
+        duration: `var(--vf-${string})`;
+    }>;
+    progress: Readonly<{
+        color: `var(--vf-${string})`;
+        trackColor: `var(--vf-${string})`;
+        size: `var(--vf-${string})`;
+        radius: `var(--vf-${string})`;
+    }>;
+    backdrop: Readonly<{
+        color: `var(--vf-${string})`;
+    }>;
+    loading: Readonly<{
+        color: `var(--vf-${string})`;
+        trackColor: `var(--vf-${string})`;
+        indicatorSize: `var(--vf-${string})`;
+        indicatorThickness: `var(--vf-${string})`;
+        indicatorDuration: `var(--vf-${string})`;
+        spinnerColor: `var(--vf-${string})`;
+        spinnerTrackColor: `var(--vf-${string})`;
+        spinnerDuration: `var(--vf-${string})`;
+        dotsColor: `var(--vf-${string})`;
+        dotsDuration: `var(--vf-${string})`;
+        barsColor: `var(--vf-${string})`;
+        barsDuration: `var(--vf-${string})`;
+        pulseColor: `var(--vf-${string})`;
+        pulseDuration: `var(--vf-${string})`;
+        customColor: `var(--vf-${string})`;
+    }>;
 }>;
+
+// @public
+export function tokenStyle(overrides: ThemeTokenOverrides): CSSProperties;
 
 // @public
 export function toneStyle(tone?: ColorRole, style?: CSSProperties): CSSProperties | undefined;
