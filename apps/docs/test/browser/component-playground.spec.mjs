@@ -682,9 +682,13 @@ test('Rating playground renders native choices, synchronized source and read-onl
   const preview = playground.getByRole('region', { name: 'Rating preview' });
   const source = playground.getByRole('region', { name: 'Generated React usage' });
   await expect(preview.getByRole('radio')).toHaveCount(5);
+  await expect(preview.getByRole('radio').first()).toHaveCSS('opacity', '0');
+  await expect(preview.locator('[data-vf-rating-artwork] [data-vf-icon]').first()).toHaveCSS('width', '20px');
+  await expect(preview.locator('[data-vf-rating-root]')).toHaveCSS('display', 'inline-flex');
   await playground.getByRole('button', { name: 'Half stars' }).click();
   await expect(preview.getByRole('radio')).toHaveCount(10);
   await expect(preview.getByRole('radio', { name: '3.5', exact: true })).toBeChecked();
+  await expect(preview.locator('[data-vf-rating-artwork]').nth(3)).toHaveCSS('--_vf-rating-fill', '50%');
   await preview.getByRole('radio', { name: '4', exact: true }).check();
   await expect(source).toContainText('defaultValue={4}');
   await playground.screenshot({ path: testInfo.outputPath('rating-playground-half.png') });
