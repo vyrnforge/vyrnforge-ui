@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -199,7 +199,7 @@ function navigation(view, links, topic) {
       { id: 'badge', title: 'Badge', href: links.badge.guide },
       { id: 'chip', title: 'Chip', href: links.chip.guide },
     ] },
-    { label: 'Feedback', items: [{ id: 'status-indicator', title: 'Status Indicator', href: links['status-indicator'].guide }, { id: 'alert', title: 'Alert', href: links.alert.guide }, { id: 'backdrop', title: 'Backdrop', href: links.backdrop.guide }, { id: 'loading', title: 'Loading', href: links.loading.guide }, { id: 'dialog', title: 'Dialog', href: links['dialog'].guide }, { id: 'alert-dialog', title: 'AlertDialog', href: links['alert-dialog'].guide }, { id: 'drawer', title: 'Drawer', href: links['drawer'].guide }, { id: 'toast', title: 'Toast', href: links['toast'].guide }, { id: 'banner', title: 'Banner', href: links['banner'].guide }, { id: 'empty-state', title: 'Empty State', href: links['empty-state'].guide }, { id: 'inline-feedback', title: 'Inline Feedback', href: links['inline-feedback'].guide }, { id: 'feedback-composition', title: 'Feedback Composition', href: links['feedback-composition'].guide }] },
+    { label: 'Feedback', items: [{ id: 'status-indicator', title: 'Status Indicator', href: links['status-indicator'].guide }, { id: 'alert', title: 'Alert', href: links.alert.guide }, { id: 'backdrop', title: 'Backdrop', href: links.backdrop.guide }, { id: 'loading', title: 'Loading', href: links.loading.guide }, { id: 'skeleton', title: 'Skeleton', href: links.skeleton.guide }, { id: 'progress', title: 'Progress', href: links.progress.guide }, { id: 'dialog', title: 'Dialog', href: links['dialog'].guide }, { id: 'alert-dialog', title: 'AlertDialog', href: links['alert-dialog'].guide }, { id: 'drawer', title: 'Drawer', href: links['drawer'].guide }, { id: 'toast', title: 'Toast', href: links['toast'].guide }, { id: 'banner', title: 'Banner', href: links['banner'].guide }, { id: 'empty-state', title: 'Empty State', href: links['empty-state'].guide }, { id: 'inline-feedback', title: 'Inline Feedback', href: links['inline-feedback'].guide }, { id: 'feedback-composition', title: 'Feedback Composition', href: links['feedback-composition'].guide }] },
     { label: 'Libraries', items: [
       { id: 'icon-library', title: 'VyrnForge Icons', href: links.icon.library },
     ] },
@@ -230,6 +230,8 @@ function navigation(view, links, topic) {
       { id: 'toast-api', title: 'Toast API', href: links['toast'].api },
       { id: 'backdrop-api', title: 'Backdrop API', href: links.backdrop.api },
       { id: 'loading-api', title: 'Loading API', href: links.loading.api },
+      { id: 'skeleton-api', title: 'Skeleton API', href: links.skeleton.api },
+      { id: 'progress-api', title: 'Progress API', href: links.progress.api },
       ...['text', 'code', 'kbd'].map((id) => ({
         id: 'typography-api:' + id,
         title: id === 'kbd' ? 'Kbd API' : id[0].toUpperCase() + id.slice(1) + ' API',
@@ -1529,7 +1531,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   if (view === 'divider-api') return dividerApi(divider, links);
   if (view === 'list') return listUsage(list, links);
   if (view === 'list-api') return listApi(list, links);
-  if (feedback) return view.endsWith('-api') ? feedbackApi(feedback, links) : feedbackUsage(feedback, links, ({ alert: alertPlayground, 'status-indicator': statusIndicatorPlayground, dialog: dialogPlayground, 'alert-dialog': alertDialogPlayground, drawer: drawerPlayground, toast: toastPlayground, input: inputPlayground, textarea: textareaPlayground, 'text-field': textFieldPlayground })[feedback.id]);
+  if (feedback) return view.endsWith('-api') ? feedbackApi(feedback, links) : feedbackUsage(feedback, links, ({ skeleton: skeletonPlayground, progress: progressPlayground, alert: alertPlayground, 'status-indicator': statusIndicatorPlayground, dialog: dialogPlayground, 'alert-dialog': alertDialogPlayground, drawer: drawerPlayground, toast: toastPlayground, input: inputPlayground, textarea: textareaPlayground, 'text-field': textFieldPlayground })[feedback.id]);
   if (view === 'backdrop') return feedbackUsage(backdrop, links, backdropPlayground);
   if (view === 'backdrop-api') return feedbackApi(backdrop, links);
   if (view === 'loading') return feedbackUsage(loading, links, loadingPlayground);

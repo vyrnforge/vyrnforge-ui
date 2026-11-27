@@ -16,7 +16,9 @@ import { AlertDialogHeader, AlertDialogBody, AlertDialogFooter, AlertDialogRoot,
 import { DrawerHeader, DrawerBody, DrawerFooter, DrawerRoot, DrawerTitle, DrawerDescription, DrawerClose } from '@vyrnforge/react/drawer';
 import { ToastViewport, ToastRoot, ToastTitle, ToastDescription, ToastClose } from '@vyrnforge/react/toast';
 
-import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
+import { Loading, LoadingIndicator, LoadingCustom } from '@vyrnforge/react/loading';
+import { Skeleton } from '@vyrnforge/react/skeleton';
+import { Progress } from '@vyrnforge/react/progress';
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Divider } from '@vyrnforge/react/divider';
 import { List, ListItem } from '@vyrnforge/react/list';
@@ -408,47 +410,59 @@ export const listPlayground = {
   },
 };
 
-const loadingParts = {
-  indicator: 'LoadingIndicator', placeholder: 'LoadingPlaceholder', progress: 'LoadingProgress', custom: 'LoadingCustom',
-};
 function LoadingPreview({ config }) {
-  const body = config.presentation === 'indicator' ? h(LoadingIndicator, { variant: config.variant })
-    : config.presentation === 'placeholder' ? h(LoadingPlaceholder, { shape: config.shape,
-      style: { inlineSize: config.shape === 'circle' ? '3rem' : '100%', minBlockSize: '3rem' } })
-    : config.presentation === 'progress' ? h(LoadingProgress, { 'aria-label': config.label || 'Loading',
-      value: config.indeterminate ? undefined : config.value, max: 100 })
-    : h(LoadingCustom, { 'aria-hidden': true }, h('svg', { width: 32, height: 32, viewBox: '0 0 32 32' },
-      h('circle', { cx: 16, cy: 16, r: 12, fill: 'none', stroke: 'currentColor', strokeWidth: 2 })));
-  return h(Flow, { gap: 'sm', style: { inlineSize: 'min(100%, 24rem)' } },
-    h(Loading, { size: config.size }, body),
-    h(Text, { as: 'p', variant: 'body-sm' }, config.label || 'Loading'));
+  return h(Loading, { size: config.size },
+    config.presentation === 'custom'
+      ? h(LoadingCustom, { 'aria-hidden': true }, h('svg', { width: 32, height: 32, viewBox: '0 0 32 32' },
+        h('circle', { cx: 16, cy: 16, r: 12, fill: 'none', stroke: 'currentColor', strokeWidth: 2 })))
+      : h(LoadingIndicator, { variant: config.variant }));
 }
 export const loadingPlayground = {
-  fields: [choice('presentation', 'Presentation', 'indicator', ['indicator', 'placeholder', 'progress', 'custom']),
-    choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
-    {...choice('variant', 'Indicator', 'spinner', ['spinner', 'dots', 'bars', 'pulse']), available: c => c.presentation === 'indicator'},
-    {...choice('shape', 'Placeholder shape', 'block', ['block', 'line', 'circle']), available: c => c.presentation === 'placeholder'},
-    {...bool('indeterminate', 'Indeterminate'), available: c => c.presentation === 'progress'},
-    {kind: 'number', key: 'value', label: 'Progress', default: 48, min: 0, max: 100, step: 1,
-      available: c => c.presentation === 'progress' && !c.indeterminate},
-    text('label', 'Status text', 'Loading account summary')],
-  presets: [{ label: 'Upload progress', values: { presentation: 'progress', label: 'Uploading file', value: 48 } },
-    { label: 'Structured placeholder', values: { presentation: 'placeholder', shape: 'line' } }],
+  fields: [choice('presentation', 'Presentation', 'indicator', ['indicator', 'custom']),
+    {...choice('size', 'Size', 'md', ['sm', 'md', 'lg']), available: c => c.presentation === 'indicator'},
+    {...choice('variant', 'Indicator', 'spinner', ['spinner', 'dots', 'bars', 'pulse']), available: c => c.presentation === 'indicator'}],
   Preview: LoadingPreview,
   source(config) {
-    const part = loadingParts[config.presentation];
-    const body = config.presentation === 'indicator'
-      ? markup(part, [attribute('variant', config.variant, 'spinner')])
-      : config.presentation === 'placeholder'
-        ? markup(part, [attribute('shape', config.shape, 'block'),
-          'style={{ inlineSize: ' + JSON.stringify(config.shape === 'circle' ? '3rem' : '100%') + ', minBlockSize: "3rem" }}'])
-        : config.presentation === 'progress'
-          ? markup(part, [attribute('aria-label', config.label || 'Loading'),
-            config.indeterminate ? '' : attribute('value', config.value), 'max={100}'])
-          : markup(part, ['aria-hidden={true}'], '<svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth={2} /></svg>');
-    return snippet([importLine('Loading, ' + part, 'loading')], '<>\n' +
-      indent(markup('Loading', [attribute('size', config.size, 'md')], body) + '\n<p>' +
-        content(config.label || 'Loading') + '</p>', 2) + '\n</>');
+    const part = config.presentation === 'custom' ? 'LoadingCustom' : 'LoadingIndicator';
+    const body = config.presentation === 'custom'
+      ? markup(part, ['aria-hidden={true}'], '<svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth={2} /></svg>')
+      : markup(part, [attribute('variant', config.variant, 'spinner')]);
+    return snippet([importLine('Loading, ' + part, 'loading')], markup('Loading', [attribute('size', config.size, 'md')], body));
+  },
+};
+
+function skeletonStyle(config) {
+  return { inlineSize: config.width + 'px', blockSize: config.shape === 'circle' ? config.width + 'px' : config.height + 'px',
+    ...(config.radius === 0 && config.shape === 'circle' ? {} : config.radius === 0 ? {} : { borderRadius: config.radius + 'px' }) };
+}
+export const skeletonPlayground = {
+  fields: [choice('shape', 'Shape', 'line', ['line', 'block', 'circle']),
+    choice('animation', 'Animation', 'wave', ['wave', 'pulse', 'none']),
+    {kind: 'number', key: 'width', label: 'Width (px)', default: 160, min: 8, max: 240, step: 1},
+    {kind: 'number', key: 'height', label: 'Height (px)', default: 12, min: 4, max: 160, step: 1, available: c => c.shape !== 'circle'},
+    {kind: 'number', key: 'radius', label: 'Custom radius (px; 0 uses shape default)', default: 0, min: 0, max: 80, step: 1, available: c => c.shape !== 'circle'}],
+  presets: [{ label: 'Text line', values: { shape: 'line', width: 160, height: 12 } },
+    { label: 'Media block', values: { shape: 'block', width: 200, height: 112 } },
+    { label: 'Avatar', values: { shape: 'circle', width: 40 } }],
+  Preview: ({ config }) => h(Skeleton, { shape: config.shape, animation: config.animation, style: skeletonStyle(config) }),
+  source(config) {
+    return snippet([importLine('Skeleton', 'skeleton')], markup('Skeleton', [
+      attribute('shape', config.shape, 'line'), attribute('animation', config.animation, 'wave'),
+      'style={' + JSON.stringify(skeletonStyle(config)) + '}']));
+  },
+};
+
+export const progressPlayground = {
+  fields: [bool('indeterminate', 'Indeterminate'),
+    {kind: 'number', key: 'value', label: 'Progress', default: 48, min: 0, max: 100, step: 1, available: c => !c.indeterminate},
+    {kind: 'number', key: 'thickness', label: 'Thickness (px)', default: 12, min: 2, max: 32, step: 1},
+    text('label', 'Accessible name', 'Uploading file')],
+  Preview: ({ config }) => h(Progress, { 'aria-label': config.label || 'Uploading file',
+    value: config.indeterminate ? undefined : config.value, max: 100, style: { blockSize: config.thickness + 'px' } }),
+  source(config) {
+    return snippet([importLine('Progress', 'progress')], markup('Progress', [
+      attribute('aria-label', config.label || 'Uploading file'), config.indeterminate ? '' : attribute('value', config.value),
+      'max={100}', 'style={{ blockSize: "' + config.thickness + 'px" }}']));
   },
 };
 

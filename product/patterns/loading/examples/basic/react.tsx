@@ -1,6 +1,6 @@
 import { Text } from '@vyrnforge/react/text';
 import { createRoot } from 'react-dom/client';
-import { Loading, LoadingIndicator, LoadingPlaceholder, LoadingProgress, LoadingCustom } from '@vyrnforge/react/loading';
+import { Loading, LoadingIndicator, LoadingCustom } from '@vyrnforge/react/loading';
 import { Flow } from '@vyrnforge/react/layout';
 
 function Example() {
@@ -14,16 +14,7 @@ function Example() {
           <LoadingIndicator variant="pulse" />
         </Flow>
       </Loading>
-      <Loading aria-busy="true">
-        <Flow direction="block" gap="sm">
-          <LoadingPlaceholder style={{ aspectRatio: '16 / 9' }} />
-          <LoadingPlaceholder shape="line" style={{ inlineSize: '70%' }} />
-          <LoadingPlaceholder shape="line" style={{ inlineSize: '45%' }} />
-        </Flow>
-      </Loading>
       <Text as="p" role="status">Loading account summary</Text>
-      <LoadingProgress aria-label="Uploading file" value={48} max={100} />
-      <LoadingProgress aria-label="Preparing import" />
       <LoadingCustom aria-hidden="true">
         <svg width="32" height="32" viewBox="0 0 32 32">
           <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth="2" />

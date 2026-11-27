@@ -273,7 +273,7 @@ if (badgeTypeStart < 0 || badgeTypeEnd < 0 ||
 }
 const publicBadgeTypes = badgePublicSource.slice(badgeTypeStart, badgeTypeEnd).trim();
 
-const feedbackIds = ['status-indicator', 'alert', 'dialog', 'alert-dialog', 'drawer', 'toast'];
+const feedbackIds = ['status-indicator', 'alert', 'dialog', 'alert-dialog', 'drawer', 'toast', 'skeleton', 'progress'];
 const fieldIds = ['input', 'textarea', 'text-field'];
 const fieldUnits = await Promise.all(fieldIds.map(async id => {
   const unit = reactModel.componentCatalog.find(entry => entry.id === id);
@@ -971,7 +971,7 @@ const pageViews = [
   ]),
   { route: backdrop.showcaseRoute, view: 'backdrop', title: 'React Backdrop', description: 'Decorative local scrim and native modal paint' },
   { route: backdrop.apiRoute, view: 'backdrop-api', title: 'React Backdrop API', description: 'Source-backed native Backdrop presentation props' },
-  { route: loading.showcaseRoute, view: 'loading', title: 'React Loading', description: 'Native progress, indicators, structured placeholders and custom loading feedback' },
+  { route: loading.showcaseRoute, view: 'loading', title: 'React Loading', description: 'Indeterminate indicators and custom loading feedback' },
   { route: loading.apiRoute, view: 'loading-api', title: 'React Loading API', description: 'Source-backed React Loading presentation parts' },
   { route: chip.showcaseRoute, view: 'chip', title: 'React Chip', description: 'Compact labels, actions, filters and removal' },
   { route: chip.apiRoute, view: 'chip-api', title: 'React Chip API', description: 'Source-backed React Chip props' },

@@ -3053,21 +3053,41 @@ test('React Chip actual pointer actions do not leak between the surface and clos
   await expect(page.getByRole('status')).toHaveText('Design activations: 2');
 });
 
-test('React Loading guide reuses the shared playground and native progress', async ({ page }) => {
+test('React Loading guide focuses on indeterminate and custom indicators', async ({ page }) => {
   await page.goto('/next/react/patterns/loading/');
   const playground = page.locator('[data-vf-docs-component-playground="Loading"]');
   await expect(playground.locator('[data-vf-loading-indicator]')).toBeVisible();
-  await playground.getByRole('radio', { name: 'progress', exact: true }).check();
-  const progress = playground.getByRole('progressbar');
+  await expect(playground.getByRole('radio', { name: 'placeholder', exact: true })).toHaveCount(0);
+  await expect(playground.getByRole('radio', { name: 'progress', exact: true })).toHaveCount(0);
+  await playground.getByRole('radio', { name: 'custom', exact: true }).check();
+  await expect(playground.locator('[data-vf-loading-custom] svg')).toBeVisible();
+  await page.goto('/next/react/api/patterns/loading/');
+  await expect(page.getByRole('heading', { name: 'Loading API', exact: true })).toBeVisible();
+});
+
+test('React Skeleton and Progress have independent playgrounds and native semantics', async ({ page }) => {
+  await page.goto('/next/react/components/skeleton/');
+  const skeleton = page.locator('[data-vf-docs-component-playground="Skeleton"]');
+  const shape = skeleton.locator('[data-vf-skeleton]');
+  await expect(shape).toHaveCSS('block-size', '12px');
+  await expect(shape).toHaveAttribute('aria-hidden', 'true');
+  await skeleton.getByRole('radio', { name: 'circle', exact: true }).check();
+  expect(await shape.evaluate(el => getComputedStyle(el).inlineSize === getComputedStyle(el).blockSize)).toBe(true);
+  await skeleton.getByRole('radio', { name: 'none', exact: true }).check();
+  await expect(shape).toHaveCSS('animation-name', 'none');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await skeleton.getByRole('radio', { name: 'wave', exact: true }).check();
+  await expect(shape).toHaveCSS('animation-name', 'none');
+  await page.goto('/next/react/api/components/skeleton/');
+  await expect(page.getByRole('heading', { name: 'Skeleton API', exact: true })).toBeVisible();
+  await page.goto('/next/react/components/progress/');
+  const playground = page.locator('[data-vf-docs-component-playground="Progress"]');
+  const progress = playground.getByRole('progressbar', { name: 'Uploading file' });
   await expect(progress).toHaveJSProperty('value', 48);
   await playground.getByRole('checkbox', { name: 'Indeterminate' }).check();
   await expect(progress).not.toHaveAttribute('value');
-  await playground.getByRole('radio', { name: 'placeholder', exact: true }).check();
-  await expect(playground.locator('[data-vf-loading-placeholder]')).toBeVisible();
-  await expect(page.frameLocator('iframe[title*="Loading presentations"]').locator('[data-vf-loading-indicator]').first()).toBeVisible();
-  await page.goto('/next/react/api/patterns/loading/');
-  await expect(page.getByRole('heading', { name: 'Loading API', exact: true })).toBeVisible();
-  await expect(page.locator('[data-vf-docs-react-api="loading"]')).toContainText('LoadingProgress');
+  await page.goto('/next/react/api/components/progress/');
+  await expect(page.getByRole('heading', { name: 'Progress API', exact: true })).toBeVisible();
 });
 
 test('React Backdrop guide reuses the shared playground and preserves an interactive underlying control', async ({ page }) => {
