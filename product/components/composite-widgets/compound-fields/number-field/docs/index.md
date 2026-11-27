@@ -27,9 +27,19 @@ Load `@vyrnforge/web/styles/number-field.css`. The native number input remains t
   <div data-vf-text-field data-vf-text-field-variant="outlined">
     <label for="quantity" data-vf-text-field-label>Quantity</label>
     <div data-vf-text-field-control data-vf-editor-surface>
-      <input id="quantity" name="quantity" type="number" min="0" max="100"
-        step="1" value="1" data-vf-input data-vf-editor-variant="unstyled"
-        data-vf-number-field-input data-vf-text-field-value>
+      <input
+        id="quantity"
+        name="quantity"
+        type="number"
+        min="0"
+        max="100"
+        step="1"
+        value="1"
+        data-vf-input
+        data-vf-editor-variant="unstyled"
+        data-vf-number-field-input
+        data-vf-text-field-value
+      />
     </div>
   </div>
 </div>
