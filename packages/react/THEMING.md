@@ -59,32 +59,24 @@ Only override roles you need. When changing primary/accent Button colors, overri
 
 ## Durable custom themes for both appearances
 
-Theme definitions belong in **application CSS** and reference public token names:
-
-```css
-/* Your app stylesheet, after VyrnForge layers. No registration API. */
-[data-vf-theme="acme-light"] {
-  color-scheme: light;
-  --vf-color-accent-background: #1758c0;
-  --vf-color-accent-background-hover: #0f4cad;
-  --vf-color-accent-background-pressed: #0b3b85;
-  --vf-color-accent-foreground: #ffffff;
-  --vf-color-danger-border: #b42318;
-}
-
-[data-vf-theme="acme-dark"] {
-  color-scheme: dark;
-  --vf-color-accent-background: #a6c8ff;
-  --vf-color-accent-background-hover: #c2d9ff;
-  --vf-color-accent-background-pressed: #80aef2;
-  --vf-color-accent-foreground: #10284f;
-  --vf-color-danger-border: #ff908e;
-}
-```
+Use the typed React authoring API to create independent appearances. Generated CSS remains portable, but React consumers do not need to author native CSS variable keys.
 
 ```tsx
+import { createTheme, renderThemeCss, ThemeScope } from '@vyrnforge/react';
+
+const light = createTheme({
+  name: 'acme-light', appearance: 'light',
+  colors: { accent: '#1758c0', accentHover: '#0f4cad', accentPressed: '#0b3b85', onAccent: '#ffffff' },
+  tokens: { radius: { surface: '0.75rem' } },
+});
+const dark = createTheme({
+  name: 'acme-dark', appearance: 'dark',
+  colors: { accent: '#a6c8ff', accentHover: '#c2d9ff', accentPressed: '#80aef2', onAccent: '#10284f' },
+  tokens: { radius: { surface: '0.75rem' } },
+});
+const css = [light, dark].map(renderThemeCss).join('\n');
+// Deliver css through the application stylesheet after VyrnForge styles.
 <ThemeScope theme="acme-light">...</ThemeScope>
-<ThemeScope theme="acme-dark">...</ThemeScope>
 ```
 
 For organization-wide brands, put the theme attributes at app or document scope rather than wrapping every component. For a theme that follows OS preferences, define appropriate `prefers-color-scheme` CSS rules in the consuming app. Custom theme names do not automatically set `color-scheme`: declare the correct one in your stylesheet.

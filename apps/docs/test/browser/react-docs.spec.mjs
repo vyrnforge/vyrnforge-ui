@@ -217,8 +217,7 @@ test('Foundations is a separate discoverable catalog for tokens, themes and CSS'
   await expect(nav.getByRole('link', { name: 'Design tokens' })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Theming' })).toBeVisible();
   await expect(nav.getByText('Customization', { exact: true })).toBeVisible();
-  await expect(nav.getByRole('link', { name: 'Color / Theme Studio' })).toBeVisible();
-  await expect(nav.getByRole('link', { name: 'Theme Builder' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Theme Studio', exact: true })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Dark mode' })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Right-to-left' })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Styling & CSS' })).toBeVisible();
@@ -267,48 +266,27 @@ test('React theme guide uses semantic roles across built-in and custom nested th
   expect(semantics.tag).toBe('H3');
   expect(semantics.bg).not.toBe('rgba(0, 0, 0, 0)');
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('semantic color');
-  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Theme Builder');
+  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Theme Studio');
 });
 
-test('Theme Studio focuses on palettes and hands a customized draft into Theme Builder', async ({ page }) => {
+test('legacy color page links to the unified Theme Studio and old drafts still import', async ({ page }) => {
   await page.goto('/next/react/foundations/color/');
-  const studio = page.locator('[data-vf-docs-react-color]');
-  await expect(studio.getByRole('heading', { name: 'Color', level: 1 })).toBeVisible();
-  await expect(studio.getByRole('navigation', { name: 'Theme Studio sections' }).getByRole('link')).toHaveCount(2);
-  await expect(studio.getByRole('navigation', { name: 'Theme Studio sections' }).locator('a[data-vf-link]')).toHaveCount(2);
-  await expect(studio.locator('[data-vf-docs-color-shades] button[data-vf-toggle-button]').first()).toBeVisible();
-  await expect(studio.getByRole('heading', { name: 'Semantic token inspector' })).toHaveCount(0);
-  await expect(studio.getByRole('heading', { name: 'Export your theme' })).toHaveCount(0);
-  const families = studio.locator('[data-vf-docs-color-picker]');
-  await families.getByRole('button', { name: 'Teal' }).click();
-  const selected = studio.locator('[data-vf-docs-color-selected]');
-  await expect(selected).toHaveAttribute('data-vf-docs-color-selected', 'teal');
-  await studio.locator('[data-vf-docs-color-shades]')
-    .getByRole('button', { name: 'Shade 700, #115e59' }).click();
-  const shadeInput = studio.locator('[data-vf-docs-studio-picker="shade"]')
-    .getByRole('textbox', { name: 'Selected shade hex', exact: true });
-  await shadeInput.fill('#123456');
-  await expect(studio.locator('[data-vf-docs-color-shades]')
-    .getByRole('button', { name: 'Shade 700, #123456' })).toHaveAttribute('aria-pressed', 'true');
-  const preview = studio.locator('[data-vf-docs-theme-preview="light"]');
-  await preview.getByRole('button', { name: 'Save changes' }).click();
-  await expect(preview.locator('[data-vf-docs-preview-feedback]'))
-    .toHaveText('Primary preview action activated');
-  await studio.locator('[data-vf-docs-open-builder]').click();
-  await expect(page).toHaveURL(/\/next\/react\/foundations\/theme-builder\/\?draft=/);
+  await page.getByRole('link', { name: 'Open Theme Studio' }).click();
+  await expect(page.locator('[data-vf-docs-theme-builder]').getByRole('heading', { name: 'Theme Studio', exact: true })).toBeVisible();
+  const draft = encodeURIComponent(JSON.stringify({ palette: 'teal', appearance: 'dark', shade: '700', radius: 8, custom: { '700': '#123456' } }));
+  await page.goto('/next/react/foundations/theme-builder/?draft=' + draft);
   const builder = page.locator('[data-vf-docs-theme-builder]');
-  await expect(builder.getByRole('heading', { name: 'Theme Builder' })).toBeVisible();
   await expect(builder.locator('[data-vf-docs-builder-palette]')).toHaveValue('teal');
-  await expect(builder.locator('[data-vf-docs-builder-notice]')).toContainText('Palette imported');
-  await expect(builder.locator('[data-vf-docs-studio-picker="builder-shade"]')
-    .getByRole('textbox', { name: 'Builder shade hex', exact: true })).toHaveValue('#123456');
+  await builder.getByRole('radiogroup', { name: 'Builder editing appearance' }).getByRole('radio', { name: 'Dark' }).check();
+  await expect(builder.locator('#vf-builder-shade')).toHaveValue('700');
 });
-
+ 
 test('Theme Builder edits independent light/dark tokens, filters roles and exports two themes', async ({ page }) => {
   await page.goto('/next/react/foundations/theme-builder/');
   const builder = page.locator('[data-vf-docs-theme-builder]');
-  await expect(builder.getByRole('navigation', { name: 'Theme Builder sections' })
+  await expect(builder.getByRole('navigation', { name: 'Theme Studio sections' })
     .getByRole('link')).toHaveCount(4);
+  await builder.getByRole('radiogroup', { name: 'Customization mode' }).getByRole('radio', { name: 'Advanced' }).check();
   const roles = builder.locator('[data-vf-docs-builder-roles]');
   await expect(roles.getByRole('button')).toHaveCount(32);
   await expect(roles.locator('button[data-vf-toggle-button]')).toHaveCount(32);
@@ -369,6 +347,7 @@ test('Theme Builder remains navigable at 320px without page overflow', async ({ 
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/foundations/theme-builder/');
   const builder = page.locator('[data-vf-docs-theme-builder]');
+  await builder.getByRole('radiogroup', { name: 'Customization mode' }).getByRole('radio', { name: 'Advanced' }).check();
   await builder.locator('[data-vf-docs-builder-filter]').fill('accent');
   await expect(builder.locator('[data-vf-docs-builder-roles]').getByRole('button')).toHaveCount(6);
   await builder.getByRole('radiogroup', { name: 'Builder editing appearance' })
@@ -384,19 +363,34 @@ test('Theme Builder remains navigable at 320px without page overflow', async ({ 
   await page.screenshot({ path: testInfo.outputPath('theme-builder-320.png'), fullPage: false });
 });
 
-test('Theme Studio retains light/dark comparison and native keyboard controls', async ({ page }) => {
-  await page.goto('/next/react/foundations/color/');
-  const studio = page.locator('[data-vf-docs-react-color]');
-  const selected = studio.locator('[data-vf-docs-color-selected]');
-  const compare = studio.locator('[data-vf-docs-studio-compare]');
-  await compare.check();
-  await expect(studio.locator('[data-vf-docs-theme-preview]')).toHaveCount(2);
-  await studio.getByRole('radiogroup', { name: 'Palette appearance' })
-    .getByRole('radio', { name: 'Dark' }).check();
-  await expect(selected).toHaveAttribute('data-vf-docs-color-scheme', 'dark');
-  await studio.locator('[data-vf-docs-studio-reset]').click();
-  await expect(selected).toHaveAttribute('data-vf-docs-color-selected', 'blue');
-  await expect(compare).not.toBeChecked();
+test('Theme Studio preserves independent shades, history and portable draft state', async ({ page }) => {
+  await page.goto('/next/react/foundations/theme-builder/');
+  const studio = page.locator('[data-vf-docs-theme-builder]');
+  await studio.locator('#vf-builder-shade').selectOption('700');
+  await studio.getByRole('radiogroup', { name: 'Builder editing appearance' }).getByRole('radio', { name: 'Dark' }).check();
+  await studio.locator('#vf-builder-shade').selectOption('200');
+  await studio.getByRole('radiogroup', { name: 'Builder editing appearance' }).getByRole('radio', { name: 'Light' }).check();
+  await expect(studio.locator('#vf-builder-shade')).toHaveValue('700');
+  await studio.getByRole('button', { name: 'Undo', exact: true }).click();
+  await studio.getByRole('radiogroup', { name: 'Builder editing appearance' }).getByRole('radio', { name: 'Dark' }).check();
+  await expect(studio.locator('#vf-builder-shade')).toHaveValue('300');
+  await studio.getByRole('button', { name: 'Redo', exact: true }).click();
+  await expect(studio.locator('#vf-builder-shade')).toHaveValue('200');
+  await studio.getByRole('radiogroup', { name: 'Preview direction' }).getByRole('radio', { name: 'RTL' }).check();
+  await expect(studio.locator('[data-vf-docs-theme-preview="dark"]')).toHaveAttribute('dir', 'rtl');
+  await studio.getByRole('radiogroup', { name: 'Builder export format' }).getByRole('radio', { name: 'JSON', exact: true }).check();
+  const json = await studio.locator('[data-vf-docs-builder-code="json"] code').textContent();
+  expect(JSON.parse(json).shades).toEqual({ light: '700', dark: '200' });
+  expect(JSON.parse(json)).not.toHaveProperty('direction');
+  await studio.getByRole('button', { name: 'Reset theme' }).click();
+  await studio.getByRole('textbox', { name: 'Theme JSON' }).fill(json);
+  await studio.getByRole('button', { name: 'Import JSON' }).click();
+  await studio.getByRole('radiogroup', { name: 'Builder editing appearance' }).getByRole('radio', { name: 'Dark' }).check();
+  await expect(studio.locator('#vf-builder-shade')).toHaveValue('200');
+  await studio.getByRole('textbox', { name: 'Theme JSON' }).fill('{"schemaVersion":99}');
+  await studio.getByRole('button', { name: 'Import JSON' }).click();
+  await expect(studio.getByRole('alert')).toContainText('unsupported versions');
+  await expect(studio.locator('#vf-builder-shade')).toHaveValue('200');
 });
 
 test('Dark-mode page previews light, dark and system from CSS under SSR and browser preferences', async ({ page, browser }) => {
