@@ -146,3 +146,29 @@ test('native radio reset restores independent defaults, empty selection and comm
   expect(await form.evaluate((element, name) => new FormData(element).get(name), name)).toBe('2');
   if (managed) await expect(page.locator('body')).toHaveAttribute('data-rating-requests', '2');
 });
+
+test('generated Rating preserves native fractional selection, clear and read-only semantics', async ({ page }) => {
+  test.skip(port !== 'react', 'Generated React surface.');
+  await open(page);
+  const group = page.getByRole('radiogroup', { name: 'Fractional rating' });
+  await expect(group.getByRole('radio')).toHaveCount(10);
+  const selected = group.getByRole('radio', { name: '3.5', exact: true });
+  await expect(selected).toBeChecked();
+  expect(await selected.evaluate(input => input.getBoundingClientRect().width)).toBeGreaterThanOrEqual(24);
+  await selected.focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(group.getByRole('radio', { name: '4', exact: true })).toBeChecked();
+  expect(await page.locator('#form').evaluate(form => new FormData(form).get('fraction'))).toBe('4');
+  await page.getByRole('button', { name: 'Clear fractional rating' }).click();
+  await expect(group.locator('input:checked')).toHaveCount(0);
+  expect(await page.locator('#form').evaluate(form => new FormData(form).has('fraction'))).toBe(false);
+  await page.locator('#form').evaluate(form => form.reset());
+  await expect(selected).toBeChecked();
+  const average = page.getByRole('img', { name: 'Average 4.7 out of 5' });
+  await expect(average.locator('input')).toHaveCount(0);
+  const required = page.getByRole('radiogroup', { name: 'Required rating' });
+  expect(await required.locator('input').first().evaluate(input => input.validity.valueMissing)).toBe(true);
+  await required.getByRole('radio', { name: '2', exact: true }).check();
+  expect(await required.locator('input').first().evaluate(input => input.validity.valueMissing)).toBe(false);
+  await expectNoAxeViolations(page);
+});

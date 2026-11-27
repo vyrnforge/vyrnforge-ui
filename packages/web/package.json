@@ -38,6 +38,11 @@
       "import": "./dist/components/text/index.js",
       "default": "./dist/components/text/index.js"
     },
+    "./rating": {
+      "types": "./dist/components/rating/index.d.ts",
+      "import": "./dist/components/rating/index.js",
+      "default": "./dist/components/rating/index.js"
+    },
     "./slider": {
       "types": "./dist/components/slider/index.d.ts",
       "import": "./dist/components/slider/index.js",
