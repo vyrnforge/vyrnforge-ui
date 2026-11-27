@@ -175,7 +175,6 @@ test('autosize alone keeps the same native editor, selection and form behavior',
   await expect(editor).toHaveAttribute('data-test-identity', 'original');
 });
 
-
 test('standalone and composed editors share their outside-label visual language', async ({ page }, testInfo) => {
   test.skip(port !== 'react', 'React primitive and composed comparisons');
   await page.goto('/components/text-field/react.html');
@@ -189,11 +188,15 @@ test('standalone and composed editors share their outside-label visual language'
         const standalone = page.getByRole('textbox', { name: 'Standalone ' + kind + ' ' + variant });
         const composed = page.getByRole('textbox', { name: 'Composed ' + kind + ' ' + variant });
         const shell = page.locator('[data-vf-text-field-control]').filter({ has: composed });
-        for (const property of ['font-family', 'font-size', 'line-height', 'padding-inline-start', 'padding-block-start']) {
-          await expect(composed).toHaveCSS(property, await standalone.evaluate((el, key) => getComputedStyle(el).getPropertyValue(key), property));
+        const typography = ['font-family', 'font-size', 'line-height', 'padding-inline-start', 'padding-block-start'];
+        const chrome = ['background-color', 'border-top-left-radius', 'border-bottom-width', 'border-bottom-color'];
+        for (const property of typography) {
+          const expected = await standalone.evaluate((el, key) => getComputedStyle(el).getPropertyValue(key), property);
+          await expect(composed).toHaveCSS(property, expected);
         }
-        for (const property of ['background-color', 'border-top-left-radius', 'border-bottom-width', 'border-bottom-color']) {
-          await expect(shell).toHaveCSS(property, await standalone.evaluate((el, key) => getComputedStyle(el).getPropertyValue(key), property));
+        for (const property of chrome) {
+          const expected = await standalone.evaluate((el, key) => getComputedStyle(el).getPropertyValue(key), property);
+          await expect(shell).toHaveCSS(property, expected);
         }
         if (kind === 'input' || (await standalone.evaluate((el) => CSS.supports('field-sizing', 'content')))) {
           const a = await standalone.evaluate((el) => el.getBoundingClientRect().height);
