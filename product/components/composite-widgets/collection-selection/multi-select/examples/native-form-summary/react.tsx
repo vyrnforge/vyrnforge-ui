@@ -39,7 +39,9 @@ export function Example() {
         <MultiSelectFormControl name="framework" required options={items} />
       </MultiSelectRoot>
       <Button type="submit">Submit</Button>
-      <Button type="reset" variant="secondary">Reset</Button>
+      <Button type="reset" variant="secondary">
+        Reset
+      </Button>
       <output aria-live="polite">
         {submitted.length ? `Submitted: ${submitted.join(', ')}` : 'Nothing submitted'}
       </output>

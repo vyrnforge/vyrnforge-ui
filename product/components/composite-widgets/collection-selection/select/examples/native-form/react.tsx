@@ -36,7 +36,9 @@ export function Example() {
         <SelectFormControl name="plan" required options={options} />
       </SelectRoot>
       <Button type="submit">Submit</Button>
-      <Button type="reset" variant="secondary">Reset</Button>
+      <Button type="reset" variant="secondary">
+        Reset
+      </Button>
       <output aria-live="polite">{submitted ? `Submitted: ${submitted}` : 'Nothing submitted'}</output>
     </form>
   );
