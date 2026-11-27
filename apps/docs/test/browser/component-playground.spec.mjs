@@ -503,7 +503,7 @@ test('Slider guide uses the native control and synchronizes value, marks, labels
   const preview = playground.getByRole('region', { name: 'Slider preview' });
   const control = preview.getByRole('slider', { name: 'Volume' });
   await expect(control).toHaveJSProperty('value', '50');
-  await playground.getByRole('group', { name: 'Size', exact: true }).getByRole('radio', { name: 'lg', exact: true }).check();
+  await playground.getByRole('radiogroup', { name: 'Size', exact: true }).getByRole('radio', { name: 'lg', exact: true }).check();
   await expect(control).toHaveAttribute('data-vf-size', 'lg');
   await playground.getByRole('button', { name: 'Stepped with labels' }).click();
   await expect(preview.locator('[data-vf-slider-value]')).toHaveText('50');

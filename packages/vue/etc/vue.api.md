@@ -18,7 +18,7 @@ import { PropType } from 'vue';
 import { PublicProps } from 'vue';
 import { RendererElement } from 'vue';
 import { RendererNode } from 'vue';
-import { SliderTooltipOptions } from '@vyrnforge/web/slider';
+import type { SliderTooltipOptions } from '@vyrnforge/web/slider';
 import { TextVariant } from '@vyrnforge/web/text';
 import { VNode } from 'vue';
 
