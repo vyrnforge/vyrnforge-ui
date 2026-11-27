@@ -170,3 +170,36 @@ test('Tooltip stays contained with enlarged text and narrow viewport', async ({ 
   await expect(surface).toBeHidden();
   await expect(trigger).toBeFocused();
 });
+
+
+test('Tooltip arrow follows native collision flip and does not change accessibility', async ({ page }, testInfo) => {
+  test.skip(port === 'web', 'Runtime ports own open and cleanup behavior.');
+  await page.setViewportSize({ width: 640, height: 400 });
+  await page.goto(`/components/tooltip/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.tooltipReady === 'true');
+  const trigger = page.locator('#t');
+  const surface = page.locator('#tip');
+  await trigger.evaluate((element) => {
+    Object.assign(element.style, { position: 'fixed', top: '60px', left: '200px' });
+  });
+  await trigger.focus();
+  await expect(surface).toBeVisible();
+  await expect(surface).toHaveCSS('font-size', '16px');
+  await expect(surface).toHaveAttribute('data-vf-tooltip-side', 'bottom');
+  await expect
+    .poll(() => surface.evaluate((element) => getComputedStyle(element, '::after').height))
+    .toBe('6px');
+  await page.screenshot({ path: testInfo.outputPath('tooltip-arrow-bottom.png') });
+  await trigger.evaluate((element) => {
+    element.style.top = '360px';
+  });
+  await expect(surface).toHaveAttribute('data-vf-tooltip-side', 'top');
+  await expect
+    .poll(() => surface.evaluate((element) => getComputedStyle(element, '::after').top))
+    .not.toBe('auto');
+  await page.screenshot({ path: testInfo.outputPath('tooltip-arrow-flipped.png') });
+  await page.keyboard.press('Escape');
+  await expect(surface).toBeHidden();
+  await expect(surface).not.toHaveAttribute('data-vf-tooltip-side');
+  await expect(trigger).toHaveAccessibleDescription('Additional context More information');
+});

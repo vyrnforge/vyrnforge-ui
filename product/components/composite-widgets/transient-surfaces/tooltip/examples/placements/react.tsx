@@ -13,7 +13,7 @@ function Example() {
               {placement}
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Preferred placement: {placement}</TooltipContent>
+          <TooltipContent arrow>Preferred placement: {placement}</TooltipContent>
         </TooltipRoot>
       ))}
     </Flow>

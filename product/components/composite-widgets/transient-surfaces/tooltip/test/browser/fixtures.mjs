@@ -2,7 +2,7 @@ const web =
   '<button id="t" aria-describedby="tip">Info</button><div id="tip" role="tooltip" data-vf-tooltip-content>More information</div>';
 
 const elements = `<p id="additional">Additional context</p>
-<vf-tooltip id="first" open-delay="0" close-delay="100" placement="bottom">
+<vf-tooltip id="first" open-delay="0" close-delay="100" placement="bottom" arrow size="lg">
   <button id="t" data-vf-tooltip-trigger aria-describedby="additional tip">Info</button>
   <div id="tip" role="tooltip" data-vf-tooltip-content hidden>More information</div>
 </vf-tooltip>
@@ -44,7 +44,7 @@ export async function createReactStory() {
       TooltipRoot,
       { contentId: 'tip', openDelay: 0, closeDelay: 100, placement: 'bottom' },
       h(TooltipTrigger, null, h('button', { id: 't', 'aria-describedby': 'additional' }, 'Info')),
-      h(TooltipContent, null, 'More information'),
+      h(TooltipContent, { arrow: true, size: 'lg' }, 'More information'),
     ),
     h(
       TooltipRoot,
@@ -83,7 +83,7 @@ export async function createVueStory() {
         h('p', { id: 'additional' }, 'Additional context'),
         h(TooltipRoot, { contentId: 'tip', openDelay: 0, closeDelay: 100, placement: 'bottom' }, () => [
           h(TooltipTrigger, null, () => h('button', { id: 't', 'aria-describedby': 'additional' }, 'Info')),
-          h(TooltipContent, null, () => 'More information'),
+          h(TooltipContent, { arrow: true, size: 'lg' }, () => 'More information'),
         ]),
         h(TooltipRoot, { openDelay: 0 }, () => [
           h(TooltipTrigger, null, () => h('button', null, 'Second')),
@@ -132,7 +132,7 @@ export async function createAngularStory() {
       <p id="additional">Additional context</p>
       <div vfTooltipRoot id="first" contentId="tip" [openDelay]="0" [closeDelay]="100" placement="bottom">
         <button id="t" vfTooltipTrigger aria-describedby="additional">Info</button>
-        <div vfTooltipContent>More information</div>
+        <div vfTooltipContent arrow size="lg">More information</div>
       </div>
       <div vfTooltipRoot id="second" [openDelay]="0">
         <button vfTooltipTrigger>Second</button>

@@ -6,9 +6,13 @@ Import TooltipRoot, TooltipTrigger and TooltipContent from `@vyrnforge/react/too
 
 Use placement to select the preferred native anchor placement, openDelay and closeDelay for hover timing, and open/defaultOpen/onOpenChange for controlled or uncontrolled state. No extra wrapper or global overlay provider is needed.
 
+## Size and arrow
+
+Pass size="sm", "md" or "lg" to TooltipContent, and arrow to opt into the decorative pointer. The default is md and no arrow. TooltipRoot placement accepts top, bottom, left and right, each with optional -start or -end alignment. The browser can flip to a fitting side; the arrow follows the resolved side. The pointer is hidden when an accurate indicator cannot fit.
+
 ## React tokens
 
-Use the centralized typed Tooltip group rather than literal CSS variable keys. The six named roles are background, foreground, radius, font, maxWidth and offset. Defaults come from the shared Web stylesheet: inverse theme colors, control radius, regular small text, 16rem width cap and a small anchor clearance. Customize only the roles you need; the other roles inherit the shared defaults.
+Use the centralized typed Tooltip group rather than literal CSS variable keys. The seven named roles are background, foreground, radius, font, maxWidth, offset and arrowSize. Defaults come from the shared Web stylesheet: inverse theme colors, control radius, regular small text, 16rem width cap and a small anchor clearance. Customize only the roles you need; the other roles inherit the shared defaults.
 
 ```tsx
 import { createTheme, renderThemeCss, colors, tokens } from '@vyrnforge/react';
@@ -23,6 +27,7 @@ const brand = createTheme({
       font: `400 ${tokens.fontSize.sm}/1.5 ${tokens.fontFamily.sans}`,
       maxWidth: '14rem',
       offset: '6px',
+      arrowSize: '5px',
     },
   },
 });

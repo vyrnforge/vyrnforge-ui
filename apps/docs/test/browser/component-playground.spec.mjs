@@ -575,6 +575,7 @@ test('Tooltip guide exposes compact anchored help and generated public usage', a
   await expect(tooltip).toBeVisible();
   await expect(tooltip).toHaveCSS('font-weight', '400');
   await expect(tooltip).toHaveCSS('font-size', '14px');
+  await expect(tooltip).not.toHaveAttribute('data-vf-arrow');
   async function anchoredRight() {
     const anchor = await trigger.boundingBox();
     const surface = await tooltip.boundingBox();
@@ -607,5 +608,15 @@ test('Tooltip guide exposes compact anchored help and generated public usage', a
   await expect(source).toContainText('tooltip:');
   await expect(source).not.toContainText('--vf-');
   await expect.poll(anchoredRight).toBe(true);
+  await expect(tooltip).toHaveAttribute('data-vf-tooltip-side', 'right');
+  await expect(tooltip).toHaveAttribute('data-vf-arrow', '');
+  await expect(source).toContainText('arrowSize');
   await page.screenshot({ path: testInfo.outputPath('tooltip-playground-brand.png') });
+  await playground.getByRole('button', { name: 'With arrow' }).click();
+  await playground.getByRole('radio', { name: 'lg', exact: true }).check();
+  await trigger.hover();
+  await expect(tooltip).toHaveCSS('font-size', '16px');
+  await expect(tooltip).toHaveAttribute('data-vf-tooltip-side', 'top');
+  await expect(source).toContainText('size="lg"');
+  await expect(source).toContainText('arrow');
 });

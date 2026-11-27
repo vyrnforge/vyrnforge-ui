@@ -828,22 +828,24 @@ export const sliderPlayground = {
   },
 };
 
-const tooltipBrand = { background: '#1e3a8a', foreground: '#fff', radius: '8px', font: '400 14px/1.5 sans-serif', maxWidth: '14rem', offset: '6px' };
+const tooltipBrand = { background: '#1e3a8a', foreground: '#fff', radius: '8px', font: '400 14px/1.5 sans-serif', maxWidth: '14rem', offset: '6px', arrowSize: '6px' };
 function TooltipPreview({ config }) {
   const help = h(TooltipRoot, { placement: config.placement, openDelay: Number(config.openDelay), closeDelay: Number(config.closeDelay) },
     h(TooltipTrigger, null, h(Button, { type: 'button', variant: 'ghost', size: 'sm', iconOnly: true, 'aria-label': 'About this setting' }, h(Icon, { icon: infoIcon, size: 'sm' }))),
-    h(TooltipContent, null, label(config, 'Changes apply to future sessions.')));
+    h(TooltipContent, { size: config.size, arrow: config.arrow }, label(config, 'Changes apply to future sessions.')));
   return config.customTheme ? h(ThemeScope, { tokens: { tooltip: tooltipBrand } }, help) : help;
 }
 export const tooltipPlayground = {
   fields: [text('label', 'Description', 'Changes apply to future sessions.'),
     choice('placement', 'Placement', 'right', ['top', 'right', 'bottom', 'left', 'top-start', 'top-end', 'bottom-start', 'bottom-end', 'left-start', 'left-end', 'right-start', 'right-end']),
+    choice('size', 'Size', 'md', ['sm', 'md', 'lg']), bool('arrow', 'Arrow'),
     choice('openDelay', 'Open delay (ms)', '400', ['0', '200', '400', '800']),
     choice('closeDelay', 'Close delay (ms)', '100', ['100', '200', '400']),
     bool('customTheme', 'Custom theme')],
   presets: [{ label: 'Compact help', values: { placement: 'right', openDelay: '200' } },
     { label: 'Long description', values: { placement: 'bottom', label: 'Changes apply to future sessions. Existing sessions retain their current settings.' } },
-    { label: 'Brand tokens', values: { placement: 'right', openDelay: '0', customTheme: true } }],
+    { label: 'With arrow', values: { placement: 'top', arrow: true, openDelay: '0' } },
+    { label: 'Brand tokens', values: { placement: 'right', openDelay: '0', customTheme: true, arrow: true } }],
   Preview: TooltipPreview,
   source(config) {
     const imports = [importLine('TooltipRoot, TooltipTrigger, TooltipContent', 'tooltip'), importLine('Button', 'button'), ...iconImports('infoIcon', 'info')];
@@ -851,7 +853,7 @@ export const tooltipPlayground = {
         Number(config.openDelay) === 400 ? '' : 'openDelay={' + Number(config.openDelay) + '}',
         Number(config.closeDelay) === 100 ? '' : 'closeDelay={' + Number(config.closeDelay) + '}'],
       markup('TooltipTrigger', [], markup('Button', ['type="button"', 'variant="ghost"', 'size="sm"', 'iconOnly', 'aria-label="About this setting"'], '<Icon icon={infoIcon} size="sm" />')) + '\n' +
-      markup('TooltipContent', [], content(label(config, 'Changes apply to future sessions.'))));
+      markup('TooltipContent', [attribute('size', config.size, 'md'), flag('arrow', config.arrow)], content(label(config, 'Changes apply to future sessions.'))));
     if (!config.customTheme) return snippet(imports, help);
     imports.push("import { ThemeScope } from '@vyrnforge/react';");
     return snippet(imports, markup('ThemeScope', ['tokens={{ tooltip: ' + JSON.stringify(tooltipBrand) + ' }}'], help));

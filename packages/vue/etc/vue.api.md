@@ -2374,9 +2374,30 @@ export const ToolbarSeparator: DefineComponent<    {}, () => VNode<RendererNode,
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const TooltipContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const TooltipContent: DefineComponent<ExtractPropTypes<    {
+size: {
+type: PropType<"sm" | "md" | "lg">;
+default: string;
+};
+arrow: {
+type: BooleanConstructor;
+default: boolean;
+};
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+size: {
+type: PropType<"sm" | "md" | "lg">;
+default: string;
+};
+arrow: {
+type: BooleanConstructor;
+default: boolean;
+};
+}>> & Readonly<{}>, {
+size: "sm" | "md" | "lg";
+arrow: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const TooltipRoot: DefineComponent<ExtractPropTypes<    {

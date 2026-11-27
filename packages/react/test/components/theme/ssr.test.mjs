@@ -129,7 +129,7 @@ test('React token references cover the entire admitted public Web theme-authorin
 });
 
 test('Tooltip named theme tokens map to canonical CSS and scope without raw consumer keys', () => {
-  const tooltip = { background: '#1e3a8a', foreground: '#fff', radius: '8px', font: '400 14px/1.5 sans-serif', maxWidth: '14rem', offset: '6px' };
+  const tooltip = { background: '#1e3a8a', foreground: '#fff', radius: '8px', font: '400 14px/1.5 sans-serif', maxWidth: '14rem', offset: '6px', arrowSize: '5px' };
   const definition = createTheme({ name: 'tooltip-brand', tokens: { tooltip } });
   const css = renderThemeCss(definition);
   const scope = renderToStaticMarkup(createElement(ThemeScope, { tokens: { tooltip } }, 'Help'));
