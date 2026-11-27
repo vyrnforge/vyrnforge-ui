@@ -208,7 +208,7 @@ export function ThemeBuilder({ links }) {
       h('section', { className: 'vf-docs-studio-section', id: 'vf-builder-roles',
         'aria-labelledby': 'vf-builder-roles-title' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'vf-builder-roles-title' }, '2 · Semantic token editor'),
-        h(Text, { as: 'p' }, 'Switch appearances and change only the roles your brand needs.'),
+        h(Text, { as: 'p' }, 'Switch appearances and change only the React color roles your brand needs. CSS output is available separately for portable delivery.'),
         h(Segment, { label: 'Builder editing appearance', value: appearance,
           testId: 'builder-appearance', onChange: (next) => {
             setAppearance(next); setShade(next === 'dark' ? '300' : '600');

@@ -1,3 +1,6 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, it, expect } from 'vitest';
 import { reactConsumerBlocks, reactConsumerSections } from '../../react-content-policy.mjs';
 
@@ -24,3 +27,10 @@ describe('React framework-locked consumer guidance', () => {
   });
 });
 
+it('authored React examples use typed public tokens instead of literal Web variable names', () => {
+  const root = fileURLToPath(new URL('../../../../product/', import.meta.url));
+  const files = readdirSync(root, { recursive: true }).filter(name => /(?:^|[\\/])examples[\\/].*[\\/]react\.tsx$/.test(name));
+  expect(files.length).toBeGreaterThan(100);
+  const violations = files.filter(name => /--vf-[a-z0-9-]+/.test(readFileSync(path.join(root, name), 'utf8')));
+  expect(violations).toEqual([]);
+});
