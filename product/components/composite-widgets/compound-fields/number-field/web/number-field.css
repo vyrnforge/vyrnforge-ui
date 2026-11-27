@@ -1,1 +1,77 @@
 @import '../../styles/compound-fields.css';
+
+@import '../text-field/text-field.css';
+@import '../button/button.css';
+@import '../icon/icon.css';
+
+@layer vyrnforge.components {
+  :where([data-vf-number-field-root][data-vf-number-field-layout]) {
+    min-block-size: 0;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  :where([data-vf-number-field-full-width]) {
+    inline-size: 100%;
+  }
+
+  :where([data-vf-number-field-layout]:not([data-vf-number-field-layout='native']) [data-vf-number-field-input]),
+  :where([data-vf-number-field-layout] [data-vf-number-field-input][step='any']) {
+    appearance: textfield;
+  }
+
+  :where([data-vf-number-field-layout]:not([data-vf-number-field-layout='native']) [data-vf-number-field-input])::-webkit-inner-spin-button,
+  :where([data-vf-number-field-layout]:not([data-vf-number-field-layout='native']) [data-vf-number-field-input])::-webkit-outer-spin-button,
+  :where([data-vf-number-field-layout] [data-vf-number-field-input][step='any'])::-webkit-inner-spin-button,
+  :where([data-vf-number-field-layout] [data-vf-number-field-input][step='any'])::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  :where([data-vf-number-field-actions]) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vf-space-xs);
+    flex: none;
+  }
+
+  :where([data-vf-number-field-stack]) {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: none;
+  }
+
+  :where([data-vf-number-field-layout='horizontal'] [data-vf-text-field-leading]) {
+    padding-inline-start: 0;
+  }
+
+  :where([data-vf-number-field-layout='horizontal'] [data-vf-text-field-trailing],
+         [data-vf-number-field-layout='stacked'] [data-vf-text-field-trailing]) {
+    padding-inline-end: 0;
+  }
+
+  /* A deliberate 24 CSS px minimum target is retained at every density.
+     Stacked actions may grow a compact field rather than overlap targets. */
+  :where([data-vf-number-field-layout]) :is([data-vf-number-field-increment], [data-vf-number-field-decrement]) {
+    min-inline-size: max(24px, calc(var(--_vf-text-field-height) - 2px));
+    min-block-size: max(24px, calc(var(--_vf-text-field-height) - 2px));
+    padding: 0;
+    flex: none;
+  }
+
+  :where([data-vf-number-field-stack]) :is([data-vf-number-field-increment], [data-vf-number-field-decrement]) {
+    min-inline-size: max(24px, calc(var(--_vf-text-field-height) * 0.75));
+    min-block-size: max(24px, calc(var(--_vf-text-field-height) / 2));
+  }
+
+  :where([data-vf-number-field-layout]) :is([data-vf-number-field-increment], [data-vf-number-field-decrement]):focus-visible {
+    outline-offset: -2px;
+  }
+
+  /* The shared field shell remains responsible for value and placeholder fonts.
+     A number editor also honors the typed single-line Input overrides. */
+  :where([data-vf-number-field-layout] [data-vf-number-field-input][data-vf-text-field-value]) {
+    font: var(--vf-text-field-value-font, var(--_vf-editor-value-font));
+  }
+}
