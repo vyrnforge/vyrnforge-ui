@@ -360,6 +360,8 @@ test('Theme Builder edits independent light/dark tokens, filters roles and expor
   await expect(builder.locator('[data-vf-docs-builder-name]')).toHaveValue('my-brand');
   await expect(builder.locator('[data-vf-docs-builder-code="function"]'))
     .toContainText('createTheme');
+  await expect(builder.locator('[data-vf-docs-builder-code="function"]')).toContainText("from '@vyrnforge/react'");
+  await expect(builder.locator('[data-vf-docs-builder-code="function"]')).not.toContainText('--vf-');
 });
 
 test('Theme Builder remains navigable at 320px without page overflow', async ({ page }, testInfo) => {
