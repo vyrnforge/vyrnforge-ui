@@ -580,7 +580,7 @@ test('Tooltip guide exposes compact anchored help and generated public usage', a
   await playground.screenshot({ path: testInfo.outputPath('tooltip-playground-light.png') });
   await trigger.press('Escape');
   await expect(tooltip).toBeHidden();
-  await playground.getByRole('radio', { name: 'bottom', exact: true }).check();
+  await playground.getByRole('combobox', { name: 'Placement', exact: true }).selectOption('bottom');
   await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('placement="bottom"');
   await page.locator('html').evaluate(element => element.dataset.vfTheme = 'dark');
   await trigger.hover();

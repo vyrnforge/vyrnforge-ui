@@ -19,4 +19,5 @@ function Example() {
     </Flow>
   );
 }
-createRoot(document.querySelector('#root')!).render(<Example />);
+const root = document.querySelector('#root');
+if (root) createRoot(root).render(<Example />);
