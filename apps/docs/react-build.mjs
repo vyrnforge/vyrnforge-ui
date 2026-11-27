@@ -423,6 +423,7 @@ const themeStudioStyles = [
   '@vyrnforge/web/styles/text-field.css',
   '@vyrnforge/web/styles/number-field.css',
   '@vyrnforge/web/styles/skeleton.css',
+  '@vyrnforge/web/styles/loading.css',
   '@vyrnforge/web/styles/radio.css',
   '@vyrnforge/web/styles/alert.css',
   '@vyrnforge/web/styles/progress.css',
