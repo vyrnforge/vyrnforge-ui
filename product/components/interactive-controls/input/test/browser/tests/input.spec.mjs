@@ -152,3 +152,32 @@ test('Input native reset restores the authored default value', async ({ page }) 
   await page.locator('#form').evaluate((form) => form.reset());
   await expect(editable).toHaveValue('alpha');
 });
+
+
+test('typed React editor tokens reach every native Input mode and specialized editor', async ({ page }) => {
+  test.skip(port !== 'react', 'React token authoring contract');
+  await page.goto('/components/input/react-token-audit.html');
+  const modes = ['text', 'email', 'password', 'search', 'tel', 'url', 'number', 'date', 'time', 'datetime-local', 'month', 'week', 'color'];
+  for (const scope of ['central', 'local']) {
+    const root = page.locator('#' + scope);
+    const names = [...modes, 'textarea', 'special-number', 'special-password', 'special-search', 'special-color', 'special-otp', 'special-combo', 'select', 'file'];
+    for (const name of names) {
+      const input = root.locator('[data-token-audit="' + name + '"]');
+      await expect(input, name).toHaveCSS('border-top-left-radius', '11px');
+      await expect(input, name).toHaveCSS('background-color', 'rgb(242, 243, 244)');
+      await expect(input, name).toHaveCSS('border-top-color', 'rgb(35, 69, 103)');
+      await expect(input, name).toHaveCSS('font-size', '18px');
+    }
+    for (const name of [...modes.map(type => 'field-' + type), 'auto']) {
+      const input = root.locator('[data-token-audit="' + name + '"]');
+      const shell = root.locator('[data-vf-text-field-control]').filter({ has: input });
+      await expect(shell, name).toHaveCSS('border-top-left-radius', '11px');
+      await expect(shell, name).toHaveCSS('background-color', 'rgb(242, 243, 244)');
+      await expect(input, name).toHaveCSS('font-size', '18px');
+    }
+    await expect(root.locator('[data-token-audit="instance"]')).toHaveCSS('font-size', '20px');
+    const placeholder = await root.locator('[data-token-audit="text"]').evaluate(el => getComputedStyle(el, '::placeholder').fontSize);
+    expect(placeholder).toBe('14px');
+  }
+  await expect(page.locator('[data-token-audit="outside"]')).not.toHaveCSS('border-top-left-radius', '11px');
+});
