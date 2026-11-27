@@ -1,5 +1,5 @@
 /* Generated from tooling/tokens/source.mjs. Do not edit directly. */
-export const themeDefaults = {
+const themeDefaults = {
   "light": {
     "--vf-color-accent-background": "#245edb",
     "--vf-color-accent-background-hover": "#1c4fb8",
@@ -70,7 +70,7 @@ export const themeDefaults = {
   }
 } as const;
 
-export const themeableColorRoles = [
+const themeableColorRoles = [
   "accent-background",
   "accent-background-hover",
   "accent-background-pressed",
@@ -105,7 +105,7 @@ export const themeableColorRoles = [
   "disabled-border"
 ] as const;
 
-export const publicRuntimeTokens = [
+const publicRuntimeTokens = [
   "--vf-color-accent-background",
   "--vf-color-accent-background-hover",
   "--vf-color-accent-background-pressed",
@@ -264,7 +264,7 @@ export const publicRuntimeTokens = [
   "--vf-loading-custom-color"
 ] as const;
 
-export const runtimeTokenAliases = {
+const runtimeTokenAliases = {
   "--vf-font-family-display": "--vf-font-family-sans",
   "--vf-control-font-family": "--vf-font-family-sans",
   "--vf-control-font-weight": "--vf-font-weight-semibold"
