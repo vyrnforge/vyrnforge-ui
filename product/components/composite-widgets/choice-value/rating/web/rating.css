@@ -1,4 +1,5 @@
 @import '../../styles/tokens.css';
+@import '../icon/icon.css';
 @layer vyrnforge.components {
   [data-vf-rating-root] {
     display: inline-flex;
@@ -6,7 +7,7 @@
     flex-wrap: wrap;
   }
   label[data-vf-rating-item],
-  label:has(> input[data-vf-rating-item]) {
+  label:not([data-vf-rating-option]):has(> input[data-vf-rating-item]) {
     position: relative;
     display: inline-grid;
     place-items: center;
@@ -15,7 +16,7 @@
     font-size: 1.25rem;
   }
   label[data-vf-rating-item] input,
-  label > input[data-vf-rating-item] {
+  label:not([data-vf-rating-option]) > input[data-vf-rating-item] {
     position: absolute;
     inline-size: 1px;
     block-size: 1px;
@@ -34,7 +35,7 @@
     content: '★';
   }
   label[data-vf-rating-item]:has(input:focus-visible),
-  label:has(> input[data-vf-rating-item]:focus-visible) {
+  label:not([data-vf-rating-option]):has(> input[data-vf-rating-item]:focus-visible) {
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
   }
@@ -49,8 +50,207 @@
   }
 
   @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-    :where(label[data-vf-rating-item], label:has(> input[data-vf-rating-item])) {
+    :where(label[data-vf-rating-item], label:not([data-vf-rating-option]):has(> input[data-vf-rating-item])) {
       transition: color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+    }
+  }
+}
+
+@layer vyrnforge.components {
+  [data-vf-rating-root][data-vf-rating-enhanced] {
+    --_vf-rating-target: 2rem;
+    --_vf-rating-paint: var(--vf-rating-filled-color, var(--vf-color-accent-background));
+    gap: var(--vf-rating-gap, 0px);
+    align-items: center;
+    max-inline-size: 100%;
+  }
+  [data-vf-rating-root][data-vf-rating-enhanced][data-vf-size='sm'] {
+    --_vf-rating-target: max(24px, 1.5rem);
+  }
+  [data-vf-rating-root][data-vf-rating-enhanced][data-vf-size='lg'] {
+    --_vf-rating-target: 2.5rem;
+  }
+  [data-vf-rating-enhanced][data-vf-precision='0.5']:not([data-vf-readonly]) {
+    --_vf-rating-target: max(48px, 3rem);
+  }
+  [data-vf-rating-star] {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--_vf-rating-target);
+    block-size: var(--_vf-rating-target);
+    flex: none;
+  }
+  [data-vf-rating-enhanced][data-vf-readonly] [data-vf-rating-star] {
+    inline-size: auto;
+    block-size: auto;
+  }
+  [data-vf-rating-artwork] {
+    display: inline-grid;
+    position: relative;
+    color: var(--vf-rating-empty-color, var(--vf-color-border-strong));
+    pointer-events: none;
+    line-height: 0;
+  }
+  [data-vf-rating-artwork] [data-vf-icon] {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    display: block;
+  }
+  [data-vf-rating-artwork] [data-vf-icon][data-vf-size='sm'] {
+    inline-size: 1rem;
+    block-size: 1rem;
+  }
+  [data-vf-rating-artwork] [data-vf-icon][data-vf-size='lg'] {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+  }
+  /* Checked native controls are the presentation source; no pointer controller is required. */
+  [data-vf-rating-enhanced]:not([data-vf-readonly]) [data-vf-rating-star] [data-vf-rating-artwork] {
+    --_vf-rating-fill: 0%;
+  }
+  [data-vf-rating-enhanced]:not([data-vf-readonly])
+    [data-vf-rating-star]:has(~ [data-vf-rating-star] input:checked)
+    [data-vf-rating-artwork],
+  [data-vf-rating-enhanced]:not([data-vf-readonly])
+    [data-vf-rating-star]:has([data-vf-rating-option]:last-child input:checked)
+    [data-vf-rating-artwork] {
+    --_vf-rating-fill: 100%;
+  }
+  [data-vf-rating-enhanced][data-vf-precision='0.5']:not([data-vf-readonly])
+    [data-vf-rating-star]:has([data-vf-rating-option]:first-child input:checked)
+    [data-vf-rating-artwork] {
+    --_vf-rating-fill: 50%;
+  }
+  @media (forced-colors: none) and (hover: hover) and (pointer: fine) {
+    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(
+        input[data-vf-rating-choice]:hover:enabled
+      ):not(:has(input:focus-visible)) {
+      --_vf-rating-paint: var(--vf-rating-hover-color, var(--vf-color-accent-background-hover));
+    }
+    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(
+        input[data-vf-rating-choice]:hover:enabled
+      ):not(:has(input:focus-visible))
+      [data-vf-rating-star]
+      [data-vf-rating-artwork] {
+      --_vf-rating-fill: 0%;
+    }
+    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(
+        input[data-vf-rating-choice]:hover:enabled
+      ):not(:has(input:focus-visible))
+      [data-vf-rating-star]:has(~ [data-vf-rating-star] input[data-vf-rating-choice]:hover:enabled)
+      [data-vf-rating-artwork],
+    [data-vf-rating-enhanced]:not([data-vf-readonly], [data-vf-disabled]):has(
+        input[data-vf-rating-choice]:hover:enabled
+      ):not(:has(input:focus-visible))
+      [data-vf-rating-star]:has([data-vf-rating-option]:last-child input:hover:enabled)
+      [data-vf-rating-artwork] {
+      --_vf-rating-fill: 100%;
+    }
+    [data-vf-rating-enhanced][data-vf-precision='0.5']:not([data-vf-readonly], [data-vf-disabled]):has(
+        input[data-vf-rating-choice]:hover:enabled
+      ):not(:has(input:focus-visible))
+      [data-vf-rating-star]:has([data-vf-rating-option]:first-child input:hover:enabled)
+      [data-vf-rating-artwork] {
+      --_vf-rating-fill: 50%;
+    }
+  }
+  [data-vf-rating-fill] {
+    position: absolute;
+    inset: 0;
+    color: var(--_vf-rating-paint);
+    clip-path: inset(0 calc(100% - var(--_vf-rating-fill)) 0 0);
+  }
+  [data-vf-rating-fill]:dir(rtl) {
+    clip-path: inset(0 0 0 calc(100% - var(--_vf-rating-fill)));
+  }
+  [data-vf-rating-choices] {
+    position: absolute;
+    inset: 0;
+    display: flex;
+  }
+  [data-vf-rating-option] {
+    position: relative;
+    flex: 1;
+    cursor: pointer;
+    border-radius: var(--vf-control-radius);
+  }
+  [data-vf-rating-choice] {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    opacity: 0;
+    margin: 0;
+    cursor: inherit;
+  }
+  [data-vf-rating-option]:has(:focus-visible) {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: -2px;
+  }
+  [data-vf-rating-option]:has(:active) {
+    box-shadow: inset 0 0 0 1px var(--vf-color-accent-background-pressed);
+  }
+  [data-vf-rating-root][data-vf-rating-enhanced][data-vf-disabled] {
+    --_vf-rating-paint: var(--vf-color-disabled-foreground);
+  }
+  [data-vf-rating-enhanced][data-vf-disabled] [data-vf-rating-artwork] {
+    color: var(--vf-color-disabled-border);
+  }
+  [data-vf-rating-enhanced][data-vf-disabled] [data-vf-rating-option] {
+    cursor: default;
+  }
+  [data-vf-rating-with-clear] {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--vf-space-xs);
+  }
+  [data-vf-rating-clear] {
+    font: inherit;
+    color: var(--vf-color-text);
+    background: transparent;
+    border: 0;
+    text-decoration: underline;
+    min-block-size: 1.5rem;
+    cursor: pointer;
+  }
+  [data-vf-rating-clear]:focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+  [data-vf-rating-clear][aria-disabled='true'],
+  [data-vf-rating-clear]:disabled {
+    color: var(--vf-color-disabled-foreground);
+    cursor: default;
+  }
+  @media (pointer: coarse) {
+    [data-vf-rating-root][data-vf-rating-enhanced]:not([data-vf-readonly]) {
+      --_vf-rating-target: max(44px, 2.75rem);
+    }
+    [data-vf-rating-enhanced][data-vf-precision='0.5']:not([data-vf-readonly]) {
+      --_vf-rating-target: max(48px, 3rem);
+    }
+    [data-vf-rating-clear] {
+      min-block-size: 2.75rem;
+    }
+  }
+  @media (forced-colors: active) {
+    [data-vf-rating-root][data-vf-rating-enhanced] {
+      --_vf-rating-paint: Highlight;
+    }
+    [data-vf-rating-artwork] {
+      color: CanvasText;
+      forced-color-adjust: none;
+    }
+    [data-vf-rating-root][data-vf-rating-enhanced][data-vf-disabled] {
+      --_vf-rating-paint: GrayText;
+    }
+    [data-vf-rating-enhanced][data-vf-disabled] [data-vf-rating-artwork] {
+      color: GrayText;
+    }
+    [data-vf-rating-option]:has(:focus-visible) {
+      outline-color: Highlight;
     }
   }
 }

@@ -1,0 +1,14 @@
+{
+  "id": "rating/custom",
+  "title": "Custom artwork",
+  "description": "Use an existing IconDefinition.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Custom artwork and themes"
+}

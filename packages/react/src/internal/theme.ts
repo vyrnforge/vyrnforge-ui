@@ -156,6 +156,12 @@ export const tokens = Object.freeze({
   list: Object.freeze({
     stickyOffset: reference('--vf-list-sticky-offset'),
   }),
+  rating: Object.freeze({
+    filledColor: reference('--vf-rating-filled-color'),
+    emptyColor: reference('--vf-rating-empty-color'),
+    hoverColor: reference('--vf-rating-hover-color'),
+    gap: reference('--vf-rating-gap'),
+  }),
   slider: Object.freeze({
     trackSize: reference('--vf-slider-track-size'),
     trackColor: reference('--vf-slider-track-color'),

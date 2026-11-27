@@ -1,3 +1,7 @@
+import { Icon } from '../icon/index.js';
+import type { IconDefinition, IconSize } from '@vyrnforge/web/icon';
+import { ratingStar, ratingMaximum, ratingValue, connectRatingReset } from '@vyrnforge/web/rating';
+import type { CSSProperties, HTMLAttributes } from 'react';
 import {
   createContext,
   createElement,
@@ -32,54 +36,44 @@ export interface RatingRootProps {
   'aria-label'?: string;
   'aria-labelledby'?: string;
 }
-export function RatingRoot({
-  value,
-  defaultValue = 0,
-  name,
-  max = 5,
-  getItemLabel,
-  onValueChange,
-  children,
-  'aria-label': label,
-  'aria-labelledby': labelledBy,
-}: RatingRootProps) {
+function useRatingState(
+  {
+    value,
+    defaultValue = 0,
+    name,
+    onValueChange,
+  }: {
+    value: number | undefined;
+    defaultValue: number | undefined;
+    name: string | undefined;
+    onValueChange: ((v: number) => void) | undefined;
+  },
+  normalize = (value: number) => value,
+) {
   const id = useId();
   const initial = useRef(defaultValue);
   const [iv, setIv] = useState(initial.current);
-  const selected = value ?? iv;
+  const selected = normalize(value ?? iv);
   const groupName = name ?? `vf-rating-${id}`;
   const rootRef = useRef<HTMLDivElement>(null);
   const committed = useRef(value);
+  const normalizer = useRef(normalize);
   useLayoutEffect(() => {
     committed.current = value;
-  }, [value]);
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const document = root.ownerDocument;
-    let active = true;
-    const radios = () =>
-      Array.from(root.querySelectorAll<HTMLInputElement>('[data-vf-rating-item] > input[type="radio"]')).filter(
-        (radio) => radio.closest('[data-vf-rating-root]') === root,
-      );
-    const onReset = (event: Event) => {
-      const group = radios();
-      if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
-      setTimeout(() => {
-        if (!active || event.defaultPrevented) return;
-        const group = radios();
-        if (!group.length || !group.every((radio) => radio.form === event.target)) return;
-        const next = committed.current ?? initial.current;
-        if (committed.current === undefined) setIv(next);
-        for (const radio of group) radio.checked = Number(radio.value) === next;
-      }, 0);
-    };
-    document.addEventListener('reset', onReset, true);
-    return () => {
-      active = false;
-      document.removeEventListener('reset', onReset, true);
-    };
-  }, []);
+    normalizer.current = normalize;
+  }, [value, normalize]);
+  useEffect(
+    () =>
+      connectRatingReset(
+        () => rootRef.current,
+        () => {
+          const next = normalizer.current(committed.current ?? initial.current);
+          if (committed.current === undefined) setIv(next);
+          return next;
+        },
+      ),
+    [],
+  );
   const ctx = useMemo(
     () => ({
       value: selected,
@@ -92,6 +86,21 @@ export function RatingRoot({
     }),
     [selected, groupName, value, onValueChange],
   );
+  return { ctx, rootRef };
+}
+
+export function RatingRoot({
+  value,
+  defaultValue,
+  name,
+  max = 5,
+  getItemLabel,
+  onValueChange,
+  children,
+  'aria-label': label,
+  'aria-labelledby': labelledBy,
+}: RatingRootProps) {
+  const { ctx, rootRef } = useRatingState({ value, defaultValue, name, onValueChange });
   const count = Number.isFinite(max) ? Math.max(0, Math.floor(max)) : 0;
   return createElement(
     C.Provider,
@@ -134,4 +143,146 @@ export function RatingItem({ value, label, disabled }: RatingItemProps) {
     }),
     createElement('span', { 'aria-hidden': true, 'data-vf-rating-glyph': '' }),
   );
+}
+
+/** A rating is an ordered native choice; readOnly displays a score instead. */
+export interface RatingProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'children' | 'onChange' | 'role' | 'defaultValue'
+> {
+  value?: number;
+  defaultValue?: number;
+  onValueChange?(value: number): void;
+  name?: string;
+  max?: number;
+  precision?: 1 | 0.5;
+  size?: IconSize;
+  icon?: IconDefinition;
+  readOnly?: boolean;
+  disabled?: boolean;
+  required?: boolean;
+  clearable?: boolean;
+  /** Required when clearable is enabled; localize in the application. */
+  clearLabel?: string;
+  getItemLabel?(value: number): string;
+}
+
+function RatingArtwork({ icon, size, fill }: { icon: IconDefinition; size: IconSize; fill?: number | undefined }) {
+  return createElement(
+    'span',
+    {
+      'data-vf-rating-artwork': '',
+      'aria-hidden': true,
+      style:
+        fill === undefined
+          ? undefined
+          : ({
+              '--_vf-rating-fill': Math.round(Math.max(0, Math.min(1, fill)) * 1000000) / 10000 + '%',
+            } as CSSProperties),
+    },
+    createElement(Icon, { icon, size, variant: 'outlined' }),
+    createElement('span', { 'data-vf-rating-fill': '' }, createElement(Icon, { icon, size, variant: 'filled' })),
+  );
+}
+
+/** Whole and half-star input; arbitrary fractional non-interactive display. */
+export function Rating({
+  value,
+  defaultValue = 0,
+  onValueChange,
+  name,
+  max = 5,
+  precision = 1,
+  size = 'md',
+  icon = ratingStar,
+  readOnly = false,
+  disabled = false,
+  required = false,
+  clearable = false,
+  clearLabel,
+  getItemLabel,
+  ...attrs
+}: RatingProps) {
+  const count = ratingMaximum(max);
+  const step = precision === 0.5 ? 0.5 : 1;
+  const normalize = (v: number) => ratingValue(v, count, step, readOnly);
+  const { ctx, rootRef } = useRatingState({ value, defaultValue, name, onValueChange }, normalize);
+  const selected = ctx.value;
+  const canClear = clearable && !required && !readOnly;
+  if (canClear && !clearLabel?.trim()) throw new Error('Rating clearable requires a localized clearLabel.');
+  const group = createElement(
+    'div',
+    {
+      ...attrs,
+      ref: rootRef,
+      role: readOnly ? 'img' : 'radiogroup',
+      'data-vf-rating-root': '',
+      'data-vf-rating-enhanced': '',
+      'data-vf-size': size,
+      'data-vf-precision': step,
+      'data-vf-readonly': readOnly ? '' : undefined,
+      'data-vf-disabled': disabled ? '' : undefined,
+      'aria-required': (!readOnly && required) || undefined,
+      'aria-disabled': (!readOnly && disabled) || undefined,
+    },
+    ...Array.from({ length: count }, (_, i) =>
+      createElement(
+        'span',
+        {
+          key: i,
+          'data-vf-rating-star': '',
+        },
+        createElement(RatingArtwork, { icon, size, fill: readOnly ? selected - i : undefined }),
+        !readOnly
+          ? createElement(
+              'span',
+              { 'data-vf-rating-choices': '' },
+              ...Array.from({ length: 1 / step }, (_, part) => {
+                const score = i + (part + 1) * step;
+                return createElement(
+                  'label',
+                  {
+                    key: score,
+                    'data-vf-rating-option': '',
+                  },
+                  createElement('input', {
+                    type: 'radio',
+                    'data-vf-rating-choice': '',
+                    name: ctx.name,
+                    value: score,
+                    checked: selected === score,
+                    disabled,
+                    required,
+                    'aria-label': getItemLabel?.(score) ?? String(score),
+                    'aria-invalid': attrs['aria-invalid'],
+                    'aria-describedby': attrs['aria-describedby'],
+                    onChange: () => ctx.set(score),
+                  }),
+                );
+              }),
+            )
+          : null,
+      ),
+    ),
+  );
+  return canClear
+    ? createElement(
+        'div',
+        { 'data-vf-rating-with-clear': '' },
+        group,
+        createElement(
+          'button',
+          {
+            type: 'button',
+            'data-vf-rating-clear': '',
+            disabled,
+            'aria-disabled': selected === 0 || undefined,
+            onClick: () => {
+              if (!disabled && selected !== 0) ctx.set(0);
+            },
+          },
+          clearLabel,
+        ),
+      )
+    : group;
 }

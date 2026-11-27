@@ -7,6 +7,8 @@ import { createElement as h, useId, useState, useEffect, useRef } from 'react';
 import { Button } from '@vyrnforge/react/button';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Radio } from '@vyrnforge/react/radio';
+import { Rating } from '@vyrnforge/react/rating';
+import { heartIcon } from '@vyrnforge/icons/heart';
 import { Slider } from '@vyrnforge/react/slider';
 import { TooltipRoot, TooltipTrigger, TooltipContent } from '@vyrnforge/react/tooltip';
 import { Avatar } from '@vyrnforge/react/avatar';
@@ -929,5 +931,44 @@ export const numberFieldPlayground = {
       flag('fullWidth', config.fullWidth), flag('required', config.required), flag('disabled', config.disabled), flag('readOnly', config.readOnly),
       config.rtl ? 'dir="rtl"' : '',
     ]), config.controlled ? { setup: ['const [value, setValue] = useState<number | null>(' + JSON.stringify(numericInitial(config.initial)) + ');'] } : {});
+  },
+};
+
+export const ratingPlayground = {
+  fields: [text('label', 'Label', 'Product quality'),
+    choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
+    choice('precision', 'Precision', '1', ['1', '0.5']),
+    choice('artwork', 'Artwork', 'star', ['star', 'heart']),
+    { kind: 'number', key: 'max', label: 'Maximum', default: 5, min: 1, max: 10 },
+    { kind: 'number', key: 'value', label: 'Value', default: 3, min: 0, max: 10, step: 0.5 },
+    bool('readOnly', 'Read-only display'), bool('disabled', 'Disabled'),
+    bool('clearable', 'Clearable'), bool('controlled', 'Controlled usage')],
+  presets: [{ label: 'Half stars', values: { precision: '0.5', value: 3.5 } },
+    { label: 'Review score', values: { readOnly: true, value: 4.5 } }],
+  Preview({ config, update }) {
+    const value = Math.min(config.max, config.value);
+    const name = label(config, 'Product quality');
+    return h(Rating, { 'aria-label': config.readOnly ? name + ': ' + value + ' out of ' + config.max : name,
+      size: config.size, max: config.max, precision: Number(config.precision), value, readOnly: config.readOnly,
+      disabled: !config.readOnly && config.disabled, clearable: !config.readOnly && config.clearable,
+      clearLabel: config.clearable ? 'Clear rating' : undefined,
+      icon: config.artwork === 'heart' ? heartIcon : undefined, onValueChange: v => update('value', v) });
+  },
+  source(config) {
+    const value = Math.min(config.max, config.value);
+    const name = label(config, 'Product quality');
+    const imports = [importLine('Rating', 'rating')];
+    if (config.artwork === 'heart') imports.push("import { heartIcon } from '@vyrnforge/icons/heart';");
+    const controlled = config.controlled && !config.readOnly;
+    if (controlled) imports.push("import { useState } from 'react';");
+    return snippet(imports, markup('Rating', [
+      attribute('aria-label', config.readOnly ? name + ': ' + value + ' out of ' + config.max : name),
+      config.readOnly ? 'value={' + value + '}' : controlled ? 'value={value}' : 'defaultValue={' + value + '}',
+      controlled ? 'onValueChange={setValue}' : '', config.max !== 5 ? 'max={' + config.max + '}' : '',
+      attribute('size', config.size, 'md'), config.precision === '0.5' && !config.readOnly ? 'precision={0.5}' : '',
+      config.artwork === 'heart' ? 'icon={heartIcon}' : '',
+      flag('readOnly', config.readOnly), flag('disabled', !config.readOnly && config.disabled),
+      flag('clearable', !config.readOnly && config.clearable), !config.readOnly && config.clearable ? 'clearLabel="Clear rating"' : '',
+    ]), { setup: controlled ? ['const [value, setValue] = useState(' + value + ');'] : [] });
   },
 };

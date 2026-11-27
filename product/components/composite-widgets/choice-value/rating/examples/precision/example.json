@@ -1,0 +1,14 @@
+{
+  "id": "rating/precision",
+  "title": "Half-star rating",
+  "description": "Choose a fractional value.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Sizes and precision"
+}

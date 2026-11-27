@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, tooltipPlayground, inputPlayground, textareaPlayground, textFieldPlayground, numberFieldPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, ratingPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, tooltipPlayground, inputPlayground, textareaPlayground, textFieldPlayground, numberFieldPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -171,6 +171,7 @@ function navigation(view, links, topic) {
       { id: 'selection-checkbox', title: 'Checkbox', href: links.selection.checkbox.guide },
       { id: 'selection-radio', title: 'Radio', href: links.selection.radio.guide },
       { id: 'selection-slider', title: 'Slider', href: links.selection.slider.guide },
+      { id: 'selection-rating', title: 'Rating', href: links.selection.rating.guide },
     ] },
     { label: 'Text entry primitives', items: [
       { id: 'input', title: 'Input', href: links.input.guide },
@@ -217,6 +218,7 @@ function navigation(view, links, topic) {
       { id: 'selection-checkbox-api', title: 'Checkbox API', href: links.selection.checkbox.api },
       { id: 'selection-radio-api', title: 'Radio API', href: links.selection.radio.api },
       { id: 'selection-slider-api', title: 'Slider API', href: links.selection.slider.api },
+      { id: 'selection-rating-api', title: 'Rating API', href: links.selection.rating.api },
       { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
       { id: 'divider-api', title: 'Divider API', href: links.divider.api },
       { id: 'list-api', title: 'List API', href: links.list.api },
@@ -632,7 +634,7 @@ function selectionGuide(unit, links) {
   const routeLinks = links.selection[unit.id];
   const topics = visibleGuideSections(unit.sharedContent.sections, unit.examples).map(section => ({ ...section, id: prefix + slug(section.heading) }));
   const sections = [...(unit.frameworkContent ? [{ id: prefix + 'setup', heading: 'Get started' }] : []), ...topics];
-  const adapter = unit.id === 'checkbox' ? checkboxPlayground : unit.id === 'radio' ? radioPlayground : unit.id === 'slider' ? sliderPlayground : null;
+  const adapter = unit.id === 'checkbox' ? checkboxPlayground : unit.id === 'radio' ? radioPlayground : unit.id === 'slider' ? sliderPlayground : unit.id === 'rating' ? ratingPlayground : null;
   const playgroundSection = { id: prefix + 'playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(adapter ? [sections[0], playgroundSection, ...sections.slice(1)] : sections),
@@ -670,7 +672,7 @@ function selectionApi(unit, links) {
   return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': unit.id },
     h('header', { className: 'vf-docs-component-header' }, h(Text, { as: 'h1', variant: 'heading-lg' }, unit.title + ' API'),
       evidenceDisclosure(unit.standardReferences),
-      h(Text, { as: 'p' }, 'Native input attributes and the forwarded HTMLInputElement ref.')),
+      h(Text, { as: 'p' }, unit.id === 'rating' ? 'Native radio choices or a non-interactive score with customizable IconDefinition artwork.' : 'Native input attributes and the forwarded HTMLInputElement ref.')),
     h('section', null, h(Text, { as: 'h2', variant: 'heading-md' }, 'Public entrypoint'),
       h(Flow, { as: 'ul', gap: 'sm' }, ...unit.publicEntrypoints.map(name => h('li', { key: name }, h(Code, null, name)))),
       h(Text, { as: 'p' }, 'Canonical styling: ', h(Code, null, '@vyrnforge/web/styles/' + unit.id + '.css'))),

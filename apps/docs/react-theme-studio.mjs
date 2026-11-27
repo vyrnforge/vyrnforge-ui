@@ -17,6 +17,7 @@ import { Button } from '@vyrnforge/react/button';
 import { ColorPickerRoot, ColorPickerInput, ColorPickerTextInput, ColorPickerSwatch } from '@vyrnforge/react/color-picker';
 import { SegmentedControlRoot, SegmentedControlItem } from '@vyrnforge/react/segmented-control';
 import { Checkbox } from '@vyrnforge/react/checkbox';
+import { Rating } from '@vyrnforge/react/rating';
 import { Slider } from '@vyrnforge/react/slider';
 import { Text } from '@vyrnforge/react/text';
 
@@ -85,6 +86,7 @@ export function PreviewScene({ theme, view, component = 'Button', direction = 'l
           h(Text, { as: 'h3', variant: 'heading-md' }, 'Account preferences'),
           h(Text, { as: 'p', tone: 'secondary' },
             'A real input, checkbox and slider in the current theme.'),
+          h(Rating, { defaultValue: 3.5, precision: 0.5, 'aria-label': 'Product rating' }),
           h(TextField, { label: 'Contact email', type: 'email', value: email, onChange: e => setEmail(e.target.value), description: 'Used for notifications', fullWidth: true }),
           h(NumberField, { label: 'Quantity', defaultValue: 2, min: 0, max: 100, stepControls: 'horizontal', incrementLabel: 'Increase quantity', decrementLabel: 'Decrease quantity', fullWidth: true }),
           h('label', { className: 'vf-docs-studio-check' },
@@ -152,6 +154,11 @@ function ComponentSamples({ component }) {
       h(Control, { ...(component === 'Radio' ? { name: id, value: label } : {}), defaultChecked: i === 0, disabled: i === 2 }), label));
     return h(Flow, { as: 'fieldset', gap: 'sm' }, h('legend', null, 'Selection states'), ...states);
   }
+  if (component === 'Rating') return h(Flow, { gap: 'sm' },
+    ...['sm','md','lg'].map(size => h(Flow, { key: size, gap: 'xs' }, h(Text, { as: 'span', variant: 'label-md' }, size + ' rating'), h(Rating, { size, defaultValue: 3, 'aria-label': size + ' rating' }))),
+    h(Rating, { defaultValue: 3.5, precision: 0.5, 'aria-label': 'Half-star rating' }),
+    h(Rating, { value: 4.7, readOnly: true, 'aria-label': 'Average 4.7 out of 5' }),
+    h(Rating, { value: 2, disabled: true, 'aria-label': 'Disabled rating' }));
   if (component === 'Slider') return h(Flow, { gap: 'md' }, ...['sm','md','lg'].map(size => h('label', { key: size, className: 'vf-docs-studio-field' },
     h(Text, { as: 'span' }, size + ' slider'), h(Slider, { size, min: 0, max: 100, defaultValue: 45 }))));
   if (component === 'Tooltip') return h(Flow, { gap: 'sm' }, h(SampleTooltip), h(Text, { as: 'p', variant: 'body-sm' }, 'Use the pointer or keyboard to show the overlay.'));

@@ -54,7 +54,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/theme-builder/', 'foundations/dark-mode/',
     'foundations/right-to-left/', 'utilities/overlay/', 'utilities/motion/', 'foundations/styling/',  'components/button/', 'api/components/button/',
-    'patterns/button-group/', 'components/toggle-button/', 'api/components/toggle-button/', 'components/toggle-group/', 'api/components/toggle-group/', 'components/checkbox/', 'api/components/checkbox/', 'components/radio/', 'api/components/radio/', 'components/slider/', 'api/components/slider/', 'patterns/checkbox-group/', 'patterns/radio-group/', 'components/layout/', 'api/components/layout/',
+    'patterns/button-group/', 'components/toggle-button/', 'api/components/toggle-button/', 'components/toggle-group/', 'api/components/toggle-group/', 'components/checkbox/', 'api/components/checkbox/', 'components/radio/', 'api/components/radio/', 'components/slider/', 'api/components/slider/', 'components/rating/', 'api/components/rating/', 'patterns/checkbox-group/', 'patterns/radio-group/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',

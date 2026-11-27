@@ -16,7 +16,7 @@ import { Segment, Picker, PreviewScene } from './react-theme-studio.mjs';
 import { presets, modes, defaultDraft, validSlug, validHex, permittedValue, permittedHint, historyReducer, importLegacyDraft, parseDraft, serializeDraft, draftSchema } from './theme-studio-model.mjs';
 
 const categories = [['colors','Colors'],['typography','Typography'],['spacing','Spacing'],['sizing','Sizing & density'],['shape','Shape & borders'],['elevation','Elevation'],['motion','Motion'],['components','Components']];
-const componentGroups = { Button: ['control','radius','fontWeight','fontSize','motion'], Checkbox: ['space','motion'], Radio: ['space','motion'], Input: ['input','editor','control'], Textarea: ['textarea','editor','control'], TextField: ['textField','editor','control'], NumberField: ['textField','editor','control'], Slider: ['slider','control'], Tooltip: ['tooltip','shadow'], Progress: ['progress'], Skeleton: ['skeleton'], Loading: ['loading','motion'] };
+const componentGroups = { Button: ['control','radius','fontWeight','fontSize','motion'], Checkbox: ['space','motion'], Radio: ['space','motion'], Input: ['input','editor','control'], Textarea: ['textarea','editor','control'], TextField: ['textField','editor','control'], NumberField: ['textField','editor','control'], Slider: ['slider','control'], Rating: ['rating'], Tooltip: ['tooltip','shadow'], Progress: ['progress'], Skeleton: ['skeleton'], Loading: ['loading','motion'] };
 const groups = ['All', 'Accent', 'Surfaces', 'Text', 'Borders', 'Feedback', 'Danger', 'Focus', 'Disabled'];
 const groupFor = (role) => (role.startsWith('accent') || role === 'onAccent') ? 'Accent' :
   role.startsWith('surface') ? 'Surfaces' : ['text', 'muted', 'subtle'].includes(role) ? 'Text' :
