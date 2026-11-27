@@ -15,6 +15,7 @@ import { ComponentProps } from 'react';
 import { ComponentPropsWithoutRef } from 'react';
 import type { ComponentPropsWithRef } from 'react';
 import { CompositionEventHandler } from 'react';
+import type { CreateThemeOptions as CreateThemeOptions_2 } from '@vyrnforge/web/theme';
 import { CSSProperties } from 'react';
 import { DetailedHTMLProps } from 'react';
 import { DetailedReactHTMLElement } from 'react';
@@ -54,6 +55,7 @@ import { SubmitEventHandler } from 'react';
 import type { SVGAttributes } from 'react';
 import type { TextareaHTMLAttributes } from 'react';
 import { TextVariant } from '@vyrnforge/web/text';
+import { ThemeDefinition } from '@vyrnforge/web/theme';
 import { ToggleEventHandler } from 'react';
 import { TouchEventHandler } from 'react';
 import { TransitionEventHandler } from 'react';
@@ -537,7 +539,7 @@ export const colors: Readonly<Record<ColorRole, CssReference>>;
 export const ComboboxContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export const ComboboxInput: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "defaultValue" | "id" | "aria-controls" | "value"> & RefAttributes<HTMLInputElement>>;
+export const ComboboxInput: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "value" | "defaultValue" | "id" | "aria-controls"> & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
 export const ComboboxOption: ForwardRefExoticComponent<ComboboxOptionProps & RefAttributes<HTMLButtonElement>>;
@@ -607,6 +609,17 @@ export const ContextMenuTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProp
 
 // @public
 export function createSvgIcon(content: ReactNode): ForwardRefExoticComponent<Omit<SvgIconProps, 'children'> & RefAttributes<SVGSVGElement>>;
+
+// @public
+export function createTheme(input: CreateThemeOptions): ThemeDefinition;
+
+// @public (undocumented)
+export interface CreateThemeOptions extends Omit<CreateThemeOptions_2, 'colors' | 'tokens'> {
+    // (undocumented)
+    colors?: ThemeColorOverrides;
+    // (undocumented)
+    tokens?: ThemeTokenOverrides;
+}
 
 // @public (undocumented)
 export function DialogBody(props: DialogBodyProps): DetailedReactHTMLElement<    {
@@ -1948,9 +1961,11 @@ export type FileUploaderInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'ty
 export function FileUploaderList(props: ComponentPropsWithoutRef<'ul'>): DetailedReactHTMLElement<    {
 'data-vf-file-uploader-list': string;
 color?: string | undefined | undefined;
+popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
+role?: AriaRole | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -1973,7 +1988,6 @@ tabIndex?: number | undefined | undefined;
 title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
-role?: AriaRole | undefined;
 about?: string | undefined | undefined;
 datatype?: string | undefined | undefined;
 inlist?: any;
@@ -1994,7 +2008,6 @@ itemRef?: string | undefined | undefined;
 results?: number | undefined | undefined;
 security?: string | undefined | undefined;
 unselectable?: "on" | "off" | undefined | undefined;
-popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 popoverTargetAction?: "toggle" | "show" | "hide" | undefined | undefined;
 popoverTarget?: string | undefined | undefined;
 inert?: boolean | undefined | undefined;
@@ -2563,6 +2576,7 @@ export function MenuSeparator(props: ComponentPropsWithoutRef<'div'>): DetailedR
 role: "separator";
 'data-vf-menu-separator': string;
 color?: string | undefined | undefined;
+popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
@@ -2608,7 +2622,6 @@ itemRef?: string | undefined | undefined;
 results?: number | undefined | undefined;
 security?: string | undefined | undefined;
 unselectable?: "on" | "off" | undefined | undefined;
-popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 popoverTargetAction?: "toggle" | "show" | "hide" | undefined | undefined;
 popoverTarget?: string | undefined | undefined;
 inert?: boolean | undefined | undefined;
@@ -3228,6 +3241,9 @@ export interface RatingRootProps {
     value?: number;
 }
 
+// @public
+export function renderThemeCss(theme: ThemeDefinition): string;
+
 // @public (undocumented)
 export const SearchFieldClear: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
 
@@ -3814,6 +3830,7 @@ hidden: boolean;
 'aria-labelledby': string;
 'data-vf-tabs-panel': string;
 color?: string | undefined | undefined;
+popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
 defaultChecked?: boolean | undefined | undefined;
@@ -3856,7 +3873,6 @@ itemRef?: string | undefined | undefined;
 results?: number | undefined | undefined;
 security?: string | undefined | undefined;
 unselectable?: "on" | "off" | undefined | undefined;
-popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 popoverTargetAction?: "toggle" | "show" | "hide" | undefined | undefined;
 popoverTarget?: string | undefined | undefined;
 inert?: boolean | undefined | undefined;
@@ -4126,6 +4142,7 @@ onClick(event: MouseEvent_2<HTMLButtonElement>): void;
 onKeyDown(event: KeyboardEvent_2<HTMLButtonElement>): void;
 name?: string | undefined | undefined;
 color?: string | undefined | undefined;
+popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
@@ -4169,7 +4186,6 @@ itemRef?: string | undefined | undefined;
 results?: number | undefined | undefined;
 security?: string | undefined | undefined;
 unselectable?: "on" | "off" | undefined | undefined;
-popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 popoverTargetAction?: "toggle" | "show" | "hide" | undefined | undefined;
 popoverTarget?: string | undefined | undefined;
 inert?: boolean | undefined | undefined;
@@ -4467,7 +4483,7 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 export type TextElement = 'span' | 'p' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote' | 'q' | 'cite' | 'strong' | 'em' | 'small' | 'mark' | 'abbr' | 'sub' | 'sup' | 'del' | 'ins' | 'time' | 'figcaption';
 
 // @public
-export const TextField: ForwardRefExoticComponent<TextFieldProps & RefAttributes<HTMLTextAreaElement | HTMLInputElement>>;
+export const TextField: ForwardRefExoticComponent<TextFieldProps & RefAttributes<HTMLInputElement | HTMLTextAreaElement>>;
 
 // @public (undocumented)
 export interface TextFieldAppearanceProps {
@@ -4537,6 +4553,8 @@ export { TextVariant }
 // @public
 export type ThemeColorOverrides = Partial<Record<ColorRole, string>>;
 
+export { ThemeDefinition }
+
 // @public (undocumented)
 export type ThemeElement = 'div' | 'span' | 'section' | 'article' | 'main' | 'aside' | 'header' | 'footer' | 'nav';
 
@@ -4558,7 +4576,13 @@ export interface ThemeScopeProps extends Omit<HTMLAttributes<HTMLElement>, 'colo
     motion?: ThemeMotionOverrides;
     // (undocumented)
     theme?: ThemeName;
+    tokens?: ThemeTokenOverrides;
 }
+
+// @public
+export type ThemeTokenOverrides = {
+    [Group in Exclude<keyof typeof tokens, 'color'>]?: Partial<Record<keyof (typeof tokens)[Group], string>>;
+};
 
 // @public (undocumented)
 export const ToastClose: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
@@ -4567,9 +4591,11 @@ export const ToastClose: ForwardRefExoticComponent<Omit<DetailedHTMLProps<Button
 export function ToastDescription(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 'data-vf-toast-description': string;
 color?: string | undefined | undefined;
+popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
+role?: AriaRole | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4592,7 +4618,6 @@ tabIndex?: number | undefined | undefined;
 title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
-role?: AriaRole | undefined;
 about?: string | undefined | undefined;
 datatype?: string | undefined | undefined;
 inlist?: any;
@@ -4613,7 +4638,6 @@ itemRef?: string | undefined | undefined;
 results?: number | undefined | undefined;
 security?: string | undefined | undefined;
 unselectable?: "on" | "off" | undefined | undefined;
-popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 popoverTargetAction?: "toggle" | "show" | "hide" | undefined | undefined;
 popoverTarget?: string | undefined | undefined;
 inert?: boolean | undefined | undefined;
@@ -4870,9 +4894,11 @@ export interface ToastRootProps extends ComponentPropsWithoutRef<'div'> {
 export function ToastTitle(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 'data-vf-toast-title': string;
 color?: string | undefined | undefined;
+popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
+role?: AriaRole | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4895,7 +4921,6 @@ tabIndex?: number | undefined | undefined;
 title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
-role?: AriaRole | undefined;
 about?: string | undefined | undefined;
 datatype?: string | undefined | undefined;
 inlist?: any;
@@ -4916,7 +4941,6 @@ itemRef?: string | undefined | undefined;
 results?: number | undefined | undefined;
 security?: string | undefined | undefined;
 unselectable?: "on" | "off" | undefined | undefined;
-popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 popoverTargetAction?: "toggle" | "show" | "hide" | undefined | undefined;
 popoverTarget?: string | undefined | undefined;
 inert?: boolean | undefined | undefined;
@@ -5262,6 +5286,7 @@ export const tokens: Readonly<{
         sm: `var(--vf-${string})`;
         md: `var(--vf-${string})`;
         lg: `var(--vf-${string})`;
+        popover: `var(--vf-${string})`;
     }>;
     control: Readonly<{
         heightSm: `var(--vf-${string})`;
@@ -5279,7 +5304,96 @@ export const tokens: Readonly<{
         loadingEasing: `var(--vf-${string})`;
         standardEasing: `var(--vf-${string})`;
     }>;
+    appShell: Readonly<{
+        maxInlineSize: `var(--vf-${string})`;
+        navigationInlineSize: `var(--vf-${string})`;
+        gap: `var(--vf-${string})`;
+        gutter: `var(--vf-${string})`;
+        blockPadding: `var(--vf-${string})`;
+    }>;
+    autoGrid: Readonly<{
+        minItemSize: `var(--vf-${string})`;
+    }>;
+    list: Readonly<{
+        stickyOffset: `var(--vf-${string})`;
+    }>;
+    slider: Readonly<{
+        trackSize: `var(--vf-${string})`;
+        trackColor: `var(--vf-${string})`;
+        fillColor: `var(--vf-${string})`;
+        thumbSize: `var(--vf-${string})`;
+        thumbColor: `var(--vf-${string})`;
+        valueLabelFont: `var(--vf-${string})`;
+        markLabelFont: `var(--vf-${string})`;
+    }>;
+    editor: Readonly<{
+        valueFont: `var(--vf-${string})`;
+        valueLetterSpacing: `var(--vf-${string})`;
+        placeholderFont: `var(--vf-${string})`;
+        placeholderLetterSpacing: `var(--vf-${string})`;
+        radius: `var(--vf-${string})`;
+        background: `var(--vf-${string})`;
+        borderColor: `var(--vf-${string})`;
+    }>;
+    input: Readonly<{
+        valueFont: `var(--vf-${string})`;
+        placeholderFont: `var(--vf-${string})`;
+    }>;
+    textarea: Readonly<{
+        valueFont: `var(--vf-${string})`;
+        placeholderFont: `var(--vf-${string})`;
+    }>;
+    textField: Readonly<{
+        valueFont: `var(--vf-${string})`;
+        valueLetterSpacing: `var(--vf-${string})`;
+        placeholderFont: `var(--vf-${string})`;
+        placeholderLetterSpacing: `var(--vf-${string})`;
+        labelFont: `var(--vf-${string})`;
+        labelLetterSpacing: `var(--vf-${string})`;
+        messageFont: `var(--vf-${string})`;
+        messageLetterSpacing: `var(--vf-${string})`;
+        affixFont: `var(--vf-${string})`;
+        affixLetterSpacing: `var(--vf-${string})`;
+        radius: `var(--vf-${string})`;
+        background: `var(--vf-${string})`;
+        borderColor: `var(--vf-${string})`;
+    }>;
+    skeleton: Readonly<{
+        color: `var(--vf-${string})`;
+        highlight: `var(--vf-${string})`;
+        radius: `var(--vf-${string})`;
+        duration: `var(--vf-${string})`;
+    }>;
+    progress: Readonly<{
+        color: `var(--vf-${string})`;
+        trackColor: `var(--vf-${string})`;
+        size: `var(--vf-${string})`;
+        radius: `var(--vf-${string})`;
+    }>;
+    backdrop: Readonly<{
+        color: `var(--vf-${string})`;
+    }>;
+    loading: Readonly<{
+        color: `var(--vf-${string})`;
+        trackColor: `var(--vf-${string})`;
+        indicatorSize: `var(--vf-${string})`;
+        indicatorThickness: `var(--vf-${string})`;
+        indicatorDuration: `var(--vf-${string})`;
+        spinnerColor: `var(--vf-${string})`;
+        spinnerTrackColor: `var(--vf-${string})`;
+        spinnerDuration: `var(--vf-${string})`;
+        dotsColor: `var(--vf-${string})`;
+        dotsDuration: `var(--vf-${string})`;
+        barsColor: `var(--vf-${string})`;
+        barsDuration: `var(--vf-${string})`;
+        pulseColor: `var(--vf-${string})`;
+        pulseDuration: `var(--vf-${string})`;
+        customColor: `var(--vf-${string})`;
+    }>;
 }>;
+
+// @public
+export function tokenStyle(overrides: ThemeTokenOverrides): CSSProperties;
 
 // @public
 export function toneStyle(tone?: ColorRole, style?: CSSProperties): CSSProperties | undefined;
@@ -5313,6 +5427,7 @@ export function ToolbarSeparator(props: ComponentPropsWithoutRef<'div'>): Detail
 role: "separator";
 'data-vf-toolbar-separator': string;
 color?: string | undefined | undefined;
+popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 hidden?: boolean | undefined | undefined;
 content?: string | undefined | undefined;
 style?: CSSProperties | undefined;
@@ -5358,7 +5473,6 @@ itemRef?: string | undefined | undefined;
 results?: number | undefined | undefined;
 security?: string | undefined | undefined;
 unselectable?: "on" | "off" | undefined | undefined;
-popover?: "" | "auto" | "manual" | "hint" | undefined | undefined;
 popoverTargetAction?: "toggle" | "show" | "hide" | undefined | undefined;
 popoverTarget?: string | undefined | undefined;
 inert?: boolean | undefined | undefined;

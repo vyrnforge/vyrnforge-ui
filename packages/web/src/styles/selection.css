@@ -58,13 +58,24 @@
     outline-offset: 1px;
   }
 
-  :where([data-vf-select-trigger], [data-vf-multi-select-trigger]) {
-    min-block-size: 2.5rem;
+  :where([data-vf-select-trigger], [data-vf-multi-select-trigger], [data-vf-combobox-input]) {
+    min-block-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     padding: 0 var(--vf-space-md);
-    border: 1px solid var(--vf-color-border);
-    border-radius: var(--vf-control-radius);
-    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-editor-border-color, var(--vf-color-border));
+    border-radius: var(--vf-editor-radius, var(--vf-control-radius));
+    background: var(--vf-editor-background, var(--vf-color-surface));
     color: inherit;
+    font: var(--vf-editor-value-font, var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal) var(--vf-control-font-family));
+  }
+
+  :where([data-vf-combobox-input]) {
+    font: var(--vf-input-value-font, var(--vf-editor-value-font, var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal) var(--vf-control-font-family)));
+    letter-spacing: var(--vf-editor-value-letter-spacing, normal);
+  }
+
+  :where([data-vf-combobox-input])::placeholder {
+    font: var(--vf-input-placeholder-font, var(--vf-editor-placeholder-font, inherit));
+    letter-spacing: var(--vf-editor-placeholder-letter-spacing, inherit);
   }
 
   @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {

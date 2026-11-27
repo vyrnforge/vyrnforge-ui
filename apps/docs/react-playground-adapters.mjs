@@ -1,3 +1,4 @@
+import { colors, tokens } from '@vyrnforge/react';
 import { Input } from '@vyrnforge/react/input';
 import { Textarea } from '@vyrnforge/react/textarea';
 import { TextField } from '@vyrnforge/react/text-field';
@@ -504,8 +505,8 @@ export const progressPlayground = {
 
 function BackdropPreview({ config }) {
   return h(Flow, { gap: 'sm', style: { inlineSize: 'min(100%, 24rem)' } },
-    h('div', { style: { position: 'relative', isolation: 'isolate', padding: 'var(--vf-space-md)',
-      border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)' } },
+    h('div', { style: { position: 'relative', isolation: 'isolate', padding: tokens.space.md,
+      border: '1px solid ' + colors.borderRequired, borderRadius: tokens.radius.surface } },
       h(Text, { as: 'p' }, 'Account summary'),
       h(Button, { type: 'button', variant: 'secondary' }, 'View statement'),
       h(Backdrop, { hidden: config.hidden, style: { opacity: config.opacity } })),

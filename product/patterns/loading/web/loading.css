@@ -5,46 +5,22 @@
 
 @layer vyrnforge.components {
   :where([data-vf-loading]) {
-    --vf-loading-color: var(--vf-color-accent-background);
-    --vf-loading-track-color: var(--vf-color-border);
-
-    --vf-loading-indicator-size: 1.5rem;
-    --vf-loading-indicator-thickness: 0.14em;
-    --vf-loading-spinner-color: var(--vf-loading-color);
-    --vf-loading-spinner-track-color: var(--vf-loading-track-color);
-    --vf-loading-spinner-duration: var(--vf-loading-indicator-duration, var(--vf-motion-duration-loading-spin));
-    --vf-loading-dots-color: var(--vf-loading-color);
-    --vf-loading-dots-duration: var(--vf-loading-indicator-duration, 900ms);
-    --vf-loading-bars-color: var(--vf-loading-color);
-    --vf-loading-bars-duration: var(--vf-loading-indicator-duration, 800ms);
-    --vf-loading-pulse-color: var(--vf-loading-color);
-    --vf-loading-pulse-duration: var(--vf-loading-indicator-duration, 900ms);
-
-    --vf-loading-placeholder-color: color-mix(in srgb, var(--vf-color-surface), var(--vf-color-text) 10%);
-    --vf-loading-placeholder-highlight: light-dark(var(--vf-color-surface-hover), var(--vf-color-surface-pressed));
-    --vf-loading-placeholder-radius: var(--vf-radius-surface);
-    --vf-loading-placeholder-duration: var(--vf-motion-duration-loading-shimmer);
-
-    --vf-loading-progress-color: var(--vf-loading-color);
-    --vf-loading-progress-track-color: var(--vf-loading-track-color);
-    --vf-loading-progress-size: 0.75rem;
-    --vf-loading-progress-radius: 999px;
-
-    --vf-loading-custom-color: var(--vf-loading-color);
+    --_vf-loading-size: 1.5rem;
+    --_vf-loading-custom-color: var(--vf-loading-color, var(--vf-color-accent-background));
 
     color: var(--vf-color-text);
   }
 
   :where([data-vf-loading][data-vf-loading-size="sm"]) {
-    --vf-loading-indicator-size: 1rem;
+    --_vf-loading-size: 1rem;
   }
 
   :where([data-vf-loading][data-vf-loading-size="lg"]) {
-    --vf-loading-indicator-size: 2rem;
+    --_vf-loading-size: 2rem;
   }
 
   :where([data-vf-loading-indicator]) {
-    --_vf-loading-indicator-size: var(--vf-loading-indicator-size, 1.5rem);
+    --_vf-loading-indicator-size: var(--vf-loading-indicator-size, var(--_vf-loading-size, 1.5rem));
 
     block-size: var(--_vf-loading-indicator-size);
     box-sizing: border-box;
@@ -111,7 +87,7 @@
   }
 
   :where([data-vf-loading-custom]) {
-    color: var(--vf-loading-custom-color, var(--vf-loading-color, currentColor));
+    color: var(--vf-loading-custom-color, var(--vf-loading-color, var(--_vf-loading-custom-color, currentColor)));
   }
 
   @keyframes vf-loading-dots {

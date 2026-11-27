@@ -304,7 +304,7 @@ function layoutGuide(layout, links) {
           'Migration from older layout names',
         ], 'react-layout'),
         ...guideSubsections(layout.frameworkContent,
-          ['Native separators in JSX'], 'react-layout-native'),
+          ['React tokens', 'Native separators in JSX'], 'react-layout-native'),
       ]),
       guidePart(sections[3], [
         h(Flow, { as: 'ul', gap: 'sm', key: 'related', className: 'vf-docs-related-links' },
@@ -854,7 +854,7 @@ function listUsage(list, links) {
         ...guideSubsections(list.frameworkContent,
           ['Composition with existing VyrnForge components',
            'React state and server rendering',
-           'Extended React List examples'], 'react-list-integration'),
+           'Extended React List examples', 'React tokens'], 'react-list-integration'),
       ]),
       guidePart(sections[3], [
         h(Link, { href: links.list.api },
@@ -903,10 +903,12 @@ function compactExample(example, links, component = 'badge', topicHeading = '') 
 // Feedback guides share the same preview/source renderer and native-first content.
 function feedbackUsage(unit, links, adapter) {
   const prefix = 'react-' + unit.id;
+  const hasReactTokens = unit.frameworkContent?.sections.some(section => section.heading === 'React tokens');
   const sections = [
     { id: prefix + '-setup', heading: 'Get started' },
     ...(adapter ? [{ id: prefix + '-playground', heading: 'Playground' }] : []),
     { id: prefix + '-examples', heading: 'Examples' },
+    ...(hasReactTokens ? [{ id: prefix + '-tokens', heading: 'React tokens' }] : []),
     { id: prefix + '-guidelines', heading: 'Usage and accessibility' },
     ...(unit.apiAvailable ? [{ id: prefix + '-reference', heading: 'Related API' }] : []),
   ];
@@ -919,8 +921,9 @@ function feedbackUsage(unit, links, adapter) {
           guideBlocks(unit.sharedContent, 'React composition')),
       adapter ? guidePart(sections.find(section => section.id === prefix + '-playground'), [h(ComponentPlayground, { adapter, title: unit.title })]) : null,
       guidePart(sections.find(section => section.id === prefix + '-examples'), unit.examples.map(example => compactExample(example, links, unit.id))),
+      hasReactTokens ? guidePart(sections.find(section => section.id === prefix + '-tokens'), guideBlocks(unit.frameworkContent, 'React tokens')) : null,
       guidePart(sections.find(section => section.id === prefix + '-guidelines'), guideSubsections(unit.sharedContent, unit.sharedContent.sections
-        .filter(section => !['Native Web', 'Framework boundary', 'React composition'].includes(section.heading))
+        .filter(section => !['Native Web', 'Framework boundary', 'React composition', ...(hasReactTokens ? ['Customization'] : [])].includes(section.heading))
         .map(section => section.heading), prefix + '-guidance')),
       unit.apiAvailable ? guidePart(sections.find(section => section.id === prefix + '-reference'),
         [h(Link, { href: links[unit.id].api }, 'View ' + unit.title + ' public React API')]) : null));
@@ -1308,7 +1311,7 @@ function tokensGuide(links) {
       h(Text, { as: 'p' }, 'React colors and tokens are typed CSS var() references, not resolved colors or a parallel theme engine. They follow the canonical Web stylesheet in every appearance.')),
     h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-foundation-token-catalog' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-foundation-token-catalog' }, 'Token categories'),
-      h(Text, { as: 'p' }, 'Public semantic colors cover accent, text, surface, border, danger, focus and disabled states. Public foundation values include spacing, typography, radius, shadows, control dimensions and motion.'),
+      h(Text, { as: 'p' }, 'Public semantic colors cover accent, text, surface, border, danger, focus and disabled states. Public foundation values include spacing, typography, radius, shadows, control dimensions and motion. Component-specific overrides use named groups such as appShell, autoGrid, list, slider, skeleton, progress, loading, backdrop, editor and textField; use createTheme, ThemeScope tokens, or tokenStyle for scoped overrides. Optional component token references resolve only where a value is supplied; the shared stylesheet owns default fallbacks.'),
       foundationCode("colors.accent;        // var(--vf-color-accent-background)\n" +
         "colors.onAccent;      // var(--vf-color-accent-foreground)\n" +
         "colors.danger;        // var(--vf-color-danger-border)\n" +
@@ -1415,17 +1418,18 @@ function themesGuide(links) {
     h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-token-local' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-token-local' }, 'Custom colors in one scope'),
       foundationCode(localExample),
+      foundationCode("import { ThemeScope, Skeleton, Progress } from '@vyrnforge/react';\n\n<ThemeScope tokens={{ skeleton: { duration: '2s' }, progress: { size: '8px' } }}>\n  <Skeleton />\n  <Progress aria-label=\"Upload\" value={48} max={100} />\n</ThemeScope>"),
       h(Text, { as: 'p' }, 'Pass only the roles you need. When changing primary/accent Button colors, also define accentHover, accentPressed and onAccent for coherent interactive states and contrast. A normal style prop can explicitly override a token.')),
     h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-theme-function' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-theme-function' }, 'Create a theme with a function'),
       h(Text, { as: 'p' },
-        'For richer palettes and reusable brand variants, use the optional framework-neutral @vyrnforge/web/theme authoring functions. createTheme maps your own named color shades to existing public semantic roles, supplies complete light/dark defaults, and supports extension from a base theme. The output is normal CSS: no required provider or registration.'),
-      foundationCode("import { createTheme, renderThemeCss } from '@vyrnforge/web/theme';\n\nconst oceanLight = createTheme({\n  name: 'ocean-light',\n  appearance: 'light',\n  palette: { ocean: {\n    50: '#ecfeff', 100: '#cffafe',\n    600: '#0f766e', 700: '#115e59', 800: '#134e4a',\n  } },\n  colors: {\n    'accent-background': '{ocean.600}',\n    'accent-background-hover': '{ocean.700}',\n    'accent-background-pressed': '{ocean.800}',\n    'accent-foreground': '#ffffff',\n    'accent-subtle': '{ocean.50}',\n    'accent-subtle-hover': '{ocean.100}',\n  },\n  tokens: { '--vf-radius-surface': '0.75rem' },\n});\n\nconst oceanRounded = createTheme({\n  name: 'ocean-rounded',\n  base: oceanLight,\n  tokens: { '--vf-control-radius': '0.75rem' },\n});\n\nconst css = [oceanLight, oceanRounded].map(renderThemeCss).join('\\n');\n// Write css to your app stylesheet during your build."),
+        'For richer palettes and reusable brand variants, use createTheme from @vyrnforge/react with typed React color and token groups. It delegates to the shared theme authoring foundation. createTheme maps your own named color shades to existing public semantic roles, supplies complete light/dark defaults, and supports extension from a base theme. The output is normal CSS: no required provider or registration.'),
+      foundationCode("import { createTheme, renderThemeCss } from '@vyrnforge/react';\n\nconst oceanLight = createTheme({\n  name: 'ocean-light',\n  appearance: 'light',\n  palette: { ocean: {\n    50: '#ecfeff', 100: '#cffafe',\n    600: '#0f766e', 700: '#115e59', 800: '#134e4a',\n  } },\n  colors: {\n    accent: '{ocean.600}',\n    accentHover: '{ocean.700}',\n    accentPressed: '{ocean.800}',\n    onAccent: '#ffffff',\n    accentSubtle: '{ocean.50}',\n    accentSubtleHover: '{ocean.100}',\n  },\n  tokens: { radius: { surface: '0.75rem' } },\n});\n\nconst oceanRounded = createTheme({\n  name: 'ocean-rounded',\n  base: oceanLight,\n  tokens: { radius: { control: '0.75rem' }, skeleton: { duration: '2s' } },\n});\n\nconst css = [oceanLight, oceanRounded].map(renderThemeCss).join('\\n');\n// Write css to your app stylesheet during your build."),
       h(Text, { as: 'p' },
         'Author light and dark themes separately when brand contrast differs. Do not assume light colors automatically produce an accessible dark scheme. The function does not add runtime styles; deliver its CSS through your application build.')),
     h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-token-brand' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-token-brand' }, 'Custom themes for both appearances'),
-      h(Text, { as: 'p' }, 'Define branded color mappings using canonical public CSS variables in your application stylesheet. Then use theme="acme-light" or theme="acme-dark". No registration is needed.'),
+      h(Text, { as: 'p' }, 'The CSS below is the portable stylesheet output, not React configuration. Prefer createTheme with named React tokens and renderThemeCss to produce it. Then use theme="acme-light" or theme="acme-dark". No registration is needed.'),
       foundationCode(brandExample),
       h(Text, { as: 'p' }, 'Custom themes must set color-scheme correctly and be checked for contrast, focus and forced-colors behavior. system is a built-in opt-in appearance using prefers-color-scheme.')),
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'react-theme-links' },

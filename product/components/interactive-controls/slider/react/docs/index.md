@@ -23,3 +23,18 @@ Use defaultValue or value plus onChange. Use event.currentTarget.valueAsNumber f
 ## Disabled and invalid states
 
 Use disabled, aria-invalid and aria-describedby when appropriate. Do not add required or readonly to a range input.
+
+## Accessibility and styling
+
+Use React's typed slider token group, rather than raw CSS names. Configure it once with createTheme from @vyrnforge/react, or use a local scope:
+
+```tsx
+import { ThemeScope, colors } from '@vyrnforge/react';
+import { Slider } from '@vyrnforge/react/slider';
+
+<ThemeScope tokens={{ slider: { trackSize: '6px', thumbSize: '18px', fillColor: colors.accent } }}>
+  <Slider aria-label="Volume" defaultValue={50} />
+</ThemeScope>
+```
+
+The typed group also supports trackColor, thumbColor, valueLabelFont and markLabelFont. The native input still owns interaction and accessibility. Shared CSS provides defaults.

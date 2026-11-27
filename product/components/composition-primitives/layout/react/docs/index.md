@@ -19,3 +19,7 @@ The generic semantic React `Separator` component was retired. For visual-only li
 ## Semantic layout and accessibility
 
 Use `as="nav"` with an accessible name for navigation groups, or `as="ul"` with native `li` children for lists. The `as` prop changes the semantic host, not the shared spacing algorithm. Keep `fieldset` and `legend` for named form groups; layout does not create form relationships or manage focus.
+
+## React tokens
+
+Use `AutoGrid minItemSize` for an individual layout. To change the default for multiple grids, use `createTheme({ name: 'brand', tokens: { autoGrid: { minItemSize: '18rem' } } })` from `@vyrnforge/react`, or the same group in `ThemeScope tokens`. Explicit instance props remain authoritative.

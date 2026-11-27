@@ -38,3 +38,26 @@ import { TextField } from '@vyrnforge/react/text-field';
 ```
 
 The first field starts as a one-row native textarea and expands in supporting browsers. Textarea owns growth, row limits, overflow and resize. Use the standalone Textarea for a custom surrounding composition with the same visual language; the TextField adds the label and optional adornments.
+
+## React tokens
+
+Use the typed `textField` token group. For app-wide configuration, pass the same group to `createTheme({ name: 'brand', tokens: ... })` from `@vyrnforge/react` and emit the stylesheet with `renderThemeCss`. For a local scope:
+
+```tsx
+import { ThemeScope, tokens } from '@vyrnforge/react';
+import { TextField } from '@vyrnforge/react/text-field';
+
+const fieldTokens = {
+  textField: { labelFont: '600 0.875rem/1.5 ' + tokens.fontFamily.sans, radius: '8px' },
+};
+
+export function Example() {
+  return (
+    <ThemeScope tokens={fieldTokens}>
+      <TextField label="Email" />
+    </ThemeScope>
+  );
+}
+```
+
+Use ordinary CSS layout properties for geometry that belongs to the application. The canonical stylesheet provides the defaults; token overrides are optional. The Native Web guide documents CSS-level equivalents.

@@ -1,3 +1,4 @@
+import { colors } from '@vyrnforge/react';
 import { createRoot } from 'react-dom/client';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
@@ -13,7 +14,7 @@ function App() {
           <path d="M12 2 14.8 9.2 22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8Z"
             fill="none" stroke="currentColor" strokeWidth="1.75"
             strokeLinejoin="round" />
-          <circle cx="12" cy="12" r="2" fill="var(--vf-color-accent-background)" />
+          <circle cx="12" cy="12" r="2" fill={colors.accent} />
         </svg>
         <Text as="span">Named SVG</Text>
       </Flow>

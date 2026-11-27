@@ -7,7 +7,7 @@
   ) {
     display: inline-flex;
     align-items: stretch;
-    min-block-size: 2.5rem;
+    min-block-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
   }
 
   :where(
@@ -18,10 +18,17 @@
   ) {
     min-inline-size: 0;
     padding: 0 var(--vf-space-md);
-    border: 1px solid var(--vf-color-border);
-    border-radius: var(--vf-control-radius);
-    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-editor-border-color, var(--vf-color-border));
+    border-radius: var(--vf-editor-radius, var(--vf-control-radius));
+    background: var(--vf-editor-background, var(--vf-color-surface));
     color: inherit;
+    font: var(--vf-input-value-font, var(--vf-editor-value-font, var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal) var(--vf-control-font-family)));
+    letter-spacing: var(--vf-editor-value-letter-spacing, normal);
+  }
+
+  :where([data-vf-number-field-input], [data-vf-password-field-input], [data-vf-search-field-input], [data-vf-color-picker-text])::placeholder {
+    font: var(--vf-input-placeholder-font, var(--vf-editor-placeholder-font, inherit));
+    letter-spacing: var(--vf-editor-placeholder-letter-spacing, inherit);
   }
 
   :where(
@@ -30,7 +37,7 @@
     [data-vf-password-field-toggle],
     [data-vf-search-field-clear]
   ) {
-    min-inline-size: 2.5rem;
+    min-inline-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     border: 1px solid var(--vf-color-border);
     background: var(--vf-color-surface);
     color: inherit;

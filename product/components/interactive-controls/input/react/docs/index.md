@@ -42,3 +42,20 @@ import { Input } from '@vyrnforge/react/input';
 ```
 
 The surrounding surface owns visual layout and focus paint; the native editor owns selection, editing, accessibility name and native events. Search execution belongs to the consuming application.
+
+## React tokens
+
+Use the typed `input` token group. For app-wide configuration, pass the same group to `createTheme({ name: 'brand', tokens: ... })` from `@vyrnforge/react` and emit the stylesheet with `renderThemeCss`. For a local scope:
+
+```tsx
+import { ThemeScope, tokens } from '@vyrnforge/react';
+import { Input } from '@vyrnforge/react/input';
+
+<ThemeScope tokens={{ editor: { radius: '8px' }, input: { valueFont: '400 1rem/1.5 ' + tokens.fontFamily.sans } }}>
+  <Input aria-label="Email" />
+</ThemeScope>
+```
+
+Use ordinary CSS layout properties for geometry that belongs to the application. The canonical stylesheet provides the defaults; token overrides are optional. The Native Web guide documents CSS-level equivalents.
+
+The same typed editor and input tokens apply to every supported native Input type: text, email, password, search, tel, url, number, date, time, datetime-local, month, week and color. Native browser picker panels are not VyrnForge-styled surfaces. Use `editor` for shared text-entry appearance, `input` for single-line value and placeholder typography, and `control` for inherited control geometry. Specialized NumberField, SearchField, PasswordField and ColorPicker text entry, and Combobox consume these shared roles without a separate theme. NativeSelect and FileInput use the shared editor appearance and control defaults. Use `tokenStyle` for a standalone instance, not literal CSS custom-property names. Checkbox, Radio, Switch and other choice controls continue to consume semantic control and color tokens, not text-entry-specific typography.
