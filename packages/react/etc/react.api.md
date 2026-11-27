@@ -4497,14 +4497,9 @@ export type TextFieldProps = TextFieldInputProps | TextFieldTextareaProps;
 
 // @public (undocumented)
 export type TextFieldTextareaProps = TextFieldAppearanceProps & Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'variant'> & {
-    type?: never;
-} & ({
-    multiline: true;
-    autosize?: boolean;
-} | {
     multiline?: true;
-    autosize: true;
-});
+    type?: never;
+} & (Record<'multiline', true> | Record<'autosize', true>);
 
 // @public (undocumented)
 export type TextProps<Element extends TextElement = TextElement> = Element extends TextElement ? {

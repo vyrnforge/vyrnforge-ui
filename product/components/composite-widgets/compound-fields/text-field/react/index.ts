@@ -27,11 +27,9 @@ export type TextFieldInputProps = TextFieldAppearanceProps &
 
 export type TextFieldTextareaProps = TextFieldAppearanceProps &
   Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'variant'> & {
+    multiline?: true;
     type?: never;
-  } & (
-    | { multiline: true; autosize?: boolean }
-    | { multiline?: true; autosize: true }
-  );
+  } & (Record<'multiline', true> | Record<'autosize', true>);
 
 export type TextFieldProps = TextFieldInputProps | TextFieldTextareaProps;
 
