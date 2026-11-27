@@ -515,8 +515,14 @@ test('Slider guide uses the native control and synchronizes value, marks, labels
   await playground.screenshot({ path: testInfo.outputPath('slider-playground-horizontal.png') });
   await playground.getByRole('button', { name: 'Vertical volume' }).click();
   await expect(control).toHaveAttribute('aria-orientation', 'vertical');
-  await control.focus();
+  await control.hover();
   await expect(preview.locator('[data-vf-slider-value]')).toBeVisible();
+  await playground.getByRole('region', { name: 'Generated React usage' }).hover();
+  await control.focus();
+  await control.press('ArrowUp');
+  await expect.poll(() => control.evaluate(element => element.matches(':focus-visible'))).toBe(true);
+  await expect(preview.locator('[data-vf-slider-value]')).toBeVisible();
+  await expect(control).toHaveJSProperty('value', '51');
   await playground.getByRole('checkbox', { name: 'Controlled usage' }).check();
   await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('value={value}');
   await playground.getByRole('checkbox', { name: 'Descriptive tooltip' }).check();
