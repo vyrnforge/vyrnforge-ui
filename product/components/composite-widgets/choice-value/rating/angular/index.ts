@@ -37,7 +37,10 @@ function createRatingState(options: {
   inject(DestroyRef).onDestroy(() => disconnect?.());
   return {
     selected,
-    initialize() { initial = options.defaultValue(); iv.set(initial); },
+    initialize() {
+      initial = options.defaultValue();
+      iv.set(initial);
+    },
     set(value: number) {
       if (value === selected()) return;
       if (options.value() === undefined) iv.set(value);
@@ -55,12 +58,18 @@ export class VfRatingRootDirective {
   readonly valueChange = output<number>();
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly state = createRatingState({
-    value: this.value, defaultValue: this.defaultValue, emit: v => this.valueChange.emit(v),
+    value: this.value,
+    defaultValue: this.defaultValue,
+    emit: (v) => this.valueChange.emit(v),
     root: () => this.element.nativeElement,
   });
   readonly selected = this.state.selected;
-  ngOnInit() { this.state.initialize(); }
-  set(v: number) { this.state.set(v); }
+  ngOnInit() {
+    this.state.initialize();
+  }
+  set(v: number) {
+    this.state.set(v);
+  }
 }
 @Directive({
   selector: 'input[type=radio][vfRatingItem]',
@@ -78,7 +87,6 @@ export class VfRatingItemDirective {
   constructor(readonly root: VfRatingRootDirective) {}
 }
 
-
 /** Native generated choice group. Name is required for interactive SSR-stable groups. */
 @Component({
   selector: 'vf-rating',
@@ -86,7 +94,9 @@ export class VfRatingItemDirective {
   imports: [VfIconComponent],
   template: `
     <div [attr.data-vf-rating-with-clear]="canClear() ? '' : null">
-      <div data-vf-rating-root data-vf-rating-enhanced
+      <div
+        data-vf-rating-root
+        data-vf-rating-enhanced
         [attr.role]="readOnly() ? 'img' : 'radiogroup'"
         [attr.aria-label]="label() ?? null"
         [attr.aria-labelledby]="labelledBy() ?? null"
@@ -94,12 +104,18 @@ export class VfRatingItemDirective {
         [attr.aria-invalid]="invalid() ? 'true' : null"
         [attr.aria-required]="!readOnly() && required() ? 'true' : null"
         [attr.aria-disabled]="!readOnly() && disabled() ? 'true' : null"
-        [attr.data-vf-size]="size()" [attr.data-vf-precision]="step()"
+        [attr.data-vf-size]="size()"
+        [attr.data-vf-precision]="step()"
         [attr.data-vf-readonly]="readOnly() ? '' : null"
-        [attr.data-vf-disabled]="disabled() ? '' : null">
+        [attr.data-vf-disabled]="disabled() ? '' : null"
+      >
         @for (star of stars(); track star) {
           <span data-vf-rating-star>
-            <span data-vf-rating-artwork aria-hidden="true" [style.--_vf-rating-fill]="readOnly() ? fraction(star) : null">
+            <span
+              data-vf-rating-artwork
+              aria-hidden="true"
+              [style.--_vf-rating-fill]="readOnly() ? fraction(star) : null"
+            >
               <vf-icon [icon]="icon()" [size]="size()" variant="outlined" />
               <span data-vf-rating-fill><vf-icon [icon]="icon()" [size]="size()" variant="filled" /></span>
             </span>
@@ -107,14 +123,19 @@ export class VfRatingItemDirective {
               <span data-vf-rating-choices>
                 @for (part of parts(); track part) {
                   <label data-vf-rating-option>
-                    <input type="radio" data-vf-rating-choice
-                      [attr.name]="groupName()" [value]="star + part"
+                    <input
+                      type="radio"
+                      data-vf-rating-choice
+                      [attr.name]="groupName()"
+                      [value]="star + part"
                       [checked]="selected() === star + part"
-                      [disabled]="disabled()" [required]="required()"
+                      [disabled]="disabled()"
+                      [required]="required()"
                       [attr.aria-label]="itemLabel(star + part)"
                       [attr.aria-invalid]="invalid() ? 'true' : null"
                       [attr.aria-describedby]="describedBy() ?? null"
-                      (change)="choose(star + part)" />
+                      (change)="choose(star + part)"
+                    />
                   </label>
                 }
               </span>
@@ -123,9 +144,15 @@ export class VfRatingItemDirective {
         }
       </div>
       @if (canClear()) {
-        <button type="button" data-vf-rating-clear [disabled]="disabled()"
+        <button
+          type="button"
+          data-vf-rating-clear
+          [disabled]="disabled()"
           [attr.aria-disabled]="selected() === 0 ? 'true' : null"
-          (click)="clear()">{{ clearText() }}</button>
+          (click)="clear()"
+        >
+          {{ clearText() }}
+        </button>
       }
     </div>
   `,
@@ -150,9 +177,9 @@ export class VfRatingComponent {
   readonly invalid = input(false, { alias: 'aria-invalid', transform: booleanAttribute });
   readonly valueChange = output<number>();
   readonly count = computed(() => ratingMaximum(this.max()));
-  readonly step = computed(() => this.precision() === 0.5 ? 0.5 : 1);
+  readonly step = computed(() => (this.precision() === 0.5 ? 0.5 : 1));
   readonly stars = computed(() => Array.from({ length: this.count() }, (_, i) => i));
-  readonly parts = computed(() => this.step() === 0.5 ? [0.5, 1] : [1]);
+  readonly parts = computed(() => (this.step() === 0.5 ? [0.5, 1] : [1]));
   readonly canClear = computed(() => this.clearable() && !this.required() && !this.readOnly());
   readonly groupName = computed(() => {
     if (!this.readOnly() && !this.name().trim()) throw new Error('Interactive Angular Rating requires a name.');
@@ -165,14 +192,26 @@ export class VfRatingComponent {
   });
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly state = createRatingState({
-    value: this.value, defaultValue: this.defaultValue, emit: v => this.valueChange.emit(v),
+    value: this.value,
+    defaultValue: this.defaultValue,
+    emit: (v) => this.valueChange.emit(v),
     root: () => this.element.nativeElement.querySelector<HTMLElement>('[data-vf-rating-root]'),
-    normalize: v => ratingValue(v, this.count(), this.step(), this.readOnly()),
+    normalize: (v) => ratingValue(v, this.count(), this.step(), this.readOnly()),
   });
   readonly selected = this.state.selected;
-  ngOnInit() { this.state.initialize(); }
-  itemLabel(value: number) { return this.getItemLabel()?.(value) ?? String(value); }
-  fraction(star: number) { return Math.round(Math.max(0, Math.min(1, this.selected() - star)) * 1000000) / 10000 + '%'; }
-  choose(value: number) { if (!this.readOnly() && !this.disabled()) this.state.set(value); }
-  clear() { if (this.canClear() && !this.disabled()) this.state.set(0); }
+  ngOnInit() {
+    this.state.initialize();
+  }
+  itemLabel(value: number) {
+    return this.getItemLabel()?.(value) ?? String(value);
+  }
+  fraction(star: number) {
+    return Math.round(Math.max(0, Math.min(1, this.selected() - star)) * 1000000) / 10000 + '%';
+  }
+  choose(value: number) {
+    if (!this.readOnly() && !this.disabled()) this.state.set(value);
+  }
+  clear() {
+    if (this.canClear() && !this.disabled()) this.state.set(0);
+  }
 }

@@ -5,8 +5,12 @@ import { defineIcon } from '../icon/index.js';
 const starPath = 'M12 2.5 14.9 8.6 21.6 9.5 16.8 14.2 17.9 20.9 12 17.7 6.1 20.9 7.2 14.2 2.4 9.5 9.1 8.6Z';
 export const ratingStar = defineIcon({
   name: 'rating-star',
-  outlined: { paths: [{ d: starPath, fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinejoin: 'round' }] },
-  filled: { paths: [{ d: starPath, fill: 'currentColor', stroke: 'currentColor', strokeWidth: 1.7, strokeLinejoin: 'round' }] },
+  outlined: {
+    paths: [{ d: starPath, fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinejoin: 'round' }],
+  },
+  filled: {
+    paths: [{ d: starPath, fill: 'currentColor', stroke: 'currentColor', strokeWidth: 1.7, strokeLinejoin: 'round' }],
+  },
 });
 
 /** Shared finite bounds for generated rating scales. */
@@ -22,7 +26,7 @@ export function ratingValue(value: number, max: number, precision: 1 | 0.5 = 1, 
 /** Reconcile only native radios owned by this Rating group after an uncanceled reset. */
 export function ratingRadios(root: HTMLElement | null): HTMLInputElement[] {
   return Array.from(root?.querySelectorAll<HTMLInputElement>('input[type="radio"]') ?? []).filter(
-    radio => radio.closest('[data-vf-rating-root]') === root,
+    (radio) => radio.closest('[data-vf-rating-root]') === root,
   );
 }
 
@@ -36,12 +40,12 @@ export function connectRatingReset(root: () => HTMLElement | null, restore: () =
   let active = true;
   const onReset = (event: Event) => {
     const group = ratingRadios(root());
-    if (!group.length || !group.every(radio => radio.form && radio.form === event.target)) return;
+    if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
     setTimeout(() => {
       if (!active || event.defaultPrevented) return;
       const current = root();
       const group = ratingRadios(current);
-      if (!group.length || !group.every(radio => radio.form && radio.form === event.target)) return;
+      if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
       reconcileRating(current, restore());
     }, 0);
   };

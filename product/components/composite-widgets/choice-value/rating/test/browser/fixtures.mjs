@@ -1,5 +1,7 @@
-const artwork = (fill) => `<span data-vf-rating-artwork aria-hidden="true" ${fill === undefined ? '' : 'style="--_vf-rating-fill:' + fill + '%"'}><svg data-vf-icon data-vf-size="md" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 2.5 14.9 8.6 21.6 9.5 16.8 14.2 17.9 20.9 12 17.7 6.1 20.9 7.2 14.2 2.4 9.5 9.1 8.6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg><span data-vf-rating-fill><svg data-vf-icon data-vf-size="md" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 2.5 14.9 8.6 21.6 9.5 16.8 14.2 17.9 20.9 12 17.7 6.1 20.9 7.2 14.2 2.4 9.5 9.1 8.6Z" fill="currentColor" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span></span>`;
-const enhanced = (tag) => `<${tag} data-vf-rating-root data-vf-rating-enhanced data-vf-size="md" data-vf-precision="0.5" role="radiogroup" aria-label="Fractional rating">${Array.from({ length: 5 }, (_, i) => `<span data-vf-rating-star>${artwork()}<span data-vf-rating-choices>${[0.5, 1].map(part => `<label data-vf-rating-option><input type="radio" data-vf-rating-choice name="fraction" value="${i + part}" aria-label="${i + part}" ${i + part === 3.5 ? 'checked' : ''}></label>`).join('')}</span></span>`).join('')}</${tag}><${tag} data-vf-rating-root data-vf-rating-enhanced data-vf-size="md" data-vf-readonly role="img" aria-label="Average 4.7 out of 5">${[100, 100, 100, 100, 70].map(value => `<span data-vf-rating-star>${artwork(value)}</span>`).join('')}</${tag}>`;
+const artwork = (fill) =>
+  `<span data-vf-rating-artwork aria-hidden="true" ${fill === undefined ? '' : 'style="--_vf-rating-fill:' + fill + '%"'}><svg data-vf-icon data-vf-size="md" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 2.5 14.9 8.6 21.6 9.5 16.8 14.2 17.9 20.9 12 17.7 6.1 20.9 7.2 14.2 2.4 9.5 9.1 8.6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg><span data-vf-rating-fill><svg data-vf-icon data-vf-size="md" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 2.5 14.9 8.6 21.6 9.5 16.8 14.2 17.9 20.9 12 17.7 6.1 20.9 7.2 14.2 2.4 9.5 9.1 8.6Z" fill="currentColor" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span></span>`;
+const enhanced = (tag) =>
+  `<${tag} data-vf-rating-root data-vf-rating-enhanced data-vf-size="md" data-vf-precision="0.5" role="radiogroup" aria-label="Fractional rating">${Array.from({ length: 5 }, (_, i) => `<span data-vf-rating-star>${artwork()}<span data-vf-rating-choices>${[0.5, 1].map((part) => `<label data-vf-rating-option><input type="radio" data-vf-rating-choice name="fraction" value="${i + part}" aria-label="${i + part}" ${i + part === 3.5 ? 'checked' : ''}></label>`).join('')}</span></span>`).join('')}</${tag}><${tag} data-vf-rating-root data-vf-rating-enhanced data-vf-size="md" data-vf-readonly role="img" aria-label="Average 4.7 out of 5">${[100, 100, 100, 100, 70].map((value) => `<span data-vf-rating-star>${artwork(value)}</span>`).join('')}</${tag}>`;
 const item = (name, value, checked = false, disabled = false) =>
   `<label data-vf-rating-item><input type="radio" name="${name}" value="${value}" aria-label="Score ${value}" ${checked ? 'checked' : ''} ${disabled ? 'disabled' : ''}><span aria-hidden="true" data-vf-rating-glyph></span></label>`;
 const group = (tag, id, name, selected) =>
@@ -51,7 +53,14 @@ export async function createReactStory({ client }) {
         },
       }),
       h('button', { type: 'button', id: 'set-controlled', onClick: () => setControlled(2) }, 'Set controlled rating'),
-      h(Rating, { 'aria-label': 'Fractional rating', name: 'fraction', defaultValue: 3.5, precision: 0.5, clearable: true, clearLabel: 'Clear fractional rating' }),
+      h(Rating, {
+        'aria-label': 'Fractional rating',
+        name: 'fraction',
+        defaultValue: 3.5,
+        precision: 0.5,
+        clearable: true,
+        clearLabel: 'Clear fractional rating',
+      }),
       h(Rating, { 'aria-label': 'Required rating', name: 'required-rating', required: true }),
       h(Rating, { 'aria-label': 'Average 4.7 out of 5', value: 4.7, readOnly: true }),
       h(Rating, { 'aria-label': 'Disabled rating', value: 2, disabled: true }),
@@ -101,7 +110,14 @@ export async function createVueStory({ client }) {
             { type: 'button', id: 'set-controlled', onClick: () => (controlled.value = 2) },
             'Set controlled rating',
           ),
-          h(Rating, { 'aria-label': 'Fractional rating', name: 'fraction', defaultValue: 3.5, precision: 0.5, clearable: true, clearLabel: 'Clear fractional rating' }),
+          h(Rating, {
+            'aria-label': 'Fractional rating',
+            name: 'fraction',
+            defaultValue: 3.5,
+            precision: 0.5,
+            clearable: true,
+            clearLabel: 'Clear fractional rating',
+          }),
           h(Rating, { 'aria-label': 'Required rating', name: 'required-rating', required: true }),
           h(Rating, { 'aria-label': 'Average 4.7 out of 5', value: 4.7, readOnly: true }),
           h(Rating, { 'aria-label': 'Disabled rating', value: 2, disabled: true }),

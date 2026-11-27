@@ -1,7 +1,8 @@
 const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 export class VfRatingElement extends H {
   connectedCallback() {
-    if (!this.hasAttribute('role')) this.setAttribute('role', this.hasAttribute('data-vf-readonly') ? 'img' : 'radiogroup');
+    if (!this.hasAttribute('role'))
+      this.setAttribute('role', this.hasAttribute('data-vf-readonly') ? 'img' : 'radiogroup');
     this.setAttribute('data-vf-rating-root', '');
   }
 }
