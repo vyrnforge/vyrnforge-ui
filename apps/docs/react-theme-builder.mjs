@@ -126,7 +126,7 @@ export function ThemeBuilder({ links }) {
   const simpleChoice = (id, label, choices) => {
     const selected = draft.overrides[appearance][id] ?? '';
     return h('label', { className: 'vf-docs-studio-field' }, h(Text, { as: 'span' }, label),
-      h(NativeSelect, { value: choices.some(([value]) => value === selected) ? selected : 'custom', onChange: e => setOverride(id, e.target.value || undefined) },
+      h(NativeSelect, { value: !selected || choices.some(([value]) => value === selected) ? selected : 'custom', onChange: e => setOverride(id, e.target.value || undefined) },
         h('option', { value: '' }, 'Default'), ...choices.map(([value, title]) => h('option', { key: value, value }, title)),
         selected && !choices.some(([value]) => value === selected) ? h('option', { value: 'custom', disabled: true }, 'Custom') : null));
   };

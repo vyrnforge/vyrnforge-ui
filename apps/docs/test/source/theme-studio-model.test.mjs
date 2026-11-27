@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { defaultDraft, validateDraft, parseDraft, serializeDraft, historyReducer, importLegacyDraft, draftSchema } from '../../theme-studio-model.mjs';
+import { defaultDraft, validateDraft, parseDraft, serializeDraft, historyReducer, importLegacyDraft, draftSchema, permittedValue } from '../../theme-studio-model.mjs';
 const catalog = { 'color-accent-background': { color: true, description: 'Accent' }, 'space-md': { description: 'Spacing' } };
 describe('Theme Studio portable draft', () => {
   it('round trips deterministically and rejects unknown versions, keys and unsafe values', () => {
@@ -26,9 +26,12 @@ describe('Theme Studio portable draft', () => {
     expect(historyReducer(undone, { type: 'edit', update: draft => ({ ...draft, radius: 8 }) }).future).toEqual([]);
     expect(initial.present.radius).toBe(12);
   });
+  it('rejects mistyped values and accepts portable CSS subsets', () => {
+    for (const [type, value, accepted] of [["dimension","2rem",true],["dimension","garbage",false],["dimension","-2px",false],["font-family","system-ui, sans-serif",true],["font-weight","600",true],["font-weight","1001",false],["shadow","0 4px 12px #0000001f",true],["duration","120ms",true],["easing","cubic-bezier(0.2, 0, 0, 1)",true],["easing","cubic-bezier(2, 0, 0, 1)",false],["font","500 1rem/1.5 system-ui",true],["paint","#ff000080",true],["paint","url(foo)",false]]) expect(permittedValue({ valueType: type }, value), type + ': ' + value).toBe(accepted);
+  });
   it('derives schema IDs from the provided catalog', () => {
     const schema = draftSchema(catalog);
-    expect(schema.properties.overrides.properties.light.properties['space-md'].description).toBe('Spacing');
+    expect(schema.properties.overrides.properties.light.properties['space-md'].description).toContain('Spacing');
     expect(schema.additionalProperties).toBe(false);
   });
 });

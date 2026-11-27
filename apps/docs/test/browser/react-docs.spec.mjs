@@ -3289,3 +3289,33 @@ test('Inventory native authoring hosts across every product-owned React example'
   expect(findings.filter(item => ['a', 'button', 'input', 'textarea', 'select', 'img'].includes(item.tag)),
     'Use public VyrnForge controls and links in consumer examples').toEqual([]);
 });
+
+test('Studio typed overrides, reduced motion and draft reuse', async ({ page }, testInfo) => {
+  await page.goto('/next/react/foundations/theme-builder/');
+  const studio = page.locator('[data-vf-docs-theme-builder]');
+  await studio.getByLabel('Interface font').selectOption('Georgia, serif');
+  await studio.getByLabel('Control transitions').selectOption('240ms');
+  await studio.getByRole('radiogroup', { name: 'Customization mode' }).getByRole('radio', { name: 'Advanced' }).check();
+  await studio.getByLabel('Search foundation and component tokens').fill('space-md');
+  await studio.getByLabel('Token', { exact: true }).selectOption('space-md');
+  await studio.getByLabel('New token value').fill('invalid');
+  await expect(studio.getByRole('button', { name: 'Apply token' })).toBeDisabled();
+  await studio.getByLabel('New token value').fill('2rem');
+  await studio.getByRole('button', { name: 'Apply token' }).click();
+  const preview = studio.locator('[data-vf-docs-theme-preview="light"]');
+  await expect.poll(() => preview.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-space-md').trim())).toBe('2rem');
+  await expect.poll(() => preview.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-control-motion-duration').trim())).toBe('240ms');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(() => preview.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-control-motion-duration').trim())).toBe('0ms');
+  await studio.getByRole('button', { name: 'Save local draft' }).click();
+  await studio.getByRole('button', { name: 'Duplicate', exact: true }).click();
+  await expect(studio.locator('[data-vf-docs-builder-name]')).toHaveValue('my-brand-copy');
+  await studio.getByLabel('Saved themes').selectOption('my-brand');
+  await studio.getByRole('button', { name: 'Load local draft' }).click();
+  await expect(studio.locator('[data-vf-docs-builder-name]')).toHaveValue('my-brand');
+  await studio.getByRole('radiogroup', { name: 'Builder preview scene' }).getByRole('radio', { name: 'Form', exact: true }).check();
+  await expect(preview.getByRole('spinbutton', { name: 'Quantity' })).toBeVisible();
+  await studio.getByRole('radiogroup', { name: 'Builder preview scene' }).getByRole('radio', { name: 'Feedback' }).check();
+  await expect(preview.getByText('Changes saved', { exact: true })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath('theme-studio-desktop.png'), fullPage: true });
+});

@@ -657,3 +657,20 @@ test('NumberField playground uses native numeric editing and concise public usag
   await preview.screenshot({ path: testInfo.outputPath('number-field-rtl-forced.png') });
   expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
 });
+
+test('Component playground reuses a saved Studio draft', async ({ page }) => {
+  await page.goto('/next/react/foundations/theme-builder/');
+  const studio = page.locator('[data-vf-docs-theme-builder]');
+  await studio.locator('[data-vf-docs-builder-palette]').selectOption('teal');
+  await studio.getByRole('button', { name: 'Save local draft' }).click();
+  await page.goto('/next/react/components/button/');
+  const playground = page.locator('[data-vf-docs-component-playground="Button"]');
+  const preview = playground.getByRole('region', { name: 'Button preview' });
+  await playground.getByRole('button', { name: 'Load Studio theme' }).click();
+  await expect(preview.getByLabel('Playground theme')).toHaveValue('light');
+  const canvas = preview.locator('.vf-docs-playground-canvas');
+  await expect.poll(() => canvas.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-color-accent-background').trim())).toBe('#0f766e');
+  await preview.getByLabel('Playground theme').selectOption('dark');
+  await expect.poll(() => canvas.evaluate(node => getComputedStyle(node).getPropertyValue('--vf-color-accent-background').trim())).toBe('#5eead4');
+  await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('Save changes');
+});
