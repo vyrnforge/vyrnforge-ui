@@ -831,6 +831,24 @@ export const sliderPlayground = {
 function numericInitial(value) {
   return value.trim() !== '' && Number.isFinite(Number(value)) ? Number(value) : null;
 }
+function NumberFieldPreview({ config }) {
+    const [value, setValue] = useState(() => numericInitial(config.initial));
+    const name = label(config, 'Quantity');
+    const custom = ['stacked', 'horizontal'].includes(config.stepControls);
+    return h(NumberField, {
+      label: name, ...(config.controlled ? { value, onValueChange: setValue } : { defaultValue: numericInitial(config.initial) }),
+      min: numericInitial(config.min) ?? undefined, max: numericInitial(config.max) ?? undefined,
+      step: config.step === 'any' ? 'any' : Number(config.step), stepControls: config.stepControls,
+      ...(custom ? { incrementLabel: 'Increase ' + name, decrementLabel: 'Decrease ' + name } : {}),
+      variant: config.variant, labelPlacement: config.labelPlacement, textAlign: config.textAlign,
+      fieldSize: config.fieldSize === 'inherit' ? undefined : config.fieldSize,
+      placeholder: config.placeholder, description: config.description || undefined, error: config.error || undefined,
+      prefix: config.prefix || undefined, suffix: config.suffix || undefined,
+      fullWidth: config.fullWidth, required: config.required, disabled: config.disabled, readOnly: config.readOnly,
+      dir: config.rtl ? 'rtl' : undefined,
+    });
+}
+
 export const numberFieldPlayground = {
   fields: [
     text('label', 'Label', 'Quantity'), text('initial', 'Initial value', '1'),
@@ -843,7 +861,7 @@ export const numberFieldPlayground = {
     choice('fieldSize', 'Field size', 'inherit', ['inherit', 'sm', 'md', 'lg']),
     choice('textAlign', 'Text alignment', 'start', ['start', 'center', 'end']),
     text('prefix', 'Prefix', ''), text('suffix', 'Suffix', ''),
-    bool('fullWidth', 'Full width'), bool('required', 'Required'),
+    bool('fullWidth', 'Full width'), bool('required', 'Required'), bool('controlled', 'Controlled usage'),
     bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'), bool('rtl', 'Right to left'),
   ],
   presets: [
@@ -852,27 +870,14 @@ export const numberFieldPlayground = {
     { label: 'Empty amount', values: { label: 'Amount in USD', initial: '', min: '0', max: '', step: '0.01', prefix: '$', stepControls: 'none', textAlign: 'end', labelPlacement: 'floating' } },
   ],
   Preview({ config }) {
-    const name = label(config, 'Quantity');
-    const custom = ['stacked', 'horizontal'].includes(config.stepControls);
-    return h(NumberField, {
-      key: config.initial, label: name, defaultValue: numericInitial(config.initial),
-      min: numericInitial(config.min) ?? undefined, max: numericInitial(config.max) ?? undefined,
-      step: config.step === 'any' ? 'any' : Number(config.step), stepControls: config.stepControls,
-      ...(custom ? { incrementLabel: 'Increase ' + name, decrementLabel: 'Decrease ' + name } : {}),
-      variant: config.variant, labelPlacement: config.labelPlacement, textAlign: config.textAlign,
-      fieldSize: config.fieldSize === 'inherit' ? undefined : config.fieldSize,
-      placeholder: config.placeholder, description: config.description || undefined, error: config.error || undefined,
-      prefix: config.prefix || undefined, suffix: config.suffix || undefined,
-      fullWidth: config.fullWidth, required: config.required, disabled: config.disabled, readOnly: config.readOnly,
-      dir: config.rtl ? 'rtl' : undefined,
-    });
+    return h(NumberFieldPreview, { config, key: JSON.stringify([config.initial, config.controlled]) });
   },
   source(config) {
     const name = label(config, 'Quantity');
     const custom = ['stacked', 'horizontal'].includes(config.stepControls);
     const numericProp = (key, value) => numericInitial(value) === null ? '' : key + '={' + numericInitial(value) + '}';
-    return snippet([importLine('NumberField', 'number-field')], markup('NumberField', [
-      attribute('label', name), numericProp('defaultValue', config.initial), numericProp('min', config.min), numericProp('max', config.max),
+    return snippet([...(config.controlled ? ["import { useState } from 'react';"] : []), importLine('NumberField', 'number-field')], markup('NumberField', [
+      attribute('label', name), config.controlled ? 'value={value}' : numericProp('defaultValue', config.initial), config.controlled ? 'onValueChange={setValue}' : '', numericProp('min', config.min), numericProp('max', config.max),
       config.step === 'any' ? 'step="any"' : config.step === '1' ? '' : 'step={' + Number(config.step) + '}',
       attribute('stepControls', config.stepControls, 'native'),
       custom ? attribute('incrementLabel', 'Increase ' + name) : '', custom ? attribute('decrementLabel', 'Decrease ' + name) : '',
@@ -882,6 +887,6 @@ export const numberFieldPlayground = {
       attribute('prefix', config.prefix, ''), attribute('suffix', config.suffix, ''),
       flag('fullWidth', config.fullWidth), flag('required', config.required), flag('disabled', config.disabled), flag('readOnly', config.readOnly),
       config.rtl ? 'dir="rtl"' : '',
-    ]));
+    ]), config.controlled ? { setup: ['const [value, setValue] = useState<number | null>(' + JSON.stringify(numericInitial(config.initial)) + ');'] } : {});
   },
 };
