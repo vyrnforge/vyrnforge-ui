@@ -14,6 +14,7 @@ import { Button } from '@vyrnforge/react/button';
 import { ColorPickerRoot, ColorPickerInput, ColorPickerTextInput, ColorPickerSwatch } from '@vyrnforge/react/color-picker';
 import { SegmentedControlRoot, SegmentedControlItem } from '@vyrnforge/react/segmented-control';
 import { Checkbox } from '@vyrnforge/react/checkbox';
+import { Rating } from '@vyrnforge/react/rating';
 import { Slider } from '@vyrnforge/react/slider';
 import { Text } from '@vyrnforge/react/text';
 
@@ -80,6 +81,7 @@ export function PreviewScene({ theme, view, direction = 'ltr', density = 'comfor
           h(Text, { as: 'h3', variant: 'heading-md' }, 'Account preferences'),
           h(Text, { as: 'p', tone: 'secondary' },
             'A real input, checkbox and slider in the current theme.'),
+          h(Rating, { defaultValue: 3.5, precision: 0.5, 'aria-label': 'Product rating' }),
           h(TextField, { label: 'Contact email', type: 'email', value: email, onChange: e => setEmail(e.target.value), description: 'Used for notifications', fullWidth: true }),
           h(NumberField, { label: 'Quantity', defaultValue: 2, min: 0, max: 100, stepControls: 'horizontal', incrementLabel: 'Increase quantity', decrementLabel: 'Decrease quantity', fullWidth: true }),
           h('label', { className: 'vf-docs-studio-check' },

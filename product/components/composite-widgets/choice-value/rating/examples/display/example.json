@@ -1,0 +1,14 @@
+{
+  "id": "rating/display",
+  "title": "Read-only score",
+  "description": "Show a fractional aggregate without input semantics.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Read-only scores"
+}
