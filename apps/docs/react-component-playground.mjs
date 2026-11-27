@@ -9,6 +9,8 @@ import { Checkbox } from '@vyrnforge/react/checkbox';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { CodeBlock } from '@vyrnforge/react/code';
 import { defaultsFor, changeConfiguration, normalizeConfiguration } from './playground-config.mjs';
+import { savedTheme, themeDefinitions } from './react-theme-authoring.mjs';
+import { DraftPreviewScope } from './react-theme-studio.mjs';
 
 function ConfigurationField({ field, config, update, disabled }) {
   const id = useId();
@@ -70,10 +72,18 @@ export function ComponentPlayground({ adapter, title }) {
   const [revision, setRevision] = useState(0);
   const [ready, setReady] = useState(false);
   const [feedback, setFeedback] = useState('');
+  const [draft, setDraft] = useState(null);
+  const [themeMode, setThemeMode] = useState('default');
+  const [themeNotice, setThemeNotice] = useState('');
   const sourceRegion = useRef(null);
   const copyRequest = useRef(0);
   useEffect(() => { setReady(true); return () => { copyRequest.current++; }; }, []);
   const source = adapter.source(config);
+  const theme = draft && themeMode !== 'default' ? themeDefinitions(draft)[themeMode].theme : null;
+  function reloadTheme() {
+    try { const next = savedTheme(window.localStorage); setDraft(next); setThemeMode(next ? 'light' : 'default'); setThemeNotice(next ? 'Loaded ' + next.name : 'Save a local draft in Theme Studio first.'); }
+    catch (error) { setThemeNotice('Unable to load theme: ' + error.message); }
+  }
   function update(key, value) {
     copyRequest.current++;
     setFeedback('');
@@ -115,13 +125,17 @@ export function ComponentPlayground({ adapter, title }) {
       h(Flow, { as: 'section', className: 'vf-docs-component-playground-preview',
         gap: 'sm', 'aria-label': title + ' preview' },
         h(Text, { as: 'h3', variant: 'body-sm', tone: 'secondary' }, 'Preview'),
-        h(Flow, { className: 'vf-docs-playground-canvas', gap: 'sm', align: 'center', justify: 'center' },
-          h(adapter.Preview, { key: revision, config, update }))),
+        h(DraftPreviewScope, { theme, className: 'vf-docs-playground-canvas' },
+          h(Flow, { gap: 'sm', align: 'center', justify: 'center', style: { inlineSize: '100%' } }, h(adapter.Preview, { key: revision, config, update })))),
       h(Flow, { as: 'section', className: 'vf-docs-playground-configuration', gap: 'md', 'aria-labelledby': id + '-config' },
         h(Flow, { direction: 'inline', align: 'center', justify: 'space-between', wrap: 'wrap', gap: 'xs' },
           h(Text, { as: 'h3', id: id + '-config', variant: 'heading-sm' }, 'Configuration'),
           h(Button, { type: 'button', size: 'sm', variant: 'ghost', disabled: !ready,
             onClick: () => restore(), 'aria-label': 'Reset playground' }, 'Reset')),
+        h(Flow, { direction: 'inline', wrap: 'wrap', align: 'center', gap: 'xs' },
+          h(Button, { type: 'button', size: 'sm', variant: 'secondary', disabled: !ready, onClick: reloadTheme }, 'Load Studio theme'),
+          draft ? h(NativeSelect, { 'aria-label': 'Playground theme', value: themeMode, onChange: e => setThemeMode(e.target.value) }, ...[['default','Documentation theme'],['light','Saved light'],['dark','Saved dark']].map(([value, label]) => h('option', { key: value, value }, label))) : null),
+        themeNotice ? h(Text, { as: 'p', variant: 'body-sm', role: 'status' }, themeNotice) : null,
         h(AutoGrid, { minItemSize: '16rem', gap: 'md', className: 'vf-docs-playground-properties' },
           ...properties.map(field)),
         options.length ? h(Flow, { as: 'fieldset', gap: 'xs', className: 'vf-docs-playground-options' },

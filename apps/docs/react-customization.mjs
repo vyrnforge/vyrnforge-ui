@@ -5,7 +5,6 @@ import { ThemeScope } from '@vyrnforge/react';
 import { Button } from '@vyrnforge/react/button';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
-import { ThemeStudio } from './react-theme-studio.mjs';
 
 function GuideLayout({ children, sections }) {
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
@@ -74,7 +73,10 @@ function DemoContent({ heading, action = 'Save changes' }) {
 }
 
 export function ColorGuide({ links }) {
-  return h(ThemeStudio, { links });
+  return h(Flow, { as: 'article', gap: 'md', className: 'vf-docs-article' },
+    h(GuideHeader, { title: 'Theme Studio has moved', description: 'Palette editing, semantic tokens and theme exports now share one workspace.' }),
+    h(Link, { href: links.builder }, 'Open Theme Studio'),
+    h(Link, { href: links.tokens }, 'Explore design tokens'));
 }
 
 export function DarkModeGuide({ links }) {

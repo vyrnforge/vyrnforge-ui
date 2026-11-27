@@ -419,6 +419,14 @@ const playgroundStyleAsset = '/assets/react-playground.css';
 // pay for unrelated component styles or invent docs-specific component skins.
 const themeStudioStyles = [
   '@vyrnforge/web/styles/color-picker.css',
+  '@vyrnforge/web/styles/textarea.css',
+  '@vyrnforge/web/styles/text-field.css',
+  '@vyrnforge/web/styles/number-field.css',
+  '@vyrnforge/web/styles/skeleton.css',
+  '@vyrnforge/web/styles/radio.css',
+  '@vyrnforge/web/styles/alert.css',
+  '@vyrnforge/web/styles/progress.css',
+  '@vyrnforge/web/styles/tooltip.css',
   '@vyrnforge/web/styles/segmented-control.css',
   '@vyrnforge/web/styles/checkbox.css',
   '@vyrnforge/web/styles/slider.css',
@@ -582,7 +590,7 @@ async function writePage(route, page) {
     throw new Error('Standalone React component examples must not depend on documentation CSS');
   }
   await verifyStyles(dir, docsChrome && route === 'icons/' ? iconExplorerStyles :
-    docsChrome && route === 'foundations/color/' ? themeStudioStyles : [], { docsChrome });
+    docsChrome && route === 'foundations/theme-builder/' ? themeStudioStyles : [], { docsChrome });
   const pageRoot = path.join(outRoot, dir);
   await mkdir(pageRoot, { recursive: true });
   await writeFile(path.join(pageRoot, 'index.html'), page);
@@ -905,10 +913,10 @@ const pageViews = [
     description: 'Shared semantic tokens, color roles and foundation scales in React' },
   { route: 'foundations/themes/', view: 'themes', title: 'React theming',
     description: 'Scoped themes and custom branded semantic tokens in React' },
-  { route: 'foundations/color/', view: 'color', title: 'React Theme Studio',
-    description: 'Interactive color palette studio with real VyrnForge component previews' },
-  { route: 'foundations/theme-builder/', view: 'builder', title: 'React Theme Builder',
-    description: 'Build and export light/dark semantic themes with the public Web theme API' },
+  { route: 'foundations/color/', view: 'color', title: 'Theme Studio migration',
+    description: 'Find the consolidated Theme Studio workspace' },
+  { route: 'foundations/theme-builder/', view: 'builder', title: 'React Theme Studio',
+    description: 'Customize, preview, import and export light/dark themes with typed React authoring' },
   { route: 'foundations/dark-mode/', view: 'dark-mode', title: 'React dark mode',
     description: 'Light, dark and system theme scopes with a live preview' },
   { route: 'foundations/right-to-left/', view: 'rtl', title: 'React right-to-left',
