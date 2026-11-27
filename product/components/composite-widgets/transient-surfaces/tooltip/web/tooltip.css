@@ -79,9 +79,9 @@
     clip-path: polygon(0 100%, 100% 100%, 50% 0);
   }
   :where(
-      [data-vf-tooltip-content][data-vf-arrow][data-vf-tooltip-side='left'],
-      [data-vf-tooltip-content][data-vf-arrow][data-vf-tooltip-side='right']
-    )::after {
+    [data-vf-tooltip-content][data-vf-arrow][data-vf-tooltip-side='left'],
+    [data-vf-tooltip-content][data-vf-arrow][data-vf-tooltip-side='right']
+  )::after {
     width: var(--_vf-tooltip-arrow);
     height: calc(2 * var(--_vf-tooltip-arrow));
     left: auto;
