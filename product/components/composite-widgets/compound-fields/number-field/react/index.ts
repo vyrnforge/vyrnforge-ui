@@ -291,6 +291,8 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
       ...{
         'data-vf-number-field-layout': props.stepControls ?? 'native',
         'data-vf-number-field-full-width': fullWidth ? '' : undefined,
+        dir: props.dir,
+        hidden: props.hidden,
       },
     },
     createElement(NumberFieldEditor, { ...props, ...(fullWidth === undefined ? {} : { fullWidth }), ref }),
