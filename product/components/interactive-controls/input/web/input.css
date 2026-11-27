@@ -2,6 +2,10 @@
 @import "../../styles/form-controls.css";
 
 @layer vyrnforge.components {
+  :where(input[data-vf-input]) {
+    --_vf-editor-value-font: var(--vf-input-value-font, var(--vf-editor-value-font, var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal) var(--vf-control-font-family)));
+    --_vf-editor-placeholder-font: var(--vf-input-placeholder-font, var(--vf-editor-placeholder-font, inherit));
+  }
   :where(input[data-vf-input]:not([data-vf-editor-variant="unstyled"])) {
     min-block-size: var(--_vf-editor-height);
     padding-block: var(--_vf-editor-block-padding);

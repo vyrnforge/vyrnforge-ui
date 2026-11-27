@@ -8,26 +8,26 @@
 
   :where(input[data-vf-input]:not([data-vf-editor-variant="unstyled"]), textarea[data-vf-textarea]:not([data-vf-editor-variant="unstyled"])) {
     color: var(--vf-color-text);
-    font-family: var(--vf-control-font-family);
-    font-size: var(--vf-control-font-size);
-    font-weight: var(--vf-font-weight-regular);
-    line-height: var(--vf-line-height-normal);
+    font: var(--_vf-editor-value-font, var(--vf-editor-value-font, var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal) var(--vf-control-font-family)));
+    letter-spacing: var(--vf-editor-value-letter-spacing, normal);
   }
 
   :where(input[data-vf-input], textarea[data-vf-textarea])::placeholder {
     color: var(--vf-color-text-subtle);
     opacity: 1;
+    font: var(--_vf-editor-placeholder-font, var(--vf-editor-placeholder-font, inherit));
+    letter-spacing: var(--vf-editor-placeholder-letter-spacing, inherit);
   }
 
   :where(input[data-vf-input]:not([data-vf-editor-variant="unstyled"]), textarea[data-vf-textarea]:not([data-vf-editor-variant="unstyled"]), [data-vf-editor-surface]) {
-    --_vf-field-surface: var(--_vf-field-surface-default, var(--vf-color-surface));
-    --_vf-field-border: var(--_vf-field-border-default, var(--vf-color-border-required));
+    --_vf-field-surface: var(--_vf-field-surface-default, var(--vf-editor-background, var(--vf-color-surface)));
+    --_vf-field-border: var(--_vf-field-border-default, var(--vf-editor-border-color, var(--vf-color-border-required)));
     --_vf-field-foreground: var(--vf-color-text);
     --_vf-field-inline-padding: calc(var(--vf-space-sm) + var(--vf-space-xs));
     box-sizing: border-box;
     background: var(--_vf-field-surface);
     border: 1px solid var(--_vf-field-border);
-    border-radius: var(--_vf-field-radius, var(--vf-control-radius));
+    border-radius: var(--_vf-field-radius, var(--vf-editor-radius, var(--vf-control-radius)));
     color: var(--_vf-field-foreground);
     transition:
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
@@ -107,7 +107,7 @@
   :where([data-vf-editor-align="center"]) { text-align: center; }
   :where([data-vf-editor-align="end"]) { text-align: end; }
   :where([data-vf-editor-variant="filled"]) {
-    --_vf-field-surface-default: color-mix(in srgb, var(--vf-color-surface) 88%, var(--vf-color-text));
+    --_vf-field-surface-default: color-mix(in srgb, var(--vf-editor-background, var(--vf-color-surface)) 88%, var(--vf-color-text));
     --_vf-field-hover-surface: var(--_vf-field-surface-default);
     border-block-start-style: none;
     border-inline-style: none;
@@ -134,7 +134,8 @@
     border-radius: 0;
     padding: 0;
     color: var(--_vf-field-foreground, var(--vf-color-text));
-    font: var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal) var(--vf-control-font-family);
+    font: var(--_vf-editor-value-font, var(--vf-editor-value-font, var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal) var(--vf-control-font-family)));
+    letter-spacing: var(--vf-editor-value-letter-spacing, normal);
   }
   :where([data-vf-editor-variant="unstyled"]:focus-visible) {
     outline: 2px solid var(--vf-color-focus-ring);

@@ -221,6 +221,17 @@ export const darkThemeOverrides = darkThemeCompilation.cssValues;
 
 // Optional component-owned tokens: fallbacks live in canonical component CSS.
 export const componentThemeTokens = Object.freeze([
+  "--vf-editor-value-font",
+  "--vf-editor-value-letter-spacing",
+  "--vf-editor-placeholder-font",
+  "--vf-editor-placeholder-letter-spacing",
+  "--vf-editor-radius",
+  "--vf-editor-background",
+  "--vf-editor-border-color",
+  "--vf-input-value-font",
+  "--vf-input-placeholder-font",
+  "--vf-textarea-value-font",
+  "--vf-textarea-placeholder-font",
   "--vf-text-field-value-font",
   "--vf-text-field-value-letter-spacing",
   "--vf-text-field-placeholder-font",

@@ -409,3 +409,48 @@ test('Radio playground uses centered shared artwork and composed public label so
   await expect(preview.getByRole('radio', { name: 'Express', exact: true })).toBeChecked();
   await playground.screenshot({ path: testInfo.outputPath('radio-centered-playground.png') });
 });
+
+
+for (const name of ['Input', 'Textarea']) {
+  test(name + ' playground preserves native editing across distinct appearances', async ({ page }, testInfo) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/next/react/components/' + name.toLowerCase() + '/');
+    const playground = page.locator('[data-vf-docs-component-playground="' + name + '"]');
+    const preview = playground.getByRole('region', { name: name + ' preview' });
+    const source = playground.getByRole('region', { name: 'Generated React usage' });
+    const editor = preview.getByRole('textbox');
+    await editor.fill('Native value');
+    await playground.getByRole('radio', { name: 'filled', exact: true }).check();
+    await expect(editor).toHaveAttribute('data-vf-editor-variant', 'filled');
+    await expect(editor).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await playground.getByRole('radio', { name: 'underlined', exact: true }).check();
+    await expect(editor).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await playground.getByRole('radio', { name: 'unstyled', exact: true }).check();
+    await expect(editor).toHaveCSS('border-top-width', '0px');
+    await expect(editor).toHaveCSS('padding-left', '0px');
+    await expect(editor).toHaveValue('Native value');
+    await expect(source).toContainText('variant="unstyled"');
+    await expect(source).toContainText('@vyrnforge/react/' + name.toLowerCase());
+    await expect(source).not.toContainText(/styles\//);
+    if (name === 'Textarea') {
+      await playground.getByRole('checkbox', { name: 'Autosize', exact: true }).check();
+      await expect(editor).toHaveAttribute('data-vf-textarea-autosize', '');
+      if (await editor.evaluate(() => CSS.supports('field-sizing', 'content'))) {
+        await editor.fill('Short');
+        const short = await editor.evaluate(el => el.clientHeight);
+        await editor.fill(Array(14).fill('A line').join('\n'));
+        await expect.poll(() => editor.evaluate(el => el.clientHeight)).toBeGreaterThan(short);
+        expect(await editor.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
+        await editor.fill('Short');
+        await expect.poll(() => editor.evaluate(el => el.clientHeight)).toBe(short);
+      }
+    }
+    await playground.getByRole('radio', { name: 'outlined', exact: true }).check();
+    await playground.screenshot({ path: testInfo.outputPath(name.toLowerCase() + '-desktop.png') });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator('html').evaluate(el => el.setAttribute('dir', 'rtl'));
+    await page.emulateMedia({ forcedColors: 'active' });
+    await editor.focus();
+    await playground.screenshot({ path: testInfo.outputPath(name.toLowerCase() + '-mobile-rtl-forced-colors.png') });
+  });
+}

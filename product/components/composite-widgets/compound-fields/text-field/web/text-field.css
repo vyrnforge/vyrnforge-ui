@@ -12,7 +12,7 @@
     color: var(--vf-color-text);
     --_vf-text-field-height: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     --_vf-text-field-padding: var(--_vf-density-input-padding-block, 0.4375rem);
-    --_vf-text-field-background: var(--vf-color-surface);
+    --_vf-text-field-background: var(--vf-editor-background, var(--vf-color-surface));
     --_vf-text-field-inline-padding: calc(var(--vf-space-sm) + var(--vf-space-xs));
   }
   :where([data-vf-text-field][hidden]) {
@@ -34,7 +34,7 @@
     --_vf-text-field-padding: var(--vf-space-sm);
   }
   :where([data-vf-text-field][data-vf-text-field-variant='filled']) {
-    --_vf-text-field-background: color-mix(in srgb, var(--vf-color-surface) 88%, var(--vf-color-text));
+    --_vf-text-field-background: color-mix(in srgb, var(--vf-editor-background, var(--vf-color-surface)) 88%, var(--vf-color-text));
   }
   :where([data-vf-text-field][data-vf-text-field-variant='underlined']) {
     --_vf-text-field-background: transparent;
@@ -54,8 +54,8 @@
     align-items: center;
     min-inline-size: 0;
     position: relative;
-    --_vf-field-radius: var(--vf-text-field-radius, var(--vf-control-radius));
-    --_vf-field-border-default: var(--vf-text-field-border-color, var(--vf-color-border-required));
+    --_vf-field-radius: var(--vf-text-field-radius, var(--vf-editor-radius, var(--vf-control-radius)));
+    --_vf-field-border-default: var(--vf-text-field-border-color, var(--vf-editor-border-color, var(--vf-color-border-required)));
     --_vf-field-surface-default: var(--vf-text-field-background, var(--_vf-text-field-background));
     --_vf-field-hover-surface: var(--_vf-field-surface-default);
   }
@@ -75,17 +75,20 @@
     border-radius: 0;
     font: var(
       --vf-text-field-value-font,
-      var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal)
-        var(--vf-control-font-family)
+      var(
+        --vf-editor-value-font,
+        var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal)
+          var(--vf-control-font-family)
+      )
     );
-    letter-spacing: var(--vf-text-field-value-letter-spacing, normal);
+    letter-spacing: var(--vf-text-field-value-letter-spacing, var(--vf-editor-value-letter-spacing, normal));
   }
   :where([data-vf-text-field-variant='filled'] [data-vf-text-field-value])::placeholder {
     color: var(--vf-color-text-muted);
   }
   :where([data-vf-text-field-value])::placeholder {
-    font: var(--vf-text-field-placeholder-font, inherit);
-    letter-spacing: var(--vf-text-field-placeholder-letter-spacing, inherit);
+    font: var(--vf-text-field-placeholder-font, var(--vf-editor-placeholder-font, inherit));
+    letter-spacing: var(--vf-text-field-placeholder-letter-spacing, var(--vf-editor-placeholder-letter-spacing, inherit));
   }
   :where([data-vf-text-field-align='start'] > [data-vf-text-field-control] > [data-vf-text-field-value]) {
     text-align: start;
@@ -299,8 +302,11 @@
       inset-block-start: 50%;
       font: var(
         --vf-text-field-value-font,
-        var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal)
-          var(--vf-control-font-family)
+        var(
+          --vf-editor-value-font,
+          var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal)
+            var(--vf-control-font-family)
+        )
       );
       color: var(--_vf-text-field-label-color, var(--vf-color-text-muted));
       transform: translateY(-50%);

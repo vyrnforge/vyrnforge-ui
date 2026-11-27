@@ -106,3 +106,8 @@ const fieldTheme = createTheme({
 ```
 
 Use `renderThemeCss(fieldTheme)` and select its existing theme scope. The value, placeholder, label, message and affix roles each accept a CSS font shorthand (`--vf-text-field-<role>-font`) and letter-spacing length or normal (`--vf-text-field-<role>-letter-spacing`). Default placeholder typography inherits the value; other roles use shared control/body roles. Also available: radius (length), background and border-color (CSS colors); their fallbacks are the semantic control radius, variant surface and required border. Semantic focus/disabled/invalid colors remain authoritative. Custom themes must still be checked for contrast, enlarged text and focus visibility. Native input className/style overrides intentionally target the editing control, not the field root.
+
+
+### Editing primitives
+
+Use `createTheme({ tokens: { ... } })` with optional `--vf-editor-value-font`, `--vf-editor-placeholder-font`, corresponding `-letter-spacing` tokens, `--vf-editor-radius`, `--vf-editor-background`, and `--vf-editor-border-color`. They supplement the semantic control defaults; native states still govern focus, invalid and disabled presentation. Input and Textarea can override their value and placeholder fonts via `--vf-input-value-font`, `--vf-input-placeholder-font`, `--vf-textarea-value-font` and `--vf-textarea-placeholder-font`. TextField retains its existing composition-specific tokens, with shared editor fallbacks. Local CSS or the native style attribute can intentionally override individual instances. No additional theme provider is needed.
