@@ -785,7 +785,7 @@ export const sliderPlayground = {
     choice('step', 'Step', '1', ['any', '1', '5', '25']),
     choice('marks', 'Marks', 'none', ['none', 'ticks', 'labels']),
     choice('valueLabelDisplay', 'Value label', 'off', ['off', 'auto', 'always']),
-    bool('percent', 'Percent format'), bool('description', 'Descriptive tooltip'),
+    bool('percent', 'Percent format'), bool('description', 'Descriptive tooltip'), bool('controlled', 'Controlled usage'),
     bool('disabled', 'Disabled'), bool('invalid', 'Invalid')],
   presets: [{ label: 'Stepped with labels', values: { step: '25', marks: 'labels', valueLabelDisplay: 'always' } },
     { label: 'Vertical volume', values: { orientation: 'vertical', valueLabelDisplay: 'auto', percent: true } }],
@@ -795,7 +795,8 @@ export const sliderPlayground = {
     const imports = [importLine('Slider', 'slider')];
     const name = label(config, 'Volume');
     const props = [
-      attribute('aria-label', name), 'defaultValue={' + value + '}',
+      attribute('aria-label', name), config.controlled ? 'value={value}' : 'defaultValue={' + value + '}',
+      config.controlled ? 'onChange={event => setValue(event.currentTarget.valueAsNumber)}' : '',
       min === 0 ? '' : 'min={' + min + '}', max === 100 ? '' : 'max={' + max + '}',
       step === 1 ? '' : step === 'any' ? 'step="any"' : 'step={' + step + '}',
       attribute('size', config.size, 'md'), attribute('orientation', config.orientation, 'horizontal'),
@@ -805,12 +806,14 @@ export const sliderPlayground = {
       flag('disabled', config.disabled), config.invalid ? 'aria-invalid="true"' : '',
     ];
     const control = markup('Slider', props);
-    if (!config.description) return snippet(imports, control);
+    const setup = config.controlled ? ['const [value, setValue] = useState(' + value + ');'] : [];
+    if (config.controlled) imports.push("import { useState } from 'react';");
+    if (!config.description) return snippet(imports, control, { setup });
     imports.push(importLine('Flow', 'layout'), importLine('Button', 'button'),
       importLine('TooltipRoot, TooltipTrigger, TooltipContent', 'tooltip'));
     const help = markup('TooltipRoot', [], markup('TooltipTrigger', [],
       markup('Button', ['type="button"', attribute('aria-label', 'About ' + name), 'size="sm"', 'variant="ghost"'], 'Info')) + '\n' +
       markup('TooltipContent', [], 'Adjust the selected numeric value.'));
-    return snippet(imports, markup('Flow', ['gap="sm"'], help + '\n' + control));
+    return snippet(imports, markup('Flow', ['gap="sm"'], help + '\n' + control), { setup });
   },
 };

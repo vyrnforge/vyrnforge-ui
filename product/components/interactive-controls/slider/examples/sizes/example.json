@@ -1,0 +1,14 @@
+{
+  "id": "slider/sizes",
+  "title": "Sizes and orientation",
+  "description": "Semantic sizes change thumb, track and target geometry without changing the numeric range.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Sizes and orientation"
+}

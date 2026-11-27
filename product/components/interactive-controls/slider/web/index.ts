@@ -70,6 +70,7 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
     if (!host || !ticks || !active) return;
     const vertical = host.getAttribute('data-vf-orientation') === 'vertical';
     const bounds = host.getBoundingClientRect();
+    const rtl = host.matches(':dir(rtl)');
     const labels = Array.from(ticks.querySelectorAll<HTMLElement>('[data-vf-slider-mark-label]'));
     if (!labels.length || bounds.width <= 0 || bounds.height <= 0) return;
     for (const label of labels) {
@@ -81,9 +82,9 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
       const delta = vertical ? 0 : Math.max(bounds.left - rect.left,
         Math.min(0, bounds.right - rect.right));
       const shift = !vertical && rect.left + delta < bounds.left ? bounds.left - rect.left : delta;
-      if (!vertical && shift) label.style.setProperty('--_vf-slider-mark-shift', shift + 'px');
-      return { label, start: vertical ? rect.top : rect.left + shift, end: vertical ? rect.bottom : rect.right + shift };
-    }).sort((a, b) => a.start - b.start);
+      if (!vertical && shift) label.style.setProperty('--_vf-slider-mark-shift', (rtl ? -shift : shift) + 'px');
+      return { label, position: Number(label.parentElement?.style.getPropertyValue('--_vf-slider-position')), start: vertical ? rect.top : rect.left + shift, end: vertical ? rect.bottom : rect.right + shift };
+    }).sort((a, b) => a.position - b.position);
     const ordered = entries.length > 1 ? [entries[0]!, entries[entries.length - 1]!, ...entries.slice(1, -1)] : entries;
     const retained: { start: number; end: number }[] = [];
     for (const entry of ordered) {

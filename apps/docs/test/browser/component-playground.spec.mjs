@@ -141,7 +141,7 @@ test('Generated playground examples typecheck and bundle against installed publi
   test.setTimeout(90_000);
   const root = fileURLToPath(new URL('../../../../', import.meta.url));
   const scenarios = [
-    [sliderPlayground, {}], [sliderPlayground, { size: 'lg', orientation: 'vertical', marks: 'labels', valueLabelDisplay: 'always', percent: true, description: true }],
+    [sliderPlayground, {}], [sliderPlayground, { size: 'lg', orientation: 'vertical', marks: 'labels', valueLabelDisplay: 'always', percent: true, description: true, controlled: true }],
     [buttonPlayground, {}], [buttonPlayground, { variant: 'secondary', size: 'lg', loading: true, disabled: true, label: '<Save>{x}' }],
     [checkboxPlayground, { selection: 'mixed', required: true }], [checkboxPlayground, { presentation: 'standalone' }], [checkboxPlayground, { presentation: 'icon label' }], [checkboxPlayground, { presentation: 'label and description', selection: 'mixed' }], [radioPlayground, { selection: 'express' }], [radioPlayground, { size: 'lg', selection: 'none', orientation: 'horizontal', invalid: true, required: true }], [radioPlayground, { presentation: 'label and description', size: 'sm' }], [radioPlayground, { presentation: 'icon label' }],
     [avatarPlayground, { appearance: 'icon', decorative: true, size: 'lg', shape: 'square' }],
@@ -517,6 +517,8 @@ test('Slider guide uses the native control and synchronizes value, marks, labels
   await expect(control).toHaveAttribute('aria-orientation', 'vertical');
   await control.focus();
   await expect(preview.locator('[data-vf-slider-value]')).toBeVisible();
+  await playground.getByRole('checkbox', { name: 'Controlled usage' }).check();
+  await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('value={value}');
   await playground.getByRole('checkbox', { name: 'Descriptive tooltip' }).check();
   await preview.getByRole('button', { name: 'About Volume' }).focus();
   await expect(preview.getByRole('tooltip')).toContainText('Adjust the selected numeric value.');
