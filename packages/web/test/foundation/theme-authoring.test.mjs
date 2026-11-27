@@ -120,3 +120,12 @@ test('editor theme tokens are centralized and component overrides remain optiona
   assert.match(renderThemeCss(theme), /--vf-editor-value-font: 400 1rem/);
   assert.match(renderThemeCss(theme), /--vf-textarea-placeholder-font: italic/);
 });
+
+test('Slider component tokens use centralized theme authoring', () => {
+  const theme = createTheme({ name: 'slider-brand', tokens: {
+    '--vf-slider-track-size': '0.5rem', '--vf-slider-thumb-size': '1.375rem',
+    '--vf-slider-fill-color': '#7c3aed', '--vf-slider-value-label-font': '600 0.875rem/1.5 sans-serif',
+  } });
+  assert.match(renderThemeCss(theme), /--vf-slider-track-size: 0\.5rem;/);
+  assert.equal(theme.variables['--vf-slider-fill-color'], '#7c3aed');
+});

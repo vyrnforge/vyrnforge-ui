@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -170,6 +170,7 @@ function navigation(view, links, topic) {
       { id: 'text-field', title: 'TextField', href: links['text-field'].guide },
       { id: 'selection-checkbox', title: 'Checkbox', href: links.selection.checkbox.guide },
       { id: 'selection-radio', title: 'Radio', href: links.selection.radio.guide },
+      { id: 'selection-slider', title: 'Slider', href: links.selection.slider.guide },
     ] },
     { label: 'Text entry primitives', items: [
       { id: 'input', title: 'Input', href: links.input.guide },
@@ -214,6 +215,7 @@ function navigation(view, links, topic) {
       { id: 'text-field-api', title: 'TextField API', href: links['text-field'].api },
       { id: 'selection-checkbox-api', title: 'Checkbox API', href: links.selection.checkbox.api },
       { id: 'selection-radio-api', title: 'Radio API', href: links.selection.radio.api },
+      { id: 'selection-slider-api', title: 'Slider API', href: links.selection.slider.api },
       { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
       { id: 'divider-api', title: 'Divider API', href: links.divider.api },
       { id: 'list-api', title: 'List API', href: links.list.api },
@@ -628,7 +630,7 @@ function selectionGuide(unit, links) {
   const routeLinks = links.selection[unit.id];
   const topics = visibleGuideSections(unit.sharedContent.sections, unit.examples).map(section => ({ ...section, id: prefix + slug(section.heading) }));
   const sections = [...(unit.frameworkContent ? [{ id: prefix + 'setup', heading: 'Get started' }] : []), ...topics];
-  const adapter = unit.id === 'checkbox' ? checkboxPlayground : unit.id === 'radio' ? radioPlayground : null;
+  const adapter = unit.id === 'checkbox' ? checkboxPlayground : unit.id === 'radio' ? radioPlayground : unit.id === 'slider' ? sliderPlayground : null;
   const playgroundSection = { id: prefix + 'playground', heading: 'Playground' };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(adapter ? [sections[0], playgroundSection, ...sections.slice(1)] : sections),
@@ -649,14 +651,14 @@ function selectionGuide(unit, links) {
               'data-vf-docs-example-id': example.id, title: 'React ' + example.title + ' example',
               src: routeLinks.examples[example.id], sandbox: 'allow-scripts allow-forms', loading: 'lazy',
               onLoad: (event) => syncSelectionPreviewTheme(event.currentTarget),
-              style: { minBlockSize: ['checkbox/basic', 'checkbox/sizes', 'radio/sizes'].includes(example.id) ? '10rem' : example.id.endsWith('/basic') ? '12rem' : '19rem' } }),
+              style: { minBlockSize: example.id === 'slider/sizes' ? '36rem' : example.id === 'slider/tooltips' ? '18rem' : ['checkbox/basic', 'checkbox/sizes', 'radio/sizes'].includes(example.id) ? '10rem' : example.id.endsWith('/basic') ? '12rem' : '19rem' } }),
             h('details', { className: 'vf-docs-source-disclosure' },
               h('summary', null, 'View React TSX source'),
               h(CodeBlock, { tabIndex: 0 }, example.source)))),
         ...(section.heading === 'Related controls' ? [
           h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
             ...(routeLinks.api ? [h('li', { key: 'api' }, h(Link, { href: routeLinks.api }, unit.title + ' API'))] : []),
-            ...['checkbox', 'radio', 'checkbox-group', 'radio-group'].filter(id => id !== unit.id).map(id =>
+            ...(unit.id === 'slider' ? [] : ['checkbox', 'radio', 'checkbox-group', 'radio-group']).filter(id => id !== unit.id).map(id =>
               h('li', { key: id }, h(Link, { href: links.selection[id].guide },
                 id.split('-').map(part => part[0].toUpperCase() + part.slice(1)).join(' ')))))
         ] : []),
@@ -1621,7 +1623,7 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
     { title: 'ToggleGroup API', href: links.toggleGroup.api, keywords: 'root item type value onValueChange' },
     ...Object.entries(links.selection).flatMap(([id, entry]) => {
       const title = id.split('-').map(part => part[0].toUpperCase() + part.slice(1)).join(' ');
-      return [{ title, href: entry.guide, keywords: 'native selection form checked required reset' },
+      return [{ title, href: entry.guide, keywords: id === 'slider' ? 'range numeric volume marks tooltip vertical step value' : 'native selection form checked required reset' },
         ...(entry.api ? [{ title: title + ' API', href: entry.api, keywords: 'React props native input ref' }] : [])];
     }),
     { title: 'ToggleButton API', href: links.toggle.api, keywords: 'togglebutton props aria-pressed controlled size' },

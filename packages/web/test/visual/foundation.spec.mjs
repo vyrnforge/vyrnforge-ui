@@ -168,7 +168,7 @@ test('Layer 0 through Layer 2 use the restrained default presentation contract',
   await expect(switchControl).toHaveCSS('height', '24px');
   await expect(switchControl).toHaveCSS('box-shadow', 'none');
   expect(await switchControl.evaluate((element) => getComputedStyle(element, '::before').boxShadow)).toBe('none');
-  await expect(slider).toHaveCSS('appearance', 'none');
+  await expect(slider).toHaveCSS('appearance', 'auto');
   await expect(slider).toHaveCSS('height', '40px');
   await expect(nativeSelect).toHaveCSS('min-height', '40px');
   await expect(nativeSelect).toHaveCSS('border-radius', '6px');

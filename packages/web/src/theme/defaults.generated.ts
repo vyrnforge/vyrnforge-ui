@@ -215,5 +215,12 @@ export const publicRuntimeTokens = [
   "--vf-text-field-affix-letter-spacing",
   "--vf-text-field-radius",
   "--vf-text-field-background",
-  "--vf-text-field-border-color"
+  "--vf-text-field-border-color",
+  "--vf-slider-track-size",
+  "--vf-slider-track-color",
+  "--vf-slider-fill-color",
+  "--vf-slider-thumb-size",
+  "--vf-slider-thumb-color",
+  "--vf-slider-value-label-font",
+  "--vf-slider-mark-label-font"
 ] as const;
