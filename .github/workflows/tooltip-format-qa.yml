@@ -1,0 +1,26 @@
+name: Tooltip source formatting QA
+on:
+  pull_request:
+    branches: [fix/tooltip-compact-surface]
+    paths: ['.github/workflows/tooltip-format-qa.yml']
+permissions:
+  contents: read
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: |
+          file=product/components/composite-widgets/transient-surfaces/tooltip/web/tooltip.css
+          pnpm exec prettier --write "$file"
+          echo VF_FORMATTED_CSS_BEGIN
+          cat "$file"
+          echo VF_FORMATTED_CSS_END
+          pnpm format:l5:check
+          pnpm lint:l5
