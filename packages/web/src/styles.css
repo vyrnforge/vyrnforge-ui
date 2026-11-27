@@ -58,3 +58,5 @@
 @import "./components/status-indicator/status-indicator.css";
 @import "./components/alert/alert.css";
 @import "./components/text-field/text-field.css";
+@import "./components/skeleton/skeleton.css";
+@import "./components/progress/progress.css";

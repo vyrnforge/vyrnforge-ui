@@ -253,7 +253,8 @@ test('Elemental-primitives responsibility families preserve deliberate Native We
 
   assert.equal(graph.components.some((entry) => entry.unitId === 'color-swatch'), false);
 
-  assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
+  assert.ok(graph.components.some((entry) => entry.unitId === 'skeleton'));
+  assert.ok(graph.components.some((entry) => entry.unitId === 'progress'));
   assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
 
   const loading = graph.patterns.find((entry) => entry.unitId === 'loading');

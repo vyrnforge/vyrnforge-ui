@@ -1,0 +1,38 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where(progress[data-vf-progress]) {
+    --vf-loading-progress-color: var(--vf-progress-color, var(--vf-color-accent-background));
+    --vf-loading-progress-track-color: var(--vf-progress-track-color, var(--vf-color-border));
+    --vf-loading-progress-size: var(--vf-progress-size, 0.75rem);
+    --vf-loading-progress-radius: var(--vf-progress-radius, 999px);
+  }
+
+  :where(progress[data-vf-progress], progress[data-vf-loading-progress]) {
+    accent-color: var(--vf-loading-progress-color, var(--vf-loading-color, var(--vf-color-accent-background)));
+    block-size: var(--vf-loading-progress-size, 0.75rem);
+    border-radius: var(--vf-loading-progress-radius, 999px);
+    inline-size: 100%;
+  }
+
+  :where(progress[data-vf-progress], progress[data-vf-loading-progress])::-webkit-progress-bar {
+    background: var(--vf-loading-progress-track-color, var(--vf-loading-track-color, var(--vf-color-border)));
+    border-radius: var(--vf-loading-progress-radius, 999px);
+  }
+
+  :where(progress[data-vf-progress], progress[data-vf-loading-progress])::-webkit-progress-value {
+    background: var(--vf-loading-progress-color, var(--vf-loading-color, var(--vf-color-accent-background)));
+    border-radius: var(--vf-loading-progress-radius, 999px);
+  }
+
+  :where(progress[data-vf-progress], progress[data-vf-loading-progress])::-moz-progress-bar {
+    background: var(--vf-loading-progress-color, var(--vf-loading-color, var(--vf-color-accent-background)));
+    border-radius: var(--vf-loading-progress-radius, 999px);
+  }
+
+  @media (forced-colors: active) {
+    :where(progress[data-vf-progress], progress[data-vf-loading-progress]) {
+      forced-color-adjust: auto;
+    }
+  }
+}

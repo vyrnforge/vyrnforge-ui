@@ -6,9 +6,9 @@ Loading communicates that work is in progress while keeping operation ownership 
 
 Use `data-vf-loading-indicator` with `data-vf-loading-variant="spinner" | "dots" | "bars" | "pulse"` for compact indeterminate feedback.
 
-Use `data-vf-loading-placeholder` for structured placeholder/skeleton presentation when the eventual layout is already predictable. Optional `data-vf-loading-placeholder-shape="block" | "line" | "circle"` controls placeholder paint only.
+Use the independent Skeleton primitive for predictable content geometry (`@vyrnforge/web/styles/skeleton.css`). The former LoadingPlaceholder hooks remain migration surfaces.
 
-Use native `<progress data-vf-loading-progress>` when progress itself is meaningful. Supply `value` only when it represents truthful determinate progress; omit it for indeterminate progress.
+Use the independent Progress primitive (`<progress data-vf-progress>`, `@vyrnforge/web/styles/progress.css`) when progress itself is meaningful. Supply `value` only when it represents truthful determinate progress; omit it for indeterminate progress.
 
 Use `data-vf-loading-custom` for authored SVG, Icon, branded artwork, composed primitives, illustrations, or other loading visuals that do not belong in a closed library variant list.
 
@@ -102,11 +102,11 @@ Placeholder paint does not own layout. Compose existing VyrnForge responsibiliti
 - semantic HTML plus owning CSS/shared surface tokens for visual containment;
 - Text or native text for status copy.
 
-The former standalone Skeleton API is intentionally replaced:
+The previous consolidation is superseded. Prefer the independent Skeleton and Progress APIs. Old Loading hooks remain temporarily supported for migration:
 
-- `data-vf-skeleton` → `data-vf-loading-placeholder`
-- `data-vf-skeleton-shape` → `data-vf-loading-placeholder-shape`
-- `@vyrnforge/web/styles/skeleton.css` → `@vyrnforge/web/styles/loading.css`
+- `data-vf-loading-placeholder` → `data-vf-skeleton`
+- `data-vf-loading-placeholder-shape` → `data-vf-skeleton-shape`
+- `@vyrnforge/react/loading` legacy LoadingPlaceholder / LoadingProgress → `@vyrnforge/react/skeleton` / `@vyrnforge/react/progress`
 
 ## Accessibility
 
@@ -122,23 +122,24 @@ Reduced-motion removes non-essential continuous movement while keeping every bui
 
 ## Framework boundary
 
-The canonical implementation is Native Web CSS because the family is presentation- and native-semantics-oriented. The React-first adapter projects the same presentation hooks without owning any application async state. It does not create separate component ownership for Skeleton, Spinner or Progress. Other framework wrappers are not required merely for symmetry.
+The canonical implementation is Native Web CSS because the family is presentation- and native-semantics-oriented. The React-first adapter projects the same presentation hooks without owning any application async state. Skeleton and Progress have separate component owners; Loading remains the indeterminate presentation and broader pattern guidance. Other framework wrappers are not required merely for symmetry.
 
 ### React
 
-Import `Loading`, `LoadingIndicator`, `LoadingPlaceholder`, `LoadingProgress` and `LoadingCustom` from `@vyrnforge/react/loading`. The browser entrypoint uses the same Web stylesheet; SSR-safe imports do not load CSS. Supply the public Web stylesheet explicitly if your bundler does not select browser exports.
+Import `Loading`, `LoadingIndicator` and `LoadingCustom` from `@vyrnforge/react/loading`. Use Skeleton and Progress from their own entrypoints in new compositions. The browser entrypoint uses the same Web stylesheet; SSR-safe imports do not load CSS. Supply the public Web stylesheet explicitly if your bundler does not select browser exports.
 
 `Loading` is an optional div scope with size sm/md/lg and authored children. Place aria-busy on the affected region and author a status outside it if the status must be announced while the region is busy. Indicator and Placeholder are decorative; the native progress element must have an accessible name, and omission of value preserves indeterminate semantics. Custom children remain first-class.
 
 ```tsx
-import { Loading, LoadingIndicator, LoadingProgress } from '@vyrnforge/react/loading';
+import { Loading, LoadingIndicator } from '@vyrnforge/react/loading';
+import { Progress } from '@vyrnforge/react/progress';
 
 <>
   <Loading aria-busy={true} size="sm">
     <LoadingIndicator />
   </Loading>
   <p role="status">Loading account summary</p>
-  <LoadingProgress aria-label="Uploading file" value={48} max={100} />
+  <Progress aria-label="Uploading file" value={48} max={100} />
 </>
 ```
 

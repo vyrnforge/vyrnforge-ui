@@ -110,7 +110,9 @@
     "./styles/backdrop.css": "./dist/components/backdrop/backdrop.css",
     "./styles/status-indicator.css": "./dist/components/status-indicator/status-indicator.css",
     "./styles/alert.css": "./dist/components/alert/alert.css",
-    "./styles/text-field.css": "./dist/components/text-field/text-field.css"
+    "./styles/text-field.css": "./dist/components/text-field/text-field.css",
+    "./styles/skeleton.css": "./dist/components/skeleton/skeleton.css",
+    "./styles/progress.css": "./dist/components/progress/progress.css"
   },
   "dependencies": {
     "@vyrnforge/core": "workspace:*"

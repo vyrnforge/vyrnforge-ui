@@ -10,4 +10,4 @@ Loading presentation is customizable through documented CSS variables. Consumers
 
 Loading deliberately does not become an async runtime. Applications own request/job lifecycle, progress data, cancellation, retry, completion, failure, and status text. Existing Layout/AspectRatio/Icon/Text responsibilities remain composed rather than duplicated; visual containment uses semantic HTML plus owning CSS and shared foundation tokens rather than a Surface component.
 
-The former standalone Skeleton product unit is superseded. Structured skeleton presentation now belongs to Loading through `data-vf-loading-placeholder`.
+Skeleton and Progress are independent primitives. Loading remains the indeterminate presentation and composition guidance; legacy hooks remain migration surfaces.

@@ -28,6 +28,7 @@ export const LoadingIndicator = forwardRef<HTMLSpanElement, LoadingIndicatorProp
     'data-vf-loading-indicator': '', 'data-vf-loading-variant': variant });
 });
 
+/** Legacy compatibility part. New compositions should import Skeleton. */
 export interface LoadingPlaceholderProps extends Omit<ComponentPropsWithoutRef<'div'>,
   'children' | 'role' | 'aria-hidden' | 'tabIndex' | 'dangerouslySetInnerHTML'> {
   shape?: LoadingPlaceholderShape;
@@ -40,6 +41,7 @@ export const LoadingPlaceholder = forwardRef<HTMLDivElement, LoadingPlaceholderP
     'data-vf-loading-placeholder': '', 'data-vf-loading-placeholder-shape': shape });
 });
 
+/** Legacy compatibility part. New compositions should import Progress. */
 export type LoadingProgressProps = Omit<ComponentPropsWithoutRef<'progress'>, 'value' | 'max' | 'role'> & {
   /** Omit for indeterminate progress. Native HTML owns the value semantics. */
   value?: number;

@@ -2459,7 +2459,7 @@ export interface LoadingIndicatorProps extends Omit<ComponentPropsWithoutRef<'sp
 // @public (undocumented)
 export const LoadingPlaceholder: ForwardRefExoticComponent<LoadingPlaceholderProps & RefAttributes<HTMLDivElement>>;
 
-// @public (undocumented)
+// @public
 export interface LoadingPlaceholderProps extends Omit<ComponentPropsWithoutRef<'div'>, 'children' | 'role' | 'aria-hidden' | 'tabIndex' | 'dangerouslySetInnerHTML'> {
     // (undocumented)
     shape?: LoadingPlaceholderShape;
@@ -2474,7 +2474,7 @@ value?: number;
 max?: number;
 } & RefAttributes<HTMLProgressElement>>;
 
-// @public (undocumented)
+// @public
 export type LoadingProgressProps = Omit<ComponentPropsWithoutRef<'progress'>, 'value' | 'max' | 'role'> & {
     value?: number;
     max?: number;
@@ -3138,6 +3138,18 @@ export interface PreviewCardTriggerProps {
     children: ReactElement;
 }
 
+// @public
+export const Progress: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ProgressHTMLAttributes<HTMLProgressElement>, HTMLProgressElement>, "ref">, "role" | "value" | "max"> & {
+value?: number;
+max?: number;
+} & RefAttributes<HTMLProgressElement>>;
+
+// @public (undocumented)
+export type ProgressProps = Omit<ComponentPropsWithoutRef<'progress'>, 'value' | 'max' | 'role'> & {
+    value?: number;
+    max?: number;
+};
+
 // @public (undocumented)
 export const Radio: ForwardRefExoticComponent<RadioProps & RefAttributes<HTMLInputElement>>;
 
@@ -3367,6 +3379,23 @@ export type SideNavListProps = ComponentPropsWithoutRef<'ul'>;
 
 // @public (undocumented)
 export type SideNavProps = ComponentPropsWithoutRef<'nav'>;
+
+// @public
+export const Skeleton: ForwardRefExoticComponent<SkeletonProps & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export type SkeletonAnimation = 'wave' | 'pulse' | 'none';
+
+// @public (undocumented)
+export interface SkeletonProps extends Omit<ComponentPropsWithoutRef<'div'>, 'children' | 'role' | 'aria-hidden' | 'tabIndex' | 'dangerouslySetInnerHTML'> {
+    // (undocumented)
+    animation?: SkeletonAnimation;
+    // (undocumented)
+    shape?: SkeletonShape;
+}
+
+// @public (undocumented)
+export type SkeletonShape = 'line' | 'block' | 'circle';
 
 // @public (undocumented)
 export const Slider: ForwardRefExoticComponent<SliderProps & RefAttributes<HTMLInputElement>>;

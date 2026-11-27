@@ -1,0 +1,7 @@
+{
+  "id": "progress",
+  "name": "Progress",
+  "documentation": {
+    "group": "feedback-status"
+  }
+}
