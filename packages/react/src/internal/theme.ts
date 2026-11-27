@@ -142,6 +142,19 @@ export const tokens = Object.freeze({
     loadingEasing: reference('--vf-motion-easing-loading'),
     standardEasing: reference('--vf-motion-easing-standard'),
   }),
+  appShell: Object.freeze({
+    maxInlineSize: reference('--vf-app-shell-max-inline-size'),
+    navigationInlineSize: reference('--vf-app-shell-navigation-inline-size'),
+    gap: reference('--vf-app-shell-gap'),
+    gutter: reference('--vf-app-shell-gutter'),
+    blockPadding: reference('--vf-app-shell-block-padding'),
+  }),
+  autoGrid: Object.freeze({
+    minItemSize: reference('--vf-auto-grid-min-item-size'),
+  }),
+  list: Object.freeze({
+    stickyOffset: reference('--vf-list-sticky-offset'),
+  }),
   slider: Object.freeze({
     trackSize: reference('--vf-slider-track-size'),
     trackColor: reference('--vf-slider-track-color'),

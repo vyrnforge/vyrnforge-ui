@@ -5303,6 +5303,19 @@ export const tokens: Readonly<{
         loadingEasing: `var(--vf-${string})`;
         standardEasing: `var(--vf-${string})`;
     }>;
+    appShell: Readonly<{
+        maxInlineSize: `var(--vf-${string})`;
+        navigationInlineSize: `var(--vf-${string})`;
+        gap: `var(--vf-${string})`;
+        gutter: `var(--vf-${string})`;
+        blockPadding: `var(--vf-${string})`;
+    }>;
+    autoGrid: Readonly<{
+        minItemSize: `var(--vf-${string})`;
+    }>;
+    list: Readonly<{
+        stickyOffset: `var(--vf-${string})`;
+    }>;
     slider: Readonly<{
         trackSize: `var(--vf-${string})`;
         trackColor: `var(--vf-${string})`;
