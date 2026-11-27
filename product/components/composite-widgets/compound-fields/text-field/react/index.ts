@@ -28,7 +28,10 @@ export type TextFieldInputProps = TextFieldAppearanceProps &
 export type TextFieldTextareaProps = TextFieldAppearanceProps &
   Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'variant'> & {
     type?: never;
-  } & ({ multiline: true; autosize?: boolean } | { multiline?: true; autosize: true });
+  } & (
+    | { multiline: true; autosize?: boolean }
+    | { multiline?: true; autosize: true }
+  );
 
 export type TextFieldProps = TextFieldInputProps | TextFieldTextareaProps;
 
@@ -66,9 +69,8 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
         ]),
       ].join(' ') || undefined;
     const floating = labelPlacement === 'floating';
-    const alwaysRaised = Boolean(
-      rest.multiline || rest.autosize || rest.type === 'number' || leading || trailing || prefix || suffix
-    );
+    const usesTextarea = rest.multiline || rest.autosize;
+    const alwaysRaised = Boolean(usesTextarea || rest.type === 'number' || leading || trailing || prefix || suffix);
     const relationships = {
       id,
       'aria-describedby': describedBy,
