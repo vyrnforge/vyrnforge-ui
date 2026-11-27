@@ -65,6 +65,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     'components/input/', 'api/components/input/',
     'components/textarea/', 'api/components/textarea/',
     'components/text-field/', 'api/components/text-field/',
+    'components/number-field/', 'api/components/number-field/',
     'patterns/banner/',
     'patterns/empty-state/',
     'patterns/inline-feedback/',
