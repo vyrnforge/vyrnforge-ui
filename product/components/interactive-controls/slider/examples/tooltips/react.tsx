@@ -5,6 +5,8 @@ import { Input } from '@vyrnforge/react/input';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 import { Button } from '@vyrnforge/react/button';
+import { Icon } from '@vyrnforge/react/icon';
+import { infoIcon } from '@vyrnforge/icons/info';
 import { TooltipRoot, TooltipTrigger, TooltipContent } from '@vyrnforge/react/tooltip';
 
 function App() {
@@ -13,8 +15,8 @@ function App() {
   return <Flow gap="md">
     <Flow direction="inline" align="center" gap="sm">
       <label htmlFor={id}><Text>Volume</Text></label>
-      <TooltipRoot>
-        <TooltipTrigger><Button type="button" aria-label="About volume">Info</Button></TooltipTrigger>
+      <TooltipRoot placement="right">
+        <TooltipTrigger><Button type="button" aria-label="About volume" variant="ghost" size="sm" iconOnly><Icon icon={infoIcon} size="sm" /></Button></TooltipTrigger>
         <TooltipContent>Adjust the playback volume.</TooltipContent>
       </TooltipRoot>
     </Flow>

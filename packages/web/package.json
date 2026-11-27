@@ -43,6 +43,11 @@
       "import": "./dist/components/slider/index.js",
       "default": "./dist/components/slider/index.js"
     },
+    "./tooltip": {
+      "types": "./dist/components/tooltip/index.d.ts",
+      "import": "./dist/components/tooltip/index.js",
+      "default": "./dist/components/tooltip/index.js"
+    },
     "./toggle-button": {
       "types": "./dist/components/toggle-button/index.d.ts",
       "import": "./dist/components/toggle-button/index.js",

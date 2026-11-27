@@ -5,7 +5,7 @@ import ts from 'typescript';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeConfiguration, defaultsFor } from '../../playground-config.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from '../../react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, tooltipPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from '../../react-playground-adapters.mjs';
 
 test('Button playground keeps configuration, interaction and generated usage synchronized', async ({ page }) => {
   await page.goto('/next/react/components/button/');
@@ -141,7 +141,7 @@ test('Generated playground examples typecheck and bundle against installed publi
   test.setTimeout(90_000);
   const root = fileURLToPath(new URL('../../../../', import.meta.url));
   const scenarios = [
-    [sliderPlayground, {}], [sliderPlayground, { size: 'lg', orientation: 'vertical', marks: 'labels', valueLabelDisplay: 'always', percent: true, description: true, controlled: true }],
+    [tooltipPlayground, {}], [tooltipPlayground, { placement: 'bottom-start', openDelay: '0' }], [sliderPlayground, {}], [sliderPlayground, { size: 'lg', orientation: 'vertical', marks: 'labels', valueLabelDisplay: 'always', percent: true, description: true, controlled: true }],
     [buttonPlayground, {}], [buttonPlayground, { variant: 'secondary', size: 'lg', loading: true, disabled: true, label: '<Save>{x}' }],
     [checkboxPlayground, { selection: 'mixed', required: true }], [checkboxPlayground, { presentation: 'standalone' }], [checkboxPlayground, { presentation: 'icon label' }], [checkboxPlayground, { presentation: 'label and description', selection: 'mixed' }], [radioPlayground, { selection: 'express' }], [radioPlayground, { size: 'lg', selection: 'none', orientation: 'horizontal', invalid: true, required: true }], [radioPlayground, { presentation: 'label and description', size: 'sm' }], [radioPlayground, { presentation: 'icon label' }],
     [avatarPlayground, { appearance: 'icon', decorative: true, size: 'lg', shape: 'square' }],
@@ -562,6 +562,63 @@ test('TextField autosize alone selects Textarea and emits concise matching usage
   await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
   await preview.screenshot({ path: testInfo.outputPath('auto-field-mobile-rtl-forced.png') });
   expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+});
+
+test('Tooltip guide exposes compact anchored help and generated public usage', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/tooltip/');
+  const playground = page.locator('[data-vf-docs-component-playground="Tooltip"]');
+  const preview = playground.getByRole('region', { name: 'Tooltip preview' });
+  const trigger = preview.getByRole('button', { name: 'About this setting' });
+  const tooltip = preview.getByRole('tooltip');
+  const source = playground.getByRole('region', { name: 'Generated React usage' });
+  await trigger.hover();
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip).toHaveCSS('font-weight', '400');
+  await expect(tooltip).toHaveCSS('font-size', '14px');
+  await expect(tooltip).not.toHaveAttribute('data-vf-arrow');
+  async function anchoredRight() {
+    const anchor = await trigger.boundingBox();
+    const surface = await tooltip.boundingBox();
+    if (!anchor || !surface) return false;
+    return surface.x >= anchor.x + anchor.width + 3 &&
+      Math.abs(surface.y + surface.height / 2 - anchor.y - anchor.height / 2) <= 2;
+  }
+  await expect.poll(anchoredRight).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath('tooltip-playground-light.png') });
+  await trigger.press('Escape');
+  await expect(tooltip).toBeHidden();
+  await page.mouse.move(0, 0);
+  await playground.getByRole('button', { name: 'Long description' }).click();
+  await expect(source).toContainText('placement="bottom"');
+  await page.locator('#vf-react-theme').selectOption('dark');
+  await trigger.focus();
+  await expect(tooltip).toBeVisible();
+  const anchor = await trigger.boundingBox();
+  const surface = await tooltip.boundingBox();
+  expect(surface.y).toBeGreaterThanOrEqual(anchor.y + anchor.height + 3);
+  expect(Math.abs(surface.x + surface.width / 2 - anchor.x - anchor.width / 2)).toBeLessThanOrEqual(2);
+  await page.screenshot({ path: testInfo.outputPath('tooltip-playground-dark.png') });
+  await playground.getByRole('button', { name: 'Brand tokens' }).click();
+  await trigger.hover();
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip).toHaveCSS('background-color', 'rgb(30, 58, 138)');
+  await expect(tooltip).toHaveCSS('color', 'rgb(255, 255, 255)');
+  await expect(tooltip).toHaveCSS('border-radius', '8px');
+  await expect(source).toContainText('ThemeScope');
+  await expect(source).toContainText('tooltip:');
+  await expect(source).not.toContainText('--vf-');
+  await expect.poll(anchoredRight).toBe(true);
+  await expect(tooltip).toHaveAttribute('data-vf-tooltip-side', 'right');
+  await expect(tooltip).toHaveAttribute('data-vf-arrow', '');
+  await expect(source).toContainText('arrowSize');
+  await page.screenshot({ path: testInfo.outputPath('tooltip-playground-brand.png') });
+  await playground.getByRole('button', { name: 'With arrow' }).click();
+  await playground.getByRole('radio', { name: 'lg', exact: true }).check();
+  await trigger.hover();
+  await expect(tooltip).toHaveCSS('font-size', '16px');
+  await expect(tooltip).toHaveAttribute('data-vf-tooltip-side', 'top');
+  await expect(source).toContainText('size="lg"');
+  await expect(source).toContainText('arrow');
 });
 
 test('NumberField playground uses native numeric editing and concise public usage', async ({ page }, testInfo) => {

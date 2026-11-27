@@ -5340,6 +5340,15 @@ export const tokens: Readonly<{
         valueLabelFont: `var(--vf-${string})`;
         markLabelFont: `var(--vf-${string})`;
     }>;
+    tooltip: Readonly<{
+        background: `var(--vf-${string})`;
+        foreground: `var(--vf-${string})`;
+        radius: `var(--vf-${string})`;
+        font: `var(--vf-${string})`;
+        maxWidth: `var(--vf-${string})`;
+        offset: `var(--vf-${string})`;
+        arrowSize: `var(--vf-${string})`;
+    }>;
     editor: Readonly<{
         valueFont: `var(--vf-${string})`;
         valueLetterSpacing: `var(--vf-${string})`;
@@ -5723,10 +5732,13 @@ key?: Key | null | undefined;
 }, HTMLElement>;
 
 // @public (undocumented)
-export function TooltipContent(props: TooltipContentProps): ReactNode;
+export function TooltipContent(input: TooltipContentProps): ReactNode;
 
 // @public (undocumented)
-export type TooltipContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'>;
+export type TooltipContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'> & {
+    size?: 'sm' | 'md' | 'lg';
+    arrow?: boolean;
+};
 
 // @public (undocumented)
 export function TooltipRoot(input: TooltipRootProps): FunctionComponentElement<ProviderProps<TooltipContextValue | null>>;

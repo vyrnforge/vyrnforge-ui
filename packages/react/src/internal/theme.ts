@@ -165,6 +165,15 @@ export const tokens = Object.freeze({
     valueLabelFont: reference('--vf-slider-value-label-font'),
     markLabelFont: reference('--vf-slider-mark-label-font'),
   }),
+  tooltip: Object.freeze({
+    background: reference('--vf-tooltip-background'),
+    foreground: reference('--vf-tooltip-foreground'),
+    radius: reference('--vf-tooltip-radius'),
+    font: reference('--vf-tooltip-font'),
+    maxWidth: reference('--vf-tooltip-max-width'),
+    offset: reference('--vf-tooltip-offset'),
+    arrowSize: reference('--vf-tooltip-arrow-size'),
+  }),
   editor: Object.freeze({
     valueFont: reference('--vf-editor-value-font'),
     valueLetterSpacing: reference('--vf-editor-value-letter-spacing'),

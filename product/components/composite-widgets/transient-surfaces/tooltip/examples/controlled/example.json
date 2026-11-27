@@ -1,0 +1,13 @@
+{
+  "id": "tooltip/controlled",
+  "title": "Controlled visibility",
+  "description": "Use open and onOpenChange when an application owns visibility. Hover and focus request opening; Escape requests closing.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

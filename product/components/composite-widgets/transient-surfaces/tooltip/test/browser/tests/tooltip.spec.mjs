@@ -12,9 +12,7 @@ test('tooltip relationship is accessible', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public Tooltip CSS resolves canonical control radius and typography in light, dark, and forced-colors modes', async ({
-  page,
-}) => {
+test('Tooltip CSS resolves compact descriptive typography and theme tokens', async ({ page }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/tooltip/web.html');
   const tooltip = page.getByRole('tooltip');
@@ -22,32 +20,31 @@ test('public Tooltip CSS resolves canonical control radius and typography in lig
   for (const theme of ['light', 'dark']) {
     await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
     await expect(tooltip).toHaveCSS('border-radius', '6px');
-    await expect(tooltip).toHaveCSS('font-size', '15px');
-    await expect(tooltip).toHaveCSS('font-weight', '600');
+    await expect(tooltip).toHaveCSS('font-size', '14px');
+    await expect(tooltip).toHaveCSS('font-weight', '400');
     expect(await tooltip.evaluate((element) => getComputedStyle(element).fontFamily)).toContain('ui-sans-serif');
   }
 
   await page.locator('html').evaluate((element) => {
-    element.style.setProperty('--vf-control-font-family', 'monospace');
-    element.style.setProperty('--vf-control-font-size', '18px');
-    element.style.setProperty('--vf-control-font-weight', '700');
+    element.style.setProperty('--vf-tooltip-font', '500 18px/1.5 monospace');
+    element.style.setProperty('--vf-tooltip-radius', '10px');
   });
   await expect(tooltip).toHaveCSS('font-family', 'monospace');
   await expect(tooltip).toHaveCSS('font-size', '18px');
-  await expect(tooltip).toHaveCSS('font-weight', '700');
+  await expect(tooltip).toHaveCSS('font-weight', '500');
+  await expect(tooltip).toHaveCSS('border-radius', '10px');
 
   await page.locator('html').evaluate((element) => {
-    element.style.removeProperty('--vf-control-font-family');
-    element.style.removeProperty('--vf-control-font-size');
-    element.style.removeProperty('--vf-control-font-weight');
+    element.style.removeProperty('--vf-tooltip-font');
+    element.style.removeProperty('--vf-tooltip-radius');
   });
   await page.emulateMedia({ forcedColors: 'active' });
   await expect(tooltip).toHaveCSS('border-radius', '6px');
-  await expect(tooltip).toHaveCSS('font-size', '15px');
-  await expect(tooltip).toHaveCSS('font-weight', '600');
+  await expect(tooltip).toHaveCSS('font-size', '14px');
+  await expect(tooltip).toHaveCSS('font-weight', '400');
 });
 
-test('Public Tooltip uses native top layer and persists across hover and focus until Escape', async ({ page }) => {
+test('Public Tooltip persists across hover and focus until Escape', async ({ page }, testInfo) => {
   test.skip(port === 'web', 'Native runtime behavior is owned by the runtime ports.');
   await page.goto(`/components/tooltip/${port}.html`);
   await page.waitForFunction(() => document.body.dataset.tooltipReady === 'true');
@@ -63,7 +60,8 @@ test('Public Tooltip uses native top layer and persists across hover and focus u
   expect(await tooltip.evaluate((element) => element.matches(':popover-open'))).toBe(true);
   const anchorBox = await trigger.boundingBox();
   const surfaceBox = await tooltip.boundingBox();
-  expect(surfaceBox.y).toBeGreaterThanOrEqual(anchorBox.y + anchorBox.height - 1);
+  expect(surfaceBox.y).toBeGreaterThanOrEqual(anchorBox.y + anchorBox.height + 3);
+  await page.screenshot({ path: testInfo.outputPath('tooltip-compact-light.png') });
   await tooltip.hover();
   await page.waitForTimeout(150);
   await expect(tooltip).toBeVisible();
@@ -171,4 +169,32 @@ test('Tooltip stays contained with enlarged text and narrow viewport', async ({ 
   await page.keyboard.press('Escape');
   await expect(surface).toBeHidden();
   await expect(trigger).toBeFocused();
+});
+
+test('Tooltip arrow follows native collision flip and does not change accessibility', async ({ page }, testInfo) => {
+  test.skip(port === 'web', 'Runtime ports own open and cleanup behavior.');
+  await page.setViewportSize({ width: 640, height: 400 });
+  await page.goto(`/components/tooltip/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.tooltipReady === 'true');
+  const trigger = page.locator('#t');
+  const surface = page.locator('#tip');
+  await trigger.evaluate((element) => {
+    Object.assign(element.style, { position: 'fixed', top: '60px', left: '200px' });
+  });
+  await trigger.focus();
+  await expect(surface).toBeVisible();
+  await expect(surface).toHaveCSS('font-size', '16px');
+  await expect(surface).toHaveAttribute('data-vf-tooltip-side', 'bottom');
+  await expect.poll(() => surface.evaluate((element) => getComputedStyle(element, '::after').height)).toBe('6px');
+  await page.screenshot({ path: testInfo.outputPath('tooltip-arrow-bottom.png') });
+  await trigger.evaluate((element) => {
+    element.style.top = '360px';
+  });
+  await expect(surface).toHaveAttribute('data-vf-tooltip-side', 'top');
+  await expect.poll(() => surface.evaluate((element) => getComputedStyle(element, '::after').top)).not.toBe('auto');
+  await page.screenshot({ path: testInfo.outputPath('tooltip-arrow-flipped.png') });
+  await page.keyboard.press('Escape');
+  await expect(surface).toBeHidden();
+  await expect(surface).not.toHaveAttribute('data-vf-tooltip-side');
+  await expect(trigger).toHaveAccessibleDescription('Additional context More information');
 });

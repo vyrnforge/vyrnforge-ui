@@ -3643,13 +3643,28 @@ export class VfToolbarSeparatorDirective {
 export class VfTooltipContentDirective implements OnDestroy {
     constructor(root: VfTooltipRootDirective);
     // (undocumented)
+    readonly arrow: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     ngOnDestroy(): void;
     // (undocumented)
     pointer(event: PointerEvent, active: boolean): void;
     // (undocumented)
     readonly root: VfTooltipRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipContentDirective, "[vfTooltipContent]", never, {}, {}, never, never, true, never>;
+    readonly size: InputSignal<"sm" | "md" | "lg">;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipContentDirective, "[vfTooltipContent]", never, {
+        "size": {
+            "alias": "size";
+            "required": false;
+            "isSignal": true;
+        };
+        "arrow": {
+            "alias": "arrow";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfTooltipContentDirective, never>;
 }
