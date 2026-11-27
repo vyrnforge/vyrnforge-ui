@@ -251,5 +251,11 @@ export const componentThemeTokens = Object.freeze([
   "--vf-slider-thumb-size",
   "--vf-slider-thumb-color",
   "--vf-slider-value-label-font",
-  "--vf-slider-mark-label-font"
+  "--vf-slider-mark-label-font",
+  "--vf-tooltip-background",
+  "--vf-tooltip-foreground",
+  "--vf-tooltip-radius",
+  "--vf-tooltip-font",
+  "--vf-tooltip-max-width",
+  "--vf-tooltip-offset"
 ]);

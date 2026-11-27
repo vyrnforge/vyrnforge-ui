@@ -5,7 +5,7 @@ import ts from 'typescript';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeConfiguration, defaultsFor } from '../../playground-config.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from '../../react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, tooltipPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, backdropPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from '../../react-playground-adapters.mjs';
 
 test('Button playground keeps configuration, interaction and generated usage synchronized', async ({ page }) => {
   await page.goto('/next/react/components/button/');
@@ -141,7 +141,7 @@ test('Generated playground examples typecheck and bundle against installed publi
   test.setTimeout(90_000);
   const root = fileURLToPath(new URL('../../../../', import.meta.url));
   const scenarios = [
-    [sliderPlayground, {}], [sliderPlayground, { size: 'lg', orientation: 'vertical', marks: 'labels', valueLabelDisplay: 'always', percent: true, description: true, controlled: true }],
+    [tooltipPlayground, {}], [tooltipPlayground, { placement: 'bottom-start', openDelay: '0' }], [sliderPlayground, {}], [sliderPlayground, { size: 'lg', orientation: 'vertical', marks: 'labels', valueLabelDisplay: 'always', percent: true, description: true, controlled: true }],
     [buttonPlayground, {}], [buttonPlayground, { variant: 'secondary', size: 'lg', loading: true, disabled: true, label: '<Save>{x}' }],
     [checkboxPlayground, { selection: 'mixed', required: true }], [checkboxPlayground, { presentation: 'standalone' }], [checkboxPlayground, { presentation: 'icon label' }], [checkboxPlayground, { presentation: 'label and description', selection: 'mixed' }], [radioPlayground, { selection: 'express' }], [radioPlayground, { size: 'lg', selection: 'none', orientation: 'horizontal', invalid: true, required: true }], [radioPlayground, { presentation: 'label and description', size: 'sm' }], [radioPlayground, { presentation: 'icon label' }],
     [avatarPlayground, { appearance: 'icon', decorative: true, size: 'lg', shape: 'square' }],
@@ -562,4 +562,28 @@ test('TextField autosize alone selects Textarea and emits concise matching usage
   await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
   await preview.screenshot({ path: testInfo.outputPath('auto-field-mobile-rtl-forced.png') });
   expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+});
+
+test('Tooltip guide exposes compact anchored help and generated public usage', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/tooltip/');
+  const playground = page.locator('[data-vf-docs-component-playground="Tooltip"]');
+  const preview = playground.getByRole('region', { name: 'Tooltip preview' });
+  const trigger = preview.getByRole('button', { name: 'About this setting' });
+  await trigger.hover();
+  const tooltip = preview.getByRole('tooltip');
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip).toHaveCSS('font-weight', '400');
+  await expect(tooltip).toHaveCSS('font-size', '14px');
+  const anchor = await trigger.boundingBox();
+  const surface = await tooltip.boundingBox();
+  expect(surface.x).toBeGreaterThanOrEqual(anchor.x + anchor.width + 3);
+  await playground.screenshot({ path: testInfo.outputPath('tooltip-playground-light.png') });
+  await trigger.press('Escape');
+  await expect(tooltip).toBeHidden();
+  await playground.getByRole('radio', { name: 'bottom', exact: true }).check();
+  await expect(playground.getByRole('region', { name: 'Generated React usage' })).toContainText('placement="bottom"');
+  await page.locator('html').evaluate(element => element.dataset.vfTheme = 'dark');
+  await trigger.hover();
+  await expect(tooltip).toBeVisible();
+  await playground.screenshot({ path: testInfo.outputPath('tooltip-playground-dark.png') });
 });

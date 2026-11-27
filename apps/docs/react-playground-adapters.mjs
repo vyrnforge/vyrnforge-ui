@@ -30,6 +30,7 @@ import { trashIcon } from '@vyrnforge/icons/trash';
 import { chevronRightIcon } from '@vyrnforge/icons/chevron-right';
 import { Icon } from '@vyrnforge/react/icon';
 import { userIcon } from '@vyrnforge/icons/user';
+import { infoIcon } from '@vyrnforge/icons/info';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 import { jsxText } from './playground-config.mjs';
@@ -777,8 +778,8 @@ function SliderPreview({ config, update }) {
   return h(Flow, { gap: 'sm', className: 'vf-docs-slider-preview' },
     h(Flow, { direction: 'inline', align: 'center', gap: 'sm' },
       h('label', { htmlFor: id }, h(Text, null, name)),
-      config.description ? h(TooltipRoot, null,
-        h(TooltipTrigger, null, h(Button, { type: 'button', 'aria-label': 'About ' + name, size: 'sm', variant: 'ghost' }, 'Info')),
+      config.description ? h(TooltipRoot, { placement: 'right' },
+        h(TooltipTrigger, null, h(Button, { type: 'button', 'aria-label': 'About ' + name, size: 'sm', variant: 'ghost', iconOnly: true }, h(Icon, { icon: infoIcon, size: 'sm' }))),
         h(TooltipContent, null, 'Adjust the selected numeric value.')) : null),
     control,
     config.invalid ? h(Text, { id: id + '-error', as: 'p', variant: 'body-sm', tone: 'danger' }, 'Choose a permitted value.') : null);
@@ -818,10 +819,33 @@ export const sliderPlayground = {
     if (config.controlled) imports.push("import { useState } from 'react';");
     if (!config.description) return snippet(imports, control, { setup });
     imports.push(importLine('Flow', 'layout'), importLine('Button', 'button'),
-      importLine('TooltipRoot, TooltipTrigger, TooltipContent', 'tooltip'));
-    const help = markup('TooltipRoot', [], markup('TooltipTrigger', [],
-      markup('Button', ['type="button"', attribute('aria-label', 'About ' + name), 'size="sm"', 'variant="ghost"'], 'Info')) + '\n' +
+      importLine('TooltipRoot, TooltipTrigger, TooltipContent', 'tooltip'), ...iconImports('infoIcon', 'info'));
+    const help = markup('TooltipRoot', ['placement="right"'], markup('TooltipTrigger', [],
+      markup('Button', ['type="button"', attribute('aria-label', 'About ' + name), 'size="sm"', 'variant="ghost"', 'iconOnly'], '<Icon icon={infoIcon} size="sm" />')) + '\n' +
       markup('TooltipContent', [], 'Adjust the selected numeric value.'));
     return snippet(imports, markup('Flow', ['gap="sm"'], help + '\n' + control), { setup });
+  },
+};
+
+function TooltipPreview({ config }) {
+  return h(TooltipRoot, { placement: config.placement, openDelay: Number(config.openDelay), closeDelay: Number(config.closeDelay) },
+    h(TooltipTrigger, null, h(Button, { type: 'button', variant: 'ghost', size: 'sm', iconOnly: true, 'aria-label': 'About this setting' }, h(Icon, { icon: infoIcon, size: 'sm' }))),
+    h(TooltipContent, null, label(config, 'Changes apply to future sessions.')));
+}
+export const tooltipPlayground = {
+  fields: [text('label', 'Description', 'Changes apply to future sessions.'),
+    choice('placement', 'Placement', 'right', ['top', 'right', 'bottom', 'left', 'top-start', 'top-end', 'bottom-start', 'bottom-end']),
+    choice('openDelay', 'Open delay (ms)', '400', ['0', '200', '400', '800']),
+    choice('closeDelay', 'Close delay (ms)', '100', ['100', '200', '400'])],
+  presets: [{ label: 'Compact help', values: { placement: 'right', openDelay: '200' } },
+    { label: 'Long description', values: { placement: 'bottom', label: 'Changes apply to future sessions. Existing sessions retain their current settings.' } }],
+  Preview: TooltipPreview,
+  source(config) {
+    return snippet([importLine('TooltipRoot, TooltipTrigger, TooltipContent', 'tooltip'), importLine('Button', 'button'), ...iconImports('infoIcon', 'info')],
+      markup('TooltipRoot', [attribute('placement', config.placement, 'top'),
+        Number(config.openDelay) === 400 ? '' : 'openDelay={' + Number(config.openDelay) + '}',
+        Number(config.closeDelay) === 100 ? '' : 'closeDelay={' + Number(config.closeDelay) + '}'],
+      markup('TooltipTrigger', [], markup('Button', ['type="button"', 'variant="ghost"', 'size="sm"', 'iconOnly', 'aria-label="About this setting"'], '<Icon icon={infoIcon} size="sm" />')) + '\n' +
+      markup('TooltipContent', [], content(label(config, 'Changes apply to future sessions.')))));
   },
 };

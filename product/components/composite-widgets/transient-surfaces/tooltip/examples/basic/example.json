@@ -1,7 +1,14 @@
 {
   "id": "tooltip/basic",
-  "title": "Basic tooltip",
-  "description": "Describe an icon button on focus or hover.",
+  "title": "Icon button description",
+  "description": "Reveal supplementary help on focus or hover using the public Tooltip parts.",
   "defaultFramework": "react",
-  "frameworks": { "react": { "label": "React", "language": "tsx", "source": "react.tsx" } }
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Appearance and placement"
 }
