@@ -12,9 +12,7 @@ test('tooltip relationship is accessible', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public Tooltip CSS resolves compact descriptive typography and theme tokens in light, dark, and forced-colors modes', async ({
-  page,
-}) => {
+test('Tooltip CSS resolves compact descriptive typography and theme tokens', async ({ page }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/tooltip/web.html');
   const tooltip = page.getByRole('tooltip');
@@ -46,7 +44,7 @@ test('public Tooltip CSS resolves compact descriptive typography and theme token
   await expect(tooltip).toHaveCSS('font-weight', '400');
 });
 
-test('Public Tooltip uses native top layer and persists across hover and focus until Escape', async ({ page }, testInfo) => {
+test('Public Tooltip persists across hover and focus until Escape', async ({ page }, testInfo) => {
   test.skip(port === 'web', 'Native runtime behavior is owned by the runtime ports.');
   await page.goto(`/components/tooltip/${port}.html`);
   await page.waitForFunction(() => document.body.dataset.tooltipReady === 'true');
