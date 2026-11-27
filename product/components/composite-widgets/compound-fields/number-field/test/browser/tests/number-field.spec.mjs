@@ -288,6 +288,11 @@ test('React composed NumberField renders responsive native, stacked and horizont
     const bounds = await button.boundingBox();
     expect(bounds.width).toBeGreaterThanOrEqual(24);
     expect(bounds.height).toBeGreaterThanOrEqual(24);
+    if (mode.dir === 'rtl') {
+      const affix = page.locator('[data-vf-text-field-suffix]').filter({ hasText: 'kg' });
+      await expect(affix).toHaveCSS('direction', 'rtl');
+      await expect(affix.locator('bdi')).toHaveCSS('direction', 'ltr');
+    }
     const custom = page.getByRole('spinbutton', { name: 'Custom typography' });
     await expect(custom).toHaveCSS('font-size', '20px');
     await expect(custom).toHaveCSS('font-weight', '600');
