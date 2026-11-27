@@ -265,6 +265,7 @@ export const componentThemeTokens = Object.freeze([
   "--vf-tooltip-font",
   "--vf-tooltip-max-width",
   "--vf-tooltip-offset",
+  "--vf-tooltip-arrow-size",
   "--vf-skeleton-color",
   "--vf-skeleton-highlight",
   "--vf-skeleton-radius",

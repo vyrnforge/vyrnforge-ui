@@ -5333,6 +5333,7 @@ export const tokens: Readonly<{
         font: `var(--vf-${string})`;
         maxWidth: `var(--vf-${string})`;
         offset: `var(--vf-${string})`;
+        arrowSize: `var(--vf-${string})`;
     }>;
     editor: Readonly<{
         valueFont: `var(--vf-${string})`;
@@ -5720,7 +5721,10 @@ key?: Key | null | undefined;
 export function TooltipContent(props: TooltipContentProps): ReactNode;
 
 // @public (undocumented)
-export type TooltipContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'>;
+export type TooltipContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'> & {
+    size?: 'sm' | 'md' | 'lg';
+    arrow?: boolean;
+};
 
 // @public (undocumented)
 export function TooltipRoot(input: TooltipRootProps): FunctionComponentElement<ProviderProps<TooltipContextValue | null>>;

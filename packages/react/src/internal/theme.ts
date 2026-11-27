@@ -172,6 +172,7 @@ export const tokens = Object.freeze({
     font: reference('--vf-tooltip-font'),
     maxWidth: reference('--vf-tooltip-max-width'),
     offset: reference('--vf-tooltip-offset'),
+    arrowSize: reference('--vf-tooltip-arrow-size'),
   }),
   editor: Object.freeze({
     valueFont: reference('--vf-editor-value-font'),

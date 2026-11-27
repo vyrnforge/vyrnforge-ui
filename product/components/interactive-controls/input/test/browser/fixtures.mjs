@@ -71,7 +71,7 @@ document.head.append(style);
 const types = ['text','email','password','search','tel','url','number','date','time','datetime-local','month','week','color'];
 const props = (name) => ({ 'aria-label': name, 'data-token-audit': name });
 const fields = () => [
-  ...types.map(type => h(Input, { key: type, type, ...props(type) })),
+  ...types.map(type => h(Input, { key: type, type, ...props(type), placeholder: type === 'text' ? 'Hint' : undefined })),
   ...types.map(type => h(TextField, { key: 'field-' + type, type, label: 'Field ' + type, 'data-token-audit': 'field-' + type })),
   h(Textarea, { key:'textarea', ...props('textarea') }),
   h(TextField, { key:'auto', label:'Auto', autosize:true, 'data-token-audit':'auto' }),
