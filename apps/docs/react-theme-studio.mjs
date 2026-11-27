@@ -3,7 +3,10 @@ import { Radio } from '@vyrnforge/react/radio';
 import { Alert } from '@vyrnforge/react/alert';
 import { Progress } from '@vyrnforge/react/progress';
 import { TooltipRoot, TooltipTrigger, TooltipContent } from '@vyrnforge/react/tooltip';
-import { ThemeScope } from '@vyrnforge/react';
+import { ThemeScope, tokens } from '@vyrnforge/react';
+import { Input } from '@vyrnforge/react/input';
+import { Textarea } from '@vyrnforge/react/textarea';
+import { Loading, LoadingIndicator } from '@vyrnforge/react/loading';
 import { previewCss } from './react-theme-authoring.mjs';
 import { Flow } from '@vyrnforge/react/layout';
 import { NumberField } from '@vyrnforge/react/number-field';
@@ -29,7 +32,7 @@ export function Picker({ value, onValueChange, label, testId }) {
     h(ColorPickerTextInput, { 'aria-label': label, spellCheck: false }),
     h(ColorPickerSwatch, null));
 }
-export function PreviewScene({ theme, view, direction = 'ltr', density = 'comfortable', viewport = 'auto' }) {
+export function PreviewScene({ theme, view, component = 'Button', direction = 'ltr', density = 'comfortable', viewport = 'auto' }) {
   const [feedback, setFeedback] = useState('');
   const [email, setEmail] = useState('hello@example.com');
   const [optedIn, setOptedIn] = useState(true);
@@ -45,7 +48,9 @@ export function PreviewScene({ theme, view, direction = 'ltr', density = 'comfor
       h('span', { className: 'vf-docs-studio-scene-mark', 'aria-hidden': 'true' }, 'V'),
       h(Text, { as: 'strong', variant: 'label-md' }, 'VyrnForge'),
       h(Text, { as: 'span', className: 'vf-docs-studio-scene-meta' }, theme.appearance + ' appearance')),
-    view === 'dashboard'
+    ['colors','typography','spacing','sizing','shape','elevation','motion','components'].includes(view)
+      ? h(ContextPreview, { view, component })
+      : view === 'dashboard'
       ? h('div', { className: 'vf-docs-studio-scene-body' },
           h(Flow, { as: 'nav', direction: 'inline', wrap: 'wrap', gap: 'xs', 'aria-label': 'Workspace sections' }, ...['Overview','Projects','Settings'].map(area => h(ToggleButton, { key: area, type: 'button', size: 'sm', pressed: selectedArea === area, onClick: () => setSelectedArea(area) }, area))),
           h(Text, { as: 'p', variant: 'body-sm', tone: 'secondary' }, selectedArea + ' / This month'),
@@ -100,6 +105,89 @@ export function PreviewScene({ theme, view, direction = 'ltr', density = 'comfor
       'data-vf-docs-preview-feedback': '', className: 'vf-docs-studio-scene-status' }, feedback));
 }
 
+
+
+function SampleButtons() {
+  return h(Flow, { direction: 'inline', gap: 'sm', wrap: 'wrap' },
+    ...['primary','secondary','ghost'].map(variant => h(Button, { key: variant, type: 'button', variant }, variant)),
+    h(Button, { type: 'button', disabled: true }, 'Disabled'));
+}
+function SampleSizes() {
+  const rows = ['sm','md','lg'].map((size, i) => h(Flow, { key: size, gap: 'xs' },
+    h(Text, { as: 'p', variant: 'label-md' }, ['Small','Medium','Large'][i]),
+    h(Flow, { direction: 'inline', gap: 'sm', wrap: 'wrap' }, h(Button, { type: 'button', size }, 'Action'), h(Button, { type: 'button', variant: 'secondary', size }, 'Cancel')),
+    h(TextField, { label: 'Example field', fieldSize: size, placeholder: 'Type here', fullWidth: true })));
+  return h(Flow, { gap: 'sm' }, ...rows);
+}
+function SampleSurface({ children, large = false }) {
+  return h(Flow, { gap: 'md', className: 'vf-docs-studio-sample-surface',
+    style: { padding: tokens.space.md, boxShadow: large ? tokens.shadow.lg : tokens.shadow.md, borderRadius: tokens.radius.surface } }, children);
+}
+function SampleTooltip() {
+  return h(TooltipRoot, { placement: 'bottom', openDelay: 0 },
+    h(TooltipTrigger, null, h(Button, { type: 'button', variant: 'secondary' }, 'Focus or hover for help')),
+    h(TooltipContent, { arrow: true }, 'Live themed tooltip'));
+}
+function ComponentSamples({ component }) {
+  const id = useId();
+  const variants = ['outlined','filled','underlined'];
+  if (component === 'Button') return h(Flow, { gap: 'md' }, h(SampleButtons),
+    h(Flow, { direction: 'inline', wrap: 'wrap', align: 'center', gap: 'sm' }, ...['sm','md','lg'].map(size => h(Button, { key: size, type: 'button', size }, size))));
+  if (component === 'Input' || component === 'Textarea') {
+    const Field = component === 'Input' ? Input : Textarea;
+    return h(Flow, { gap: 'sm' }, ...variants.map(variant => h(Flow, { key: variant, gap: 'xs' },
+      h(Text, { as: 'p', variant: 'label-md' }, variant),
+      h(Field, { 'aria-label': variant + ' ' + component, variant, placeholder: 'Enter text', ...(component === 'Textarea' ? { rows: 2 } : {}) }))));
+  }
+  if (component === 'TextField' || component === 'NumberField') {
+    const Field = component === 'TextField' ? TextField : NumberField;
+    return h(Flow, { gap: 'md' }, ...variants.map(variant =>
+      h(Field, { key: variant, label: variant + ' field', variant, description: 'Supporting text', fullWidth: true,
+        ...(component === 'NumberField' ? { defaultValue: 2, min: 0, max: 100 } : { placeholder: 'Enter text' }) })),
+      h(Field, { label: 'Invalid field', error: 'Check this value', fullWidth: true }), h(Field, { label: 'Disabled field', disabled: true, fullWidth: true }));
+  }
+  if (component === 'Checkbox' || component === 'Radio') {
+    const Control = component === 'Checkbox' ? Checkbox : Radio;
+    const states = ['Selected','Unselected','Disabled'].map((label, i) => h('label', { key: label, className: 'vf-docs-studio-check' },
+      h(Control, { ...(component === 'Radio' ? { name: id, value: label } : {}), defaultChecked: i === 0, disabled: i === 2 }), label));
+    return h(Flow, { as: 'fieldset', gap: 'sm' }, h('legend', null, 'Selection states'), ...states);
+  }
+  if (component === 'Slider') return h(Flow, { gap: 'md' }, ...['sm','md','lg'].map(size => h('label', { key: size, className: 'vf-docs-studio-field' },
+    h(Text, { as: 'span' }, size + ' slider'), h(Slider, { size, min: 0, max: 100, defaultValue: 45 }))));
+  if (component === 'Tooltip') return h(Flow, { gap: 'sm' }, h(SampleTooltip), h(Text, { as: 'p', variant: 'body-sm' }, 'Use the pointer or keyboard to show the overlay.'));
+  if (component === 'Progress') return h(Flow, { gap: 'md' }, ...[25,60,100].map(value => h(Progress, { key: value, 'aria-label': 'Progress ' + value + '%', value, max: 100 })));
+  if (component === 'Skeleton') return h(Flow, { gap: 'sm' }, ...[100,75,45].map(width => h(Skeleton, { key: width, 'aria-hidden': true, style: { inlineSize: width + '%', blockSize: '1rem' } })));
+  return h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'md' }, ...['spinner','dots','bars','pulse'].map(variant => h(Loading, { key: variant, 'aria-label': variant + ' loading' }, h(LoadingIndicator, { variant }))));
+}
+function ContextPreview({ view, component }) {
+  let content;
+  if (view === 'components') content = h(ComponentSamples, { key: component, component });
+  else if (view === 'typography') content = h(Flow, { gap: 'sm' },
+    h(Text, { as: 'h4', variant: 'heading-lg' }, 'Workspace heading'),
+    h(Text, { as: 'h5', variant: 'heading-md' }, 'Section heading'),
+    h(Text, { as: 'p', variant: 'body-md' }, 'The quick brown fox jumps over the lazy dog.'),
+    h(Text, { as: 'p', variant: 'body-sm', tone: 'secondary' }, 'Supporting text and descriptions'),
+    h(TextField, { label: 'Display name', placeholder: 'Alex Morgan', description: 'Visible to teammates', fullWidth: true }), h(SampleButtons));
+  else if (view === 'sizing') content = h(SampleSizes);
+  else if (view === 'spacing') content = h(SampleSurface, null,
+    h(Flow, { gap: 'sm' }, h(Text, { as: 'h4', variant: 'heading-sm' }, 'Account details'),
+      h(TextField, { label: 'Name', placeholder: 'Alex Morgan', fullWidth: true }), h(TextField, { label: 'Email', placeholder: 'hello@example.com', fullWidth: true })),
+    h(Flow, { gap: 'lg' }, h(Text, { as: 'p' }, 'Preferences'), h(SampleButtons)));
+  else if (view === 'shape') content = h(SampleSurface, null, h(TextField, { label: 'Profile name', placeholder: 'Alex Morgan', fullWidth: true }), h(SampleButtons));
+  else if (view === 'elevation') content = h(Flow, { gap: 'lg' },
+    h(SampleSurface, null, h(Text, { as: 'h4', variant: 'heading-sm' }, 'Medium surface'), h(Text, { as: 'p' }, 'Settings card')),
+    h(SampleSurface, { large: true }, h(Text, { as: 'h4', variant: 'heading-sm' }, 'Large surface'), h(SampleTooltip)));
+  else if (view === 'motion') content = h(Flow, { gap: 'md' }, h(Text, { as: 'p', variant: 'body-sm' }, 'Hover, focus or press controls. Loading respects motion preferences.'),
+    h(SampleButtons), h(SampleTooltip), h(ComponentSamples, { component: 'Loading' }));
+  else content = h(Flow, { gap: 'md' }, h(SampleButtons),
+    ...['success','warning','info','error'].map(severity => h(Alert, { key: severity, severity, heading: severity }, 'Semantic feedback')),
+    h(ComponentSamples, { component: 'Checkbox' }), h(ComponentSamples, { component: 'Slider' }));
+  const label = view === 'components' ? component + ' showcase' : ({
+    colors: 'Semantic colors', typography: 'Type hierarchy', spacing: 'Form and surface spacing',
+    sizing: 'Control sizes', shape: 'Surface and control shape', elevation: 'Surface elevation', motion: 'Interactive motion',
+  })[view];
+  return h(Flow, { gap: 'md', 'data-vf-docs-context-preview': view }, h(Text, { as: 'h3', variant: 'heading-md' }, label), content);
+}
 
 // Documentation-only CSS preview. Canonical theme layer preserves later
 // foundation reduced-motion overrides; no inline token declarations or runtime provider.

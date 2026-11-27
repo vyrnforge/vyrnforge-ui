@@ -129,3 +129,14 @@ test('Slider component tokens use centralized theme authoring', () => {
   assert.match(renderThemeCss(theme), /--vf-slider-track-size: 0\.5rem;/);
   assert.equal(theme.variables['--vf-slider-fill-color'], '#7c3aed');
 });
+
+test('generated scoped themes rebind canonical aliases only when their targets are overridden', () => {
+  const theme = createTheme({ name: 'type-scope', tokens: { '--vf-font-family-sans': 'Georgia, serif', '--vf-font-weight-semibold': '500' } });
+  assert.equal(theme.variables['--vf-control-font-family'], 'var(--vf-font-family-sans)');
+  assert.equal(theme.variables['--vf-font-family-display'], 'var(--vf-font-family-sans)');
+  assert.equal(theme.variables['--vf-control-font-weight'], 'var(--vf-font-weight-semibold)');
+  assert.match(renderThemeCss(theme), /--vf-control-font-family: var\(--vf-font-family-sans\);/);
+  const explicit = createTheme({ name: 'explicit-type', base: theme, tokens: { '--vf-control-font-family': 'monospace' } });
+  assert.equal(explicit.variables['--vf-control-font-family'], 'monospace');
+  assert.equal(createTheme({ name: 'unrelated' }).variables['--vf-control-font-family'], undefined);
+});

@@ -122,3 +122,20 @@ export function storeTheme(storage, draft) {
   storage.setItem(storageKey + '.library', JSON.stringify([next, ...library].slice(0, 50)));
   storage.setItem(storageKey, JSON.stringify(next));
 }
+
+// Resolve inherited authoring values through canonical runtime aliases.
+export function effectiveTokenValue(theme, id, seen = new Set()) {
+  if (seen.has(id)) return undefined;
+  seen.add(id);
+  const name = '--vf-' + id;
+  if (Object.hasOwn(theme.variables, name)) {
+    const value = theme.variables[name];
+    const reference = /^var\(--vf-([a-z0-9-]+)\)$/.exec(value);
+    return reference ? effectiveTokenValue(theme, reference[1], seen) : value;
+  }
+  const definition = runtimeTokenDefinitions[name];
+  if (definition?.reference?.startsWith('runtime.') && definition.emit === 'css-var') {
+    return effectiveTokenValue(theme, definition.reference.slice('runtime.--vf-'.length), seen);
+  }
+  return catalog[id]?.baseline;
+}

@@ -263,3 +263,9 @@ export const publicRuntimeTokens = [
   "--vf-loading-pulse-duration",
   "--vf-loading-custom-color"
 ] as const;
+
+export const runtimeTokenAliases = {
+  "--vf-font-family-display": "--vf-font-family-sans",
+  "--vf-control-font-family": "--vf-font-family-sans",
+  "--vf-control-font-weight": "--vf-font-weight-semibold"
+} as const;

@@ -1555,6 +1555,12 @@
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
   }
+  .vf-docs-studio-categories { display: flex; flex-wrap: wrap; align-items: center; gap: var(--vf-space-xs); min-inline-size: 0; }
+  .vf-docs-studio-categories [aria-pressed='true'] { background: var(--vf-color-accent-subtle); color: var(--vf-color-text); box-shadow: inset 0 0 0 1px var(--vf-color-accent-background); }
+  .vf-docs-studio-setting { display: grid; gap: var(--vf-space-2xs); min-inline-size: 0; overflow-wrap: anywhere; }
+  .vf-docs-studio-setting p { margin: 0; }
+  .vf-docs-studio-sample-surface { background: var(--vf-color-surface-subtle); border: 1px solid var(--vf-color-border); min-inline-size: 0; }
+  .vf-docs-studio-scene [data-vf-text] { overflow-wrap: anywhere; }
   .vf-docs-builder-workspace {
     display: grid;
     gap: var(--vf-space-md);
