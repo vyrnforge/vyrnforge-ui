@@ -75,6 +75,8 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     'components/alert-dialog/', 'api/components/alert-dialog/',
     'components/drawer/', 'api/components/drawer/',
     'components/toast/', 'api/components/toast/',
+    'components/skeleton/', 'api/components/skeleton/',
+    'components/progress/', 'api/components/progress/',
     'components/backdrop/', 'api/components/backdrop/',
     'patterns/loading/', 'api/patterns/loading/',
     'components/chip/', 'api/components/chip/',
