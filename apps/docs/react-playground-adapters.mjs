@@ -662,7 +662,7 @@ function nativeFieldAdapter(multiline) {
     defaultValue: config.initial, 'aria-invalid': config.invalid || undefined,
     variant: config.variant, fieldSize: config.fieldSize === 'inherit' ? undefined : config.fieldSize,
     fullWidth: config.fullWidth, textAlign: config.textAlign,
-    ...(multiline ? { rows: Number(config.rows), autosize: config.autosize, resize: config.resize === 'native' ? undefined : config.resize,
+    ...(multiline ? { rows: config.autosize ? undefined : Number(config.rows), autosize: config.autosize, resize: config.resize === 'native' ? undefined : config.resize,
       minRows: config.autosize ? Number(config.minRows) : undefined, maxRows: config.autosize ? Number(config.maxRows) : undefined } : { type: config.type }),
   });
   return {
@@ -677,18 +677,18 @@ function nativeFieldAdapter(multiline) {
     Preview({ config }) {
       const id = useId();
       return h(Flow, { gap: 'xs', style: { maxInlineSize: '100%', inlineSize: config.fullWidth ? '100%' : undefined } },
-        h('label', { htmlFor: id }, label(config, name)),
+        h('label', { htmlFor: id }, h(Text, { variant: 'label-md' }, label(config, name))),
         h(Component, { ...fieldProps(config), id, key: JSON.stringify([config.type, config.initial]) }));
     },
     source(config) {
       const control = markup(name, ['id="field"', attribute('placeholder', config.placeholder, ''), attribute('defaultValue', config.initial, ''),
-        multiline ? 'rows={' + Number(config.rows) + '}' : attribute('type', config.type, 'text'),
+        multiline ? (config.autosize ? '' : 'rows={' + Number(config.rows) + '}') : attribute('type', config.type, 'text'),
         attribute('variant', config.variant, 'outlined'), attribute('fieldSize', config.fieldSize, 'inherit'), attribute('textAlign', config.textAlign, 'start'), flag('fullWidth', config.fullWidth),
         multiline ? flag('autosize', config.autosize) : '', multiline && config.autosize ? 'minRows={' + Number(config.minRows) + '}' : '', multiline && config.autosize ? 'maxRows={' + Number(config.maxRows) + '}' : '', multiline ? attribute('resize', config.resize, 'native') : '',
         flag('disabled', config.disabled), flag('readOnly', config.readOnly), flag('required', config.required),
         config.invalid ? 'aria-invalid="true"' : '']);
-      return snippet([importLine(name, name.toLowerCase())],
-        '<>\n  <label htmlFor="field">' + content(label(config, name)) + '</label>\n' + indent(control, 2) + '\n</>');
+      return snippet([importLine(name, name.toLowerCase()), importLine('Text', 'text')],
+        '<>\n  <label htmlFor="field"><Text variant="label-md">' + content(label(config, name)) + '</Text></label>\n' + indent(control, 2) + '\n</>');
     },
   };
 }
@@ -702,7 +702,8 @@ function textFieldProps(config) {
     textAlign: config.textAlign, disabled: config.disabled, readOnly: config.readOnly, required: config.required,
     prefix: config.prefix || undefined, suffix: config.suffix || undefined,
     status: config.status === 'none' ? undefined : config.status,
-    ...(config.multiline ? { multiline: true, rows: 3, autosize: config.autosize } : { type: config.type }),
+    ...(config.autosize ? { autosize: true, minRows: Number(config.minRows), maxRows: Number(config.maxRows), resize: config.resize === 'native' ? undefined : config.resize }
+      : config.multiline ? { multiline: true, rows: Number(config.rows), resize: config.resize === 'native' ? undefined : config.resize } : { type: config.type }),
     ...(config.leadingIcon ? { leading: h(Icon, { icon: userIcon }) } : {}),
   };
 }
@@ -717,16 +718,101 @@ export const textFieldPlayground = {
     choice('status', 'Feedback', 'none', ['none', 'warning', 'success']),
     text('prefix', 'Prefix', ''), text('suffix', 'Suffix', ''),
     bool('leadingIcon', 'Leading icon'), bool('fullWidth', 'Full width'),
-    bool('multiline', 'Multiline'), bool('autosize', 'Autosize'), bool('required', 'Required'),
+    bool('multiline', 'Multiline'), bool('autosize', 'Autosize'),
+    choice('rows', 'Rows', '3', ['1','2','3','5']), choice('minRows', 'Minimum rows', '1', ['1','2','3']),
+    choice('maxRows', 'Maximum rows', '6', ['4','6','8']), choice('resize', 'Resize', 'native', ['native','none','vertical','horizontal','both']),
+    bool('required', 'Required'),
     bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'),
   ],
   presets: [
+    { label: 'Auto-expanding message', values: { label: 'Message', autosize: true, multiline: false, minRows: '1', maxRows: '6', fullWidth: true, labelPlacement: 'outside' } },
     { label: 'Underlined', values: { variant: 'underlined', labelPlacement: 'floating' } },
-    { label: 'Amount', values: { label: 'Amount in USD', prefix: '$', textAlign: 'end', description: 'Enter a decimal amount.' } },
+    { label: 'Amount', values: { label: 'Amount in USD', prefix: '
+  },
+};
+
+function sliderValues(config) {
+  const min = config.min;
+  const max = Math.max(min + 1, config.max);
+  const step = config.step === 'any' ? 'any' : Number(config.step);
+  const raw = Math.min(max, Math.max(min, config.value));
+  const value = step === 'any' ? raw : Math.min(min + Math.floor((max - min) / step) * step,
+    min + Math.round((raw - min) / step) * step);
+  return { min, max, step, value };
+}
+function sliderMarks(config, values) {
+  if (config.marks === 'ticks') return true;
+  if (config.marks === 'labels') return [values.min, (values.min + values.max) / 2, values.max]
+    .map(value => ({ value, label: String(value) }));
+  return false;
+}
+function SliderPreview({ config, update }) {
+  const values = sliderValues(config);
+  const name = label(config, 'Volume');
+  const id = useId();
+  const control = h(Slider, { ...values, id, size: config.size, orientation: config.orientation,
+    disabled: config.disabled, 'aria-invalid': config.invalid || undefined,
+    'aria-describedby': config.invalid ? id + '-error' : undefined,
+    marks: sliderMarks(config, values), valueLabelDisplay: config.valueLabelDisplay,
+    formatValue: config.percent ? value => value + '%' : undefined,
+    onChange: event => update('value', event.currentTarget.valueAsNumber) });
+  return h(Flow, { gap: 'sm', className: 'vf-docs-slider-preview' },
+    h(Flow, { direction: 'inline', align: 'center', gap: 'sm' },
+      h('label', { htmlFor: id }, h(Text, null, name)),
+      config.description ? h(TooltipRoot, null,
+        h(TooltipTrigger, null, h(Button, { type: 'button', 'aria-label': 'About ' + name, size: 'sm', variant: 'ghost' }, 'Info')),
+        h(TooltipContent, null, 'Adjust the selected numeric value.')) : null),
+    control,
+    config.invalid ? h(Text, { id: id + '-error', as: 'p', variant: 'body-sm', tone: 'danger' }, 'Choose a permitted value.') : null);
+}
+export const sliderPlayground = {
+  fields: [text('label', 'Label', 'Volume'),
+    choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
+    choice('orientation', 'Orientation', 'horizontal', ['horizontal', 'vertical']),
+    { kind: 'number', key: 'min', label: 'Minimum', default: 0, min: -100, max: 100 },
+    { kind: 'number', key: 'max', label: 'Maximum', default: 100, min: -99, max: 200 },
+    { kind: 'number', key: 'value', label: 'Value', default: 50, min: -100, max: 200 },
+    choice('step', 'Step', '1', ['any', '1', '5', '25']),
+    choice('marks', 'Marks', 'none', ['none', 'ticks', 'labels']),
+    choice('valueLabelDisplay', 'Value label', 'off', ['off', 'auto', 'always']),
+    bool('percent', 'Percent format'), bool('description', 'Descriptive tooltip'), bool('controlled', 'Controlled usage'),
+    bool('disabled', 'Disabled'), bool('invalid', 'Invalid')],
+  presets: [{ label: 'Stepped with labels', values: { step: '25', marks: 'labels', valueLabelDisplay: 'always' } },
+    { label: 'Vertical volume', values: { orientation: 'vertical', valueLabelDisplay: 'auto', percent: true } }],
+  Preview: SliderPreview,
+  source(config) {
+    const { min, max, step, value } = sliderValues(config);
+    const imports = [importLine('Slider', 'slider')];
+    const name = label(config, 'Volume');
+    const props = [
+      attribute('aria-label', name), config.controlled ? 'value={value}' : 'defaultValue={' + value + '}',
+      config.controlled ? 'onChange={event => setValue(event.currentTarget.valueAsNumber)}' : '',
+      min === 0 ? '' : 'min={' + min + '}', max === 100 ? '' : 'max={' + max + '}',
+      step === 1 ? '' : step === 'any' ? 'step="any"' : 'step={' + step + '}',
+      attribute('size', config.size, 'md'), attribute('orientation', config.orientation, 'horizontal'),
+      config.marks === 'ticks' ? 'marks' : config.marks === 'labels' ? 'marks={' + JSON.stringify(sliderMarks(config, { min, max })) + '}' : '',
+      attribute('valueLabelDisplay', config.valueLabelDisplay, 'off'),
+      config.percent ? 'formatValue={value => value + "%"}' : '',
+      flag('disabled', config.disabled), config.invalid ? 'aria-invalid="true"' : '',
+    ];
+    const control = markup('Slider', props);
+    const setup = config.controlled ? ['const [value, setValue] = useState(' + value + ');'] : [];
+    if (config.controlled) imports.push("import { useState } from 'react';");
+    if (!config.description) return snippet(imports, control, { setup });
+    imports.push(importLine('Flow', 'layout'), importLine('Button', 'button'),
+      importLine('TooltipRoot, TooltipTrigger, TooltipContent', 'tooltip'));
+    const help = markup('TooltipRoot', [], markup('TooltipTrigger', [],
+      markup('Button', ['type="button"', attribute('aria-label', 'About ' + name), 'size="sm"', 'variant="ghost"'], 'Info')) + '\n' +
+      markup('TooltipContent', [], 'Adjust the selected numeric value.'));
+    return snippet(imports, markup('Flow', ['gap="sm"'], help + '\n' + control), { setup });
+  },
+};
+, textAlign: 'end', description: 'Enter a decimal amount.' } },
     { label: 'Invalid', values: { error: 'Choose a different display name.', variant: 'filled' } },
   ],
   Preview({ config }) {
-    return h(TextField, { ...textFieldProps(config), key: config.multiline ? 'multi' : config.type });
+    const [value, setValue] = useState('');
+    return h(TextField, { ...textFieldProps(config), value, onChange: event => setValue(event.currentTarget.value) });
   },
   source(config) {
     const p = textFieldProps(config);
@@ -734,8 +820,10 @@ export const textFieldPlayground = {
       markup('TextField', [attribute('label', p.label, ''), attribute('placeholder', config.placeholder, ''),
         attribute('description', config.description, ''), attribute('error', config.error, ''),
         attribute('variant', config.variant, 'outlined'), attribute('labelPlacement', config.labelPlacement, 'outside'), attribute('fieldSize', config.fieldSize, 'inherit'),
-        config.multiline ? 'multiline' : attribute('type', config.type, 'text'), config.multiline ? 'rows={3}' : '',
-        flag('autosize', config.multiline && config.autosize), attribute('textAlign', config.textAlign, 'start'),
+        config.autosize ? 'autosize' : config.multiline ? 'multiline' : attribute('type', config.type, 'text'),
+        config.multiline && !config.autosize ? 'rows={' + Number(config.rows) + '}' : '',
+        config.autosize ? 'minRows={' + Number(config.minRows) + '}' : '', config.autosize ? 'maxRows={' + Number(config.maxRows) + '}' : '',
+        config.multiline || config.autosize ? attribute('resize', config.resize, 'native') : '', attribute('textAlign', config.textAlign, 'start'),
         attribute('status', config.status, 'none'), attribute('prefix', config.prefix, ''), attribute('suffix', config.suffix, ''),
         config.leadingIcon ? 'leading={<Icon icon={userIcon} />}' : '',
         flag('fullWidth', config.fullWidth), flag('required', config.required), flag('disabled', config.disabled), flag('readOnly', config.readOnly)]));
