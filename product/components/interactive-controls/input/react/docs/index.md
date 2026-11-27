@@ -16,7 +16,7 @@ For a composite field with associated label, description, error and optional art
 
 ## Choosing a field component
 
-For ordinary labeled forms, start with TextField. This primitive is for custom compositions and native editing semantics, not a second high-level field API.
+For ordinary labeled forms, start with TextField. For an automatically expanding labeled field, use TextField with autosize; for an independently composed multiline editor, use Textarea. Input remains single-line. This primitive is for custom compositions and native editing semantics, not a second high-level field API.
 
 
 ### Independent editor appearance

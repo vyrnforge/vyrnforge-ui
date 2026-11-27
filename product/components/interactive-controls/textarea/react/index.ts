@@ -33,7 +33,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   return createElement('textarea', {
     ...nativeProps,
     ref,
-    rows: rows ?? (autosize ? minimum : undefined),
+    rows: rows ?? (autosize ? (minimum ?? 1) : undefined),
     cols,
     style: sizing,
     'data-vf-textarea': '',

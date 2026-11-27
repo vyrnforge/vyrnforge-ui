@@ -661,7 +661,7 @@ function nativeFieldAdapter(multiline) {
     defaultValue: config.initial, 'aria-invalid': config.invalid || undefined,
     variant: config.variant, fieldSize: config.fieldSize === 'inherit' ? undefined : config.fieldSize,
     fullWidth: config.fullWidth, textAlign: config.textAlign,
-    ...(multiline ? { rows: Number(config.rows), autosize: config.autosize, resize: config.resize === 'native' ? undefined : config.resize,
+    ...(multiline ? { rows: config.autosize ? undefined : Number(config.rows), autosize: config.autosize, resize: config.resize === 'native' ? undefined : config.resize,
       minRows: config.autosize ? Number(config.minRows) : undefined, maxRows: config.autosize ? Number(config.maxRows) : undefined } : { type: config.type }),
   });
   return {
@@ -676,18 +676,18 @@ function nativeFieldAdapter(multiline) {
     Preview({ config }) {
       const id = useId();
       return h(Flow, { gap: 'xs', style: { maxInlineSize: '100%', inlineSize: config.fullWidth ? '100%' : undefined } },
-        h('label', { htmlFor: id }, label(config, name)),
+        h('label', { htmlFor: id }, h(Text, { variant: 'label-md' }, label(config, name))),
         h(Component, { ...fieldProps(config), id, key: JSON.stringify([config.type, config.initial]) }));
     },
     source(config) {
       const control = markup(name, ['id="field"', attribute('placeholder', config.placeholder, ''), attribute('defaultValue', config.initial, ''),
-        multiline ? 'rows={' + Number(config.rows) + '}' : attribute('type', config.type, 'text'),
+        multiline ? (config.autosize ? '' : 'rows={' + Number(config.rows) + '}') : attribute('type', config.type, 'text'),
         attribute('variant', config.variant, 'outlined'), attribute('fieldSize', config.fieldSize, 'inherit'), attribute('textAlign', config.textAlign, 'start'), flag('fullWidth', config.fullWidth),
         multiline ? flag('autosize', config.autosize) : '', multiline && config.autosize ? 'minRows={' + Number(config.minRows) + '}' : '', multiline && config.autosize ? 'maxRows={' + Number(config.maxRows) + '}' : '', multiline ? attribute('resize', config.resize, 'native') : '',
         flag('disabled', config.disabled), flag('readOnly', config.readOnly), flag('required', config.required),
         config.invalid ? 'aria-invalid="true"' : '']);
-      return snippet([importLine(name, name.toLowerCase())],
-        '<>\n  <label htmlFor="field">' + content(label(config, name)) + '</label>\n' + indent(control, 2) + '\n</>');
+      return snippet([importLine(name, name.toLowerCase()), importLine('Text', 'text')],
+        '<>\n  <label htmlFor="field"><Text variant="label-md">' + content(label(config, name)) + '</Text></label>\n' + indent(control, 2) + '\n</>');
     },
   };
 }
@@ -701,7 +701,8 @@ function textFieldProps(config) {
     textAlign: config.textAlign, disabled: config.disabled, readOnly: config.readOnly, required: config.required,
     prefix: config.prefix || undefined, suffix: config.suffix || undefined,
     status: config.status === 'none' ? undefined : config.status,
-    ...(config.multiline ? { multiline: true, rows: 3, autosize: config.autosize } : { type: config.type }),
+    ...(config.autosize ? { autosize: true, minRows: Number(config.minRows), maxRows: Number(config.maxRows), resize: config.resize === 'native' ? undefined : config.resize }
+      : config.multiline ? { multiline: true, rows: Number(config.rows), resize: config.resize === 'native' ? undefined : config.resize } : { type: config.type }),
     ...(config.leadingIcon ? { leading: h(Icon, { icon: userIcon }) } : {}),
   };
 }
@@ -716,16 +717,21 @@ export const textFieldPlayground = {
     choice('status', 'Feedback', 'none', ['none', 'warning', 'success']),
     text('prefix', 'Prefix', ''), text('suffix', 'Suffix', ''),
     bool('leadingIcon', 'Leading icon'), bool('fullWidth', 'Full width'),
-    bool('multiline', 'Multiline'), bool('autosize', 'Autosize'), bool('required', 'Required'),
+    bool('multiline', 'Multiline'), bool('autosize', 'Autosize'),
+    choice('rows', 'Rows', '3', ['1','2','3','5']), choice('minRows', 'Minimum rows', '1', ['1','2','3']),
+    choice('maxRows', 'Maximum rows', '6', ['4','6','8']), choice('resize', 'Resize', 'native', ['native','none','vertical','horizontal','both']),
+    bool('required', 'Required'),
     bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'),
   ],
   presets: [
+    { label: 'Auto-expanding message', values: { label: 'Message', autosize: true, multiline: false, minRows: '1', maxRows: '6', fullWidth: true, labelPlacement: 'outside' } },
     { label: 'Underlined', values: { variant: 'underlined', labelPlacement: 'floating' } },
     { label: 'Amount', values: { label: 'Amount in USD', prefix: '$', textAlign: 'end', description: 'Enter a decimal amount.' } },
     { label: 'Invalid', values: { error: 'Choose a different display name.', variant: 'filled' } },
   ],
   Preview({ config }) {
-    return h(TextField, { ...textFieldProps(config), key: config.multiline ? 'multi' : config.type });
+    const [value, setValue] = useState('');
+    return h(TextField, { ...textFieldProps(config), value, onChange: event => setValue(event.currentTarget.value) });
   },
   source(config) {
     const p = textFieldProps(config);
@@ -733,8 +739,10 @@ export const textFieldPlayground = {
       markup('TextField', [attribute('label', p.label, ''), attribute('placeholder', config.placeholder, ''),
         attribute('description', config.description, ''), attribute('error', config.error, ''),
         attribute('variant', config.variant, 'outlined'), attribute('labelPlacement', config.labelPlacement, 'outside'), attribute('fieldSize', config.fieldSize, 'inherit'),
-        config.multiline ? 'multiline' : attribute('type', config.type, 'text'), config.multiline ? 'rows={3}' : '',
-        flag('autosize', config.multiline && config.autosize), attribute('textAlign', config.textAlign, 'start'),
+        config.autosize ? 'autosize' : config.multiline ? 'multiline' : attribute('type', config.type, 'text'),
+        config.multiline && !config.autosize ? 'rows={' + Number(config.rows) + '}' : '',
+        config.autosize ? 'minRows={' + Number(config.minRows) + '}' : '', config.autosize ? 'maxRows={' + Number(config.maxRows) + '}' : '',
+        config.multiline || config.autosize ? attribute('resize', config.resize, 'native') : '', attribute('textAlign', config.textAlign, 'start'),
         attribute('status', config.status, 'none'), attribute('prefix', config.prefix, ''), attribute('suffix', config.suffix, ''),
         config.leadingIcon ? 'leading={<Icon icon={userIcon} />}' : '',
         flag('fullWidth', config.fullWidth), flag('required', config.required), flag('disabled', config.disabled), flag('readOnly', config.readOnly)]));
