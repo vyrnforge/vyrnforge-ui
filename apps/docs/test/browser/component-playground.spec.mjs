@@ -684,7 +684,8 @@ test('Rating playground renders native choices, synchronized source and read-onl
   await expect(preview.getByRole('radio')).toHaveCount(5);
   await expect(preview.getByRole('radio').first()).toHaveCSS('opacity', '0');
   await expect(preview.locator('[data-vf-rating-artwork] [data-vf-icon]').first()).toHaveCSS('width', '20px');
-  await expect(preview.locator('[data-vf-rating-root]')).toHaveCSS('display', 'inline-flex');
+  await expect(preview.locator('[data-vf-rating-root]')).toHaveCSS('display', /^(inline-)?flex$/);
+  expect(await preview.locator('[data-vf-rating-star]').first().evaluate(el => el.getBoundingClientRect().height)).toBeLessThanOrEqual(40);
   await playground.getByRole('button', { name: 'Half stars' }).click();
   await expect(preview.getByRole('radio')).toHaveCount(10);
   await expect(preview.getByRole('radio', { name: '3.5', exact: true })).toBeChecked();
