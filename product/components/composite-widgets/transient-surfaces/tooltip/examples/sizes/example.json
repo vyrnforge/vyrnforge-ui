@@ -1,0 +1,13 @@
+{
+  "id": "tooltip/sizes",
+  "title": "Sizes and arrows",
+  "description": "Compare compact and larger surfaces, with and without the optional pointer.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

@@ -11,6 +11,7 @@ import {
   type OnDestroy,
 } from '@angular/core';
 import type { AnchorPlacement } from '@vyrnforge/web';
+import { connectTooltipArrow } from '@vyrnforge/web/tooltip';
 
 type Activity = 'trigger' | 'content' | 'focus';
 
@@ -128,21 +129,26 @@ export class VfTooltipTriggerDirective implements OnDestroy {
     '[attr.data-vf-open]': 'root.expanded() ? "" : null',
     '[attr.data-vf-placement]': 'root.placement()',
     '[hidden]': '!root.expanded()',
+    '[attr.data-vf-size]': 'size()',
+    '[attr.data-vf-arrow]': 'arrow() ? "" : null',
     '(pointerenter)': 'pointer($event, true)',
     '(pointerleave)': 'pointer($event, false)',
   },
 })
 export class VfTooltipContentDirective implements OnDestroy {
+  readonly size = input<'sm' | 'md' | 'lg'>('md');
+  readonly arrow = input(false, { transform: booleanAttribute });
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   constructor(readonly root: VfTooltipRootDirective) {
     this.root.content = this.element.nativeElement;
-    afterRenderEffect(() => {
+    afterRenderEffect((onCleanup) => {
       const open = this.root.expanded();
       const trigger = this.root.anchor;
       const surface = this.element.nativeElement;
       if (!trigger) return;
       if (open && !surface.matches(':popover-open')) surface.showPopover({ source: trigger });
       if (!open && surface.matches(':popover-open')) surface.hidePopover();
+      if (open && this.arrow()) onCleanup(connectTooltipArrow(surface, trigger));
     });
   }
   pointer(event: PointerEvent, active: boolean): void {

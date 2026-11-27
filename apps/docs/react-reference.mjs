@@ -18,7 +18,7 @@ import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
 import { MotionUtility } from './react-motion-utility.mjs';
 import { ComponentPlayground } from './react-component-playground.mjs';
-import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from './react-playground-adapters.mjs';
+import { buttonPlayground, checkboxPlayground, radioPlayground, sliderPlayground, avatarPlayground, badgePlayground, chipPlayground, togglePlayground, dividerPlayground, listPlayground, loadingPlayground, skeletonPlayground, progressPlayground, backdropPlayground, statusIndicatorPlayground, alertPlayground, dialogPlayground, alertDialogPlayground, drawerPlayground, toastPlayground, tooltipPlayground, inputPlayground, textareaPlayground, textFieldPlayground } from './react-playground-adapters.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -200,7 +200,7 @@ function navigation(view, links, topic) {
       { id: 'badge', title: 'Badge', href: links.badge.guide },
       { id: 'chip', title: 'Chip', href: links.chip.guide },
     ] },
-    { label: 'Feedback', items: [{ id: 'status-indicator', title: 'Status Indicator', href: links['status-indicator'].guide }, { id: 'alert', title: 'Alert', href: links.alert.guide }, { id: 'backdrop', title: 'Backdrop', href: links.backdrop.guide }, { id: 'loading', title: 'Loading', href: links.loading.guide }, { id: 'skeleton', title: 'Skeleton', href: links.skeleton.guide }, { id: 'progress', title: 'Progress', href: links.progress.guide }, { id: 'dialog', title: 'Dialog', href: links['dialog'].guide }, { id: 'alert-dialog', title: 'AlertDialog', href: links['alert-dialog'].guide }, { id: 'drawer', title: 'Drawer', href: links['drawer'].guide }, { id: 'toast', title: 'Toast', href: links['toast'].guide }, { id: 'banner', title: 'Banner', href: links['banner'].guide }, { id: 'empty-state', title: 'Empty State', href: links['empty-state'].guide }, { id: 'inline-feedback', title: 'Inline Feedback', href: links['inline-feedback'].guide }, { id: 'feedback-composition', title: 'Feedback Composition', href: links['feedback-composition'].guide }] },
+    { label: 'Feedback', items: [{ id: 'status-indicator', title: 'Status Indicator', href: links['status-indicator'].guide }, { id: 'alert', title: 'Alert', href: links.alert.guide }, { id: 'backdrop', title: 'Backdrop', href: links.backdrop.guide }, { id: 'loading', title: 'Loading', href: links.loading.guide }, { id: 'skeleton', title: 'Skeleton', href: links.skeleton.guide }, { id: 'progress', title: 'Progress', href: links.progress.guide }, { id: 'dialog', title: 'Dialog', href: links['dialog'].guide }, { id: 'alert-dialog', title: 'AlertDialog', href: links['alert-dialog'].guide }, { id: 'drawer', title: 'Drawer', href: links['drawer'].guide }, { id: 'toast', title: 'Toast', href: links['toast'].guide }, { id: 'tooltip', title: 'Tooltip', href: links.tooltip.guide }, { id: 'banner', title: 'Banner', href: links['banner'].guide }, { id: 'empty-state', title: 'Empty State', href: links['empty-state'].guide }, { id: 'inline-feedback', title: 'Inline Feedback', href: links['inline-feedback'].guide }, { id: 'feedback-composition', title: 'Feedback Composition', href: links['feedback-composition'].guide }] },
     { label: 'Libraries', items: [
       { id: 'icon-library', title: 'VyrnForge Icons', href: links.icon.library },
     ] },
@@ -230,6 +230,7 @@ function navigation(view, links, topic) {
       { id: 'alert-dialog-api', title: 'AlertDialog API', href: links['alert-dialog'].api },
       { id: 'drawer-api', title: 'Drawer API', href: links['drawer'].api },
       { id: 'toast-api', title: 'Toast API', href: links['toast'].api },
+      { id: 'tooltip-api', title: 'Tooltip API', href: links.tooltip.api },
       { id: 'backdrop-api', title: 'Backdrop API', href: links.backdrop.api },
       { id: 'loading-api', title: 'Loading API', href: links.loading.api },
       { id: 'skeleton-api', title: 'Skeleton API', href: links.skeleton.api },
@@ -1537,7 +1538,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   if (view === 'divider-api') return dividerApi(divider, links);
   if (view === 'list') return listUsage(list, links);
   if (view === 'list-api') return listApi(list, links);
-  if (feedback) return view.endsWith('-api') ? feedbackApi(feedback, links) : feedbackUsage(feedback, links, ({ skeleton: skeletonPlayground, progress: progressPlayground, alert: alertPlayground, 'status-indicator': statusIndicatorPlayground, dialog: dialogPlayground, 'alert-dialog': alertDialogPlayground, drawer: drawerPlayground, toast: toastPlayground, input: inputPlayground, textarea: textareaPlayground, 'text-field': textFieldPlayground })[feedback.id]);
+  if (feedback) return view.endsWith('-api') ? feedbackApi(feedback, links) : feedbackUsage(feedback, links, ({ skeleton: skeletonPlayground, progress: progressPlayground, alert: alertPlayground, 'status-indicator': statusIndicatorPlayground, dialog: dialogPlayground, 'alert-dialog': alertDialogPlayground, drawer: drawerPlayground, toast: toastPlayground, tooltip: tooltipPlayground, input: inputPlayground, textarea: textareaPlayground, 'text-field': textFieldPlayground })[feedback.id]);
   if (view === 'backdrop') return feedbackUsage(backdrop, links, backdropPlayground);
   if (view === 'backdrop-api') return feedbackApi(backdrop, links);
   if (view === 'loading') return feedbackUsage(loading, links, loadingPlayground);
@@ -1654,6 +1655,7 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
     { title: 'AlertDialog', href: links['alert-dialog'].guide, keywords: 'feedback alert-dialog native composition' },
     { title: 'Drawer', href: links['drawer'].guide, keywords: 'feedback drawer native composition' },
     { title: 'Toast', href: links['toast'].guide, keywords: 'feedback toast native composition' },
+    { title: 'Tooltip', href: links.tooltip.guide, keywords: 'supplementary help hover focus anchor placement' },
     { title: 'Banner', href: links['banner'].guide, keywords: 'feedback banner native composition' },
     { title: 'Empty State', href: links['empty-state'].guide, keywords: 'feedback empty-state native composition' },
     { title: 'Inline Feedback', href: links['inline-feedback'].guide, keywords: 'feedback inline-feedback native composition' },

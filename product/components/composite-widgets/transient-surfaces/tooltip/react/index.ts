@@ -16,6 +16,7 @@ import {
   type Ref,
 } from 'react';
 import type { AnchorPlacement } from '@vyrnforge/web';
+import { connectTooltipArrow } from '@vyrnforge/web/tooltip';
 
 type Activity = 'trigger' | 'content' | 'focus';
 
@@ -189,8 +190,11 @@ export function TooltipTrigger({ children }: TooltipTriggerProps) {
   } as HTMLAttributes<HTMLElement> & { ref: Ref<HTMLElement> });
 }
 
-export type TooltipContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'>;
-export function TooltipContent(props: TooltipContentProps): ReactNode {
+export type TooltipContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'> & {
+  size?: 'sm' | 'md' | 'lg';
+  arrow?: boolean;
+};
+export function TooltipContent({ size = 'md', arrow = false, ...props }: TooltipContentProps): ReactNode {
   const context = useTooltip();
   useEffect(() => {
     const surface = context.contentRef.current;
@@ -198,7 +202,8 @@ export function TooltipContent(props: TooltipContentProps): ReactNode {
     if (!surface || !trigger) return;
     if (context.open && !surface.matches(':popover-open')) surface.showPopover({ source: trigger });
     if (!context.open && surface.matches(':popover-open')) surface.hidePopover();
-  }, [context.anchorRef, context.contentRef, context.open]);
+    if (context.open && arrow) return connectTooltipArrow(surface, trigger);
+  }, [context.anchorRef, context.contentRef, context.open, arrow]);
 
   return createElement('div', {
     ...props,
@@ -210,6 +215,8 @@ export function TooltipContent(props: TooltipContentProps): ReactNode {
     'data-vf-tooltip-content': '',
     'data-vf-open': context.open ? '' : undefined,
     'data-vf-placement': context.placement,
+    'data-vf-size': size,
+    'data-vf-arrow': arrow ? '' : undefined,
     onPointerEnter(event) {
       props.onPointerEnter?.(event);
       if (!event.defaultPrevented && event.pointerType !== 'touch') context.activity('content', true, 0);

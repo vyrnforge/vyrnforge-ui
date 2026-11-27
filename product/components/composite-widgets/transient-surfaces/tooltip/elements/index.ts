@@ -1,16 +1,18 @@
 import type { AnchorPlacement } from '@vyrnforge/web';
+import { connectTooltipArrow } from '@vyrnforge/web/tooltip';
 
 const HTMLElementBase = (globalThis.HTMLElement ?? class {}) as typeof HTMLElement;
 let nextId = 0;
 
 export class VfTooltipElement extends HTMLElementBase {
-  static readonly observedAttributes = ['open', 'placement'];
+  static readonly observedAttributes = ['open', 'placement', 'size', 'arrow'];
   #timer: ReturnType<typeof setTimeout> | null = null;
   #observer: MutationObserver | null = null;
   #hover = false;
   #focus = false;
   #dismissed = false;
   #surface: HTMLElement | null = null;
+  #disconnectArrow: (() => void) | undefined;
 
   connectedCallback(): void {
     if (typeof HTMLElement === 'undefined') return;
@@ -36,6 +38,8 @@ export class VfTooltipElement extends HTMLElementBase {
     this.#hover = false;
     this.#focus = false;
     this.#dismissed = false;
+    this.#disconnectArrow?.();
+    this.#disconnectArrow = undefined;
     this.#surface = null;
   }
 
@@ -94,6 +98,8 @@ export class VfTooltipElement extends HTMLElementBase {
   }
 
   #sync(): void {
+    this.#disconnectArrow?.();
+    this.#disconnectArrow = undefined;
     const trigger = this.#trigger();
     const content = this.#content();
     if (this.#surface && this.#surface !== content && this.#surface.matches(':popover-open'))
@@ -113,10 +119,13 @@ export class VfTooltipElement extends HTMLElementBase {
     content.setAttribute('role', 'tooltip');
     content.setAttribute('popover', 'manual');
     content.setAttribute('data-vf-placement', this.placement);
+    if (this.hasAttribute('size')) content.setAttribute('data-vf-size', this.getAttribute('size') ?? 'md');
+    content.toggleAttribute('data-vf-arrow', this.hasAttribute('arrow'));
     content.hidden = !this.open;
     content.toggleAttribute('data-vf-open', this.open);
     if (this.open && !content.matches(':popover-open')) content.showPopover({ source: trigger });
     if (!this.open && content.matches(':popover-open')) content.hidePopover();
+    if (this.open && this.hasAttribute('arrow')) this.#disconnectArrow = connectTooltipArrow(content, trigger);
   }
 
   #pointerOver = (event: PointerEvent): void => {

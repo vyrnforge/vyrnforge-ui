@@ -17,6 +17,7 @@ import {
   type Ref,
 } from 'vue';
 import type { AnchorPlacement } from '@vyrnforge/web';
+import { connectTooltipArrow } from '@vyrnforge/web/tooltip';
 
 type Activity = 'trigger' | 'content' | 'focus';
 interface Context {
@@ -168,17 +169,26 @@ export const TooltipTrigger = defineComponent({
 export const TooltipContent = defineComponent({
   name: 'VfTooltipContent',
   inheritAttrs: false,
-  setup(_p, { attrs, slots }) {
+  props: {
+    size: { type: String as PropType<'sm' | 'md' | 'lg'>, default: 'md' },
+    arrow: { type: Boolean, default: false },
+  },
+  setup(props, { attrs, slots }) {
     const context = useTooltip();
+    let disconnect: (() => void) | undefined;
     function sync() {
+      disconnect?.();
+      disconnect = undefined;
       const surface = context.content.value;
       const trigger = context.anchor.value;
       if (!surface || !trigger) return;
       if (context.open.value && !surface.matches(':popover-open')) surface.showPopover({ source: trigger });
       if (!context.open.value && surface.matches(':popover-open')) surface.hidePopover();
+      if (context.open.value && props.arrow) disconnect = connectTooltipArrow(surface, trigger);
     }
     onMounted(sync);
-    watch([context.open, context.anchor, context.content], sync, { flush: 'post' });
+    watch([context.open, context.anchor, context.content, () => props.arrow], sync, { flush: 'post' });
+    onUnmounted(() => disconnect?.());
     return () =>
       h(
         'div',
@@ -191,6 +201,8 @@ export const TooltipContent = defineComponent({
           'data-vf-tooltip-content': '',
           'data-vf-open': context.open.value ? '' : undefined,
           'data-vf-placement': context.placement.value,
+          'data-vf-size': props.size,
+          'data-vf-arrow': props.arrow ? '' : undefined,
           onPointerenter: (event: PointerEvent) => {
             if (!event.defaultPrevented && event.pointerType !== 'touch') context.activity('content', true, 0);
           },

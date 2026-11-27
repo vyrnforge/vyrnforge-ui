@@ -1,0 +1,13 @@
+{
+  "id": "tooltip/placements",
+  "title": "Preferred placements",
+  "description": "Hover or focus each public trigger. Native CSS may flip the surface when the preferred side does not fit.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

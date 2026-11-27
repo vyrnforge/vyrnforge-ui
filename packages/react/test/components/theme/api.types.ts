@@ -34,3 +34,9 @@ const raw: ThemeTokenOverrides = { '--vf-control-radius': '12px' };
 // @ts-expect-error unknown component token
 const bad: ThemeTokenOverrides = { skeleton: { secret: 'red' } };
 void [raw, bad];
+
+const tooltipTokens: ThemeTokenOverrides = { tooltip: { background: '#1e3a8a', foreground: '#fff', radius: '8px', font: '400 14px/1.5 sans-serif', maxWidth: '14rem', offset: '6px', arrowSize: '5px' } };
+void [tokens.tooltip.background, createTheme({ name: 'tooltip-brand', tokens: tooltipTokens }), tokenStyle(tooltipTokens)];
+// @ts-expect-error unknown Tooltip token role
+const badTooltip: ThemeTokenOverrides = { tooltip: { color: '#fff' } };
+void badTooltip;
