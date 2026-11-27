@@ -14,7 +14,27 @@ Pass marks to show a bounded set of step ticks, or pass an array of { value, lab
 
 ## Value labels and descriptive tooltips
 
-Use valueLabelDisplay="auto" or "always", and formatValue for units or localized display. The default is "off". For explanatory text, compose the public Tooltip components rather than using the value label as help text.
+Pass tooltip to enable the built-in moving value tooltip. No TooltipRoot, TooltipTrigger or TooltipContent import is necessary.
+
+```tsx
+<Slider aria-label="Volume" defaultValue={50} tooltip />
+
+<Slider
+  aria-label="Volume"
+  defaultValue={50}
+  tooltip={{
+    display: 'always',
+    placement: 'top',
+    size: 'sm',
+    arrow: true,
+    format: value => value + '%',
+  }}
+/>
+```
+
+Default is false. An options object defaults to auto visibility, sm size, no arrow, and the orientation-appropriate placement. Native viewport collision handling and the shared Tooltip arrow follow the moving thumb, even at the minimum or maximum. All twelve Tooltip placements are supported. During dragging the tooltip remains visible even if the pointer leaves the track. The numeric surface is not an accessible description; formatted values use aria-valuetext unless an explicit value text is supplied.
+
+Migration: valueLabelDisplay and formatValue remain accepted for existing consumers. Prefer tooltip={{ display: 'auto', format: value => value + '%' }} for new usage. An explicitly supplied tooltip option takes precedence over the legacy visibility option; a legacy formatter remains a fallback for accessible value text. For explanatory text, use the standalone Tooltip separately.
 
 ## Controlled and uncontrolled state
 
@@ -37,4 +57,4 @@ import { Slider } from '@vyrnforge/react/slider';
 </ThemeScope>
 ```
 
-The typed group also supports trackColor, thumbColor, valueLabelFont and markLabelFont. The native input still owns interaction and accessibility. Shared CSS provides defaults.
+The typed Slider group also supports trackColor, thumbColor, valueLabelFont and markLabelFont. The numeric tooltip inherits the centralized tooltip group (background, foreground, radius, font, maxWidth, offset and arrowSize); the existing slider.valueLabelFont overrides that font only when explicitly configured. The native input still owns interaction and accessibility. Shared CSS provides defaults.

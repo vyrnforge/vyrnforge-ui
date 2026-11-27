@@ -263,8 +263,7 @@ export function connectSlider(input: HTMLInputElement, initial: SliderPresentati
       if (host) {
         host.removeAttribute('data-vf-slider-marks');
         host.removeAttribute('data-vf-value-label');
-        for (const property of ['--_vf-slider-progress'])
-          host.style.removeProperty(property);
+        host.style.removeProperty('--_vf-slider-progress');
       }
     },
   };

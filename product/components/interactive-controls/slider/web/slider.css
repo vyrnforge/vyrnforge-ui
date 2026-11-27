@@ -187,7 +187,7 @@
     inset-block-start: 50%;
     translate: 0 -50%;
   }
-  :where([data-vf-slider-value][data-vf-tooltip-content]) {
+  :where([data-vf-slider-value])[data-vf-tooltip-content] {
     pointer-events: none;
     text-align: center;
     font: var(--vf-slider-value-label-font, var(--_vf-tooltip-font));

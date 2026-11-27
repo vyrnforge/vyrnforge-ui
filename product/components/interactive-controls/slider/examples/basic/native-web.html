@@ -6,7 +6,6 @@
   import { connectSlider } from '@vyrnforge/web/slider';
   connectSlider(document.querySelector('#volume'), {
     marks: [{ value: 0, label: '0%' }, { value: 50, label: '50%' }, { value: 100, label: '100%' }],
-    valueLabelDisplay: 'auto',
-    formatValue: value => value + '%'
+    tooltip: { arrow: true, format: value => value + '%' }
   });
 </script>

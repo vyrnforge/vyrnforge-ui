@@ -2,9 +2,9 @@ const marks = [{ value: 0, label: '0' }, { value: 50, label: '50' }, { value: 10
 export default {
   id: 'slider', exportName: 'Slider', angularName: 'VfSliderDirective', hook: 'data-vf-slider', hydrate: true,
   markup: '<label for="control">Value</label><span data-vf-slider-presentation><input id="control" name="control" type="range" data-vf-slider value="50" min="0" max="100" step="5"></span>',
-  webConnector: 'connectSlider', webConnectorOptions: { marks, valueLabelDisplay: 'always' },
-  angular: '<label for="control">Value</label><span data-vf-slider-presentation><input id="control" name="control" vfSlider value="50" min="0" max="100" step="5" [marks]="[{value: 0, label: \'0\'}, {value: 50, label: \'50\'}, {value: 100, label: \'100\'}]" valueLabelDisplay="always"></span>',
-  props: { name: 'control', defaultValue: 50, min: 0, max: 100, step: 5, marks, valueLabelDisplay: 'always' }, semantics: { tag: 'INPUT', type: 'range' },
+  webConnector: 'connectSlider', webConnectorOptions: { marks, tooltip: { display: 'always', arrow: true } },
+  angular: '<label for="control">Value</label><span data-vf-slider-presentation><input id="control" name="control" vfSlider value="50" min="0" max="100" step="5" [marks]="[{value: 0, label: \'0\'}, {value: 50, label: \'50\'}, {value: 100, label: \'100\'}]" [tooltip]="{display: \'always\', arrow: true}"></span>',
+  props: { name: 'control', defaultValue: 50, min: 0, max: 100, step: 5, marks, tooltip: { display: 'always', arrow: true } }, semantics: { tag: 'INPUT', type: 'range' },
   async assertBrowser({ page, control, expect }) {
     await expect(control).toHaveAttribute('data-vf-slider-enhanced', '');
     await control.focus();
