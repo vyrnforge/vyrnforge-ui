@@ -1,7 +1,7 @@
-export { colors, tokens, toneStyle, ThemeScope } from './internal/theme.js';
+export { colors, tokens, toneStyle, ThemeScope, createTheme, renderThemeCss, tokenStyle } from './internal/theme.js';
 export { Motion } from './internal/motion.js';
 export type { MotionDirection, MotionEffect, MotionProps } from './internal/motion.js';
-export type { ColorRole, TextTone, ThemeColorOverrides, ThemeElement, ThemeMotionOverrides, ThemeName, ThemeScopeProps } from './internal/theme.js';
+export type { ColorRole, TextTone, ThemeColorOverrides, ThemeElement, ThemeMotionOverrides, ThemeName, ThemeScopeProps, ThemeTokenOverrides, CreateThemeOptions, ThemeDefinition } from './internal/theme.js';
 export { Chip } from './components/chip/index.js';
 export type { ChipProps, ChipTone, ChipSize, ChipVariant } from './components/chip/index.js';
 export { Badge } from './components/badge/index.js';

@@ -50,6 +50,52 @@ export const browserFixture = {
       ));
       await writeFile(path.join(outDir, 'react.html'), page(markup));
 
+      await build({
+        stdin: {
+          resolveDir: root,
+          sourcefile: 'react-input-token-audit.ts',
+          contents: `
+import { createElement as h } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Input, Textarea, TextField, ThemeScope, createTheme, renderThemeCss, tokenStyle,
+  NumberFieldRoot, NumberFieldInput, PasswordFieldRoot, PasswordFieldInput,
+  SearchFieldRoot, SearchFieldInput, ColorPickerRoot, ColorPickerTextInput,
+  OTPFieldRoot, OTPFieldInput, ComboboxRoot, ComboboxInput, ComboboxContent,
+  NativeSelect, FileInput } from '@vyrnforge/react';
+const roles = { editor: { radius: '11px', background: '#f2f3f4', borderColor: '#234567',
+  valueFont: '400 18px/1.5 monospace', placeholderFont: '400 14px/1.5 monospace' } };
+const theme = createTheme({ name: 'input-token-audit', tokens: roles });
+const style = document.createElement('style');
+style.textContent = renderThemeCss(theme);
+document.head.append(style);
+const types = ['text','email','password','search','tel','url','number','date','time','datetime-local','month','week','color'];
+const props = (name) => ({ 'aria-label': name, 'data-token-audit': name });
+const fields = () => [
+  ...types.map(type => h(Input, { key: type, type, ...props(type) })),
+  ...types.map(type => h(TextField, { key: 'field-' + type, type, label: 'Field ' + type, 'data-token-audit': 'field-' + type })),
+  h(Textarea, { key:'textarea', ...props('textarea') }),
+  h(TextField, { key:'auto', label:'Auto', autosize:true, 'data-token-audit':'auto' }),
+  h(NumberFieldRoot, { key:'number' }, h(NumberFieldInput, props('special-number'))),
+  h(PasswordFieldRoot, { key:'password' }, h(PasswordFieldInput, props('special-password'))),
+  h(SearchFieldRoot, { key:'search' }, h(SearchFieldInput, props('special-search'))),
+  h(ColorPickerRoot, { key:'color' }, h(ColorPickerTextInput, props('special-color'))),
+  h(OTPFieldRoot, { key:'otp' }, h(OTPFieldInput, props('special-otp'))),
+  h(ComboboxRoot, { key:'combo' }, h(ComboboxInput, props('special-combo')), h(ComboboxContent, null)),
+  h(NativeSelect, { key:'select', ...props('select') }, h('option', null, 'Option')),
+  h(FileInput, { key:'file', ...props('file') }),
+  h(Input, { key:'instance', ...props('instance'), style:tokenStyle({ input:{ valueFont:'400 20px/1.5 monospace' } }) })
+];
+createRoot(document.querySelector('#audit')).render(h('main', null,
+  h(ThemeScope, { id:'central', theme:theme.name }, fields()),
+  h(ThemeScope, { id:'local', tokens:roles }, fields()),
+  h(Input, { ...props('outside') })));
+`,
+        },
+        bundle: true, format: 'esm', platform: 'browser',
+        outfile: path.join(outDir, 'react-token-audit.js'),
+      });
+      await writeFile(path.join(outDir, 'react-token-audit.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>React input tokens</title><link rel="stylesheet" href="./react-token-audit.css"></head><body><div id="audit"></div><script type="module" src="./react-token-audit.js"></script></body></html>');
+
       const profileBuild = await build({
         stdin: {
           resolveDir: root,

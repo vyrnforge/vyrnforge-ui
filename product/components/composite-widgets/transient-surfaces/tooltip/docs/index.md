@@ -10,9 +10,9 @@ The surface uses regular-weight small text, theme-aware inverse colors, compact 
 
 Hover or focus reveals a description, Escape dismisses it without moving focus, and pointer users can move into the open content. The trigger has an accessible name independent of its tooltip. Tooltip content is not interactive; use Popover for actions and richer content. Touch users must not depend on hover to discover essential information. Forced colors retain system colors; reduced motion suppresses the reveal animation.
 
-## Theme customization
+## Customization
 
-Customize background, foreground, radius, font, maximum width and anchor offset through createTheme with the registered --vf-tooltip-background, --vf-tooltip-foreground, --vf-tooltip-radius, --vf-tooltip-font, --vf-tooltip-max-width and --vf-tooltip-offset tokens. Maintain contrast and avoid excessive offsets that make hover transfer difficult.
+Customize background, foreground, radius, font, maximum width and anchor offset through createTheme with the registered --vf-tooltip-background, --vf-tooltip-foreground, --vf-tooltip-radius, --vf-tooltip-font, --vf-tooltip-max-width and --vf-tooltip-offset tokens. Defaults: inverse semantic text/surface colors; control radius; regular 0.875rem text with normal line height and control font family; maximum width 16rem; and 0.25rem clearance. Colors accept CSS colors, radius/maximum width/offset accept CSS lengths, and font accepts a complete CSS font shorthand. Maintain contrast and avoid excessive offsets that make hover transfer difficult.
 
 ## Related controls
 

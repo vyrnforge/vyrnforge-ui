@@ -2,20 +2,21 @@ import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Code, CodeBlock } from '@vyrnforge/react/code';
 import { Link } from '@vyrnforge/react/link';
 import { createElement as h, useEffect, useState } from 'react';
-import { createTheme, renderThemeCss, themeableColorRoles } from '@vyrnforge/web/theme';
+import { createTheme, renderThemeCss, colors } from '@vyrnforge/react';
 import { Button } from '@vyrnforge/react/button';
 import { Input } from '@vyrnforge/react/input';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { Slider } from '@vyrnforge/react/slider';
 import { Text } from '@vyrnforge/react/text';
-import { presets, buildTheme, Segment, Picker, PreviewScene, contrast } from './react-theme-studio.mjs';
+import { presets, buildTheme, Segment, Picker, PreviewScene, contrast, themeValue } from './react-theme-studio.mjs';
 
+const themeableColorRoles = Object.keys(colors).filter(role => !['primary', 'secondary', 'background'].includes(role));
 const groups = ['All', 'Accent', 'Surfaces', 'Text', 'Borders', 'Feedback', 'Danger', 'Focus', 'Disabled'];
-const groupFor = (role) => role.startsWith('accent-') ? 'Accent' :
-  role.startsWith('surface') ? 'Surfaces' : role.startsWith('text') ? 'Text' :
+const groupFor = (role) => (role.startsWith('accent') || role === 'onAccent') ? 'Accent' :
+  role.startsWith('surface') ? 'Surfaces' : ['text', 'muted', 'subtle'].includes(role) ? 'Text' :
   role.startsWith('border') ? 'Borders' : role.startsWith('danger') ? 'Danger' :
-  /^(success|warning|info)-/.test(role) ? 'Feedback' :
+  /^(success|warning|info)/.test(role) ? 'Feedback' :
   role.startsWith('focus') ? 'Focus' : 'Disabled';
 const validSlug = (name) => /^[a-z][a-z0-9-]*$/.test(name) &&
   !['light', 'dark', 'system'].includes(name);
@@ -37,7 +38,7 @@ function readDraft(search) {
       radius: x.radius, custom };
   } catch { return null; }
 }
-const friendly = (role) => role.replaceAll('-', ' ');
+const friendly = (role) => role === 'onAccent' ? 'accent foreground' : role.replace(/[A-Z]/g, letter => ' ' + letter.toLowerCase());
 function TokenList({ roles, selected, onSelect, theme }) {
   return h('div', { className: 'vf-docs-builder-role-list', 'data-vf-docs-builder-roles': '',
     'aria-label': 'Semantic color roles' },
@@ -46,15 +47,15 @@ function TokenList({ roles, selected, onSelect, theme }) {
       pressed: selected === role, onClick: () => onSelect(role),
     },
     h('span', { className: 'vf-docs-studio-token-swatch',
-      style: { backgroundColor: theme.variables['--vf-color-' + role] },
+      style: { backgroundColor: themeValue(theme, role) },
       'aria-hidden': 'true' }),
     h(Text, { as: 'span' }, h(Text, { as: 'strong', variant: 'label-md' }, friendly(role)),
-      h(Code, null, theme.variables['--vf-color-' + role])))) :
+      h(Code, null, themeValue(theme, role))))) :
       h(Text, { as: 'p', className: 'vf-docs-builder-empty' }, 'No matching tokens. Clear a filter to see more.'));
 }
 function AccentContrast({ theme }) {
-  const foreground = theme.variables['--vf-color-accent-foreground'];
-  const background = theme.variables['--vf-color-accent-background'];
+  const foreground = themeValue(theme, 'onAccent');
+  const background = themeValue(theme, 'accent');
   const ratio = contrast(foreground, background);
   return h('div', { className: 'vf-docs-studio-contrast',
     'data-vf-docs-builder-contrast': theme.appearance },
@@ -73,7 +74,7 @@ export function ThemeBuilder({ links }) {
   const [custom, setCustom] = useState({});
   const [radius, setRadius] = useState(12);
   const [roleEdits, setRoleEdits] = useState({});
-  const [role, setRole] = useState('accent-background');
+  const [role, setRole] = useState('accent');
   const [group, setGroup] = useState('All');
   const [query, setQuery] = useState('');
   const [changedOnly, setChangedOnly] = useState(false);
@@ -104,14 +105,14 @@ export function ThemeBuilder({ links }) {
   const current = definitions[appearance].theme;
   const key = appearance + ':' + role;
   const overridden = Object.hasOwn(roleEdits, key);
-  const value = current.variables['--vf-color-' + role];
+  const value = themeValue(current, role);
   const visible = themeableColorRoles.filter((item) =>
     (group === 'All' || groupFor(item) === group) &&
-    item.includes(query.trim().toLowerCase()) &&
+    friendly(item).includes(query.trim().toLowerCase()) &&
     (!changedOnly || Object.hasOwn(roleEdits, appearance + ':' + item)));
   const overrideCount = Object.keys(roleEdits).length;
   const valid = validSlug(name);
-  const ts = "import { createTheme, renderThemeCss } from '@vyrnforge/web/theme';\n\n" +
+  const ts = "import { createTheme, renderThemeCss } from '@vyrnforge/react';\n\n" +
     modes.map((mode) => 'export const ' + mode + 'Theme = createTheme(' +
       JSON.stringify(definitions[mode].options, null, 2) + ');').join('\n\n') +
     "\n\nexport const themeCss = [lightTheme, darkTheme].map(renderThemeCss).join('\\n');";
@@ -129,7 +130,7 @@ export function ThemeBuilder({ links }) {
   };
   const reset = () => {
     setName('my-brand'); setPalette('blue'); setAppearance('light'); setShade('600');
-    setCustom({}); setRadius(12); setRoleEdits({}); setRole('accent-background');
+    setCustom({}); setRadius(12); setRoleEdits({}); setRole('accent');
     setGroup('All'); setQuery(''); setChangedOnly(false); setScene('dashboard');
     setFormat('function'); setExportStatus(''); setStatus('Theme Builder restored to defaults');
   };
@@ -207,7 +208,7 @@ export function ThemeBuilder({ links }) {
       h('section', { className: 'vf-docs-studio-section', id: 'vf-builder-roles',
         'aria-labelledby': 'vf-builder-roles-title' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'vf-builder-roles-title' }, '2 · Semantic token editor'),
-        h(Text, { as: 'p' }, 'Switch appearances and change only the roles your brand needs.'),
+        h(Text, { as: 'p' }, 'Switch appearances and change only the React color roles your brand needs. CSS output is available separately for portable delivery.'),
         h(Segment, { label: 'Builder editing appearance', value: appearance,
           testId: 'builder-appearance', onChange: (next) => {
             setAppearance(next); setShade(next === 'dark' ? '300' : '600');
@@ -231,7 +232,7 @@ export function ThemeBuilder({ links }) {
           h('div', { className: 'vf-docs-builder-role-detail',
             'data-vf-docs-builder-role-detail': '' },
             h(Text, { as: 'h3', variant: 'heading-sm' }, friendly(role)),
-            h(Code, null, '--vf-color-' + role),
+            h(Code, null, 'colors.' + role),
             h(Picker, { value, onValueChange: editRole,
               label: 'Builder role hex', testId: 'builder-role' }),
             h(Text, { as: 'p' }, overridden ? 'Custom override for ' + appearance :

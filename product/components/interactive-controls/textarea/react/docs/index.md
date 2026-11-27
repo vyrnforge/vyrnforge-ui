@@ -47,3 +47,18 @@ import { Button } from '@vyrnforge/react/button';
 The form handler is application-owned. Autosizing does not intercept submission, IME or keyboard editing; no separate composition runtime is required.
 
 A one-row expanding standalone editor can be written as `<Textarea aria-label="Message" autosize minRows={1} maxRows={6} />`. The matching labeled composition is `<TextField label="Message" autosize minRows={1} maxRows={6} />`. Both use the native textarea from initial render.
+
+## React tokens
+
+Use the typed `textarea` token group. For app-wide configuration, pass the same group to `createTheme({ name: 'brand', tokens: ... })` from `@vyrnforge/react` and emit the stylesheet with `renderThemeCss`. For a local scope:
+
+```tsx
+import { ThemeScope, tokens } from '@vyrnforge/react';
+import { Textarea } from '@vyrnforge/react/textarea';
+
+<ThemeScope tokens={{ editor: { radius: '8px' }, textarea: { valueFont: '400 1rem/1.5 ' + tokens.fontFamily.sans } }}>
+  <Textarea aria-label="Notes" />
+</ThemeScope>
+```
+
+Use ordinary CSS layout properties for geometry that belongs to the application. The canonical stylesheet provides the defaults; token overrides are optional. The Native Web guide documents CSS-level equivalents.

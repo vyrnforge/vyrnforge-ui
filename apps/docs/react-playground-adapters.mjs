@@ -1,3 +1,4 @@
+import { colors, tokens, ThemeScope } from '@vyrnforge/react';
 import { Input } from '@vyrnforge/react/input';
 import { Textarea } from '@vyrnforge/react/textarea';
 import { TextField } from '@vyrnforge/react/text-field';
@@ -505,8 +506,8 @@ export const progressPlayground = {
 
 function BackdropPreview({ config }) {
   return h(Flow, { gap: 'sm', style: { inlineSize: 'min(100%, 24rem)' } },
-    h('div', { style: { position: 'relative', isolation: 'isolate', padding: 'var(--vf-space-md)',
-      border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)' } },
+    h('div', { style: { position: 'relative', isolation: 'isolate', padding: tokens.space.md,
+      border: '1px solid ' + colors.borderRequired, borderRadius: tokens.radius.surface } },
       h(Text, { as: 'p' }, 'Account summary'),
       h(Button, { type: 'button', variant: 'secondary' }, 'View statement'),
       h(Backdrop, { hidden: config.hidden, style: { opacity: config.opacity } })),
@@ -827,25 +828,32 @@ export const sliderPlayground = {
   },
 };
 
+const tooltipBrand = { background: '#1e3a8a', foreground: '#fff', radius: '8px', font: '400 14px/1.5 sans-serif', maxWidth: '14rem', offset: '6px' };
 function TooltipPreview({ config }) {
-  return h(TooltipRoot, { placement: config.placement, openDelay: Number(config.openDelay), closeDelay: Number(config.closeDelay) },
+  const help = h(TooltipRoot, { placement: config.placement, openDelay: Number(config.openDelay), closeDelay: Number(config.closeDelay) },
     h(TooltipTrigger, null, h(Button, { type: 'button', variant: 'ghost', size: 'sm', iconOnly: true, 'aria-label': 'About this setting' }, h(Icon, { icon: infoIcon, size: 'sm' }))),
     h(TooltipContent, null, label(config, 'Changes apply to future sessions.')));
+  return config.customTheme ? h(ThemeScope, { tokens: { tooltip: tooltipBrand } }, help) : help;
 }
 export const tooltipPlayground = {
   fields: [text('label', 'Description', 'Changes apply to future sessions.'),
-    choice('placement', 'Placement', 'right', ['top', 'right', 'bottom', 'left', 'top-start', 'top-end', 'bottom-start', 'bottom-end']),
+    choice('placement', 'Placement', 'right', ['top', 'right', 'bottom', 'left', 'top-start', 'top-end', 'bottom-start', 'bottom-end', 'left-start', 'left-end', 'right-start', 'right-end']),
     choice('openDelay', 'Open delay (ms)', '400', ['0', '200', '400', '800']),
-    choice('closeDelay', 'Close delay (ms)', '100', ['100', '200', '400'])],
+    choice('closeDelay', 'Close delay (ms)', '100', ['100', '200', '400']),
+    bool('customTheme', 'Custom theme')],
   presets: [{ label: 'Compact help', values: { placement: 'right', openDelay: '200' } },
-    { label: 'Long description', values: { placement: 'bottom', label: 'Changes apply to future sessions. Existing sessions retain their current settings.' } }],
+    { label: 'Long description', values: { placement: 'bottom', label: 'Changes apply to future sessions. Existing sessions retain their current settings.' } },
+    { label: 'Brand tokens', values: { placement: 'right', openDelay: '0', customTheme: true } }],
   Preview: TooltipPreview,
   source(config) {
-    return snippet([importLine('TooltipRoot, TooltipTrigger, TooltipContent', 'tooltip'), importLine('Button', 'button'), ...iconImports('infoIcon', 'info')],
-      markup('TooltipRoot', [attribute('placement', config.placement, 'top'),
+    const imports = [importLine('TooltipRoot, TooltipTrigger, TooltipContent', 'tooltip'), importLine('Button', 'button'), ...iconImports('infoIcon', 'info')];
+    const help = markup('TooltipRoot', [attribute('placement', config.placement, 'top'),
         Number(config.openDelay) === 400 ? '' : 'openDelay={' + Number(config.openDelay) + '}',
         Number(config.closeDelay) === 100 ? '' : 'closeDelay={' + Number(config.closeDelay) + '}'],
       markup('TooltipTrigger', [], markup('Button', ['type="button"', 'variant="ghost"', 'size="sm"', 'iconOnly', 'aria-label="About this setting"'], '<Icon icon={infoIcon} size="sm" />')) + '\n' +
-      markup('TooltipContent', [], content(label(config, 'Changes apply to future sessions.')))));
+      markup('TooltipContent', [], content(label(config, 'Changes apply to future sessions.'))));
+    if (!config.customTheme) return snippet(imports, help);
+    imports.push("import { ThemeScope } from '@vyrnforge/react';");
+    return snippet(imports, markup('ThemeScope', ['tokens={{ tooltip: ' + JSON.stringify(tooltipBrand) + ' }}'], help));
   },
 };

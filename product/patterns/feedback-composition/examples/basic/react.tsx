@@ -1,3 +1,4 @@
+import { tokens } from '@vyrnforge/react';
 import { Text } from '@vyrnforge/react/text';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -15,7 +16,7 @@ function Example() {
       <section
         aria-label="Account summary"
         aria-busy={busy}
-        style={{ position: 'relative', isolation: 'isolate', minBlockSize: '8rem', padding: 'var(--vf-space-md)' }}
+        style={{ position: 'relative', isolation: 'isolate', minBlockSize: '8rem', padding: tokens.space.md }}
       >
         <Flow inert={busy} gap="sm">
           <Text as="p">Account summary</Text>

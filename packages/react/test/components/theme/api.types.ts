@@ -23,3 +23,20 @@ const invalidTone: TextTone = '#ff0011';
 const invalidOverrides: ThemeColorOverrides = { cobalt600: '#245edb' };
 
 void [role, tone, brand, props, heading, icon, catalogIcon, invalid, invalidTone, invalidOverrides, colors, tokens, ThemeScope];
+
+import { createTheme, renderThemeCss, tokenStyle } from '@vyrnforge/react';
+import type { CreateThemeOptions, ThemeTokenOverrides } from '@vyrnforge/react';
+const named: ThemeTokenOverrides = { skeleton: { duration: '2s' }, radius: { control: '12px' }, textField: { labelFont: '600 1rem sans-serif' } };
+const options: CreateThemeOptions = { name: 'brand', colors: { accent: '#123456' }, tokens: named };
+void [renderThemeCss(createTheme(options)), tokenStyle(named)];
+// @ts-expect-error CSS variable names are not React token groups
+const raw: ThemeTokenOverrides = { '--vf-control-radius': '12px' };
+// @ts-expect-error unknown component token
+const bad: ThemeTokenOverrides = { skeleton: { secret: 'red' } };
+void [raw, bad];
+
+const tooltipTokens: ThemeTokenOverrides = { tooltip: { background: '#1e3a8a', foreground: '#fff', radius: '8px', font: '400 14px/1.5 sans-serif', maxWidth: '14rem', offset: '6px' } };
+void [tokens.tooltip.background, createTheme({ name: 'tooltip-brand', tokens: tooltipTokens }), tokenStyle(tooltipTokens)];
+// @ts-expect-error unknown Tooltip token role
+const badTooltip: ThemeTokenOverrides = { tooltip: { color: '#fff' } };
+void badTooltip;

@@ -146,3 +146,14 @@ test('React Loading projects native progress, decorative hooks and shared motion
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });
+
+test('React named theme tokens reach components and preserve nested cascade', async ({ page }) => {
+  test.skip(process.env.VF_COMPONENT_PORT !== 'react', 'React theme authoring fixture');
+  await page.goto('/components/loading/react.html');
+  await expect(page.locator('#brand-spinner')).toHaveCSS('color', 'rgb(18, 52, 86)');
+  await expect(page.locator('#brand-spinner')).toHaveCSS('inline-size', '30px');
+  await expect(page.locator('#brand-skeleton')).toHaveCSS('background-color', 'rgb(51, 68, 85)');
+  await expect(page.locator('#brand-progress')).toHaveCSS('block-size', '8px');
+  await expect(page.locator('#nested-spinner')).toHaveCSS('color', 'rgb(101, 67, 33)');
+  await expect(page.locator('#nested-progress')).toHaveCSS('block-size', '16px');
+});

@@ -1,8 +1,7 @@
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Link } from '@vyrnforge/react/link';
 import { createElement as h, useState } from 'react';
-import { ThemeScope } from '@vyrnforge/react';
-import { createTheme } from '@vyrnforge/web/theme';
+import { ThemeScope, createTheme, colors } from '@vyrnforge/react';
 import { Button } from '@vyrnforge/react/button';
 import { ColorPickerRoot, ColorPickerInput, ColorPickerTextInput, ColorPickerSwatch } from '@vyrnforge/react/color-picker';
 import { SegmentedControlRoot, SegmentedControlItem } from '@vyrnforge/react/segmented-control';
@@ -11,6 +10,8 @@ import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Slider } from '@vyrnforge/react/slider';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
+
+export const themeValue = (theme, role) => theme.variables[colors[role].slice(4, -1)];
 
 // Documentation presets: palette shades are authoring inputs, never public UI tokens.
 export const presets = [
@@ -65,13 +66,13 @@ export function buildTheme({ palette, shades, shade, appearance, roleEdits, radi
   const hover = levels[at + offset];
   const pressed = levels[at + 2 * offset];
   const base = {
-    'accent-background': '{brand.' + shade + '}',
-    'accent-background-hover': '{brand.' + hover + '}',
-    'accent-background-pressed': '{brand.' + pressed + '}',
-    'accent-foreground': readableOn(shades[shade]),
-    'accent-subtle': '{brand.' + (appearance === 'light' ? '50' : '900') + '}',
-    'accent-subtle-hover': '{brand.' + (appearance === 'light' ? '100' : '800') + '}',
-    'focus-ring': '{brand.' + (appearance === 'light' ? '600' : '300') + '}',
+    accent: '{brand.' + shade + '}',
+    accentHover: '{brand.' + hover + '}',
+    accentPressed: '{brand.' + pressed + '}',
+    onAccent: readableOn(shades[shade]),
+    accentSubtle: '{brand.' + (appearance === 'light' ? '50' : '900') + '}',
+    accentSubtleHover: '{brand.' + (appearance === 'light' ? '100' : '800') + '}',
+    focus: '{brand.' + (appearance === 'light' ? '600' : '300') + '}',
   };
   const edits = Object.fromEntries(
     Object.entries(roleEdits).filter(([name]) => name.startsWith(appearance + ':'))
@@ -83,8 +84,7 @@ export function buildTheme({ palette, shades, shade, appearance, roleEdits, radi
     palette: { brand: shades },
     colors: { ...base, ...edits },
     tokens: {
-      '--vf-radius-surface': radius + 'px',
-      '--vf-control-radius': Math.max(0, radius - 4) + 'px',
+      radius: { surface: radius + 'px', control: Math.max(0, radius - 4) + 'px' },
     },
   };
   return { options, theme: createTheme(options) };
@@ -182,8 +182,8 @@ export function ThemeStudio({ links }) {
     palette, shades, shade: opposite === 'dark' ? '300' : '600',
     appearance: opposite, roleEdits: {}, radius,
   }).theme : null;
-  const foreground = current.variables['--vf-color-accent-foreground'];
-  const background = current.variables['--vf-color-accent-background'];
+  const foreground = themeValue(current, 'onAccent');
+  const background = themeValue(current, 'accent');
   const ratio = contrast(foreground, background);
   const reset = () => {
     setPalette('blue'); setAppearance('light'); setShade('600');

@@ -1,0 +1,13 @@
+{
+  "id": "tooltip/theme",
+  "title": "Typed theme customization",
+  "description": "Override the named Tooltip roles locally, without raw CSS-variable names or component-specific styling props.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

@@ -2,14 +2,13 @@
 
 @layer vyrnforge.components {
   :where(select[data-vf-native-select]) {
-    background: var(--vf-color-surface);
-    border: 1px solid var(--vf-color-border-required);
-    border-radius: var(--vf-control-radius);
+    background: var(--vf-editor-background, var(--vf-color-surface));
+    border: 1px solid var(--vf-editor-border-color, var(--vf-color-border-required));
+    border-radius: var(--vf-editor-radius, var(--vf-control-radius));
     box-sizing: border-box;
     color: var(--vf-color-text);
-    font-family: var(--vf-control-font-family);
-    font-size: var(--vf-control-font-size);
-    line-height: var(--vf-line-height-normal);
+    font: var(--vf-editor-value-font, var(--vf-font-weight-regular) var(--vf-control-font-size)/var(--vf-line-height-normal) var(--vf-control-font-family));
+    letter-spacing: var(--vf-editor-value-letter-spacing, normal);
     min-block-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     min-inline-size: 0;
     padding-block: 0.4375rem;

@@ -361,6 +361,8 @@ test('Theme Builder edits independent light/dark tokens, filters roles and expor
   await expect(builder.locator('[data-vf-docs-builder-name]')).toHaveValue('my-brand');
   await expect(builder.locator('[data-vf-docs-builder-code="function"]'))
     .toContainText('createTheme');
+  await expect(builder.locator('[data-vf-docs-builder-code="function"]')).toContainText("from '@vyrnforge/react'");
+  await expect(builder.locator('[data-vf-docs-builder-code="function"]')).not.toContainText('--vf-');
 });
 
 test('Theme Builder remains navigable at 320px without page overflow', async ({ page }, testInfo) => {
@@ -1305,6 +1307,8 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   await expect(nav.getByText('Layout & Structure', { exact: true })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Layout', exact: true })).toHaveAttribute('aria-current', 'page');
   const layoutGuide = page.locator('[data-vf-docs-react-layout]');
+  await expect(layoutGuide.getByRole('heading', { name: 'React tokens' })).toBeVisible();
+  await expect(layoutGuide).toContainText("autoGrid: { minItemSize: '18rem' }");
   await layoutGuide.getByText('Accessibility standards', { exact: true }).click();
   const accessibility = layoutGuide.locator('[data-vf-docs-accessibility]');
   await expect(accessibility).toContainText('Accessibility still needs review.');
@@ -2357,6 +2361,8 @@ test('React Image guide uses shared native CSS, source-backed examples and a dis
 test('React List guide exposes rich semantic examples and a separate source-backed API', async ({ page }) => {
   await page.goto('/next/react/components/list/');
   await expect(page.locator('[data-vf-docs-react-list]')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'React tokens' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-list]')).toContainText('tokenStyle({ list: { stickyOffset:');
   await expect(page.locator('[data-vf-docs-react-list-example]')).toHaveCount(8);
 
   await page.locator('iframe[title="React Rich team directory List example"]').scrollIntoViewIfNeeded();
@@ -2476,6 +2482,7 @@ test('Overlay utility exercises native popover, tooltip, preview, Dialog and Dra
     return [css.getPropertyValue('--vf-shadow-popover').trim(), css.getPropertyValue('--vf-shadow-lg').trim()];
   });
   expect(shadows[0]).toBe(shadows[1]);
+  await expect(page.locator('[data-vf-docs-react-overlay-utility] .vf-docs-source-disclosure')).toContainText('tokens={{ shadow: { popover: tokens.shadow.lg } }}');
   await stage.scrollIntoViewIfNeeded();
   await stage.getByRole('button', { name: 'Open Popover' }).click();
   const popover = page.locator('[data-vf-popover-content]');
@@ -2487,6 +2494,7 @@ test('Overlay utility exercises native popover, tooltip, preview, Dialog and Dra
   await expect(popover).not.toBeVisible();
 
   await kind.selectOption('tooltip');
+  await expect(page.locator('#overlay-elevation')).toBeDisabled();
   await stage.getByRole('button', { name: 'Explain this control' }).focus();
   await expect(page.locator('[data-vf-tooltip-content]')).toBeVisible();
   await stage.getByRole('button', { name: 'Explain this control' }).evaluate((element) => element.blur());

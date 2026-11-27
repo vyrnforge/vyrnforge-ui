@@ -16,7 +16,11 @@ Anchored surfaces use browser-native CSS Anchor Positioning and a shared placeme
 
 ## Appearance and customization
 
-The canonical visual system lives in `@vyrnforge/web`, not documentation CSS or a framework-specific stylesheet. Load the public stylesheet for the chosen component. Configure themes and semantic tokens in your application scope; use CSS custom properties such as `--vf-shadow-popover` to override supported anchored-surface elevation. Choose shared `--vf-shadow-sm`, `--vf-shadow-md`, or `--vf-shadow-lg` values rather than hard-coded shadow colors. Defaults vary by surface and theme; consult the current public component stylesheet instead of assuming one universal overlay shadow.
+The canonical visual system lives in `@vyrnforge/web`, not documentation CSS or a framework-specific stylesheet. Load the public stylesheet for the chosen component. Configure themes and semantic tokens in your application scope. Popover and PreviewCard support a shared optional elevation override. Choose a shared shadow scale rather than hard-coded shadow colors. Defaults vary by surface and theme; consult the current public component stylesheet instead of assuming one universal overlay shadow.
+
+## Native Web customization
+
+Use the public `--vf-shadow-popover` custom property to override Popover and PreviewCard elevation, with `var(--vf-shadow-sm)`, `var(--vf-shadow-md)`, or `var(--vf-shadow-lg)` as its value. Tooltip and modal surfaces do not consume this override.
 
 ## Top layer, backdrop, and dismissal
 

@@ -41,9 +41,9 @@ function Field({ id, label, value, onChange, options, disabled = false }) {
 
 function Source({ kind, placement, theme, elevation, direction }) {
   const modal = kind === 'dialog' || kind === 'drawer';
-  const elevationStyle = elevation === 'default' || modal ? '' :
-    " style={{ '--vf-shadow-popover': tokens.shadow." +
-      (elevation === 'subtle' ? 'sm' : 'lg') + " }}";
+  const elevationStyle = elevation === 'default' || modal || kind === 'tooltip' ? '' :
+    " tokens={{ shadow: { popover: tokens.shadow." +
+      (elevation === 'subtle' ? 'sm' : 'lg') + " } }}";
   const names = {
     popover: 'PopoverRoot, PopoverTrigger, PopoverContent',
     tooltip: 'TooltipRoot, TooltipTrigger, TooltipContent',
@@ -105,6 +105,7 @@ export function OverlayUtility({ guide, links }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [feedback, setFeedback] = useState('');
   const anchored = ['popover', 'tooltip', 'preview-card'].includes(kind);
+  const supportsElevation = kind === 'popover' || kind === 'preview-card';
   const shadow = elevation === 'subtle' ? tokens.shadow.sm :
     elevation === 'strong' ? tokens.shadow.lg : undefined;
 
@@ -172,13 +173,13 @@ export function OverlayUtility({ guide, links }) {
         h(Field, { id: 'overlay-direction', label: 'Text direction', value: direction,
           onChange: setDirection, options: [['ltr', 'Left to right'], ['rtl', 'Right to left']] }),
         h(Field, { id: 'overlay-elevation', label: 'Popover elevation override', value: elevation,
-          onChange: setElevation, disabled: !anchored,
+          onChange: setElevation, disabled: !supportsElevation,
           options: [['default', 'Default'], ['subtle', 'Subtle · shadow-sm'], ['strong', 'Strong · shadow-lg']] })),
       h(ThemeScope, { as: 'div', theme, dir: direction,
         className: 'vf-docs-overlay-stage',
         'data-vf-docs-overlay-stage': '',
         'data-vf-docs-overlay-kind': kind,
-        style: shadow ? { '--vf-shadow-popover': shadow } : undefined },
+        tokens: supportsElevation && shadow ? { shadow: { popover: shadow } } : undefined },
         h(Flow, { gap: 'md', align: 'center' },
           h(Text, { as: 'p', variant: 'body-sm' }, anchored
             ? 'Use keyboard focus, hover, or click as appropriate; press Escape to dismiss.'
@@ -188,6 +189,7 @@ export function OverlayUtility({ guide, links }) {
       h(Source, { kind, placement, theme, elevation, direction }),
       h(Text, { as: 'p', variant: 'body-sm' },
         'Trigger and close parts render their own native buttons. Their optional public Button styling hooks reuse VyrnForge’s shared Web presentation; do not nest a Button inside them. Modal backdrop, focus, and dismissal policies stay with the selected component.')),
+    h(Text, { as: 'p' }, 'Customize Popover and PreviewCard elevation with ThemeScope tokens.shadow.popover and a shared shadow scale such as tokens.shadow.lg. Tooltip and modal elevation are not controlled by this override.'),
     ...UtilitySections({ guide, prefix: 'overlay-' }),
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'overlay-component-links' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'overlay-component-links' }, 'React component sources'),
