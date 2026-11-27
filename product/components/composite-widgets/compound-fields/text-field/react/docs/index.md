@@ -51,9 +51,13 @@ const fieldTokens = {
   textField: { labelFont: '600 0.875rem/1.5 ' + tokens.fontFamily.sans, radius: '8px' },
 };
 
-<ThemeScope tokens={fieldTokens}>
-  <TextField label="Email" />
-</ThemeScope>
+export function Example() {
+  return (
+    <ThemeScope tokens={fieldTokens}>
+      <TextField label="Email" />
+    </ThemeScope>
+  );
+}
 ```
 
 Use ordinary CSS layout properties for geometry that belongs to the application. The canonical stylesheet provides the defaults; token overrides are optional. The Native Web guide documents CSS-level equivalents.
