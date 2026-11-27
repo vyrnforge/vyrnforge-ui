@@ -8,12 +8,12 @@
       var(--vf-loading-placeholder-duration, var(--vf-motion-duration-loading-shimmer))
       var(--vf-motion-easing-loading)
       infinite;
-    background-color: var(--vf-loading-placeholder-color, var(--vf-color-disabled-background));
+    background-color: var(--vf-loading-placeholder-color, color-mix(in srgb, var(--vf-color-surface), var(--vf-color-text) 10%));
     background-image: linear-gradient(
       90deg,
-      var(--vf-loading-placeholder-color, var(--vf-color-disabled-background)) 40%,
-      var(--vf-loading-placeholder-highlight, light-dark(var(--vf-color-surface), var(--vf-color-surface-pressed))) 50%,
-      var(--vf-loading-placeholder-color, var(--vf-color-disabled-background)) 60%
+      var(--vf-loading-placeholder-color, color-mix(in srgb, var(--vf-color-surface), var(--vf-color-text) 10%)) 40%,
+      var(--vf-loading-placeholder-highlight, light-dark(var(--vf-color-surface-hover), var(--vf-color-surface-pressed))) 50%,
+      var(--vf-loading-placeholder-color, color-mix(in srgb, var(--vf-color-surface), var(--vf-color-text) 10%)) 60%
     );
     background-repeat: no-repeat;
     background-size: 300% 100%;
@@ -32,8 +32,8 @@
   }
 
   :where([data-vf-skeleton]) {
-    --vf-loading-placeholder-color: var(--vf-skeleton-color, var(--vf-color-disabled-background));
-    --vf-loading-placeholder-highlight: var(--vf-skeleton-highlight, light-dark(var(--vf-color-surface), var(--vf-color-surface-pressed)));
+    --vf-loading-placeholder-color: var(--vf-skeleton-color, color-mix(in srgb, var(--vf-color-surface), var(--vf-color-text) 10%));
+    --vf-loading-placeholder-highlight: var(--vf-skeleton-highlight, light-dark(var(--vf-color-surface-hover), var(--vf-color-surface-pressed)));
     --vf-loading-placeholder-radius: var(--vf-skeleton-radius, var(--vf-radius-surface));
     --vf-loading-placeholder-line-radius: var(--vf-skeleton-radius, 999px);
     --vf-loading-placeholder-duration: var(--vf-skeleton-duration, var(--vf-motion-duration-loading-shimmer));
@@ -75,7 +75,7 @@
   @media (prefers-reduced-motion: reduce) {
     :where([data-vf-skeleton], [data-vf-loading-placeholder]) {
       animation: none;
-      background: var(--vf-loading-placeholder-color, var(--vf-color-disabled-background));
+      background: var(--vf-loading-placeholder-color, color-mix(in srgb, var(--vf-color-surface), var(--vf-color-text) 10%));
     }
   }
 

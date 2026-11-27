@@ -40,16 +40,16 @@ test('Skeleton wave has a single non-repeating highlight with distinct default p
         size: style.backgroundSize,
         start,
         middle,
-        frames: animation.effect.getKeyframes().map(frame => frame.backgroundPosition),
+        frames: animation.effect.getKeyframes().map(frame => [frame.backgroundPositionX, frame.backgroundPositionY]),
       };
     });
     expect(paint.repeat).toBe('no-repeat');
     expect(paint.size).toBe('300% 100%');
     expect(paint.start).toBe('100% 0px');
     expect(paint.middle).toBe('50% 0px');
-    expect(paint.frames).toEqual(['100% 0px', '0% 0px']);
+    expect(paint.frames).toEqual([['100%', '0px'], ['0%', '0px']]);
     expect(paint.gradient).toContain(paint.base);
-    const colors = paint.gradient.match(/rgba?\([^)]*\)/g) ?? [];
+    const colors = paint.gradient.match(/(?:rgba?|color)\([^)]*\)/g) ?? [];
     expect(new Set(colors).size).toBe(2);
   }
 });
