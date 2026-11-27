@@ -563,3 +563,31 @@ test('TextField autosize alone selects Textarea and emits concise matching usage
   await preview.screenshot({ path: testInfo.outputPath('auto-field-mobile-rtl-forced.png') });
   expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
 });
+
+test('NumberField playground uses native numeric editing and concise public usage', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/number-field/');
+  const playground = page.locator('[data-vf-docs-component-playground="NumberField"]');
+  const preview = playground.getByRole('region', { name: 'NumberField preview' });
+  const source = playground.getByRole('region', { name: 'Generated React usage' });
+  await expect(preview.getByRole('spinbutton', { name: 'Quantity' })).toHaveValue('1');
+  await playground.getByRole('radio', { name: 'horizontal', exact: true }).check();
+  await preview.getByRole('button', { name: 'Increase Quantity' }).click();
+  await expect(preview.getByRole('spinbutton')).toHaveValue('2');
+  await expect(source).toContainText('stepControls="horizontal"');
+  await expect(source).toContainText('@vyrnforge/react/number-field');
+  await expect(source).not.toContainText(/styles\/|--vf-/);
+  await playground.getByRole('button', { name: 'Decimal temperature', exact: true }).click();
+  await expect(preview.getByRole('spinbutton', { name: 'Temperature' })).toHaveValue('-2.5');
+  await expect(preview.getByRole('button', { name: 'Increase Temperature' })).toBeVisible();
+  for (const width of [1440, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const theme of ['light', 'dark']) {
+      await page.evaluate(theme => { document.documentElement.dataset.vfTheme = theme; }, theme);
+      await preview.screenshot({ path: testInfo.outputPath('number-field-' + width + '-' + theme + '.png') });
+    }
+  }
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+  await preview.screenshot({ path: testInfo.outputPath('number-field-rtl-forced.png') });
+  expect(await page.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+});
