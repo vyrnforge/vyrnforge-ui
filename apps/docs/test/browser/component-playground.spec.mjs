@@ -388,3 +388,24 @@ test('TextField playground switches the real public component between visibly di
     await expect(source).not.toContainText(/styles\//);
   }
 });
+
+
+test('Radio playground uses centered shared artwork and composed public label source', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/next/react/components/radio/');
+  const playground = page.locator('[data-vf-docs-component-playground="Radio"]');
+  const preview = playground.getByRole('region', { name: 'Radio preview' });
+  const source = playground.getByRole('region', { name: 'Generated React usage' });
+  const standard = preview.getByRole('radio', { name: 'Standard', exact: true });
+  await expect(standard).toBeChecked();
+  await expect(standard).toHaveCSS('align-items', 'center');
+  await expect(standard).toHaveCSS('justify-items', 'center');
+  const dimensions = await standard.evaluate(element => ({ target: element.getBoundingClientRect().width,
+    dot: parseFloat(getComputedStyle(element, '::before').width) }));
+  expect(dimensions.dot).toBeCloseTo(dimensions.target / 2, 1);
+  await expect(source).toContainText('<Flow as="label"');
+  await expect(source).toContainText('<Text>Standard</Text>');
+  await preview.getByText('Express', { exact: true }).click();
+  await expect(preview.getByRole('radio', { name: 'Express', exact: true })).toBeChecked();
+  await playground.screenshot({ path: testInfo.outputPath('radio-centered-playground.png') });
+});

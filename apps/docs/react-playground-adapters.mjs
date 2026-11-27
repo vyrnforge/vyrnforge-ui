@@ -165,7 +165,7 @@ export const checkboxPlayground = {
 function RadioPreview({ config, update }) {
   const name = useId();
   return h(Flow, { as: 'fieldset', gap: 'sm', style: { minInlineSize: 0 } },
-    h('legend', null, 'Delivery'),
+    h('legend', null, h(Text, { as: 'strong' }, 'Delivery')),
     ...['standard', 'express'].map(value => h(Flow, { as: 'label', direction: 'inline', align: 'center', gap: 'sm', key: value },
       h(Radio, { name, value, checked: config.selection === value, disabled: config.disabled,
         required: config.required, onChange: () => update('selection', value) }),
@@ -177,11 +177,11 @@ export const radioPlayground = {
   Preview: RadioPreview,
   source(config) {
     // A same-name native group and its labels are semantic requirements, not demo chrome.
-    return snippet([importLine('Radio', 'radio')],
-      markup('fieldset', [], '<legend>Delivery</legend>\n' + ['standard', 'express'].map(value =>
-        markup('label', [], markup('Radio', ['name="delivery"', attribute('value', value),
+    return snippet([importLine('Radio', 'radio'), importLine('Flow', 'layout'), importLine('Text', 'text')],
+      markup('Flow', ['as="fieldset"', 'gap="sm"'], '<legend><Text as="strong">Delivery</Text></legend>\n' + ['standard', 'express'].map(value =>
+        markup('Flow', ['as="label"', 'direction="inline"', 'align="center"', 'gap="sm"'], markup('Radio', ['name="delivery"', attribute('value', value),
           flag('defaultChecked', config.selection === value), flag('disabled', config.disabled), flag('required', config.required)]) +
-          '\n' + (value === 'standard' ? 'Standard' : 'Express'))).join('\n')));
+          '\n' + markup('Text', [], value === 'standard' ? 'Standard' : 'Express'))).join('\n')));
   },
 };
 

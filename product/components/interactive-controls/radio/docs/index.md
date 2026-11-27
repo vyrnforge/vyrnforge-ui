@@ -20,7 +20,7 @@ The browser owns arrow-key selection, focus and native form interaction. Use a f
 
 ## Accessibility and styling
 
-Use the shared Radio CSS and accessible labels. Keep the 24 CSS-pixel minimum indicator target, visible focus, forced-color treatment, reduced motion and label association. See Radio Group for form composition and validation.
+Use the shared Radio CSS and accessible labels. Keep the 24 CSS-pixel minimum indicator target, visible focus, forced-color treatment, reduced motion and label association. The circular selected dot is centered and occupies half the indicator diameter; it uses the existing accent foreground, without changing the native target or selection behavior. See Radio Group for form composition and validation.
 
 ## Related controls
 
