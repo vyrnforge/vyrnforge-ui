@@ -462,8 +462,11 @@ for (const name of ['Input', 'Textarea']) {
       if (await editor.evaluate(() => CSS.supports('field-sizing', 'content'))) {
         await editor.fill('Short');
         const short = await editor.evaluate(el => el.clientHeight);
+        const shortWidth = await editor.evaluate(el => el.getBoundingClientRect().width);
+        expect(shortWidth).toBeGreaterThan(100);
         await editor.fill(Array(14).fill('A line').join('\n'));
         await expect.poll(() => editor.evaluate(el => el.clientHeight)).toBeGreaterThan(short);
+        expect(await editor.evaluate(el => el.getBoundingClientRect().width)).toBeCloseTo(shortWidth, 0);
         expect(await editor.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
         await editor.fill('Short');
         await expect.poll(() => editor.evaluate(el => el.clientHeight)).toBe(short);

@@ -21,7 +21,7 @@
   @supports (field-sizing: content) {
     :where(textarea[data-vf-textarea][data-vf-textarea-autosize]) {
       field-sizing: content;
-      inline-size: min(100%, calc(var(--vf-textarea-cols, 20) * 1ch + 2 * var(--_vf-field-inline-padding, 0px) + var(--_vf-editor-border-block, 2px)));
+      inline-size: calc(var(--vf-textarea-cols, 20) * 1ch + 2 * var(--_vf-field-inline-padding, 0px) + var(--_vf-editor-border-block, 2px));
       --_vf-textarea-block-insets: calc(2 * var(--_vf-editor-block-padding, 0px) + var(--_vf-editor-border-block, 2px));
       --_vf-textarea-autosize-min: max(var(--_vf-editor-height, 0px), calc(var(--vf-textarea-min-rows, 1) * 1lh + var(--_vf-textarea-block-insets)));
       min-block-size: var(--_vf-textarea-autosize-min);
