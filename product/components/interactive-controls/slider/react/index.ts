@@ -1,5 +1,5 @@
 import { createElement, forwardRef, useEffect, useRef, useState } from 'react';
-import type { CSSProperties, InputHTMLAttributes, FormEvent, ChangeEvent } from 'react';
+import type { CSSProperties, InputHTMLAttributes, ChangeEvent } from 'react';
 
 type Snapshot = { value: number; min: number; max: number; step: string };
 
@@ -63,7 +63,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
       if (typeof ref === 'function') ref(node);
       else if (ref) ref.current = node;
     },
-    onInput: (event: FormEvent<HTMLInputElement>) => { onInput?.(event); sync(); },
+    onInput: (event: Parameters<NonNullable<SliderProps['onInput']>>[0]) => { onInput?.(event); sync(); },
     onChange: (event: ChangeEvent<HTMLInputElement>) => { onChange?.(event); sync(); },
   });
   if (!marks && valueLabelDisplay === 'off') return input;
