@@ -2,6 +2,7 @@ import { colors, tokens } from '@vyrnforge/react';
 import { Input } from '@vyrnforge/react/input';
 import { Textarea } from '@vyrnforge/react/textarea';
 import { TextField } from '@vyrnforge/react/text-field';
+import { NumberField } from '@vyrnforge/react/number-field';
 import { createElement as h, useId, useState, useEffect, useRef } from 'react';
 import { Button } from '@vyrnforge/react/button';
 import { Checkbox } from '@vyrnforge/react/checkbox';
@@ -824,5 +825,63 @@ export const sliderPlayground = {
       markup('Button', ['type="button"', attribute('aria-label', 'About ' + name), 'size="sm"', 'variant="ghost"'], 'Info')) + '\n' +
       markup('TooltipContent', [], 'Adjust the selected numeric value.'));
     return snippet(imports, markup('Flow', ['gap="sm"'], help + '\n' + control), { setup });
+  },
+};
+
+function numericInitial(value) {
+  return value.trim() !== '' && Number.isFinite(Number(value)) ? Number(value) : null;
+}
+export const numberFieldPlayground = {
+  fields: [
+    text('label', 'Label', 'Quantity'), text('initial', 'Initial value', '1'),
+    text('placeholder', 'Placeholder', ''), text('description', 'Helper text', ''),
+    text('error', 'Error message', ''), text('min', 'Minimum', '0'), text('max', 'Maximum', '100'),
+    choice('step', 'Step', '1', ['1', '0.1', '0.01', 'any']),
+    choice('stepControls', 'Step controls', 'native', ['native', 'stacked', 'horizontal', 'none']),
+    choice('variant', 'Variant', 'outlined', ['outlined', 'filled', 'underlined']),
+    choice('labelPlacement', 'Label placement', 'outside', ['outside', 'floating']),
+    choice('fieldSize', 'Field size', 'inherit', ['inherit', 'sm', 'md', 'lg']),
+    choice('textAlign', 'Text alignment', 'start', ['start', 'center', 'end']),
+    text('prefix', 'Prefix', ''), text('suffix', 'Suffix', ''),
+    bool('fullWidth', 'Full width'), bool('required', 'Required'),
+    bool('disabled', 'Disabled'), bool('readOnly', 'Read-only'), bool('rtl', 'Right to left'),
+  ],
+  presets: [
+    { label: 'Quantity', values: { stepControls: 'horizontal', initial: '1' } },
+    { label: 'Decimal temperature', values: { label: 'Temperature', initial: '-2.5', min: '-20', max: '40', step: '0.1', suffix: '°C', stepControls: 'stacked', variant: 'filled' } },
+    { label: 'Empty amount', values: { label: 'Amount in USD', initial: '', min: '0', max: '', step: '0.01', prefix: '$', stepControls: 'none', textAlign: 'end', labelPlacement: 'floating' } },
+  ],
+  Preview({ config }) {
+    const name = label(config, 'Quantity');
+    const custom = ['stacked', 'horizontal'].includes(config.stepControls);
+    return h(NumberField, {
+      key: config.initial, label: name, defaultValue: numericInitial(config.initial),
+      min: numericInitial(config.min) ?? undefined, max: numericInitial(config.max) ?? undefined,
+      step: config.step === 'any' ? 'any' : Number(config.step), stepControls: config.stepControls,
+      ...(custom ? { incrementLabel: 'Increase ' + name, decrementLabel: 'Decrease ' + name } : {}),
+      variant: config.variant, labelPlacement: config.labelPlacement, textAlign: config.textAlign,
+      fieldSize: config.fieldSize === 'inherit' ? undefined : config.fieldSize,
+      placeholder: config.placeholder, description: config.description || undefined, error: config.error || undefined,
+      prefix: config.prefix || undefined, suffix: config.suffix || undefined,
+      fullWidth: config.fullWidth, required: config.required, disabled: config.disabled, readOnly: config.readOnly,
+      dir: config.rtl ? 'rtl' : undefined,
+    });
+  },
+  source(config) {
+    const name = label(config, 'Quantity');
+    const custom = ['stacked', 'horizontal'].includes(config.stepControls);
+    const numericProp = (key, value) => numericInitial(value) === null ? '' : key + '={' + numericInitial(value) + '}';
+    return snippet([importLine('NumberField', 'number-field')], markup('NumberField', [
+      attribute('label', name), numericProp('defaultValue', config.initial), numericProp('min', config.min), numericProp('max', config.max),
+      config.step === 'any' ? 'step="any"' : config.step === '1' ? '' : 'step={' + Number(config.step) + '}',
+      attribute('stepControls', config.stepControls, 'native'),
+      custom ? attribute('incrementLabel', 'Increase ' + name) : '', custom ? attribute('decrementLabel', 'Decrease ' + name) : '',
+      attribute('variant', config.variant, 'outlined'), attribute('labelPlacement', config.labelPlacement, 'outside'),
+      attribute('fieldSize', config.fieldSize, 'inherit'), attribute('textAlign', config.textAlign, 'start'),
+      attribute('placeholder', config.placeholder, ''), attribute('description', config.description, ''), attribute('error', config.error, ''),
+      attribute('prefix', config.prefix, ''), attribute('suffix', config.suffix, ''),
+      flag('fullWidth', config.fullWidth), flag('required', config.required), flag('disabled', config.disabled), flag('readOnly', config.readOnly),
+      config.rtl ? 'dir="rtl"' : '',
+    ]));
   },
 };
