@@ -79,7 +79,7 @@ test('Loading supports built-ins, presentation customization, placeholders, nati
     };
   })).toEqual({
     radius: '12px',
-    backgroundImage: 'linear-gradient(90deg, rgb(225, 235, 255) 0%, rgb(190, 210, 250) 45%, rgb(225, 235, 255) 90%)',
+    backgroundImage: 'linear-gradient(90deg, rgb(225, 235, 255) 40%, rgb(190, 210, 250) 50%, rgb(225, 235, 255) 60%)',
   });
 
   expect(await avatar.evaluate((el) => {

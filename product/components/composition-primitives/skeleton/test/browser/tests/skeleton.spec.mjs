@@ -17,3 +17,39 @@ test('Skeleton independent Web presentation and accessibility', async ({ page })
   await expect(line).toBeVisible();
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
+
+test('Skeleton wave has a single non-repeating highlight with distinct default paint in both themes', async ({ page }) => {
+  test.skip((process.env.VF_COMPONENT_PORT || 'web') !== 'web', 'Native Web CSS fixture');
+  await page.goto('/components/skeleton/web.html');
+  const line = page.locator('#line');
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => document.documentElement.setAttribute('data-vf-theme', value), theme);
+    const paint = await line.evaluate(el => {
+      const style = getComputedStyle(el);
+      const animation = el.getAnimations()[0];
+      animation.pause();
+      const duration = animation.effect.getTiming().duration;
+      animation.currentTime = 0;
+      const start = getComputedStyle(el).backgroundPosition;
+      animation.currentTime = duration / 2;
+      const middle = getComputedStyle(el).backgroundPosition;
+      return {
+        base: style.backgroundColor,
+        gradient: style.backgroundImage,
+        repeat: style.backgroundRepeat,
+        size: style.backgroundSize,
+        start,
+        middle,
+        frames: animation.effect.getKeyframes().map(frame => frame.backgroundPosition),
+      };
+    });
+    expect(paint.repeat).toBe('no-repeat');
+    expect(paint.size).toBe('300% 100%');
+    expect(paint.start).toBe('100% 0px');
+    expect(paint.middle).toBe('50% 0px');
+    expect(paint.frames).toEqual(['100% 0px', '0% 0px']);
+    expect(paint.gradient).toContain(paint.base);
+    const colors = paint.gradient.match(/rgba?\([^)]*\)/g) ?? [];
+    expect(new Set(colors).size).toBe(2);
+  }
+});

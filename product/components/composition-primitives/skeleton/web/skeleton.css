@@ -8,13 +8,15 @@
       var(--vf-loading-placeholder-duration, var(--vf-motion-duration-loading-shimmer))
       var(--vf-motion-easing-loading)
       infinite;
-    background: linear-gradient(
+    background-color: var(--vf-loading-placeholder-color, var(--vf-color-disabled-background));
+    background-image: linear-gradient(
       90deg,
-      var(--vf-loading-placeholder-color, var(--vf-color-disabled-background)) 0%,
-      var(--vf-loading-placeholder-highlight, var(--vf-color-surface-hover)) 45%,
-      var(--vf-loading-placeholder-color, var(--vf-color-disabled-background)) 90%
+      var(--vf-loading-placeholder-color, var(--vf-color-disabled-background)) 40%,
+      var(--vf-loading-placeholder-highlight, light-dark(var(--vf-color-surface), var(--vf-color-surface-pressed))) 50%,
+      var(--vf-loading-placeholder-color, var(--vf-color-disabled-background)) 60%
     );
-    background-size: 220% 100%;
+    background-repeat: no-repeat;
+    background-size: 300% 100%;
     border-radius: var(--vf-loading-placeholder-radius, var(--vf-radius-surface));
     display: block;
     min-block-size: 1rem;
@@ -31,7 +33,7 @@
 
   :where([data-vf-skeleton]) {
     --vf-loading-placeholder-color: var(--vf-skeleton-color, var(--vf-color-disabled-background));
-    --vf-loading-placeholder-highlight: var(--vf-skeleton-highlight, var(--vf-color-surface-hover));
+    --vf-loading-placeholder-highlight: var(--vf-skeleton-highlight, light-dark(var(--vf-color-surface), var(--vf-color-surface-pressed)));
     --vf-loading-placeholder-radius: var(--vf-skeleton-radius, var(--vf-radius-surface));
     --vf-loading-placeholder-line-radius: var(--vf-skeleton-radius, 999px);
     --vf-loading-placeholder-duration: var(--vf-skeleton-duration, var(--vf-motion-duration-loading-shimmer));

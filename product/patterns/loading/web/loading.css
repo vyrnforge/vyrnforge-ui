@@ -21,7 +21,7 @@
     --vf-loading-pulse-duration: var(--vf-loading-indicator-duration, 900ms);
 
     --vf-loading-placeholder-color: var(--vf-color-disabled-background);
-    --vf-loading-placeholder-highlight: var(--vf-color-surface-hover);
+    --vf-loading-placeholder-highlight: light-dark(var(--vf-color-surface), var(--vf-color-surface-pressed));
     --vf-loading-placeholder-radius: var(--vf-radius-surface);
     --vf-loading-placeholder-duration: var(--vf-motion-duration-loading-shimmer);
 

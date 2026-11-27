@@ -10,11 +10,11 @@
 
   @keyframes vf-loading-shimmer {
     from {
-      background-position: 200% 0;
+      background-position: 100% 0;
     }
 
     to {
-      background-position: -200% 0;
+      background-position: 0% 0;
     }
   }
 }
