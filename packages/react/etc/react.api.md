@@ -4490,6 +4490,12 @@ export type TextFieldInputProps = TextFieldAppearanceProps & Omit<InputProps, 'c
     multiline?: false;
     type?: 'text' | 'email' | 'url' | 'tel' | 'search' | 'password' | 'number';
     autosize?: false;
+    cols?: never;
+    rows?: never;
+    minRows?: never;
+    maxRows?: never;
+    resize?: never;
+    wrap?: never;
 };
 
 // @public (undocumented)
@@ -4499,6 +4505,7 @@ export type TextFieldProps = TextFieldInputProps | TextFieldTextareaProps;
 export type TextFieldTextareaProps = TextFieldAppearanceProps & Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'variant'> & {
     multiline?: true;
     type?: never;
+    size?: never;
 } & (Record<'multiline', true> | Record<'autosize', true>);
 
 // @public (undocumented)

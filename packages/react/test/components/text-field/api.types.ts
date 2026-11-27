@@ -18,3 +18,6 @@ void createElement(TextField, { label: 'Password', type: 'password', autosize: t
 void createElement(TextField, { label: 'Message', multiline: false, autosize: true });
 // @ts-expect-error fixed multiline must be intentional
 void createElement(TextField, { label: 'Message', rows: 4 });
+
+// @ts-expect-error native input size does not apply to an expanding textarea
+void createElement(TextField, { label: 'Message', autosize: true, size: 20 });

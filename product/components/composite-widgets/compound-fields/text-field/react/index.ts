@@ -23,12 +23,19 @@ export type TextFieldInputProps = TextFieldAppearanceProps &
     multiline?: false;
     type?: 'text' | 'email' | 'url' | 'tel' | 'search' | 'password' | 'number';
     autosize?: false;
+    cols?: never;
+    rows?: never;
+    minRows?: never;
+    maxRows?: never;
+    resize?: never;
+    wrap?: never;
   };
 
 export type TextFieldTextareaProps = TextFieldAppearanceProps &
   Omit<TextareaProps, 'children' | 'dangerouslySetInnerHTML' | 'prefix' | 'variant'> & {
     multiline?: true;
     type?: never;
+    size?: never;
   } & (Record<'multiline', true> | Record<'autosize', true>);
 
 export type TextFieldProps = TextFieldInputProps | TextFieldTextareaProps;

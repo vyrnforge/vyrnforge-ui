@@ -30,6 +30,6 @@ test('autosize alone selects native textarea before hydration; false keeps input
   assert.match(html, /data-vf-text-field-always-raised/);
   assert.match(html, /<label for="message"/);
   assert.match(html, /First\nSecond<\/textarea>/);
-  assert.doesNotMatch(html, /<input|multiline=|autosize="/);
+  assert.doesNotMatch(html, /<input|\smultiline=|\sautosize=/);
   assert.match(renderToStaticMarkup(h(TextField, { label: 'Name', autosize: false })), /<input/);
 });
