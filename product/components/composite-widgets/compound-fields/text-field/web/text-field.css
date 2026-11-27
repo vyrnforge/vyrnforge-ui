@@ -12,7 +12,8 @@
     color: var(--vf-color-text);
     --_vf-text-field-height: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     --_vf-text-field-padding: var(--_vf-density-input-padding-block, 0.4375rem);
-    --_vf-text-field-background: var(--vf-editor-background, var(--vf-color-surface));
+    --_vf-text-field-base-surface: var(--vf-editor-background, var(--vf-color-surface));
+    --_vf-text-field-background: var(--_vf-text-field-base-surface);
     --_vf-text-field-inline-padding: calc(var(--vf-space-sm) + var(--vf-space-xs));
   }
   :where([data-vf-text-field][hidden]) {
@@ -34,7 +35,7 @@
     --_vf-text-field-padding: var(--vf-space-sm);
   }
   :where([data-vf-text-field][data-vf-text-field-variant='filled']) {
-    --_vf-text-field-background: color-mix(in srgb, var(--vf-editor-background, var(--vf-color-surface)) 88%, var(--vf-color-text));
+    --_vf-text-field-background: color-mix(in srgb, var(--_vf-text-field-base-surface) 88%, var(--vf-color-text));
   }
   :where([data-vf-text-field][data-vf-text-field-variant='underlined']) {
     --_vf-text-field-background: transparent;
@@ -55,10 +56,8 @@
     min-inline-size: 0;
     position: relative;
     --_vf-field-radius: var(--vf-text-field-radius, var(--vf-editor-radius, var(--vf-control-radius)));
-    --_vf-field-border-default: var(
-      --vf-text-field-border-color,
-      var(--vf-editor-border-color, var(--vf-color-border-required))
-    );
+    --_vf-editor-border-default: var(--vf-editor-border-color, var(--vf-color-border-required));
+    --_vf-field-border-default: var(--vf-text-field-border-color, var(--_vf-editor-border-default));
     --_vf-field-surface-default: var(--vf-text-field-background, var(--_vf-text-field-background));
     --_vf-field-hover-surface: var(--_vf-field-surface-default);
   }
@@ -91,7 +90,8 @@
   }
   :where([data-vf-text-field-value])::placeholder {
     font: var(--vf-text-field-placeholder-font, var(--vf-editor-placeholder-font, inherit));
-    letter-spacing: var(--vf-text-field-placeholder-letter-spacing, var(--vf-editor-placeholder-letter-spacing, inherit));
+    --_vf-placeholder-spacing: var(--vf-editor-placeholder-letter-spacing, inherit);
+    letter-spacing: var(--vf-text-field-placeholder-letter-spacing, var(--_vf-placeholder-spacing));
   }
   :where([data-vf-text-field-align='start'] > [data-vf-text-field-control] > [data-vf-text-field-value]) {
     text-align: start;
