@@ -253,7 +253,7 @@ test('React composed NumberField preserves native behavior and shared relationsh
   await expect(page.locator('body')).toHaveAttribute('data-order', 'null');
   await input.fill('7');
   expect(await page.locator('#number-form').evaluate((form) => new FormData(form).get('order'))).toBe('7');
-  const accepted = page.getByRole('spinbutton', { name: 'Accepted adjustment' });
+  const accepted = page.getByRole('spinbutton', { name: 'Adjustment' });
   await page.getByRole('button', { name: 'Increase adjustment' }).click();
   await expect(accepted).toHaveValue('-2.4');
   await accepted.fill('3.25');
@@ -288,6 +288,9 @@ test('React composed NumberField renders responsive native, stacked and horizont
     const bounds = await button.boundingBox();
     expect(bounds.width).toBeGreaterThanOrEqual(24);
     expect(bounds.height).toBeGreaterThanOrEqual(24);
+    const custom = page.getByRole('spinbutton', { name: 'Custom typography' });
+    await expect(custom).toHaveCSS('font-size', '20px');
+    await expect(custom).toHaveCSS('font-weight', '600');
     await page.screenshot({ path: testInfo.outputPath(mode.name + '.png'), fullPage: true });
   }
 });
