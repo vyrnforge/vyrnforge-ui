@@ -234,3 +234,58 @@ test('NumberField reset preserves controlled values and restores a nullable init
   await expect(controlled).toHaveValue('');
   await expect(body).not.toHaveAttribute('data-controlled-request-count', /.+/);
 });
+
+test('React composed NumberField preserves native behavior and shared relationships', async ({ page }) => {
+  test.skip(port !== 'react', 'High-level composition is React-first.');
+  await page.goto('/components/number-field/react.html');
+  await expect(page.locator('body')).toHaveAttribute('data-number-field-ready', 'true');
+  const input = page.getByRole('spinbutton', { name: 'Order quantity' });
+  await expect(input).toHaveAccessibleDescription('Number of items');
+  await expect(input).toHaveAttribute('type', 'number');
+  await expect(input).toHaveAttribute('data-vf-input', '');
+  await page.getByRole('button', { name: 'Add order item' }).click();
+  await expect(input).toHaveValue('2');
+  await input.press('ArrowUp');
+  await expect(input).toHaveValue('3');
+  await input.fill('101');
+  expect(await input.evaluate(el => el.validity.rangeOverflow)).toBe(true);
+  await input.fill('');
+  await expect(page.locator('body')).toHaveAttribute('data-order', 'null');
+  await input.fill('7');
+  expect(await page.locator('#number-form').evaluate(form => new FormData(form).get('order'))).toBe('7');
+  const accepted = page.getByRole('spinbutton', { name: 'Accepted adjustment' });
+  await page.getByRole('button', { name: 'Increase adjustment' }).click();
+  await expect(accepted).toHaveValue('-2.4');
+  await accepted.fill('3.25');
+  await expect(accepted).toHaveValue('3.25');
+  await page.locator('#number-form').evaluate(form => form.reset());
+  await expect(input).toHaveValue('1');
+  await expect(accepted).toHaveValue('3.25');
+  const empty = page.getByRole('spinbutton', { name: 'Empty amount' });
+  await expect(empty).toHaveValue('');
+  await expect(empty).toHaveAttribute('aria-invalid', 'true');
+  await expect(empty).toHaveAccessibleDescription('Enter amount');
+});
+
+test('React composed NumberField renders responsive native, stacked and horizontal fields', async ({ page }, testInfo) => {
+  test.skip(port !== 'react', 'High-level composition is React-first.');
+  await page.goto('/components/number-field/react.html');
+  await expect(page.locator('body')).toHaveAttribute('data-number-field-ready', 'true');
+  for (const mode of [
+    { name: 'desktop-light', width: 1280, theme: 'light', dir: 'ltr' },
+    { name: 'mobile-dark-rtl', width: 375, theme: 'dark', dir: 'rtl' },
+    { name: 'mobile-forced-colors', width: 375, theme: 'light', dir: 'ltr', forcedColors: 'active' },
+  ]) {
+    await page.setViewportSize({ width: mode.width, height: 900 });
+    await page.emulateMedia({ forcedColors: mode.forcedColors || 'none', reducedMotion: 'reduce' });
+    await page.locator('html').evaluate((el, settings) => {
+      el.setAttribute('data-vf-theme', settings.theme);
+      el.dir = settings.dir;
+    }, mode);
+    const button = page.getByRole('button', { name: 'Increase adjustment' });
+    const bounds = await button.boundingBox();
+    expect(bounds.width).toBeGreaterThanOrEqual(24);
+    expect(bounds.height).toBeGreaterThanOrEqual(24);
+    await page.screenshot({ path: testInfo.outputPath(mode.name + '.png'), fullPage: true });
+  }
+});
