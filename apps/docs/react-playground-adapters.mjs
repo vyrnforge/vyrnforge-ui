@@ -162,26 +162,60 @@ export const checkboxPlayground = {
   },
 };
 
+const radioOptions = ['standard', 'express'];
+const radioLabel = value => value === 'standard' ? 'Standard' : 'Express';
+const radioDescription = value => value === 'standard' ? 'Arrives in 3–5 days.' : 'Arrives the next day.';
 function RadioPreview({ config, update }) {
   const name = useId();
+  const rich = config.presentation === 'label and description';
   return h(Flow, { as: 'fieldset', gap: 'sm', style: { minInlineSize: 0 } },
     h('legend', null, h(Text, { as: 'strong' }, 'Delivery')),
-    ...['standard', 'express'].map(value => h(Flow, { as: 'label', direction: 'inline', align: 'center', gap: 'sm', key: value },
-      h(Radio, { name, value, checked: config.selection === value, disabled: config.disabled,
-        required: config.required, onChange: () => update('selection', value) }),
-      h(Text, { as: 'span' }, value === 'standard' ? 'Standard' : 'Express'))));
+    h(Flow, { direction: config.orientation === 'horizontal' ? 'inline' : 'block', wrap: 'wrap', gap: 'sm' },
+      ...radioOptions.map(value => {
+        const id = name + '-' + value;
+        return h(Flow, { as: 'label', direction: 'inline', align: 'center', gap: 'sm', key: value },
+          h(Radio, { name, value, size: config.size, checked: config.selection === value, disabled: config.disabled,
+            required: config.required, 'aria-invalid': config.invalid || undefined,
+            ...(rich ? { 'aria-labelledby': id, 'aria-describedby': id + '-description' } : {}),
+            onChange: () => update('selection', value) }),
+          config.presentation === 'icon label' ? h(Icon, { icon: tagIcon }) : null,
+          rich ? h('span', { 'data-vf-flow': '', 'data-vf-flow-direction': 'block', 'data-vf-flow-gap': 'xs' },
+            h(Text, { id }, radioLabel(value)),
+            h(Text, { id: id + '-description', variant: 'body-sm' }, radioDescription(value))) :
+            h(Text, { as: 'span' }, radioLabel(value)));
+      })));
 }
 export const radioPlayground = {
-  fields: [choice('selection', 'Selected option', 'standard', ['standard', 'express']),
-    bool('disabled', 'Disabled'), bool('required', 'Required')],
+  fields: [choice('size', 'Size', 'md', ['sm', 'md', 'lg']),
+    choice('selection', 'Selected option', 'standard', ['none', 'standard', 'express']),
+    choice('orientation', 'Layout', 'vertical', ['vertical', 'horizontal']),
+    choice('presentation', 'Presentation', 'label', ['label', 'icon label', 'label and description']),
+    bool('disabled', 'Disabled'), bool('required', 'Required'), bool('invalid', 'Invalid')],
   Preview: RadioPreview,
   source(config) {
-    // A same-name native group and its labels are semantic requirements, not demo chrome.
-    return snippet([importLine('Radio', 'radio'), importLine('Flow', 'layout'), importLine('Text', 'text')],
-      markup('Flow', ['as="fieldset"', 'gap="sm"'], '<legend><Text as="strong">Delivery</Text></legend>\n' + ['standard', 'express'].map(value =>
-        markup('Flow', ['as="label"', 'direction="inline"', 'align="center"', 'gap="sm"'], markup('Radio', ['name="delivery"', attribute('value', value),
-          flag('defaultChecked', config.selection === value), flag('disabled', config.disabled), flag('required', config.required)]) +
-          '\n' + markup('Text', [], value === 'standard' ? 'Standard' : 'Express'))).join('\n')));
+    const rich = config.presentation === 'label and description';
+    const icon = config.presentation === 'icon label';
+    const imports = [importLine('Radio', 'radio'), importLine('Flow', 'layout'), importLine('Text', 'text')];
+    if (rich) imports.unshift("import { useId } from 'react';");
+    if (icon) imports.push(...iconImports('tagIcon', 'tag'));
+    const options = radioOptions.map(value => {
+      const id = value + 'Id';
+      const control = markup('Radio', ['name="delivery"', attribute('value', value),
+        flag('defaultChecked', config.selection === value), attribute('size', config.size, 'md'),
+        flag('disabled', config.disabled), flag('required', config.required),
+        config.invalid ? 'aria-invalid="true"' : '',
+        rich ? 'aria-labelledby={' + id + '}' : '', rich ? 'aria-describedby={' + id + ' + "-description"}' : '']);
+      const label = rich
+        ? markup('span', ['data-vf-flow=""', 'data-vf-flow-direction="block"', 'data-vf-flow-gap="xs"'],
+          markup('Text', ['id={' + id + '}'], radioLabel(value)) + '\n' +
+          markup('Text', ['id={' + id + ' + "-description"}', 'variant="body-sm"'], radioDescription(value)))
+        : (icon ? '<Icon icon={tagIcon} />\n' : '') + markup('Text', [], radioLabel(value));
+      return markup('Flow', ['as="label"', 'direction="inline"', 'align="center"', 'gap="sm"'], control + '\n' + label);
+    });
+    return snippet(imports, markup('Flow', ['as="fieldset"', 'gap="sm"'],
+      '<legend><Text as="strong">Delivery</Text></legend>\n' +
+      markup('Flow', ['gap="sm"', ...(config.orientation === 'horizontal' ? ['direction="inline"', 'wrap="wrap"'] : [])], options.join('\n'))),
+      { setup: rich ? ['const standardId = useId();', 'const expressId = useId();'] : [] });
   },
 };
 

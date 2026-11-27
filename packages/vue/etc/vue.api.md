@@ -1499,9 +1499,21 @@ export const PreviewCardTrigger: DefineComponent<    {}, () => VNode<RendererNod
 }>[], {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const Radio: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const Radio: DefineComponent<ExtractPropTypes<    {
+size: {
+type: PropType<"sm" | "md" | "lg">;
+default: string;
+};
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+size: {
+type: PropType<"sm" | "md" | "lg">;
+default: string;
+};
+}>> & Readonly<{}>, {
+size: "sm" | "md" | "lg";
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const RangeSliderRoot: DefineComponent<ExtractPropTypes<    {

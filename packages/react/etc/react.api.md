@@ -3142,7 +3142,10 @@ export interface PreviewCardTriggerProps {
 export const Radio: ForwardRefExoticComponent<RadioProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export type RadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;
+export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
+    // (undocumented)
+    size?: 'sm' | 'md' | 'lg';
+}
 
 // @public (undocumented)
 export const RangeSliderRoot: ForwardRefExoticComponent<RangeSliderRootProps & RefAttributes<HTMLDivElement>>;

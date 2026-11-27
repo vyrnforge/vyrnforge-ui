@@ -288,7 +288,7 @@ test('settings pattern is documentation-only and references existing React evide
   assert.equal(reference.evidence.port, 'react');
   assert.equal(reference.evidence.fixtureUrl, '/components/app-shell/settings-navigation-react.html');
   assert.equal(reference.evidence.testName, 'settings navigation preserves deep links, route history, title and focus while local state remains local');
-  assert.deepEqual([...new Set(reference.frameworks[0].usage.map((entry) => entry.component))].sort(), ['app-shell', 'button', 'drawer', 'input', 'side-nav', 'tabs']);
+  assert.deepEqual([...new Set(reference.frameworks[0].usage.map((entry) => entry.component))].sort(), ['app-shell', 'button', 'drawer', 'input', 'side-nav', 'tabs', 'text']);
   assert.ok(graph.patterns.find((entry) => entry.id === 'pattern:loading').publicEntrypoints.includes('@vyrnforge/web/styles/loading.css'));
   const closure = reference.frameworks[0].usageClosure;
   assert.ok(closure.some((edge) => edge.component === 'dialog' && edge.port === 'react'));

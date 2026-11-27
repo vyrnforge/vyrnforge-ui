@@ -2508,7 +2508,15 @@ export class VfPreviewCardTriggerDirective implements OnDestroy {
 // @public (undocumented)
 export class VfRadioDirective {
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfRadioDirective, "input[vfRadio]", never, {}, {}, never, never, true, never>;
+    readonly size: InputSignal<"sm" | "md" | "lg">;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfRadioDirective, "input[vfRadio]", never, {
+        "size": {
+            "alias": "size";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfRadioDirective, never>;
 }
