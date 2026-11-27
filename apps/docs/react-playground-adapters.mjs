@@ -674,7 +674,7 @@ function nativeFieldAdapter(multiline) {
     Preview({ config }) {
       const id = useId();
       return h(Flow, { gap: 'xs', style: { maxInlineSize: '100%', inlineSize: config.fullWidth ? '100%' : undefined } },
-        h(Text, { as: 'label', htmlFor: id }, label(config, name)),
+        h('label', { htmlFor: id }, h(Text, { variant: 'label-md' }, label(config, name))),
         h(Component, { ...fieldProps(config), id, key: JSON.stringify([config.type, config.initial]) }));
     },
     source(config) {
@@ -685,7 +685,7 @@ function nativeFieldAdapter(multiline) {
         flag('disabled', config.disabled), flag('readOnly', config.readOnly), flag('required', config.required),
         config.invalid ? 'aria-invalid="true"' : '']);
       return snippet([importLine(name, name.toLowerCase()), importLine('Text', 'text')],
-        '<>\n  <Text as="label" htmlFor="field">' + content(label(config, name)) + '</Text>\n' + indent(control, 2) + '\n</>');
+        '<>\n  <label htmlFor="field"><Text variant="label-md">' + content(label(config, name)) + '</Text></label>\n' + indent(control, 2) + '\n</>');
     },
   };
 }

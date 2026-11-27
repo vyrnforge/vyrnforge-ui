@@ -29,6 +29,8 @@ export const browserFixture = {
 import {createElement as h,useState,useRef} from 'react';
 import {createRoot} from 'react-dom/client';
 import {TextField} from '@vyrnforge/react/text-field';
+import {Textarea} from '@vyrnforge/react/textarea';
+import {Input} from '@vyrnforge/react/input';
 import {Button} from '@vyrnforge/react/button';
 import {createTheme,renderThemeCss} from '@vyrnforge/web/theme';
 const theme = createTheme({name:'field-test', tokens:{'--vf-text-field-label-font':'600 18px/1.5 sans-serif','--vf-text-field-radius':'12px'}});
@@ -50,6 +52,11 @@ function App(){
     h(TextField,{label:'Floating underlined',labelPlacement:'floating',variant:'underlined',fullWidth:true}),
     h(TextField,{label:'Compare filled',labelPlacement:'floating',variant:'filled',defaultValue:'Ada',fullWidth:true}),
     h(TextField,{label:'Compare underlined',labelPlacement:'floating',variant:'underlined',defaultValue:'Ada',fullWidth:true}),
+    ...['outlined','filled','underlined'].flatMap(variant=>[
+      h(Input,{key:variant+'input','aria-label':'Standalone input '+variant,variant,fieldSize:'md',fullWidth:true}),
+      h(TextField,{key:variant+'field',label:'Composed input '+variant,variant,fieldSize:'md',fullWidth:true}),
+      h(Textarea,{key:variant+'textarea','aria-label':'Standalone textarea '+variant,variant,fieldSize:'md',autosize:true,minRows:1,maxRows:4,fullWidth:true}),
+      h(TextField,{key:variant+'composed',label:'Composed textarea '+variant,variant,fieldSize:'md',autosize:true,minRows:1,maxRows:4,fullWidth:true})]),
     h(Button,{type:'submit'},'Submit'),h(Button,{type:'reset'},'Reset'),h('output',null,submitted));
 }
 createRoot(document.querySelector('#root')).render(h(App));

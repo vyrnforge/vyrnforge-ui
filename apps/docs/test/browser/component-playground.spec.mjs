@@ -511,7 +511,7 @@ test('TextField autosize alone selects Textarea and emits concise matching usage
   await expect(playground.getByRole('checkbox', { name: 'Multiline', exact: true })).not.toBeChecked();
   await expect(source).toContainText('autosize');
   await expect(source).toContainText('minRows={1}');
-  await expect(source).not.toContainText(/multiline|rows=|styles\\/|useState/);
+  await expect(source).not.toContainText(/multiline|rows=|styles\/|useState/);
   await editor.fill(Array(10).fill('A line').join('\n'));
   for (const theme of ['light', 'dark']) {
     await page.locator('#vf-react-theme').selectOption(theme);

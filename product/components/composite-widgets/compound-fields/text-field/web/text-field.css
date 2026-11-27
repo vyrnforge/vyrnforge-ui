@@ -60,12 +60,13 @@
     --_vf-field-border-default: var(--vf-text-field-border-color, var(--_vf-editor-border-default));
     --_vf-field-surface-default: var(--vf-text-field-background, var(--_vf-text-field-background));
     --_vf-field-hover-surface: var(--vf-color-surface-hover);
+    --_vf-editor-frame-block: 2px;
   }
   :where([data-vf-text-field-control] > [data-vf-text-field-value]) {
     flex: 1 1 auto;
     min-inline-size: 0;
     max-inline-size: 100%;
-    --_vf-editor-height: calc(var(--_vf-text-field-height) - 2px);
+    --_vf-editor-height: calc(var(--_vf-text-field-height) - var(--_vf-editor-frame-block));
     min-block-size: var(--_vf-textarea-autosize-min, var(--_vf-editor-height));
     --_vf-editor-block-padding: var(--_vf-text-field-padding);
     --_vf-field-inline-padding: var(--_vf-text-field-inline-padding);
@@ -182,6 +183,7 @@
     [data-vf-text-field-variant='underlined'] > [data-vf-text-field-control]
   ) {
     --_vf-field-hover-surface: var(--_vf-field-surface-default);
+    --_vf-editor-frame-block: 3px;
     border-color: transparent;
     border-block-end: 2px solid var(--_vf-field-border);
     border-end-start-radius: 0;
