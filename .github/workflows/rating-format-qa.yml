@@ -1,0 +1,23 @@
+name: Rating source formatting QA
+on:
+  pull_request:
+    branches: [feat/rating-redesign-1590]
+    paths: ['.github/workflows/rating-format-qa.yml']
+permissions:
+  contents: read
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: |
+          pnpm exec prettier --write 'product/components/composite-widgets/choice-value/rating/**/*.{ts,tsx,mjs,css,json,md,html}'
+          node --input-type=module -e 'import { execFileSync } from "node:child_process"; import { readFileSync } from "node:fs"; for(const path of execFileSync("git",["diff","--name-only"],{encoding:"utf8"}).trim().split("\n").filter(Boolean)) console.log("VF_FORMATTED "+JSON.stringify({path,content:readFileSync(path,"utf8")}));'
+          pnpm format:l5:check
+          pnpm lint:l5
