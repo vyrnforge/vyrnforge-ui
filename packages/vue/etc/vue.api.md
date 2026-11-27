@@ -1856,9 +1856,59 @@ export const SideNavList: DefineComponent<    {}, () => VNode<RendererNode, Rend
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const Slider: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const Slider: DefineComponent<ExtractPropTypes<    {
+size: {
+type: PropType<"sm" | "md" | "lg">;
+default: string;
+};
+orientation: {
+type: PropType<"horizontal" | "vertical">;
+default: string;
+};
+marks: {
+type: PropType<boolean | readonly {
+value: number;
+label?: string;
+}[]>;
+default: boolean;
+};
+valueLabelDisplay: {
+type: PropType<"off" | "auto" | "always">;
+default: string;
+};
+formatValue: PropType<(value: number) => string>;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+size: {
+type: PropType<"sm" | "md" | "lg">;
+default: string;
+};
+orientation: {
+type: PropType<"horizontal" | "vertical">;
+default: string;
+};
+marks: {
+type: PropType<boolean | readonly {
+value: number;
+label?: string;
+}[]>;
+default: boolean;
+};
+valueLabelDisplay: {
+type: PropType<"off" | "auto" | "always">;
+default: string;
+};
+formatValue: PropType<(value: number) => string>;
+}>> & Readonly<{}>, {
+size: "sm" | "md" | "lg";
+orientation: "horizontal" | "vertical";
+marks: boolean | readonly {
+value: number;
+label?: string;
+}[];
+valueLabelDisplay: "off" | "auto" | "always";
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const SplitButtonAction: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {

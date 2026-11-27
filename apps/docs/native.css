@@ -1906,3 +1906,9 @@
     .vf-docs-playground-options, .vf-docs-playground-source { border-color: CanvasText; }
   }
 }
+
+.vf-docs-slider-preview {
+  inline-size: 100%;
+  max-inline-size: 24rem;
+  min-inline-size: 0;
+}

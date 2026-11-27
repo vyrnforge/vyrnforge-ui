@@ -1,0 +1,14 @@
+{
+  "id": "slider/values",
+  "title": "Continuous values and discrete marks",
+  "description": "Native step controls the allowed values; visual marks provide optional landmarks.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Values and marks"
+}

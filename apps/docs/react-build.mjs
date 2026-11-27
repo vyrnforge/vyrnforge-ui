@@ -89,7 +89,7 @@ const buttonGroup = reactModel.patternCatalog.find((entry) => entry.id === 'butt
 if (!buttonGroup?.showcaseAvailable || !buttonGroup.guideOnly || buttonGroup.apiAvailable ||
     buttonGroup.examples.length !== 6) throw new Error('Button Group requires a guide-only pattern with six real examples');
 
-const selectionIds = ['checkbox', 'radio', 'checkbox-group', 'radio-group'];
+const selectionIds = ['checkbox', 'radio', 'slider', 'checkbox-group', 'radio-group'];
 const selection = Object.fromEntries(await Promise.all(selectionIds.map(async (id) => {
   const group = id.endsWith('-group');
   const owner = (group ? reactModel.patternCatalog : reactModel.componentCatalog).find(entry => entry.id === id);
@@ -98,7 +98,7 @@ const selection = Object.fromEntries(await Promise.all(selectionIds.map(async (i
     throw new Error('Missing native selection documentation contract for ' + id);
   const publicSource = group ? null : await readFile(path.join(root,
     path.dirname(path.dirname(owner.frameworkSourcePath)), 'index.ts'), 'utf8');
-  const publicTypes = group ? null : publicSource.match(/export (?:interface|type) (?:Checkbox|Radio)Props[\s\S]*?(?=\nexport const)/)?.[0].trim();
+  const publicTypes = group ? null : publicSource.match(/export (?:interface|type) (?:Checkbox|Radio|Slider)Props[\s\S]*?(?=\nexport const)/)?.[0].trim();
   if (!group && !publicTypes) throw new Error('Missing public selection props for ' + id);
   return [id, { ...owner, publicTypes }];
 })));
@@ -412,8 +412,8 @@ const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 // Playground CSS belongs to React guide pages only. Bundle relative public CSS imports
 // so an iframe or Native Web inline theme clone never resolves them against a document URL.
-const playgroundViews = new Set(['guide', 'selection-checkbox', 'selection-radio', 'avatar', 'badge', 'chip', 'toggle', 'divider', 'list', 'loading', 'backdrop', ...fieldIds, ...feedbackIds]);
-const playgroundStyles = ['checkbox', 'radio', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list', 'loading', 'backdrop', 'segmented-control', ...fieldIds, ...feedbackIds];
+const playgroundViews = new Set(['guide', 'selection-checkbox', 'selection-radio', 'selection-slider', 'avatar', 'badge', 'chip', 'toggle', 'divider', 'list', 'loading', 'backdrop', ...fieldIds, ...feedbackIds]);
+const playgroundStyles = ['checkbox', 'radio', 'slider', 'tooltip', 'avatar', 'badge', 'chip', 'toggle-button', 'icon', 'divider', 'list', 'loading', 'backdrop', 'segmented-control', ...fieldIds, ...feedbackIds];
 const playgroundStyleAsset = '/assets/react-playground.css';
 // The Color studio alone needs these public controls; other docs pages do not
 // pay for unrelated component styles or invent docs-specific component skins.

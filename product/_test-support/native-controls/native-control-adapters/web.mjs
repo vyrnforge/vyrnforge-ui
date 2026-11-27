@@ -10,6 +10,9 @@ export function validateWebNativeControlContract(contract, componentId) {
   if (contract.webInlineScript !== undefined && (typeof contract.webInlineScript !== 'string' || !contract.webInlineScript.trim())) {
     throw new Error(`${componentId}/web native-control fixture webInlineScript must be a non-empty string when provided`);
   }
+  if (contract.webConnectorOptions !== undefined && (!contract.webConnector || !contract.webConnectorOptions || typeof contract.webConnectorOptions !== 'object' || Array.isArray(contract.webConnectorOptions))) {
+    throw new Error(`${componentId}/web native-control fixture webConnectorOptions requires a connector and an options object`);
+  }
   if (contract.webConnector && contract.webInlineScript) {
     throw new Error(`${componentId}/web native-control fixture must not define both webConnector and webInlineScript`);
   }
@@ -20,7 +23,7 @@ export async function buildNativeControlPortFixture({ componentId, contract, out
   validateWebNativeControlContract(contract, componentId);
   let script = '';
   if (contract.webConnector) {
-    await writeClient(outDir, 'web.ts', `import{${contract.webConnector}}from'@vyrnforge/web/${componentId}';${contract.webConnector}(document.querySelector('#control'));`, root);
+    await writeClient(outDir, 'web.ts', `import{${contract.webConnector}}from'@vyrnforge/web/${componentId}';${contract.webConnector}(document.querySelector('#control')${contract.webConnectorOptions ? ',' + JSON.stringify(contract.webConnectorOptions) : ''});`, root);
     script = '<script type="module" src="./web.js"></script>';
   } else if (contract.webInlineScript) {
     script = `<script>${contract.webInlineScript}</script>`;
