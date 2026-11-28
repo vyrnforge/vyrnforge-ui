@@ -188,6 +188,8 @@
     translate: 0 -50%;
   }
   :where([data-vf-slider-value])[data-vf-tooltip-content] {
+    /* Clear the thumb's active halo; retain explicit shared Tooltip theming. */
+    --_vf-tooltip-offset: var(--vf-tooltip-offset, calc(var(--vf-space-sm) + var(--vf-space-xs)));
     pointer-events: none;
     text-align: center;
     font: var(--vf-slider-value-label-font, var(--_vf-tooltip-font));
