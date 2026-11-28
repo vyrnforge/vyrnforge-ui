@@ -692,6 +692,17 @@ test('Rating playground renders native choices, synchronized source and read-onl
   await expect(preview.locator('[data-vf-rating-artwork]').nth(3)).toHaveCSS('--_vf-rating-fill', '50%');
   await preview.getByRole('radio', { name: '4', exact: true }).check();
   await expect(source).toContainText('defaultValue={4}');
+  await playground.getByRole('checkbox', { name: 'Clearable' }).check();
+  await expect(source).toContainText('clearable');
+  await expect(source).not.toContainText('clearLabel');
+  await expect(preview.getByRole('button')).toHaveCount(0);
+  await preview.getByRole('radio', { name: '4', exact: true }).click();
+  await expect(preview.locator('input:checked')).toHaveCount(0);
+  await expect(source).toContainText('defaultValue={0}');
+  await expect(preview.locator('[data-vf-rating-artwork]').nth(3)).toHaveCSS('--_vf-rating-fill', '0%');
+  await playground.screenshot({ path: testInfo.outputPath('rating-playground-cleared.png') });
+  await preview.getByRole('radio', { name: '4', exact: true }).click();
+  await expect(preview.getByRole('radio', { name: '4', exact: true })).toBeChecked();
   await playground.screenshot({ path: testInfo.outputPath('rating-playground-half.png') });
   await playground.getByRole('button', { name: 'Review score' }).click();
   await expect(preview.getByRole('img')).toHaveCount(1);

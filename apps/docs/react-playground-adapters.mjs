@@ -951,7 +951,6 @@ export const ratingPlayground = {
     return h(Rating, { 'aria-label': config.readOnly ? name + ': ' + value + ' out of ' + config.max : name,
       size: config.size, max: config.max, precision: Number(config.precision), value, readOnly: config.readOnly,
       disabled: !config.readOnly && config.disabled, clearable: !config.readOnly && config.clearable,
-      clearLabel: config.clearable ? 'Clear rating' : undefined,
       icon: config.artwork === 'heart' ? heartIcon : undefined, onValueChange: v => update('value', v) });
   },
   source(config) {
@@ -968,7 +967,7 @@ export const ratingPlayground = {
       attribute('size', config.size, 'md'), config.precision === '0.5' && !config.readOnly ? 'precision={0.5}' : '',
       config.artwork === 'heart' ? 'icon={heartIcon}' : '',
       flag('readOnly', config.readOnly), flag('disabled', !config.readOnly && config.disabled),
-      flag('clearable', !config.readOnly && config.clearable), !config.readOnly && config.clearable ? 'clearLabel="Clear rating"' : '',
+      flag('clearable', !config.readOnly && config.clearable),
     ]), { setup: controlled ? ['const [value, setValue] = useState(' + value + ');'] : [] });
   },
 };

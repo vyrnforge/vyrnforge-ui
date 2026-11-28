@@ -46,6 +46,6 @@
     "Group labels are authored; explicit or generated numeric item labels support localization. Filled and empty glyphs distinguish state without color.",
     "Audit mapping is provisional; not a conformance claim.",
     "Native same-form reset browser regressions cover canceled reset, independent groups, no selection and controlled value preservation; wider form, visual and manual acceptance remain open.",
-    "Enhanced rating: native whole/half choices with 24px minimum half target at default scale, CSS checked/hover artwork, authored clear label, disabled/required and noninteractive role=img display. Manual AT review remains required."
+    "Enhanced rating: native whole/half choices with 24px minimum half target at default scale, CSS checked/hover artwork, optional repeat activation with no extra tab stop (describe it using an authored localized hint), disabled/required and noninteractive role=img display. Manual AT review remains required."
   ]
 }
