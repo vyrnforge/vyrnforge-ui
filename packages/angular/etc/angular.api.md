@@ -2657,9 +2657,9 @@ export class VfRatingComponent {
     // (undocumented)
     readonly readOnly: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
-    readonly required: InputSignalWithTransform<boolean, unknown>;
-    // (undocumented)
     repeatKey(event: KeyboardEvent): void;
+    // (undocumented)
+    readonly required: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     reselect(event: MouseEvent): void;
     // (undocumented)

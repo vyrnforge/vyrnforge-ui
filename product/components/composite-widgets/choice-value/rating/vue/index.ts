@@ -215,14 +215,20 @@ export const Rating = defineComponent({
                           },
                           onKeydown: (event: KeyboardEvent) => {
                             if (canClear)
-                              handleRatingRepeatKey(event, event.currentTarget as HTMLInputElement, ctx.value.value, () =>
-                                ctx.set(0),
+                              handleRatingRepeatKey(
+                                event,
+                                event.currentTarget as HTMLInputElement,
+                                ctx.value.value,
+                                () => ctx.set(0),
                               );
                           },
                           onKeyup: (event: KeyboardEvent) => {
                             if (canClear)
-                              handleRatingRepeatKey(event, event.currentTarget as HTMLInputElement, ctx.value.value, () =>
-                                ctx.set(0),
+                              handleRatingRepeatKey(
+                                event,
+                                event.currentTarget as HTMLInputElement,
+                                ctx.value.value,
+                                () => ctx.set(0),
                               );
                           },
                           onChange: () => ctx.set(score),
