@@ -3216,9 +3216,12 @@ export interface RangeSliderRootProps extends Omit<ComponentPropsWithoutRef<'div
     value?: readonly [number, number];
 }
 
+// @public
+export function Rating(input: RatingProps): ReactElement;
+
 // @public (undocumented)
-export function RatingItem(input: RatingItemProps): ReactElement<    {
-'data-vf-rating-item': string;
+export function RatingItem(input: RatingItemProps): ReactElement<{
+    'data-vf-rating-item': string;
 }, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
@@ -3229,6 +3232,35 @@ export interface RatingItemProps {
     label?: string;
     // (undocumented)
     value: number;
+}
+
+// @public
+export interface RatingProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onChange' | 'role' | 'defaultValue'> {
+    clearable?: boolean;
+    // (undocumented)
+    defaultValue?: number;
+    // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
+    getItemLabel?(value: number): string;
+    // (undocumented)
+    icon?: IconDefinition;
+    // (undocumented)
+    max?: number;
+    // (undocumented)
+    name?: string;
+    // (undocumented)
+    onValueChange?(value: number): void;
+    // (undocumented)
+    precision?: 1 | 0.5;
+    // (undocumented)
+    readOnly?: boolean;
+    // (undocumented)
+    required?: boolean;
+    // (undocumented)
+    size?: IconSize;
+    // (undocumented)
+    value?: number;
 }
 
 // @public (undocumented)
@@ -5333,6 +5365,12 @@ export const tokens: Readonly<{
     }>;
     list: Readonly<{
         stickyOffset: `var(--vf-${string})`;
+    }>;
+    rating: Readonly<{
+        filledColor: `var(--vf-${string})`;
+        emptyColor: `var(--vf-${string})`;
+        hoverColor: `var(--vf-${string})`;
+        gap: `var(--vf-${string})`;
     }>;
     slider: Readonly<{
         trackSize: `var(--vf-${string})`;

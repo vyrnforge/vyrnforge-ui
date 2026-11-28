@@ -1,13 +1,7 @@
 import { Icon } from '../icon/index.js';
 import type { IconDefinition, IconSize } from '@vyrnforge/web/icon';
-import {
-  ratingStar,
-  ratingMaximum,
-  ratingValue,
-  clearRatingOnRepeat,
-  connectRatingReset,
-} from '@vyrnforge/web/rating';
-import type { CSSProperties, HTMLAttributes, MouseEvent } from 'react';
+import { ratingStar, ratingMaximum, ratingValue, clearRatingOnRepeat, handleRatingRepeatKey, connectRatingReset } from '@vyrnforge/web/rating';
+import type { CSSProperties, HTMLAttributes, KeyboardEvent, MouseEvent } from 'react';
 import {
   createContext,
   createElement,
@@ -262,6 +256,14 @@ export function Rating({
                     'aria-describedby': attrs['aria-describedby'],
                     onClick: (event: MouseEvent<HTMLInputElement>) => {
                       if (canClear) clearRatingOnRepeat(event.currentTarget, selected, () => ctx.set(0));
+                    },
+                    onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
+                      if (canClear)
+                        handleRatingRepeatKey(event.nativeEvent, event.currentTarget, selected, () => ctx.set(0));
+                    },
+                    onKeyUp: (event: KeyboardEvent<HTMLInputElement>) => {
+                      if (canClear)
+                        handleRatingRepeatKey(event.nativeEvent, event.currentTarget, selected, () => ctx.set(0));
                     },
                     onChange: () => ctx.set(score),
                   }),

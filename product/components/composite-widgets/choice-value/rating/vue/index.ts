@@ -19,6 +19,7 @@ import {
   ratingMaximum,
   ratingValue,
   clearRatingOnRepeat,
+  handleRatingRepeatKey,
   reconcileRating,
   connectRatingReset,
 } from '@vyrnforge/web/rating';
@@ -208,7 +209,21 @@ export const Rating = defineComponent({
                           'aria-describedby': attrs['aria-describedby'],
                           onClick: (event: MouseEvent) => {
                             if (canClear)
-                              clearRatingOnRepeat(event.currentTarget as HTMLInputElement, ctx.value.value, () => ctx.set(0));
+                              clearRatingOnRepeat(event.currentTarget as HTMLInputElement, ctx.value.value, () =>
+                                ctx.set(0),
+                              );
+                          },
+                          onKeydown: (event: KeyboardEvent) => {
+                            if (canClear)
+                              handleRatingRepeatKey(event, event.currentTarget as HTMLInputElement, ctx.value.value, () =>
+                                ctx.set(0),
+                              );
+                          },
+                          onKeyup: (event: KeyboardEvent) => {
+                            if (canClear)
+                              handleRatingRepeatKey(event, event.currentTarget as HTMLInputElement, ctx.value.value, () =>
+                                ctx.set(0),
+                              );
                           },
                           onChange: () => ctx.set(score),
                         }),

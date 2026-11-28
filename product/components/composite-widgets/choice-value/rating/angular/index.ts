@@ -17,6 +17,7 @@ import {
   ratingMaximum,
   ratingValue,
   clearRatingOnRepeat,
+  handleRatingRepeatKey,
   reconcileRating,
   connectRatingReset,
 } from '@vyrnforge/web/rating';
@@ -140,6 +141,8 @@ export class VfRatingItemDirective {
                     [attr.aria-label]="itemLabel(star + part)"
                     [attr.aria-invalid]="invalid() ? 'true' : null"
                     [attr.aria-describedby]="describedBy() ?? null"
+                    (keydown)="repeatKey($event)"
+                    (keyup)="repeatKey($event)"
                     (click)="reselect($event)"
                     (change)="choose(star + part)"
                   />
@@ -199,6 +202,11 @@ export class VfRatingComponent {
   }
   choose(value: number) {
     if (!this.readOnly() && !this.disabled()) this.state.set(value);
+  }
+  repeatKey(event: KeyboardEvent) {
+    if (this.canClear() && !this.disabled()) {
+      handleRatingRepeatKey(event, event.currentTarget as HTMLInputElement, this.selected(), () => this.state.set(0));
+    }
   }
   reselect(event: MouseEvent) {
     if (this.canClear() && !this.disabled()) {

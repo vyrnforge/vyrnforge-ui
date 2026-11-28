@@ -68,3 +68,24 @@ export function clearRatingOnRepeat(radio: HTMLInputElement, selected: number, c
   }
   clear();
 }
+
+/** Space on a selected radio does not consistently produce a native click across engines. */
+export function handleRatingRepeatKey(
+  event: KeyboardEvent,
+  radio: HTMLInputElement,
+  selected: number,
+  clear: () => void,
+): void {
+  if (
+    event.key !== ' ' ||
+    !selected ||
+    !radio.checked ||
+    Number(radio.value) !== selected ||
+    radio.required ||
+    radio.matches(':disabled')
+  ) {
+    return;
+  }
+  event.preventDefault();
+  if (event.type === 'keyup') clearRatingOnRepeat(radio, selected, clear);
+}
