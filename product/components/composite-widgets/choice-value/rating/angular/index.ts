@@ -12,7 +12,14 @@ import {
   signal,
 } from '@angular/core';
 import type { IconDefinition, IconSize } from '@vyrnforge/web/icon';
-import { ratingStar, ratingMaximum, ratingValue, clearRatingOnRepeat, reconcileRating, connectRatingReset } from '@vyrnforge/web/rating';
+import {
+  ratingStar,
+  ratingMaximum,
+  ratingValue,
+  clearRatingOnRepeat,
+  reconcileRating,
+  connectRatingReset,
+} from '@vyrnforge/web/rating';
 import { VfIconComponent } from '@vyrnforge/angular/icon';
 
 function createRatingState(options: {

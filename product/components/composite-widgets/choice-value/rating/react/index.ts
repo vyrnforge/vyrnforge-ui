@@ -1,6 +1,12 @@
 import { Icon } from '../icon/index.js';
 import type { IconDefinition, IconSize } from '@vyrnforge/web/icon';
-import { ratingStar, ratingMaximum, ratingValue, clearRatingOnRepeat, connectRatingReset } from '@vyrnforge/web/rating';
+import {
+  ratingStar,
+  ratingMaximum,
+  ratingValue,
+  clearRatingOnRepeat,
+  connectRatingReset,
+} from '@vyrnforge/web/rating';
 import type { CSSProperties, HTMLAttributes, MouseEvent } from 'react';
 import {
   createContext,
@@ -265,5 +271,4 @@ export function Rating({
       ),
     ),
   );
-
 }

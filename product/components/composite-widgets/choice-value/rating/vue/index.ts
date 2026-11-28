@@ -14,7 +14,14 @@ import {
 } from 'vue';
 import { Icon } from '../icon/index.js';
 import type { IconDefinition, IconSize } from '@vyrnforge/web/icon';
-import { ratingStar, ratingMaximum, ratingValue, clearRatingOnRepeat, reconcileRating, connectRatingReset } from '@vyrnforge/web/rating';
+import {
+  ratingStar,
+  ratingMaximum,
+  ratingValue,
+  clearRatingOnRepeat,
+  reconcileRating,
+  connectRatingReset,
+} from '@vyrnforge/web/rating';
 
 interface Ctx {
   value: Ref<number>;
@@ -200,7 +207,8 @@ export const Rating = defineComponent({
                           'aria-invalid': attrs['aria-invalid'],
                           'aria-describedby': attrs['aria-describedby'],
                           onClick: (event: MouseEvent) => {
-                            if (canClear) clearRatingOnRepeat(event.currentTarget as HTMLInputElement, ctx.value.value, () => ctx.set(0));
+                            if (canClear)
+                              clearRatingOnRepeat(event.currentTarget as HTMLInputElement, ctx.value.value, () => ctx.set(0));
                           },
                           onChange: () => ctx.set(score),
                         }),

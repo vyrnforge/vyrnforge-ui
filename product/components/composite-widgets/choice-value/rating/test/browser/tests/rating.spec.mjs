@@ -160,9 +160,16 @@ test('generated Rating preserves native fractional selection, clear and read-onl
   expect(await page.locator('#form').evaluate((form) => new FormData(form).get('fraction'))).toBe('4');
   const generated = port !== 'web' && port !== 'elements';
   if (generated) {
-    await page.getByRole('button', { name: 'Clear fractional rating' }).click();
+    const four = group.getByRole('radio', { name: '4', exact: true });
+    await four.click();
+    await expect(four).toBeFocused();
+    await expect(group.locator('[data-vf-rating-artwork]').nth(3)).toHaveCSS('--_vf-rating-fill', '0%');
     await expect(group.locator('input:checked')).toHaveCount(0);
     expect(await page.locator('#form').evaluate((form) => new FormData(form).has('fraction'))).toBe(false);
+    await four.click();
+    await expect(four).toBeChecked();
+    await four.press('Space');
+    await expect(group.locator('input:checked')).toHaveCount(0);
   }
   await page.locator('#form').evaluate((form) => form.reset());
   await expect(selected).toBeChecked();
@@ -176,7 +183,10 @@ test('generated Rating preserves native fractional selection, clear and read-onl
         .first()
         .evaluate((input) => input.validity.valueMissing),
     ).toBe(true);
-    await required.getByRole('radio', { name: '2', exact: true }).check();
+    const two = required.getByRole('radio', { name: '2', exact: true });
+    await two.check();
+    await two.click();
+    await expect(two).toBeChecked();
     expect(
       await required
         .locator('input')
@@ -207,4 +217,25 @@ test('enhanced native paint follows checked choice, hover and logical direction'
     'outline-style',
     'solid',
   );
+});
+
+test('optional repeat activation respects controlled rejection and ordinary ratings', async ({ page }) => {
+  test.skip(port === 'web' || port === 'elements', 'Authored native groups have no managed clearable prop.');
+  await open(page);
+  const controlled = page.getByRole('radiogroup', { name: 'Controlled clearable rating' });
+  const five = controlled.getByRole('radio', { name: '5', exact: true });
+  await five.click();
+  await expect(page.locator('body')).toHaveAttribute('data-clear-request', '0');
+  await expect(five).toBeChecked();
+  expect(await page.locator('#form').evaluate((form) => new FormData(form).get('controlled-clearable'))).toBe('5');
+  const ordinary = page
+    .getByRole('radiogroup', { name: 'Ordinary rating' })
+    .getByRole('radio', { name: '5', exact: true });
+  await ordinary.click();
+  await expect(ordinary).toBeChecked();
+  const disabled = page
+    .getByRole('radiogroup', { name: 'Disabled rating' })
+    .getByRole('radio', { name: '2', exact: true });
+  await expect(disabled).toBeDisabled();
+  await expect(disabled).toBeChecked();
 });
