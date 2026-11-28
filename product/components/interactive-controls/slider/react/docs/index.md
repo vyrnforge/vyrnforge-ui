@@ -32,7 +32,7 @@ Pass tooltip to enable the built-in moving value tooltip. No TooltipRoot, Toolti
 />
 ```
 
-Default is false. An options object defaults to auto visibility, sm size, no arrow, and the orientation-appropriate placement. Native viewport collision handling and the shared Tooltip arrow follow the moving thumb, even at the minimum or maximum. All twelve Tooltip placements are supported. During dragging the tooltip remains visible even if the pointer leaves the track. The numeric surface is not an accessible description; formatted values use aria-valuetext unless an explicit value text is supplied.
+Default is false. An options object defaults to auto visibility, sm size, no arrow, and the orientation-appropriate placement. Native viewport collision handling and the shared Tooltip arrow follow the moving thumb, even at the minimum or maximum. All twelve Tooltip placements are supported. The default thumb clearance is 0.75rem (12px at a 16px root), measured to the arrow tip or arrowless surface. Set tooltip.offset in the centralized theme to override it; a local ThemeScope can limit the override to the Slider. During dragging the tooltip remains visible even if the pointer leaves the track. The numeric surface is not an accessible description; formatted values use aria-valuetext unless an explicit value text is supplied.
 
 Migration: valueLabelDisplay and formatValue remain accepted for existing consumers. Prefer tooltip={{ display: 'auto', format: value => value + '%' }} for new usage. An explicitly supplied tooltip option takes precedence over the legacy visibility option; a legacy formatter remains a fallback for accessible value text. For explanatory text, use the standalone Tooltip separately.
 
