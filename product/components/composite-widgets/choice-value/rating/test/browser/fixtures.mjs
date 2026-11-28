@@ -59,11 +59,20 @@ export async function createReactStory({ client }) {
         defaultValue: 3.5,
         precision: 0.5,
         clearable: true,
-        clearLabel: 'Clear fractional rating',
       }),
-      h(Rating, { 'aria-label': 'Required rating', name: 'required-rating', required: true }),
+      h(Rating, {
+        'aria-label': 'Controlled clearable rating',
+        name: 'controlled-clearable',
+        value: 5,
+        clearable: true,
+        onValueChange: (v) => {
+          if (client) document.body.dataset.clearRequest = String(v);
+        },
+      }),
+      h(Rating, { 'aria-label': 'Ordinary rating', defaultValue: 5 }),
+      h(Rating, { 'aria-label': 'Required rating', name: 'required-rating', required: true, clearable: true }),
       h(Rating, { 'aria-label': 'Average 4.7 out of 5', value: 4.7, readOnly: true }),
-      h(Rating, { 'aria-label': 'Disabled rating', value: 2, disabled: true }),
+      h(Rating, { 'aria-label': 'Disabled rating', value: 2, disabled: true, clearable: true }),
       h(RatingRoot, {
         'aria-label': 'Generated rating',
         name: 'score',
@@ -116,11 +125,20 @@ export async function createVueStory({ client }) {
             defaultValue: 3.5,
             precision: 0.5,
             clearable: true,
-            clearLabel: 'Clear fractional rating',
           }),
-          h(Rating, { 'aria-label': 'Required rating', name: 'required-rating', required: true }),
+          h(Rating, {
+            'aria-label': 'Controlled clearable rating',
+            name: 'controlled-clearable',
+            value: 5,
+            clearable: true,
+            'onUpdate:value': (v) => {
+              if (client) document.body.dataset.clearRequest = String(v);
+            },
+          }),
+          h(Rating, { 'aria-label': 'Ordinary rating', defaultValue: 5 }),
+          h(Rating, { 'aria-label': 'Required rating', name: 'required-rating', required: true, clearable: true }),
           h(Rating, { 'aria-label': 'Average 4.7 out of 5', value: 4.7, readOnly: true }),
-          h(Rating, { 'aria-label': 'Disabled rating', value: 2, disabled: true }),
+          h(Rating, { 'aria-label': 'Disabled rating', value: 2, disabled: true, clearable: true }),
           h(RatingRoot, {
             'aria-label': 'Generated rating',
             name: 'score',
@@ -146,6 +164,9 @@ export async function createAngularStory({ client }) {
         document.body.dataset.ratingReady = 'true';
       });
     }
+    clearRequested(v) {
+      if (client) document.body.dataset.clearRequest = String(v);
+    }
     changed(v) {
       if (client) document.body.dataset.requested = String(v);
     }
@@ -166,10 +187,12 @@ export async function createAngularStory({ client }) {
     <div vfRatingRoot name="empty" aria-label="Empty rating" [defaultValue]="0">${items}</div>
     <div vfRatingRoot name="controlled" aria-label="Controlled rating" [value]="controlled()" (valueChange)="changed($event)">${items}</div>
     <button id="set-controlled" type="button" (click)="controlled.set(2)">Set controlled rating</button>
-    <vf-rating aria-label="Fractional rating" name="fraction" [defaultValue]="3.5" [precision]="0.5" clearable clearLabel="Clear fractional rating" />
-    <vf-rating aria-label="Required rating" name="required-rating" required />
+    <vf-rating aria-label="Fractional rating" name="fraction" [defaultValue]="3.5" [precision]="0.5" clearable />
+    <vf-rating aria-label="Controlled clearable rating" name="controlled-clearable" [value]="5" clearable (valueChange)="clearRequested($event)" />
+    <vf-rating aria-label="Ordinary rating" name="ordinary" [defaultValue]="5" />
+    <vf-rating aria-label="Required rating" name="required-rating" required clearable />
     <vf-rating aria-label="Average 4.7 out of 5" [value]="4.7" readOnly />
-    <vf-rating aria-label="Disabled rating" name="disabled-rating" [value]="2" disabled />
+    <vf-rating aria-label="Disabled rating" name="disabled-rating" [value]="2" disabled clearable />
     </form></main>`,
   })(RatingTestApp);
   return RatingTestApp;

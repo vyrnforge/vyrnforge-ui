@@ -14,7 +14,7 @@ Use size="sm", "md" or "lg", max and precision={0.5} for half stars. Read-only v
 
 ## State and forms
 
-Supply name for form submission, required and aria-invalid/aria-describedby as needed. Pass clearable and a localized clearLabel for optional clearing. Required ratings cannot clear. Programmatic updates and resets do not emit selection intent.
+Supply name for form submission, required and aria-invalid/aria-describedby as needed. Pass clearable to clear when the committed choice is activated again (including Space). There is no separate button or clearLabel. Required, disabled and read-only ratings cannot clear. In controlled usage, onValueChange receives zero; the owner must commit it. An application-authored aria-describedby hint can explain the optional behavior. Programmatic updates and resets do not emit selection intent.
 
 ## Custom artwork and themes
 

@@ -2612,6 +2612,157 @@ export class VfRangeSliderStartDirective {
     static ɵfac: i0.ɵɵFactoryDeclaration<VfRangeSliderStartDirective, never>;
 }
 
+// @public
+export class VfRatingComponent {
+    // (undocumented)
+    readonly canClear: Signal<boolean>;
+    // (undocumented)
+    choose(value: number): void;
+    // (undocumented)
+    readonly clearable: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly count: Signal<number>;
+    // (undocumented)
+    readonly defaultValue: InputSignal<number>;
+    // (undocumented)
+    readonly describedBy: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    fraction(star: number): string;
+    // (undocumented)
+    readonly getItemLabel: InputSignal<((value: number) => string) | undefined>;
+    // (undocumented)
+    readonly groupName: Signal<string>;
+    // (undocumented)
+    readonly icon: InputSignal<IconDefinition>;
+    // (undocumented)
+    readonly invalid: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    itemLabel(value: number): string;
+    // (undocumented)
+    readonly label: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly labelledBy: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly max: InputSignal<number>;
+    // (undocumented)
+    readonly name: InputSignal<string>;
+    // (undocumented)
+    ngOnInit(): void;
+    // (undocumented)
+    readonly parts: Signal<number[]>;
+    // (undocumented)
+    readonly precision: InputSignal<1 | 0.5>;
+    // (undocumented)
+    readonly readOnly: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    repeatKey(event: KeyboardEvent): void;
+    // (undocumented)
+    readonly required: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    reselect(event: MouseEvent): void;
+    // (undocumented)
+    readonly selected: Signal<number>;
+    // (undocumented)
+    readonly size: InputSignal<IconSize>;
+    // (undocumented)
+    readonly stars: Signal<number[]>;
+    // (undocumented)
+    readonly step: Signal<1 | 0.5>;
+    // (undocumented)
+    readonly value: InputSignal<number | undefined>;
+    // (undocumented)
+    readonly valueChange: OutputEmitterRef<number>;
+    // (undocumented)
+    static ɵcmp: i0.ɵɵComponentDeclaration<VfRatingComponent, "vf-rating", never, {
+        "value": {
+            "alias": "value";
+            "required": false;
+            "isSignal": true;
+        };
+        "defaultValue": {
+            "alias": "defaultValue";
+            "required": false;
+            "isSignal": true;
+        };
+        "name": {
+            "alias": "name";
+            "required": false;
+            "isSignal": true;
+        };
+        "max": {
+            "alias": "max";
+            "required": false;
+            "isSignal": true;
+        };
+        "precision": {
+            "alias": "precision";
+            "required": false;
+            "isSignal": true;
+        };
+        "size": {
+            "alias": "size";
+            "required": false;
+            "isSignal": true;
+        };
+        "icon": {
+            "alias": "icon";
+            "required": false;
+            "isSignal": true;
+        };
+        "readOnly": {
+            "alias": "readOnly";
+            "required": false;
+            "isSignal": true;
+        };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "required": {
+            "alias": "required";
+            "required": false;
+            "isSignal": true;
+        };
+        "clearable": {
+            "alias": "clearable";
+            "required": false;
+            "isSignal": true;
+        };
+        "getItemLabel": {
+            "alias": "getItemLabel";
+            "required": false;
+            "isSignal": true;
+        };
+        "label": {
+            "alias": "aria-label";
+            "required": false;
+            "isSignal": true;
+        };
+        "labelledBy": {
+            "alias": "aria-labelledby";
+            "required": false;
+            "isSignal": true;
+        };
+        "describedBy": {
+            "alias": "aria-describedby";
+            "required": false;
+            "isSignal": true;
+        };
+        "invalid": {
+            "alias": "aria-invalid";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {
+        "valueChange": "valueChange";
+    }, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfRatingComponent, never>;
+}
+
 // @public (undocumented)
 export class VfRatingItemDirective {
     constructor(root: VfRatingRootDirective);
@@ -3073,8 +3224,8 @@ export class VfSliderDirective {
     readonly formatValue: InputSignal<((value: number) => string) | undefined>;
     // (undocumented)
     readonly marks: InputSignal<boolean | readonly {
-        value: number;
-        label?: string;
+    value: number;
+    label?: string;
     }[]>;
     // (undocumented)
     readonly orientation: InputSignal<"horizontal" | "vertical">;

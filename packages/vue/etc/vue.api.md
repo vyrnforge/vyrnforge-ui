@@ -1587,6 +1587,79 @@ min: number;
 step: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
+// @public
+export const Rating: DefineComponent<ExtractPropTypes<    {
+value: NumberConstructor;
+defaultValue: {
+type: NumberConstructor;
+default: number;
+};
+name: StringConstructor;
+max: {
+type: NumberConstructor;
+default: number;
+};
+precision: {
+type: PropType<1 | 0.5>;
+default: number;
+};
+size: {
+type: PropType<IconSize>;
+default: string;
+};
+icon: {
+type: PropType<IconDefinition>;
+default: () => IconDefinition;
+};
+readOnly: BooleanConstructor;
+disabled: BooleanConstructor;
+required: BooleanConstructor;
+clearable: BooleanConstructor;
+getItemLabel: PropType<(value: number) => string>;
+}>, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
+value: NumberConstructor;
+defaultValue: {
+type: NumberConstructor;
+default: number;
+};
+name: StringConstructor;
+max: {
+type: NumberConstructor;
+default: number;
+};
+precision: {
+type: PropType<1 | 0.5>;
+default: number;
+};
+size: {
+type: PropType<IconSize>;
+default: string;
+};
+icon: {
+type: PropType<IconDefinition>;
+default: () => IconDefinition;
+};
+readOnly: BooleanConstructor;
+disabled: BooleanConstructor;
+required: BooleanConstructor;
+clearable: BooleanConstructor;
+getItemLabel: PropType<(value: number) => string>;
+}>> & Readonly<{
+"onUpdate:value"?: (...args: any[]) => any;
+}>, {
+size: IconSize;
+disabled: boolean;
+icon: IconDefinition;
+required: boolean;
+defaultValue: number;
+readOnly: boolean;
+max: number;
+clearable: boolean;
+precision: 1 | 0.5;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
 // @public (undocumented)
 export const RatingItem: DefineComponent<ExtractPropTypes<    {
 value: {

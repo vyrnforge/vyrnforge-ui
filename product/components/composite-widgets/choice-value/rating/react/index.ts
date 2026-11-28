@@ -1,7 +1,14 @@
 import { Icon } from '../icon/index.js';
 import type { IconDefinition, IconSize } from '@vyrnforge/web/icon';
-import { ratingStar, ratingMaximum, ratingValue, connectRatingReset } from '@vyrnforge/web/rating';
-import type { CSSProperties, HTMLAttributes } from 'react';
+import {
+  ratingStar,
+  ratingMaximum,
+  ratingValue,
+  clearRatingOnRepeat,
+  handleRatingRepeatKey,
+  connectRatingReset,
+} from '@vyrnforge/web/rating';
+import type { CSSProperties, HTMLAttributes, KeyboardEvent, MouseEvent } from 'react';
 import {
   createContext,
   createElement,
@@ -12,6 +19,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type ReactElement,
   type ReactNode,
 } from 'react';
 interface Ctx {
@@ -161,9 +169,8 @@ export interface RatingProps extends Omit<
   readOnly?: boolean;
   disabled?: boolean;
   required?: boolean;
+  /** Activating the selected choice again clears optional ratings. */
   clearable?: boolean;
-  /** Required when clearable is enabled; localize in the application. */
-  clearLabel?: string;
   getItemLabel?(value: number): string;
 }
 
@@ -199,18 +206,16 @@ export function Rating({
   disabled = false,
   required = false,
   clearable = false,
-  clearLabel,
   getItemLabel,
   ...attrs
-}: RatingProps) {
+}: RatingProps): ReactElement {
   const count = ratingMaximum(max);
   const step = precision === 0.5 ? 0.5 : 1;
   const normalize = (v: number) => ratingValue(v, count, step, readOnly);
   const { ctx, rootRef } = useRatingState({ value, defaultValue, name, onValueChange }, normalize);
   const selected = ctx.value;
   const canClear = clearable && !required && !readOnly;
-  if (canClear && !clearLabel?.trim()) throw new Error('Rating clearable requires a localized clearLabel.');
-  const group = createElement(
+  return createElement(
     'div',
     {
       ...attrs,
@@ -256,6 +261,17 @@ export function Rating({
                     'aria-label': getItemLabel?.(score) ?? String(score),
                     'aria-invalid': attrs['aria-invalid'],
                     'aria-describedby': attrs['aria-describedby'],
+                    onClick: (event: MouseEvent<HTMLInputElement>) => {
+                      if (canClear) clearRatingOnRepeat(event.currentTarget, selected, () => ctx.set(0));
+                    },
+                    onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
+                      if (canClear)
+                        handleRatingRepeatKey(event.nativeEvent, event.currentTarget, selected, () => ctx.set(0));
+                    },
+                    onKeyUp: (event: KeyboardEvent<HTMLInputElement>) => {
+                      if (canClear)
+                        handleRatingRepeatKey(event.nativeEvent, event.currentTarget, selected, () => ctx.set(0));
+                    },
                     onChange: () => ctx.set(score),
                   }),
                 );
@@ -265,24 +281,4 @@ export function Rating({
       ),
     ),
   );
-  return canClear
-    ? createElement(
-        'div',
-        { 'data-vf-rating-with-clear': '' },
-        group,
-        createElement(
-          'button',
-          {
-            type: 'button',
-            'data-vf-rating-clear': '',
-            disabled,
-            'aria-disabled': selected === 0 || undefined,
-            onClick: () => {
-              if (!disabled && selected !== 0) ctx.set(0);
-            },
-          },
-          clearLabel,
-        ),
-      )
-    : group;
 }
