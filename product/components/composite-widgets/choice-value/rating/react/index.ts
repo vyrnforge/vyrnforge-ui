@@ -18,6 +18,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type ReactElement,
   type ReactNode,
 } from 'react';
 interface Ctx {
@@ -206,7 +207,7 @@ export function Rating({
   clearable = false,
   getItemLabel,
   ...attrs
-}: RatingProps) {
+}: RatingProps): ReactElement {
   const count = ratingMaximum(max);
   const step = precision === 0.5 ? 0.5 : 1;
   const normalize = (v: number) => ratingValue(v, count, step, readOnly);

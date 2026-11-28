@@ -239,3 +239,21 @@ test('optional repeat activation respects controlled rejection and ordinary rati
   await expect(disabled).toBeDisabled();
   await expect(disabled).toBeChecked();
 });
+
+test('touch activation of the same optional score clears without a second control', async ({ browser }, testInfo) => {
+  test.skip(port === 'web' || port === 'elements', 'Authored native groups have no managed clearable prop.');
+  const context = await browser.newContext({ baseURL: testInfo.project.use.baseURL, hasTouch: true });
+  try {
+    const page = await context.newPage();
+    await open(page);
+    const group = page.getByRole('radiogroup', { name: 'Fractional rating' });
+    const five = group.getByRole('radio', { name: '5', exact: true });
+    await five.tap();
+    await expect(five).toBeChecked();
+    await five.tap();
+    await expect(group.locator('input:checked')).toHaveCount(0);
+    expect(await page.locator('#form').evaluate((form) => new FormData(form).has('fraction'))).toBe(false);
+  } finally {
+    await context.close();
+  }
+});
