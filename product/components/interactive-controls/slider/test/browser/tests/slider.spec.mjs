@@ -92,3 +92,41 @@ test('Slider tooltip stays anchored at native thumb positions, including endpoin
     }
   }
 });
+
+test('Slider value tooltip clears the active thumb halo and respects themed offset', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 900, height: 620 });
+  await page.goto('/components/slider/' + port + '.html');
+  const control = page.locator('#control');
+  const host = control.locator('..');
+  const bubble = host.locator('[data-vf-slider-value]');
+  await host.evaluate(element => {
+    element.style.margin = '100px';
+    element.style.inlineSize = '240px';
+  });
+  await expect(bubble).toBeVisible();
+  const clearance = () => bubble.evaluate(surface => {
+    const anchor = surface.parentElement.querySelector('[data-vf-slider-thumb-anchor]').getBoundingClientRect();
+    const rect = surface.getBoundingClientRect();
+    const side = surface.getAttribute('data-vf-tooltip-side') || surface.getAttribute('data-vf-placement');
+    const arrow = getComputedStyle(surface, '::after');
+    const depth = surface.hasAttribute('data-vf-arrow') ? parseFloat(side === 'left' || side === 'right' ? arrow.width : arrow.height) : 0;
+    const gap = side === 'left' ? anchor.left - rect.right : side === 'right' ? rect.left - anchor.right : side === 'bottom' ? rect.top - anchor.bottom : anchor.top - rect.bottom;
+    return Math.round((gap - depth) * 10) / 10;
+  });
+  for (const orientation of ['horizontal', 'vertical']) {
+    await control.evaluate((element, orientation) => {
+      element.setAttribute('data-vf-orientation', orientation);
+      element.parentElement.style.inlineSize = orientation === 'vertical' ? 'max-content' : '240px';
+    }, orientation);
+    await expect(bubble).toHaveAttribute('data-vf-tooltip-side', orientation === 'vertical' ? 'left' : 'top');
+    await expect.poll(clearance).toBe(12);
+    await host.evaluate(element => element.style.setProperty('--vf-tooltip-offset', '20px'));
+    await expect.poll(clearance).toBe(20);
+    await host.evaluate(element => element.style.removeProperty('--vf-tooltip-offset'));
+    await expect.poll(clearance).toBe(12);
+    await bubble.evaluate(element => element.removeAttribute('data-vf-arrow'));
+    await expect.poll(clearance).toBe(12);
+    await page.screenshot({ path: testInfo.outputPath('slider-tooltip-clearance-' + orientation + '-' + port + '.png') });
+    await bubble.evaluate(element => element.setAttribute('data-vf-arrow', ''));
+  }
+});
