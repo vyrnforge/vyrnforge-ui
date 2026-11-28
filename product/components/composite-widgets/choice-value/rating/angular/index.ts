@@ -12,7 +12,7 @@ import {
   signal,
 } from '@angular/core';
 import type { IconDefinition, IconSize } from '@vyrnforge/web/icon';
-import { ratingStar, ratingMaximum, ratingValue, reconcileRating, connectRatingReset } from '@vyrnforge/web/rating';
+import { ratingStar, ratingMaximum, ratingValue, clearRatingOnRepeat, reconcileRating, connectRatingReset } from '@vyrnforge/web/rating';
 import { VfIconComponent } from '@vyrnforge/angular/icon';
 
 function createRatingState(options: {
@@ -93,66 +93,54 @@ export class VfRatingItemDirective {
   standalone: true,
   imports: [VfIconComponent],
   template: `
-    <div [attr.data-vf-rating-with-clear]="canClear() ? '' : null">
-      <div
-        data-vf-rating-root
-        data-vf-rating-enhanced
-        [attr.role]="readOnly() ? 'img' : 'radiogroup'"
-        [attr.aria-label]="label() ?? null"
-        [attr.aria-labelledby]="labelledBy() ?? null"
-        [attr.aria-describedby]="describedBy() ?? null"
-        [attr.aria-invalid]="invalid() ? 'true' : null"
-        [attr.aria-required]="!readOnly() && required() ? 'true' : null"
-        [attr.aria-disabled]="!readOnly() && disabled() ? 'true' : null"
-        [attr.data-vf-size]="size()"
-        [attr.data-vf-precision]="step()"
-        [attr.data-vf-readonly]="readOnly() ? '' : null"
-        [attr.data-vf-disabled]="disabled() ? '' : null"
-      >
-        @for (star of stars(); track star) {
-          <span data-vf-rating-star>
-            <span
-              data-vf-rating-artwork
-              aria-hidden="true"
-              [style.--_vf-rating-fill]="readOnly() ? fraction(star) : null"
-            >
-              <vf-icon [icon]="icon()" [size]="size()" variant="outlined" />
-              <span data-vf-rating-fill><vf-icon [icon]="icon()" [size]="size()" variant="filled" /></span>
-            </span>
-            @if (!readOnly()) {
-              <span data-vf-rating-choices>
-                @for (part of parts(); track part) {
-                  <label data-vf-rating-option>
-                    <input
-                      type="radio"
-                      data-vf-rating-choice
-                      [attr.name]="groupName()"
-                      [value]="star + part"
-                      [checked]="selected() === star + part"
-                      [disabled]="disabled()"
-                      [required]="required()"
-                      [attr.aria-label]="itemLabel(star + part)"
-                      [attr.aria-invalid]="invalid() ? 'true' : null"
-                      [attr.aria-describedby]="describedBy() ?? null"
-                      (change)="choose(star + part)"
-                    />
-                  </label>
-                }
-              </span>
-            }
+    <div
+      data-vf-rating-root
+      data-vf-rating-enhanced
+      [attr.role]="readOnly() ? 'img' : 'radiogroup'"
+      [attr.aria-label]="label() ?? null"
+      [attr.aria-labelledby]="labelledBy() ?? null"
+      [attr.aria-describedby]="describedBy() ?? null"
+      [attr.aria-invalid]="invalid() ? 'true' : null"
+      [attr.aria-required]="!readOnly() && required() ? 'true' : null"
+      [attr.aria-disabled]="!readOnly() && disabled() ? 'true' : null"
+      [attr.data-vf-size]="size()"
+      [attr.data-vf-precision]="step()"
+      [attr.data-vf-readonly]="readOnly() ? '' : null"
+      [attr.data-vf-disabled]="disabled() ? '' : null"
+    >
+      @for (star of stars(); track star) {
+        <span data-vf-rating-star>
+          <span
+            data-vf-rating-artwork
+            aria-hidden="true"
+            [style.--_vf-rating-fill]="readOnly() ? fraction(star) : null"
+          >
+            <vf-icon [icon]="icon()" [size]="size()" variant="outlined" />
+            <span data-vf-rating-fill><vf-icon [icon]="icon()" [size]="size()" variant="filled" /></span>
           </span>
-        }
-      </div>
-      @if (canClear()) {
-        <button
-          type="button"
-          data-vf-rating-clear
-          [disabled]="disabled()"
-          [attr.aria-disabled]="selected() === 0 ? 'true' : null"
-          (click)="clear()"
-        >
-          {{ clearText() }}
-        </button>
+          @if (!readOnly()) {
+            <span data-vf-rating-choices>
+              @for (part of parts(); track part) {
+                <label data-vf-rating-option>
+                  <input
+                    type="radio"
+                    data-vf-rating-choice
+                    [attr.name]="groupName()"
+                    [value]="star + part"
+                    [checked]="selected() === star + part"
+                    [disabled]="disabled()"
+                    [required]="required()"
+                    [attr.aria-label]="itemLabel(star + part)"
+                    [attr.aria-invalid]="invalid() ? 'true' : null"
+                    [attr.aria-describedby]="describedBy() ?? null"
+                    (click)="reselect($event)"
+                    (change)="choose(star + part)"
+                  />
+                </label>
+              }
+            </span>
+          }
+        </span>
       }
     </div>
   `,
@@ -169,7 +157,6 @@ export class VfRatingComponent {
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly required = input(false, { transform: booleanAttribute });
   readonly clearable = input(false, { transform: booleanAttribute });
-  readonly clearLabel = input<string | undefined>(undefined);
   readonly getItemLabel = input<((value: number) => string) | undefined>(undefined);
   readonly label = input<string | undefined>(undefined, { alias: 'aria-label' });
   readonly labelledBy = input<string | undefined>(undefined, { alias: 'aria-labelledby' });
@@ -184,11 +171,6 @@ export class VfRatingComponent {
   readonly groupName = computed(() => {
     if (!this.readOnly() && !this.name().trim()) throw new Error('Interactive Angular Rating requires a name.');
     return this.name();
-  });
-  readonly clearText = computed(() => {
-    const label = this.clearLabel();
-    if (this.canClear() && !label?.trim()) throw new Error('Rating clearable requires a localized clearLabel.');
-    return label;
   });
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly state = createRatingState({
@@ -211,7 +193,9 @@ export class VfRatingComponent {
   choose(value: number) {
     if (!this.readOnly() && !this.disabled()) this.state.set(value);
   }
-  clear() {
-    if (this.canClear() && !this.disabled()) this.state.set(0);
+  reselect(event: MouseEvent) {
+    if (this.canClear() && !this.disabled()) {
+      clearRatingOnRepeat(event.currentTarget as HTMLInputElement, this.selected(), () => this.state.set(0));
+    }
   }
 }

@@ -55,3 +55,16 @@ export function connectRatingReset(root: () => HTMLElement | null, restore: () =
     document?.removeEventListener('reset', onReset, true);
   };
 }
+
+/** Clear on a repeated native activation of the committed choice, never on a new choice. */
+export function clearRatingOnRepeat(radio: HTMLInputElement, selected: number, clear: () => void): void {
+  if (!selected || !radio.checked || Number(radio.value) !== selected || radio.required || radio.matches(':disabled')) {
+    return;
+  }
+  // A pointer still over the cleared choice must not immediately repaint the previous score.
+  if (radio.matches(':hover')) {
+    radio.setAttribute('data-vf-rating-cleared', '');
+    radio.addEventListener('pointerleave', () => radio.removeAttribute('data-vf-rating-cleared'), { once: true });
+  }
+  clear();
+}

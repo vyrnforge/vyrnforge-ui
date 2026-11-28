@@ -14,7 +14,7 @@ import {
 } from 'vue';
 import { Icon } from '../icon/index.js';
 import type { IconDefinition, IconSize } from '@vyrnforge/web/icon';
-import { ratingStar, ratingMaximum, ratingValue, reconcileRating, connectRatingReset } from '@vyrnforge/web/rating';
+import { ratingStar, ratingMaximum, ratingValue, clearRatingOnRepeat, reconcileRating, connectRatingReset } from '@vyrnforge/web/rating';
 
 interface Ctx {
   value: Ref<number>;
@@ -126,7 +126,6 @@ export const Rating = defineComponent({
     disabled: Boolean,
     required: Boolean,
     clearable: Boolean,
-    clearLabel: String,
     getItemLabel: Function as PropType<(value: number) => string>,
   },
   emits: ['update:value'],
@@ -140,8 +139,7 @@ export const Rating = defineComponent({
     );
     return () => {
       const canClear = p.clearable && !p.required && !p.readOnly;
-      if (canClear && !p.clearLabel?.trim()) throw new Error('Rating clearable requires a localized clearLabel.');
-      const group = h(
+      return h(
         'div',
         {
           ...attrs,
@@ -201,6 +199,9 @@ export const Rating = defineComponent({
                           'aria-label': p.getItemLabel?.(score) ?? String(score),
                           'aria-invalid': attrs['aria-invalid'],
                           'aria-describedby': attrs['aria-describedby'],
+                          onClick: (event: MouseEvent) => {
+                            if (canClear) clearRatingOnRepeat(event.currentTarget as HTMLInputElement, ctx.value.value, () => ctx.set(0));
+                          },
                           onChange: () => ctx.set(score),
                         }),
                       );
@@ -211,24 +212,6 @@ export const Rating = defineComponent({
           ),
         ),
       );
-      return canClear
-        ? h('div', { 'data-vf-rating-with-clear': '' }, [
-            group,
-            h(
-              'button',
-              {
-                type: 'button',
-                'data-vf-rating-clear': '',
-                disabled: p.disabled,
-                'aria-disabled': ctx.value.value === 0 || undefined,
-                onClick: () => {
-                  if (!p.disabled && ctx.value.value !== 0) ctx.set(0);
-                },
-              },
-              p.clearLabel,
-            ),
-          ])
-        : group;
     };
   },
 });
